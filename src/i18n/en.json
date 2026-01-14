@@ -1,0 +1,28 @@
+{
+  "jobs": "Jobs",
+  "login": "Login",
+  "apply": "Apply",
+  "nav": {
+    "searchJobs": "Search jobs",
+    "postResume": "Post resume",
+    "forEmployers": "For employers",
+    "signIn": "Sign in"
+  },
+  "home": {
+    "title": "Uzbekistan's #1 job service",
+    "subtitle": "We currently have {count} jobs.",
+    "findJobs": "Find jobs",
+    "pickUpJobs": "Pick up jobs",
+    "keywordPlaceholder": "Job title or keyword",
+    "allUkraine": "All Ukraine"
+  },
+  "footer": {
+    "resources": "Resources",
+    "contact": "Contact",
+    "about": "About",
+    "career": "Career",
+    "news": "Work.ua news",
+    "help": "Help",
+    "terms": "Terms of use"
+  }
+}

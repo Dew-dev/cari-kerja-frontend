@@ -1,0 +1,28 @@
+{
+  "jobs": "ish o'rinlari",
+  "login": "Kirish",
+  "apply": "Murojaat Qiling",
+  "nav": {
+    "searchJobs": "Ish qidirish",
+    "postResume": "Rezyume joylash",
+    "forEmployers": "Ish beruvchilar uchun",
+    "signIn": "Kirish"
+  },
+  "home": {
+    "title": "O'zbekistonning №1 ish qidirish xizmati",
+    "subtitle": "Hozirda {count} ta bo‘sh ish o‘rni mavjud.",
+    "findJobs": "Ish topish",
+    "pickUpJobs": "Mos ishlarni tanlash",
+    "keywordPlaceholder": "Lavozim yoki kalit so‘z",
+    "allUkraine": "Butun Ukraina"
+  },
+  "footer": {
+    "resources": "Resurslar",
+    "contact": "Aloqa",
+    "about": "Biz haqimizda",
+    "career": "Karyera",
+    "news": "Work.ua yangiliklari",
+    "help": "Yordam",
+    "terms": "Foydalanish shartlari"
+  }
+}
