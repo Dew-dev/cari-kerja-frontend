@@ -21,8 +21,8 @@ async function submit() {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50">
-    <div class="w-full max-w-sm bg-white border p-6">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 rounded">
+    <div class="w-full max-w-sm bg-white border p-6 rounded-2xl">
 
       <h1 class="text-xl font-semibold mb-4">
         Login
@@ -35,7 +35,7 @@ async function submit() {
           <input
             v-model="form.email"
             type="email"
-            class="w-full border px-3 py-2"
+            class="w-full border px-3 py-2 rounded-sm"
             placeholder="email@example.com"
             required
           />
@@ -46,7 +46,7 @@ async function submit() {
           <input
             v-model="form.password"
             type="password"
-            class="w-full border px-3 py-2"
+            class="w-full border px-3 py-2 rounded-sm"
             placeholder="••••••••"
             required
           />
@@ -59,7 +59,7 @@ async function submit() {
         <button
           type="submit"
           :disabled="auth.loading"
-          class="w-full border bg-blue-600 text-white py-2"
+          class="w-full border bg-blue-600 text-white py-2 rounded-t-full rounded-b-full hover:bg-blue-700 disabled:opacity-50"
         >
           {{ auth.loading ? "Signing in..." : "Sign in" }}
         </button>

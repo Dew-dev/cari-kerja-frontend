@@ -1,5 +1,15 @@
 import api from "./api";
 
 export function login(payload) {
-  return api.post("/users/login", payload);
+  const username = "testing123";
+  const pass = "testing123";
+  const basicHeader =
+    username && pass ? `Basic ${btoa(`${username}:${pass}`)}` : undefined;
+  // api.defaults.headers.common["Authorization"] = basicHeader;
+
+  return api.post("/users/login", payload, {
+    headers: {
+      authorization: basicHeader,
+    },
+  });
 }

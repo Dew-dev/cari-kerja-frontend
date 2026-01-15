@@ -1,7 +1,7 @@
 <template>
   <header class="bg-[#0a9cf5] text-white">
     
-    <div class="max-w-290 mx-auto h-14 flex items-center justify-between">
+    <div class="max-w-290 mx-auto py-10 h-14 flex items-center justify-between">
 
       <div class="text-xl font-bold">JOBS.UZ</div>
 
@@ -11,7 +11,7 @@
         <div class="relative">
           <button
             @click="open = !open"
-            class="flex items-center gap-1 border border-white px-3 py-1 rounded"
+            class="flex items-center gap-1 border border-white px-3 py-1 rounded font-semibold"
           >
             {{ locale.toUpperCase() }}
             <span>▾</span>
@@ -19,7 +19,7 @@
 
           <div
             v-if="open"
-            class="absolute right-0 mt-1 bg-white text-gray-800 border rounded shadow-sm min-w-[140px] z-50"
+            class="absolute right-0 mt-1 bg-white text-gray-800 border rounded shadow-sm min-w-[140px] z-50 font-semibold"
           >
             <button
               v-for="lang in languages"
@@ -33,9 +33,9 @@
         </div>
 
         <!-- SIGN IN -->
-        <button class="border border-white px-4 py-1 rounded">
+        <a class="border border-white px-4 py-1 rounded font-semibold" href="/login">
           {{ $t("nav.signIn") }}
-        </button>
+        </a>
 
       </nav>
     </div>

@@ -20,7 +20,7 @@
           :placeholder="t('home.keywordPlaceholder')"
         />
 
-        <select class="bg-white px-4 py-3 rounded text-black">
+        <select class="bg-white px-5 py-3 rounded text-black">
           <option>{{ t("home.allUkraine") }}</option>
         </select>
 

@@ -29,6 +29,10 @@ const routes = [
     path: "/login",
     component: () => import("../pages/auth/Login.vue"),
   },
+  {
+    path: "/jobs",
+    component: () => import("../pages/Jobs.vue"),
+  },
 ];
 
 const router = createRouter({
