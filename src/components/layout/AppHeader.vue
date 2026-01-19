@@ -42,14 +42,6 @@
   </header>
 </template>
 
-
-
-        <!-- <button @click="setLang('en')">EN</button>
-        <button @click="setLang('ru')">RU</button>
-        <button @click="setLang('uz')">UZ</button> -->
-
-
-
 <script setup>
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
