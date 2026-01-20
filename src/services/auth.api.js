@@ -13,3 +13,13 @@ export function login(payload) {
     },
   });
 }
+
+export function refreshToken(refreshToken) {
+  return api.post("/users/refresh-token", {
+    refreshToken,
+  });
+}
+
+export function register(payload) {
+  return api.post("/users/register", payload);
+}

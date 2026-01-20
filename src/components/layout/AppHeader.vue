@@ -33,9 +33,28 @@
         </div>
 
         <!-- SIGN IN -->
-        <a class="border border-white px-4 py-1 rounded font-semibold" href="/login">
-          {{ $t("nav.signIn") }}
-        </a>
+        <template v-if="!auth.isLoggedIn">
+          <button
+            class="border border-white px-4 py-1 rounded"
+            @click="router.push('/login')"
+          >
+            {{ $t("nav.signIn") }}
+          </button>
+        </template>
+
+        <!-- AUTHENTICATED -->
+        <template v-else>
+          <span class="opacity-90">
+            {{ auth.user?.name }}
+          </span>
+
+          <button
+            class="border border-white px-4 py-1 rounded"
+            @click="logout"
+          >
+            Logout
+          </button>
+        </template>
 
       </nav>
     </div>
@@ -48,6 +67,17 @@ import { useI18n } from "vue-i18n"
 
 const { locale } = useI18n()
 const open = ref(false)
+
+import { useRouter } from "vue-router"
+import { useAuthStore } from "../../stores/authStore"
+
+const router = useRouter()
+const auth = useAuthStore()
+
+function logout() {
+  auth.logout()
+  router.push("/")
+}
 
 const languages = [
   { code: "en", label: "English" },

@@ -1,41 +1,79 @@
 import axios from "axios";
+import { useAuthStore } from "../stores/authStore";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1",
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000",
 });
 
-// 🔐 REQUEST INTERCEPTOR → AUTO BEARER TOKEN
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
+let isRefreshing = false;
+let queue = [];
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+function processQueue(error, token = null) {
+  queue.forEach((promise) => {
+    if (error) {
+      promise.reject(error);
+    } else {
+      promise.resolve(token);
     }
+  });
+  queue = [];
+}
 
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-// 🚨 RESPONSE INTERCEPTOR → AUTO LOGOUT ON 401
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // token invalid / expired
-      localStorage.removeItem("token");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("user");
+  async (error) => {
+    const originalRequest = error.config;
+    const auth = useAuthStore();
 
-      // hard redirect (aman dari state rusak)
-      window.location.href = "/login";
+    // 🚫 bukan 401 → lempar aja
+    if (error.response?.status !== 401) {
+      return Promise.reject(error);
     }
 
-    return Promise.reject(error);
+    // 🚫 sudah retry → logout
+    if (originalRequest._retry) {
+      auth.logout();
+      window.location.href = "/login";
+      return Promise.reject(error);
+    }
+
+    // 🧠 tandai retry
+    originalRequest._retry = true;
+
+    // 🔁 lagi refresh?
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        queue.push({ resolve, reject });
+      }).then((token) => {
+        originalRequest.headers.Authorization = `Bearer ${token}`;
+        return api(originalRequest);
+      });
+    }
+
+    isRefreshing = true;
+
+    try {
+      const newToken = await auth.refreshToken();
+      processQueue(null, newToken);
+
+      originalRequest.headers.Authorization = `Bearer ${newToken}`;
+      return api(originalRequest);
+    } catch (err) {
+      processQueue(err, null);
+      auth.logout();
+      window.location.href = "/login";
+      return Promise.reject(err);
+    } finally {
+      isRefreshing = false;
+    }
   },
 );
 

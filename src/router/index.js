@@ -29,6 +29,8 @@ const routes = [
   },
   {
     path: "/login",
+    name: "login",
+    meta: { guestOnly: true },
     component: () => import("../pages/auth/Login.vue"),
   },
   {
@@ -42,6 +44,11 @@ const routes = [
       template: "<div class='p-6'>RECRUITER DASHBOARD</div>",
     },
   },
+  {
+    path: "/register",
+    meta: { guestOnly: true },
+    component: () => import("../pages/auth/Register.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -53,23 +60,19 @@ const router = createRouter({
 router.beforeEach((to) => {
   const auth = useAuthStore();
 
-  // ✅ 1. Route PUBLIC (tidak butuh login)
-  if (!to.meta.requiresAuth) {
-    return true;
+  // 🚫 GUEST ONLY (login/register)
+  if (to.meta.guestOnly && auth.isLoggedIn) {
+    return auth.role === "recruiter" ? "/recruiter" : "/jobs";
   }
 
-  // 🔒 2. Route butuh login tapi user belum login
+  // 🔒 PROTECTED ROUTE
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
     return "/login";
   }
 
-  // 🧭 3. Route role-based
+  // 🧭 ROLE CHECK
   if (to.meta.role && auth.role !== to.meta.role) {
     return "/";
-  }
-
-  if (to.path === "/login" && auth.isLoggedIn) {
-    return auth.role === "recruiter" ? "/recruiter" : "/jobs";
   }
 
   return true;

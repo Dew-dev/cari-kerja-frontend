@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import { login as loginApi } from "@/services/auth.api";
+import { login as loginApi } from "../services/auth.api";
+import { refreshToken as refreshApi } from "../services/auth.api";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -51,6 +52,28 @@ export const useAuthStore = defineStore("auth", {
       localStorage.removeItem("token");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("user");
+    },
+
+    async refreshToken() {
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) throw new Error("No refresh token");
+
+        const res = await refreshApi(refreshToken);
+
+        const { token, refreshToken: newRefreshToken } = res.data.data;
+
+        this.token = token;
+        this.refreshToken = newRefreshToken;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("refreshToken", newRefreshToken);
+
+        return token;
+      } catch (err) {
+        this.logout();
+        throw err;
+      }
     },
   },
 });
