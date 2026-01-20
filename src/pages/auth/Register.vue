@@ -1,15 +1,15 @@
 <script setup>
 import { reactive } from "vue"
 import { useRouter } from "vue-router"
-import { register } from "../../services/auth.api"
+import { register } from "@/services/auth.api"
 
 const router = useRouter()
 
 const form = reactive({
   name: "",
+  username: "",
   email: "",
   password: "",
-  role: "user", // default job seeker
 })
 
 const state = reactive({
@@ -24,7 +24,7 @@ async function submit() {
   try {
     await register(form)
 
-    // setelah register → login page
+    // setelah register → login
     router.push("/login")
   } catch (err) {
     state.error =
@@ -37,7 +37,7 @@ async function submit() {
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50">
-    <div class="w-full max-w-sm bg-white border p-6">
+    <div class="w-full max-w-sm bg-white p-6 rounded-lg shadow-lg">
 
       <h1 class="text-xl font-semibold mb-4">
         Create account
@@ -45,60 +45,68 @@ async function submit() {
 
       <form @submit.prevent="submit" class="space-y-4">
 
+        <!-- NAME -->
         <div>
           <label class="block text-sm mb-1">Full name</label>
           <input
             v-model="form.name"
             type="text"
-            class="w-full border px-3 py-2"
+            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
             required
           />
         </div>
 
+        <!-- USERNAME -->
+        <div>
+          <label class="block text-sm mb-1">Username</label>
+          <input
+            v-model="form.username"
+            type="text"
+            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
+            required
+          />
+        </div>
+
+        <!-- EMAIL -->
         <div>
           <label class="block text-sm mb-1">Email</label>
           <input
             v-model="form.email"
             type="email"
-            class="w-full border px-3 py-2"
+            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
             required
           />
         </div>
 
+        <!-- PASSWORD -->
         <div>
           <label class="block text-sm mb-1">Password</label>
           <input
             v-model="form.password"
             type="password"
-            class="w-full border px-3 py-2"
+            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
             required
           />
+          <p class="text-xs text-gray-500 mt-1">
+            Min 8 chars, uppercase, lowercase, number & symbol
+          </p>
         </div>
 
-        <!-- ROLE -->
-        <div>
-          <label class="block text-sm mb-1">I am a</label>
-          <select
-            v-model="form.role"
-            class="w-full border px-3 py-2"
-          >
-            <option value="user">Job seeker</option>
-            <option value="recruiter">Recruiter</option>
-          </select>
-        </div>
-
+        <!-- ERROR -->
         <p v-if="state.error" class="text-red-600 text-sm">
           {{ state.error }}
         </p>
 
+        <!-- SUBMIT -->
         <button
           type="submit"
           :disabled="state.loading"
-          class="w-full bg-blue-600 text-white py-2"
+          class="w-full bg-blue-600 text-white py-2 rounded-t-full rounded-b-full hover:bg-blue-700 disabled:opacity-50 rounded"
         >
           {{ state.loading ? "Creating..." : "Create account" }}
         </button>
 
+        <!-- FOOTER -->
         <p class="text-sm text-center">
           Already have an account?
           <span

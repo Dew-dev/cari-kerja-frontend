@@ -25,8 +25,8 @@ async function submit() {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 rounded">
-    <div class="w-full max-w-sm bg-white border p-6 rounded-2xl">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 rounded-md">
+    <div class=" w-full max-w-sm bg-white shadow-lg p-6 rounded-2xl">
 
       <h1 class="text-xl font-semibold mb-4">
         Login
@@ -38,9 +38,9 @@ async function submit() {
           <label class="block text-sm mb-1">Email</label>
           <input
             v-model="form.email"
-            type="email"
-            class="w-full border px-3 py-2 rounded-sm"
-            placeholder="email@example.com"
+            type="text"
+            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
+            placeholder="Username or Email"
             required
           />
         </div>
@@ -50,7 +50,7 @@ async function submit() {
           <input
             v-model="form.password"
             type="password"
-            class="w-full border px-3 py-2 rounded-sm"
+            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
             placeholder="••••••••"
             required
           />
@@ -63,11 +63,20 @@ async function submit() {
         <button
           type="submit"
           :disabled="auth.loading"
-          class="w-full border bg-blue-600 text-white py-2 rounded-t-full rounded-b-full hover:bg-blue-700 disabled:opacity-50"
+          class="w-full border bg-blue-600 text-white py-2 rounded-t-full rounded-b-full hover:bg-blue-700 disabled:opacity-50 rounded"
         >
           {{ auth.loading ? "Signing in..." : "Sign in" }}
         </button>
-
+        
+        <p class="text-sm text-center">
+          Don't have an account?
+          <span
+            class="text-blue-600 cursor-pointer"
+            @click="router.push('/register')"
+          >
+            Sign Up
+          </span>
+        </p>
       </form>
     </div>
   </div>

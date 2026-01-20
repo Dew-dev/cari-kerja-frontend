@@ -1,11 +1,10 @@
 import api from "./api";
+const username = "testing123";
+const pass = "testing123";
+const basicHeader =
+  username && pass ? `Basic ${btoa(`${username}:${pass}`)}` : undefined;
 
 export function login(payload) {
-  const username = "testing123";
-  const pass = "testing123";
-  const basicHeader =
-    username && pass ? `Basic ${btoa(`${username}:${pass}`)}` : undefined;
-  // api.defaults.headers.common["Authorization"] = basicHeader;
 
   return api.post("/users/login", payload, {
     headers: {
@@ -21,5 +20,9 @@ export function refreshToken(refreshToken) {
 }
 
 export function register(payload) {
-  return api.post("/users/register", payload);
+  return api.post("/users/register-worker", payload, {
+    headers: {
+      authorization: basicHeader,
+    },
+  });
 }

@@ -11,7 +11,7 @@
         <div class="relative">
           <button
             @click="open = !open"
-            class="flex items-center gap-1 border border-white px-3 py-1 rounded font-semibold"
+            class="flex items-center gap-1 border border-white px-4 py-3 rounded font-semibold hover:bg-white hover:text-blue-500 transition duration-200"
           >
             {{ locale.toUpperCase() }}
             <span>▾</span>
@@ -19,7 +19,7 @@
 
           <div
             v-if="open"
-            class="absolute right-0 mt-1 bg-white text-gray-800 border rounded shadow-sm min-w-[140px] z-50 font-semibold"
+            class="absolute right-0 mt-1 bg-white text-gray-800  rounded shadow-sm min-w-[140px] z-50 font-semibold rounded-md"
           >
             <button
               v-for="lang in languages"
@@ -35,7 +35,7 @@
         <!-- SIGN IN -->
         <template v-if="!auth.isLoggedIn">
           <button
-            class="border border-white px-4 py-1 rounded"
+            class="border border-white px-4 py-3 rounded font-semibold hover:bg-white hover:text-blue-500 transition duration-200"
             @click="router.push('/login')"
           >
             {{ $t("nav.signIn") }}
