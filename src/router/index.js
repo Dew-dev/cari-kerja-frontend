@@ -34,8 +34,8 @@ const routes = [
     component: () => import("../pages/auth/Login.vue"),
   },
   {
-    path: "/jobs",
-    component: () => import("../pages/Jobs.vue"),
+    path: "/jobposts",
+    component: () => import("../pages/Jobposts.vue"),
   },
   {
     path: "/recruiter",
