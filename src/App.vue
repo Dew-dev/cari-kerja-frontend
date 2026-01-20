@@ -1,7 +1,8 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import AppFooter from './components/layout/AppFooter.vue';
-import AppHeader from "./components/layout/AppHeader.vue"
+import AppHeader from "./components/layout/AppHeader.vue";
+import 'primeicons/primeicons.css'
 </script>
 
 <template>
@@ -25,6 +26,12 @@ import AppHeader from "./components/layout/AppHeader.vue"
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+body{
+  background: grey;
+}
+.hover-button:hover{
+  scale: calc(1.05);
 }
 </style>
 <script>

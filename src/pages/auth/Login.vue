@@ -13,9 +13,13 @@ const form = reactive({
 
 async function submit() {
   const success = await auth.login(form)
-  if (success) {
-    // sementara redirect ke home
-    router.push("/")
+   if (!success) return
+
+  // ROLE BASED REDIRECT
+  if (auth.role === "recruiter") {
+    router.push("/recruiter")
+  } else {
+    router.push("/jobs")
   }
 }
 </script>

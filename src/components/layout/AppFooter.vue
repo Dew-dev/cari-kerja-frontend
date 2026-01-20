@@ -50,7 +50,6 @@ function setLang(lang) {
             </button>
           </div>
         </div>
-
         <!-- RIGHT SIDE -->
         <div class="flex items-center gap-3 flex-wrap">
 
@@ -75,7 +74,7 @@ function setLang(lang) {
 
       <!-- COPYRIGHT -->
       <div class="text-gray-500 text-xs">
-        © 2006–2026 Work.ua. Ukraine's #1 job service.
+        © 2006–2026 Jobs.uz. Uzbekistan's #1 job service.
       </div>
 
     </div>

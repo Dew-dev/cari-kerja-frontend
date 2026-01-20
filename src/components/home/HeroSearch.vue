@@ -16,7 +16,7 @@
       <!-- SEARCH BAR -->
       <div class="flex items-center gap-3">
         <input
-          class=" bg-white flex-1 px-4 py-3 rounded text-black"
+          class=" bg-white flex-1 px-4 py-3 rounded text-black hover:scale-101 transition duration-200 ease-in-out"
           :placeholder="t('home.keywordPlaceholder')"
         />
 
@@ -24,11 +24,11 @@
           <option>{{ t("home.allUkraine") }}</option>
         </select>
 
-        <button class="bg-pink-600 px-6 py-3 rounded font-semibold">
+        <button class="bg-pink-600 px-6 py-3 rounded font-semibold hover:scale-105 transition duration-200 ease-in-out">
           {{ t("home.findJobs") }}
         </button>
 
-        <button class="bg-white text-blue-600 px-6 py-3 rounded font-semibold">
+        <button class="bg-white text-blue-600 px-6 py-3 rounded font-semibold hover:scale-105 transition duration-200 ease-in-out">
           {{ t("home.pickUpJobs") }}
         </button>
       </div>
