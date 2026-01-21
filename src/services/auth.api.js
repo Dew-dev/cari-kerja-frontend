@@ -26,3 +26,11 @@ export function register(payload) {
     },
   });
 }
+
+export function registerRecruiter(payload) {
+  return api.post("/users/register-recruiter", payload, {
+    headers: {
+      authorization: basicHeader,
+    },
+  });
+}

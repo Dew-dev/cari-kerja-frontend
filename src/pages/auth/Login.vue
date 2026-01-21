@@ -3,6 +3,10 @@ import { reactive } from "vue"
 import { useRouter } from "vue-router"
 import { useAuthStore } from "../../stores/authstore"
 
+import { useI18n } from "vue-i18n"
+
+const { locale, t } = useI18n()
+
 const router = useRouter()
 const auth = useAuthStore()
 
@@ -29,7 +33,7 @@ async function submit() {
     <div class=" w-full max-w-sm bg-white shadow-lg p-6 rounded-2xl">
 
       <h1 class="text-xl font-semibold mb-4">
-        Login
+        {{ t("login") }}
       </h1>
 
       <form @submit.prevent="submit" class="space-y-4">
@@ -63,9 +67,9 @@ async function submit() {
         <button
           type="submit"
           :disabled="auth.loading"
-          class="w-full border bg-blue-600 text-white py-2 rounded-t-full rounded-b-full hover:bg-blue-700 disabled:opacity-50 rounded"
+          class="w-full border bg-blue-600 text-white py-2 rounded-t-full rounded-b-full hover:bg-blue-700 disabled:opacity-50"
         >
-          {{ auth.loading ? "Signing in..." : "Sign in" }}
+          {{ auth.loading ? "Signing in..." : t("nav.signIn") }}
         </button>
         
         <p class="text-sm text-center">

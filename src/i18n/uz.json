@@ -2,6 +2,10 @@
   "jobs": "ish o'rinlari",
   "login": "Kirish",
   "apply": "Murojaat Qiling",
+  "signUp": "Ro'yxatdan o'tish",
+  "dontHaveAccount": "Hisobingiz yo'qmi?",
+  "signing": "Kirish amalga oshirilmoqda...",
+  "signingUp": "Ro'yxatdan o'tish amalga oshirilmoqda...", 
   "nav": {
     "searchJobs": "Ish qidirish",
     "postResume": "Rezyume joylash",
@@ -24,5 +28,26 @@
     "news": "Work.ua yangiliklari",
     "help": "Yordam",
     "terms": "Foydalanish shartlari"
+  },
+  "register": {
+    "titleRecruiter": "Rekruter Ro'yxatdan O'tishi",
+    "title": "Hisob Yaratish",
+    "subtitle": "Bugun bizga qo'shiling va orzuingizdagi ishga birinchi qadamni qo'ying.",
+    "haveAccount": "Allaqachon hisobingiz bormi?",
+    "signIn": "Kirish",
+    "personalInfo": "Shaxsiy ma'lumotlar",
+    "firstName": "Ism",
+    "lastName": "Familiya",
+    "fullName": "To'liq ism",
+    "username": "Foydalanuvchi nomi",
+    "email": "Elektron pochta manzili",
+    "password": "Parol",
+    "confirmPassword": "Parolni tasdiqlang",
+    "registerButton": "Ro'yxatdan o'tish",
+    "loading": "Ro'yxatdan o'tish amalga oshirilmoqda...",
+    "companyName": "Kompaniya nomi",
+    "contactNumber": "Aloqa raqami",
+    "contactPerson": "Aloqa shaxsi",
+    "signUp": "Ro'yxatdan o'tish"
   }
 }

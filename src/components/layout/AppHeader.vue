@@ -3,7 +3,7 @@
     
     <div class="max-w-290 mx-auto py-10 h-14 flex items-center justify-between">
 
-      <div class="text-xl font-bold">JOBS.UZ</div>
+        <div class="text-xl font-bold hover:cursor-pointer" @click="router.push('/')">JOBS.UZ</div>
 
       <nav class="flex items-center gap-4 text-sm relative">
 

@@ -2,6 +2,8 @@
 import HelloWorld from './components/HelloWorld.vue'
 import AppFooter from './components/layout/AppFooter.vue';
 import AppHeader from "./components/layout/AppHeader.vue";
+import { useI18n } from "vue-i18n"
+const { locale, t } = useI18n()
 import 'primeicons/primeicons.css'
 </script>
 
