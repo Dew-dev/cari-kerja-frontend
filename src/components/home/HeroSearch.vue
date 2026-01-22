@@ -16,6 +16,8 @@
       <!-- SEARCH BAR -->
       <div class="flex items-center gap-3">
         <input
+          type="text"
+          v-model="keyword"
           class=" bg-white flex-1 px-4 py-3 rounded text-black hover:scale-101 transition duration-200 ease-in-out"
           :placeholder="t('home.keywordPlaceholder')"
         />
@@ -24,7 +26,10 @@
           <option>{{ t("home.allUkraine") }}</option>
         </select>
 
-        <button class="bg-pink-600 px-6 py-3 rounded font-semibold hover:scale-105 transition duration-200 ease-in-out">
+        <button 
+        @click="emit('search', keyword)"
+        class="bg-pink-600 px-6 py-3 rounded font-semibold hover:scale-105 transition duration-200 ease-in-out"
+        >
           {{ t("home.findJobs") }}
         </button>
 
@@ -39,6 +44,11 @@
 
 <script setup>
 import { useI18n } from "vue-i18n"
+import { ref } from "vue";
 
-const { t } = useI18n()
+const { t } = useI18n();
+const keyword = ref('');
+const emit = defineEmits(['search']);
+
+
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-gray-50">
-    <HeroSearch />
+    <HeroSearch @search="handleSearchFromHero" />
 
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-6">
@@ -109,8 +109,8 @@
               <div class="flex gap-4">
                 <div class="shrink-0">
                   <img
-                    :src="job.logo"
-                    :alt="job.company"
+                    :src="job.avatar_url"
+                    :alt="job.company_name"
                     class="w-16 h-16 rounded border border-gray-200"
                   />
                 </div>
@@ -123,7 +123,7 @@
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                       </svg>
-                      <span>{{ job.company }}</span>
+                      <span>{{ job.company_name }}</span>
                     </div>
                     <div class="flex items-center gap-1">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,19 +135,19 @@
                   </div>
                   <div class="flex items-center gap-4 text-sm mb-3">
                     <div class="flex items-center gap-1 text-green-600 font-semibold">
-                      <span>{{ job.salary }}</span>
+                      <span>{{ formatNumber(job.salary_min) }} {{ job.currency }}</span> - <span>{{ formatNumber(job.salary_max) }} {{ job.currency }}</span>
                     </div>
                     <div class="flex items-center gap-1 text-gray-500">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
-                      <span>{{ job.type }}</span>
+                      <span>{{ job.employment_type }}</span>
                     </div>
                     <div class="flex items-center gap-1 text-gray-500">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <span>{{ job.postedDate }}</span>
+                      <span>{{ timeAgo(job.created_at) }}</span>
                     </div>
                   </div>
                   <p class="text-sm text-gray-600 line-clamp-2">
@@ -170,7 +170,7 @@
               :disabled="currentPage === 1"
               class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sebelumnya
+              Previous
             </button>
             <button
               v-for="page in displayPages"
@@ -230,106 +230,58 @@ import { getJobPosts } from '../services/jobposts.api';
       return pages;
     });
 
+    const formatNumber = (num) =>
+        new Intl.NumberFormat('en-US').format(num);
+    
+    function timeAgo(dateString) {
+        const date = new Date(dateString)
+        const now = new Date()
+
+        const seconds = Math.floor((now - date) / 1000)
+
+        const units = [
+        { name: 'year',   seconds: 31536000 },
+        { name: 'month',  seconds: 2592000 },
+        { name: 'day',    seconds: 86400 },
+        { name: 'hour',   seconds: 3600 },
+        { name: 'minute', seconds: 60 },
+        ]
+
+        for (const unit of units) {
+            const value = Math.floor(seconds / unit.seconds)
+            if (value >= 1) {
+                return `posted ${new Intl.RelativeTimeFormat('en', { numeric: 'always' })
+                .format(-value, unit.name)}`
+            }
+        }
+
+        return 'posted just now'
+    }
+
     // API Service menggunakan Axios
     const jobService = {
       async fetchJobs(filters = {}) {
         try {
-          // PLACEHOLDER - Ganti dengan endpoint backend Anda
-          // const response = await axios.get('http://your-api.com/api/jobs', {
-          //   params: {
-          //     search: filters.search,
-          //     location: filters.location,
-          //     category: filters.category,
-          //     jobTypes: filters.jobTypes,
-          //     sortBy: filters.sortBy,
-          //     page: filters.page,
-          //     perPage: filters.perPage
-          //   }
-          // });
-          // return response.data;
-          const res = getJobPosts(filters);
-          console.log(res);
-          
+          const params = {
+            // search: filters.search,
+            // location: filters.location,
+            // category: filters.category,
+            // jobTypes: filters.jobTypes,
+            // sortBy: filters.sortBy,
+            page: filters.page,
+            limit: filters.limit
+          }
 
-          // Simulasi data untuk demo
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve({
-                jobs: [
-                  {
-                    id: 1,
-                    title: 'Senior Frontend Developer',
-                    company: 'Tech Solutions Inc.',
-                    location: 'Jakarta',
-                    salary: 'Rp 15.000.000 - 25.000.000',
-                    type: 'Full-time',
-                    postedDate: '2 hari yang lalu',
-                    description: 'We are looking for an experienced Frontend Developer with strong skills in Vue.js and modern web technologies...',
-                    logo: 'https://via.placeholder.com/60'
-                  },
-                  {
-                    id: 2,
-                    title: 'Backend Developer (Node.js)',
-                    company: 'Digital Innovations',
-                    location: 'Bandung',
-                    salary: 'Rp 12.000.000 - 20.000.000',
-                    type: 'Full-time',
-                    postedDate: '1 hari yang lalu',
-                    description: 'Join our team as a Backend Developer. We need someone with expertise in Node.js, Express, and MongoDB...',
-                    logo: 'https://via.placeholder.com/60'
-                  },
-                  {
-                    id: 3,
-                    title: 'UI/UX Designer',
-                    company: 'Creative Studio',
-                    location: 'Surabaya',
-                    salary: 'Rp 10.000.000 - 18.000.000',
-                    type: 'Full-time',
-                    postedDate: '3 hari yang lalu',
-                    description: 'We need a talented UI/UX Designer who can create beautiful and user-friendly interfaces...',
-                    logo: 'https://via.placeholder.com/60'
-                  },
-                  {
-                    id: 4,
-                    title: 'DevOps Engineer',
-                    company: 'Cloud Systems',
-                    location: 'Jakarta',
-                    salary: 'Rp 18.000.000 - 30.000.000',
-                    type: 'Full-time',
-                    postedDate: '4 hari yang lalu',
-                    description: 'Looking for DevOps Engineer with AWS experience, Docker, Kubernetes, and CI/CD pipeline expertise...',
-                    logo: 'https://via.placeholder.com/60'
-                  },
-                  {
-                    id: 5,
-                    title: 'Mobile Developer (Flutter)',
-                    company: 'App Ventures',
-                    location: 'Yogyakarta',
-                    salary: 'Rp 11.000.000 - 19.000.000',
-                    type: 'Full-time',
-                    postedDate: '5 hari yang lalu',
-                    description: 'Seeking Mobile Developer for our products. Experience with Flutter and Dart is required...',
-                    logo: 'https://via.placeholder.com/60'
-                  },
-                  {
-                    id: 6,
-                    title: 'Data Scientist',
-                    company: 'Analytics Pro',
-                    location: 'Jakarta',
-                    salary: 'Rp 16.000.000 - 28.000.000',
-                    type: 'Full-time',
-                    postedDate: '1 minggu yang lalu',
-                    description: 'Join our data science team. Strong background in Python, machine learning, and data analysis required...',
-                    logo: 'https://via.placeholder.com/60'
-                  }
-                ],
-                total: 150,
-                page: filters.page || 1,
-                perPage: 20,
-                totalPages: 5
-              });
-            }, 500);
-          });
+          if (filters.search && filters.search.trim() !== '') {
+            params.search = filters.search.trim()
+          }
+
+          // const response = await axios.get('http://localhost:5000/api/v1/job-posts', {
+          //   params
+          // });
+          const response = await getJobPosts(params);
+          return response.data;
+
         } catch (error) {
           console.error('Error fetching jobs:', error);
           throw error;
@@ -367,15 +319,16 @@ import { getJobPosts } from '../services/jobposts.api';
         loading.value = true;
         const data = await jobService.fetchJobs({
           search: searchQuery.value,
-          location: locationFilter.value,
-          category: selectedCategory.value,
-          jobTypes: jobTypes.value,
-          sortBy: sortBy.value,
+          // location: locationFilter.value,
+          // category: selectedCategory.value,
+          // jobTypes: jobTypes.value,
+          // sortBy: sortBy.value,
           page: currentPage.value,
-          perPage: 20
+          limit: 3
         });
-        jobs.value = data.jobs;
-        totalPages.value = data.totalPages;
+        jobs.value = data.data;
+        totalPages.value = data.meta.totalPage;
+
       } catch (error) {
         console.error('Error loading jobs:', error);
       } finally {
@@ -392,10 +345,19 @@ import { getJobPosts } from '../services/jobposts.api';
       }
     };
 
-    const handleSearch = () => {
+    const handleSearchFromHero = (value) => {
+      const keyword = value?.trim()
+      if (!keyword) {
+        // opsi 1: reset data
+        searchQuery.value = ''
+        currentPage.value = 1
+        loadJobs() // load default jobs
+        return
+      }
       currentPage.value = 1;
-      loadJobs();
-    };
+      searchQuery.value = value
+      loadJobs() // atau fetch API
+    }
 
     const viewJobDetail = (jobId) => {
       console.log('View job detail:', jobId);

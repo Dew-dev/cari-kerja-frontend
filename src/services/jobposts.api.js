@@ -1,8 +1,9 @@
 import api from "./api";
 
-export function getJobPosts(filters) {
+export function getJobPosts(params) {
 
-  return api.get(`/job-posts?${filters}`);
+  return api.get(`/job-posts`, {params});
+  
 }
 
 export function refreshToken(refreshToken) {
