@@ -49,6 +49,11 @@ const routes = [
     meta: { guestOnly: true },
     component: () => import("../pages/auth/Register.vue"),
   },
+  {
+    path: "/regcruiter",
+    meta: { guestOnly: true },
+    component: () => import("../pages/auth/RegisterRecruiter.vue"),
+  },
 ];
 
 const router = createRouter({

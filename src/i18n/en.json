@@ -2,6 +2,10 @@
   "jobs": "Jobs",
   "login": "Login",
   "apply": "Apply",
+  "signUp": "Sign Up",
+  "dontHaveAccount": "Don't have an account?",
+  "signing": "Signing in...",
+  "signingUp": "Signing up...", 
   "nav": {
     "searchJobs": "Search jobs",
     "postResume": "Post resume",
@@ -24,5 +28,27 @@
     "news": "Work.ua news",
     "help": "Help",
     "terms": "Terms of use"
+  },
+  "register": {
+    "titleRecruiter": "Recruiter Registration",
+    "title": "Create an Account",
+    "subtitle": "Join us today and take the first step towards your dream job.",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "personalInfo": "Personal Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "fullName": "Full Name",
+    "username": "Username",
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "registerButton": "Register",
+    "loading": "Registering...",
+    "companyName": "Company Name",
+    "contactNumber": "Contact Number",
+    "contactPerson": "Contact Person",
+    "signUp": "Sign Up"
+    
   }
 }
