@@ -10,7 +10,7 @@
       </h1>
 
       <p class="text-white/90 mb-8">
-        {{ t("home.subtitle", { count: 85472 }) }}
+        {{ t("home.subtitle") }}
       </p>
 
       <!-- SEARCH BAR -->

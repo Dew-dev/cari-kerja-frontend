@@ -1,5 +1,10 @@
 {
   "jobs": "ish o'rinlari",
+  "companies": "Kompaniyalar",
+  "salary": "Maosh",
+  "dashboard": "Boshqaruv paneli",
+  "createjob": "Ish Yaratish",
+  "applicants": "nomzodlar",
   "login": "Kirish",
   "apply": "Murojaat Qiling",
   "signUp": "Ro'yxatdan o'tish",
@@ -14,11 +19,11 @@
   },
   "home": {
     "title": "O'zbekistonning №1 ish qidirish xizmati",
-    "subtitle": "Hozirda {count} ta bo‘sh ish o‘rni mavjud.",
+    "subtitle": "O'z imkoniyatlaringizni shu yerdan toping!",
     "findJobs": "Ish topish",
     "pickUpJobs": "Mos ishlarni tanlash",
     "keywordPlaceholder": "Lavozim yoki kalit so‘z",
-    "allUkraine": "Butun Ukraina"
+    "allUkraine": "Butun O'zbekiston"
   },
   "footer": {
     "resources": "Resurslar",
@@ -48,6 +53,27 @@
     "companyName": "Kompaniya nomi",
     "contactNumber": "Aloqa raqami",
     "contactPerson": "Aloqa shaxsi",
-    "signUp": "Ro'yxatdan o'tish"
-  }
+    "signUp": "Ro'yxatdan o'tish",
+    "noAccount": "Hisobingiz yo'qmi?"
+  },
+  "job_description": "Ish tavsifi",
+  "job_title": "Ish nomi",
+  "add_tag": "Teg qo'shish",
+  "select_currency": "Valyutani tanlang",
+  "min_salary": "Minimal maosh",
+  "max_salary": "Maksimal maosh",
+  "select": "Tanlang",
+  "education": "Ta'lim",
+  "job_type": "Ish turi",
+  "job_level": "Ish darajasi",
+  "deadline": "Muddat",
+  "advanced_info": "Qo'shimcha ma'lumotlar",
+  "job_title_placeholder": "Ish nomini bu yerga kiriting",
+  "job_description_placeholder": "Ish tavsifini bu yerga kiriting",
+  "tags": "Teglar",
+  "location": "Joylashuv",
+  "submit": "Yuborish",
+  "country": "Mamlakat",
+  "city": "Shahar",
+  "post_job": "Ish joylash"
 }

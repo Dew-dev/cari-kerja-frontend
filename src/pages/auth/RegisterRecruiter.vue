@@ -1,7 +1,10 @@
 <script setup>
 import { reactive } from "vue"
 import { useRouter } from "vue-router"
-import { register } from "@/services/auth.api"
+import { registerRecruiter } from "@/services/auth.api"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const router = useRouter()
 
@@ -76,7 +79,7 @@ async function submit() {
 
   state.loading = true
   try {
-    await register(form)
+    await registerRecruiter(form)
     router.push("/login")
   } catch (err) {
     state.serverError =
