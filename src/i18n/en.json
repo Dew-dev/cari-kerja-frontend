@@ -1,5 +1,10 @@
 {
   "jobs": "Jobs",
+  "companies": "Companies",
+  "salary": "Salary",
+  "dashboard": "Dashboard",
+  "createjob": "Create Job",
+  "applicants": "Applicants",
   "login": "Login",
   "apply": "Apply",
   "signUp": "Sign Up",
@@ -14,11 +19,11 @@
   },
   "home": {
     "title": "Uzbekistan's #1 job service",
-    "subtitle": "We currently have {count} jobs.",
+    "subtitle": "Find your opportunities here!",
     "findJobs": "Find jobs",
     "pickUpJobs": "Pick up jobs",
     "keywordPlaceholder": "Job title or keyword",
-    "allUkraine": "All Ukraine"
+    "allUkraine": "All Uzbekistan"
   },
   "footer": {
     "resources": "Resources",
@@ -48,7 +53,28 @@
     "companyName": "Company Name",
     "contactNumber": "Contact Number",
     "contactPerson": "Contact Person",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "noAccount": "Don't have an account?"
     
-  }
+  },
+  "job_description": "Job Description",
+  "job_title": "Job Title",
+  "add_tag": "Add tag",
+  "select_currency": "Select Currency",
+  "min_salary": "Min Salary",
+  "max_salary": "Max Salary",
+  "select": "Select",
+  "education": "Education",
+  "job_type": "Job Type",
+  "job_level": "Job Level",
+  "deadline": "Deadline",
+  "advanced_info": "Advanced Information",
+  "job_title_placeholder": "Enter job title here",
+  "job_description_placeholder": "Enter job description here",
+  "tags": "Tags",
+  "location": "Location",
+  "submit": "Submit",
+  "country": "Country",
+  "city": "City",
+  "post_job": "Post Job"
 }

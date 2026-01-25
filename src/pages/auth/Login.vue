@@ -23,7 +23,7 @@ async function submit() {
   if (auth.role === "recruiter") {
     router.push("/recruiter")
   } else {
-    router.push("/jobs")
+    router.push("/jobposts")
   }
 }
 </script>
@@ -73,12 +73,12 @@ async function submit() {
         </button>
         
         <p class="text-sm text-center">
-          Don't have an account?
+          {{ t("register.noAccount") }}
           <span
             class="text-blue-600 cursor-pointer"
             @click="router.push('/register')"
           >
-            Sign Up
+            {{ t("register.signUp") }}  
           </span>
         </p>
       </form>

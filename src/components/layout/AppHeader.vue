@@ -3,8 +3,11 @@
     
     <div class="max-w-290 mx-auto py-10 h-14 flex items-center justify-between">
 
-        <div class="text-xl font-bold hover:cursor-pointer" @click="router.push('/')">JOBS.UZ</div>
-
+        <div class="text-xl font-bold hover:cursor-pointer hover:scale-110 hover:text-pink-500 transition duration-200 ease-in-out" @click="router.push('/')">JOBS.UZ</div>
+      
+    <RecruiterHeader v-if="auth.role === 'recruiter'" />
+    <UserHeader v-else />
+    
       <nav class="flex items-center gap-4 text-sm relative">
 
         <!-- LANGUAGE DROPDOWN -->
@@ -44,12 +47,14 @@
 
         <!-- AUTHENTICATED -->
         <template v-else>
-          <span class="opacity-90">
-            {{ auth.user?.name }}
-          </span>
+
+          <ProfileAvatar
+            :name="auth.user?.name"
+            :avatar="auth.user?.avatar"
+          />
 
           <button
-            class="border border-white px-4 py-1 rounded"
+            class="border border-white px-4 py-3 rounded hover:bg-white hover:text-blue-500 font-semibold transition duration-200"
             @click="logout"
           >
             Logout
@@ -64,6 +69,9 @@
 <script setup>
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
+import ProfileAvatar from "@/components/common/ProfileAvatar.vue"
+import RecruiterHeader from "@/components/layout/RecruiterHeader.vue"
+import UserHeader from "@/components/layout/UserHeader.vue"
 
 const { locale } = useI18n()
 const open = ref(false)

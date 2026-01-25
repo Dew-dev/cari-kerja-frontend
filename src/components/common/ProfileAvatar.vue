@@ -1,0 +1,49 @@
+<script setup>
+import { useRouter } from "vue-router"
+
+defineProps({
+  name: {
+    type: String,
+    default: "",
+  },
+  avatar: {
+    type: String,
+    default: "",
+  },
+})
+
+const router = useRouter()
+
+function goProfile() {
+  router.push("/profile/edit")
+}
+</script>
+
+<template>
+  <div
+    class="flex items-center gap-2 cursor-pointer"
+    @click="goProfile"
+  >
+    <!-- AVATAR -->
+    <div
+      class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden"
+    >
+      <img
+        v-if="avatar"
+        :src="avatar"
+        class="w-full h-full object-cover"
+      />
+      <span
+        v-else
+        class="text-sm font-semibold text-gray-700"
+      >
+        {{ name?.charAt(0)?.toUpperCase() }}
+      </span>
+    </div>
+
+    <!-- NAME (optional hide on mobile later) -->
+    <span class="text-sm">
+      {{ name }}
+    </span>
+  </div>
+</template>

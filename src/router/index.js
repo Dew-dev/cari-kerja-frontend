@@ -38,13 +38,6 @@ const routes = [
     component: () => import("../pages/Jobposts.vue"),
   },
   {
-    path: "/recruiter",
-    meta: { requiresAuth: true, role: "recruiter" },
-    component: {
-      template: "<div class='p-6'>RECRUITER DASHBOARD</div>",
-    },
-  },
-  {
     path: "/register",
     meta: { guestOnly: true },
     component: () => import("../pages/auth/Register.vue"),
@@ -53,6 +46,36 @@ const routes = [
     path: "/regcruiter",
     meta: { guestOnly: true },
     component: () => import("../pages/auth/RegisterRecruiter.vue"),
+  },
+  {
+    path: "/profile/edit",
+    meta: { requiresAuth: true },
+    component: {
+      template: "<div class='p-6'>EDIT PROFILE (COMING SOON)</div>",
+    },
+  },
+
+  {
+    path: "/recruiter",
+    meta: { requiresAuth: true, role: "recruiter" },
+    children: [
+      {
+        path: "",
+        component: () => import("../pages/recruiter/Dashboard.vue"),
+      },
+      {
+        path: "jobs",
+        component: () => import("../pages/recruiter/Jobs.vue"),
+      },
+      {
+        path: "jobs/create",
+        component: () => import("../pages/recruiter/CreateJob.vue"),
+      },
+      {
+        path: "applicants",
+        component: () => import("../pages/recruiter/Applicants.vue"),
+      },
+    ],
   },
 ];
 
@@ -67,7 +90,7 @@ router.beforeEach((to) => {
 
   // 🚫 GUEST ONLY (login/register)
   if (to.meta.guestOnly && auth.isLoggedIn) {
-    return auth.role === "recruiter" ? "/recruiter" : "/jobs";
+    return auth.role === "recruiter" ? "/recruiter" : "/jobposts";
   }
 
   // 🔒 PROTECTED ROUTE
@@ -85,4 +108,3 @@ router.beforeEach((to) => {
 
 
 export default router
-
