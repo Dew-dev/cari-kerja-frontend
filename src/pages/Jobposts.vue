@@ -26,7 +26,7 @@
               <!-- Categories -->
               <li v-for="category in visibleCategories" :key="category.id">
                 <button
-                  @click="selectedCategory = category.name"
+                  @click="selectedCategory = category.name; handleFilterChange()"
                   :class="[
                     'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
                     selectedCategory === category.name
@@ -96,6 +96,7 @@
                   <input
                     type="checkbox"
                     v-model="selectedEmploymentTypes"
+                    @change="handleFilterChange"
                     :value="type.name"
                     class="rounded"
                   />
@@ -330,16 +331,24 @@ const router = useRouter();
     }
 
     const syncUrl = () => {
-      const query = {}
+      const query = { ...route.query }
 
       if (searchQuery.value) query.search = searchQuery.value
+      else delete query.search
+
       if (selectedCategory.value) query.category = selectedCategory.value
+      else delete query.category
+
       if (currentPage.value > 1) query.page = currentPage.value
+      else delete query.page
+
       if (selectedEmploymentTypes.value.length) {
         query.employment_types = selectedEmploymentTypes.value.join(',')
+      } else {
+        delete query.employment_types
       }
 
-      router.replace({ query })
+      router.push({ query })
     }
 
     // API Service menggunakan Axios
@@ -473,7 +482,6 @@ const router = useRouter();
       searchQuery.value = value;
 
       syncUrl();
-      loadJobs() // atau fetch API
     }
 
     const viewJobDetail = (jobId) => {
@@ -484,44 +492,59 @@ const router = useRouter();
 
     const prevPage = () => {
       if (currentPage.value > 1) {
-        currentPage.value--;
-        syncUrl();
-        loadJobs();
+        goToPage(currentPage.value - 1);
       }
     };
 
     const nextPage = () => {
       if (currentPage.value < totalPages.value) {
-        currentPage.value++;
-        syncUrl();
-        loadJobs();
+        goToPage(currentPage.value + 1);
       }
     };
 
     const goToPage = (page) => {
-      currentPage.value = page;
-      syncUrl();
-      loadJobs();
+      // Cukup ubah URL, biarkan watcher route.query yang memanggil API
+      router.push({
+        query: {
+          ...route.query,
+          page: page
+        }
+      });
+    }
+
+    const handleFilterChange = () => {
+      router.push({
+        query: {
+          ...route.query,
+          category: selectedCategory.value || undefined,
+          employment_types: selectedEmploymentTypes.value.length
+            ? selectedEmploymentTypes.value.join(',')
+            : undefined,
+          page: 1 // Reset ke 1 hanya saat fungsi ini dipanggil
+        }
+      });
     };
 
+
     // Watchers
-    watch([selectedCategory, selectedEmploymentTypes, sortBy], () => {
-      currentPage.value = 1;
-      syncUrl();
-      loadJobs();
-    });
 
     watch(
       () => route.query,
       (q) => {
-        searchQuery.value = q.search || '';
-        selectedCategory.value = q.category || '';
-        currentPage.value = Number(q.page || 1);
-        selectedEmploymentTypes.value = q.employment_types ? q.employment_types.split(',') : [];
+        searchQuery.value = q.search || ''
+        selectedCategory.value = q.category || ''
+        selectedEmploymentTypes.value = q.employment_types
+          ? q.employment_types.split(',')
+          : []
+        currentPage.value = Number(q.page || 1)
 
-        loadJobs();
-      }
+        loadJobs()
+      },
+      { immediate: true }
     )
+
+    
+
 
     // Lifecycle
     onMounted(() => {
@@ -529,7 +552,6 @@ const router = useRouter();
       selectedCategory.value = route.query.category || ''
       currentPage.value = Number(route.query.page || 1)
 
-      loadJobs();
       loadCategories();
       loadEmploymentTypes();
     });
