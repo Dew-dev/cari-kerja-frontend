@@ -13,7 +13,7 @@
               <!-- All -->
               <li>
                 <button
-                  @click="selectedCategory = ''"
+                  @click="resetCategory"
                   :class="[
                     'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
                     selectedCategory === '' ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
@@ -470,19 +470,27 @@ const router = useRouter();
     }
 
     const handleSearchFromHero = (value) => {
-      const keyword = value?.trim()
-      if (!keyword) {
-        // opsi 1: reset data
-        searchQuery.value = ''
-        currentPage.value = 1
-        loadJobs() // load default jobs
-        return
-      }
-      currentPage.value = 1;
-      searchQuery.value = value;
+      const keyword = value?.trim();
+      
+      // Buat copy query yang ada sekarang
+      const newQuery = { ...route.query };
 
-      syncUrl();
-    }
+      if (!keyword) {
+        // Jika kosong, hapus property search dari object query
+        searchQuery.value = '';
+        delete newQuery.search;
+      } else {
+        // Jika ada isinya, update property search
+        searchQuery.value = keyword;
+        newQuery.search = keyword;
+      }
+
+      // Setiap kali search berubah, kita harus reset ke halaman 1
+      newQuery.page = 1;
+
+      // Eksekusi navigasi
+      router.push({ query: newQuery });
+    };
 
     const viewJobDetail = (jobId) => {
       console.log('View job detail:', jobId);
@@ -523,6 +531,22 @@ const router = useRouter();
           page: 1 // Reset ke 1 hanya saat fungsi ini dipanggil
         }
       });
+    };
+
+    const resetCategory = () => {
+      selectedCategory.value = ''; // Reset state internal
+      
+      // Buat copy dari query saat ini
+      const query = { ...route.query };
+      
+      // Hapus key category dari object query
+      delete query.category;
+      
+      // Reset ke halaman 1 saat ganti kategori
+      query.page = 1;
+
+      // Navigasi dengan query yang sudah bersih
+      router.push({ query });
     };
 
 
