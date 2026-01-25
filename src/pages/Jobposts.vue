@@ -10,6 +10,7 @@
           <div class="bg-white rounded-lg shadow p-4 sticky top-6">
             <h3 class="font-semibold text-lg mb-4 text-gray-900">Kategori</h3>
             <ul class="space-y-2">
+              <!-- All -->
               <li>
                 <button
                   @click="selectedCategory = ''"
@@ -21,19 +22,67 @@
                   <span>Semua Kategori</span>
                 </button>
               </li>
-              <li v-for="category in categories" :key="category.id">
+
+              <!-- Categories -->
+              <li v-for="category in visibleCategories" :key="category.id">
                 <button
-                  @click="selectedCategory = category.id"
+                  @click="selectedCategory = category.name"
                   :class="[
                     'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
-                    selectedCategory === category.id ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
+                    selectedCategory === category.name
+                      ? 'bg-blue-50 text-blue-600'
+                      : 'text-gray-700'
                   ]"
                 >
                   <span>{{ category.name }}</span>
-                  <span class="text-sm text-gray-500">{{ category.count }}</span>
+                  <span class="text-sm text-gray-500">{{ category.job_count }}</span>
                 </button>
               </li>
+              
+              <div
+                v-if="categories.length > CATEGORY_LIMIT"
+                class="mt-4 pt-3 border-t border-gray-100"
+              >
+                <button
+                  @click="showAllCategories = !showAllCategories"
+                  class="
+                    w-full
+                    flex items-center justify-center gap-2
+                    px-3 py-2
+                    rounded-md
+                    text-sm font-medium
+                    text-gray-600
+                    hover:text-blue-600
+                    hover:bg-blue-50
+                    transition
+                    cursor-pointer
+                    focus:outline-none
+                  "
+                >
+                  <span>
+                    {{ showAllCategories ? 'View less categories' : 'View more categories' }}
+                  </span>
+
+                  <svg
+                    class="w-4 h-4 transition-transform duration-200"
+                    :class="{ 'rotate-180': showAllCategories }"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+
             </ul>
+
 
             <div class="mt-6 pt-6 border-t">
               <h4 class="font-semibold text-sm mb-3 text-gray-900">Tipe Pekerjaan</h4>
@@ -78,7 +127,7 @@
           <div class="bg-white rounded-lg shadow p-4 mb-4">
             <div class="flex items-center justify-between">
               <h2 class="text-xl font-semibold text-gray-900">
-                Ditemukan {{ jobs.length }} lowongan pekerjaan
+                Ditemukan {{ totalData }} lowongan pekerjaan
               </h2>
               <select v-model="sortBy" class="px-4 py-2 border border-gray-300 rounded text-sm text-gray-700">
                 <option value="latest">Terbaru</option>
@@ -204,6 +253,12 @@ import { ref, onMounted, watch, computed } from 'vue';
 import HeroSearch from "../components/home/HeroSearch.vue";
 import axios from 'axios';
 import { getJobPosts } from '../services/jobposts.api';
+import { getCategoriesWithJobcount } from '../services/categories.api';
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute();
+const router = useRouter();
+
 
 // State
     const jobs = ref([]);
@@ -217,6 +272,9 @@ import { getJobPosts } from '../services/jobposts.api';
     const sortBy = ref('latest');
     const currentPage = ref(1);
     const totalPages = ref(5);
+    const totalData = ref(0);
+    const CATEGORY_LIMIT = 6
+    const showAllCategories = ref(false)
 
     // Computed
     const displayPages = computed(() => {
@@ -228,6 +286,11 @@ import { getJobPosts } from '../services/jobposts.api';
         pages.push(i);
       }
       return pages;
+    });
+    const visibleCategories = computed(() => {
+      return showAllCategories.value
+        ? categories.value
+        : categories.value.slice(0, CATEGORY_LIMIT)
     });
 
     const formatNumber = (num) =>
@@ -258,6 +321,16 @@ import { getJobPosts } from '../services/jobposts.api';
         return 'posted just now'
     }
 
+    const syncUrl = () => {
+      const query = {}
+
+      if (searchQuery.value) query.search = searchQuery.value
+      if (selectedCategory.value) query.category = selectedCategory.value
+      if (currentPage.value > 1) query.page = currentPage.value
+
+      router.replace({ query })
+    }
+
     // API Service menggunakan Axios
     const jobService = {
       async fetchJobs(filters = {}) {
@@ -274,6 +347,10 @@ import { getJobPosts } from '../services/jobposts.api';
 
           if (filters.search && filters.search.trim() !== '') {
             params.search = filters.search.trim()
+          }
+          
+          if (filters.category !== '') {
+            params.category = filters.category;
           }
 
           // const response = await axios.get('http://localhost:5000/api/v1/job-posts', {
@@ -294,18 +371,20 @@ import { getJobPosts } from '../services/jobposts.api';
           // const response = await axios.get('http://your-api.com/api/categories');
           // return response.data;
 
+          const response = await getCategoriesWithJobcount();
+          return response.data;
           // Simulasi data untuk demo
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve([
-                { id: 1, name: 'IT / Software', count: 45 },
-                { id: 2, name: 'Marketing', count: 28 },
-                { id: 3, name: 'Design', count: 22 },
-                { id: 4, name: 'Finance', count: 18 },
-                { id: 5, name: 'Sales', count: 35 }
-              ]);
-            }, 300);
-          });
+          // return new Promise((resolve) => {
+          //   setTimeout(() => {
+          //     resolve([
+          //       { id: 1, name: 'IT / Software', count: 45 },
+          //       { id: 2, name: 'Marketing', count: 28 },
+          //       { id: 3, name: 'Design', count: 22 },
+          //       { id: 4, name: 'Finance', count: 18 },
+          //       { id: 5, name: 'Sales', count: 35 }
+          //     ]);
+          //   }, 300);
+          // });
         } catch (error) {
           console.error('Error fetching categories:', error);
           throw error;
@@ -320,7 +399,7 @@ import { getJobPosts } from '../services/jobposts.api';
         const data = await jobService.fetchJobs({
           search: searchQuery.value,
           // location: locationFilter.value,
-          // category: selectedCategory.value,
+          category: selectedCategory.value,
           // jobTypes: jobTypes.value,
           // sortBy: sortBy.value,
           page: currentPage.value,
@@ -328,6 +407,8 @@ import { getJobPosts } from '../services/jobposts.api';
         });
         jobs.value = data.data;
         totalPages.value = data.meta.totalPage;
+        totalData.value = data.meta.total;
+        
 
       } catch (error) {
         console.error('Error loading jobs:', error);
@@ -339,7 +420,7 @@ import { getJobPosts } from '../services/jobposts.api';
     const loadCategories = async () => {
       try {
         const data = await jobService.fetchCategories();
-        categories.value = data;
+        categories.value = data.data;
       } catch (error) {
         console.error('Error loading categories:', error);
       }
@@ -355,7 +436,9 @@ import { getJobPosts } from '../services/jobposts.api';
         return
       }
       currentPage.value = 1;
-      searchQuery.value = value
+      searchQuery.value = value;
+
+      syncUrl();
       loadJobs() // atau fetch API
     }
 
@@ -368,6 +451,7 @@ import { getJobPosts } from '../services/jobposts.api';
     const prevPage = () => {
       if (currentPage.value > 1) {
         currentPage.value--;
+        syncUrl();
         loadJobs();
       }
     };
@@ -375,23 +459,41 @@ import { getJobPosts } from '../services/jobposts.api';
     const nextPage = () => {
       if (currentPage.value < totalPages.value) {
         currentPage.value++;
+        syncUrl();
         loadJobs();
       }
     };
 
     const goToPage = (page) => {
       currentPage.value = page;
+      syncUrl();
       loadJobs();
     };
 
     // Watchers
     watch([selectedCategory, jobTypes, sortBy], () => {
       currentPage.value = 1;
+      syncUrl();
       loadJobs();
     });
 
+    watch(
+      () => route.query,
+      (q) => {
+        searchQuery.value = q.search || ''
+        selectedCategory.value = q.category || ''
+        currentPage.value = Number(q.page || 1)
+
+        loadJobs()
+      }
+    )
+
     // Lifecycle
     onMounted(() => {
+      searchQuery.value = route.query.search || ''
+      selectedCategory.value = route.query.category || ''
+      currentPage.value = Number(route.query.page || 1)
+
       loadJobs();
       loadCategories();
     });
