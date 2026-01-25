@@ -1,9 +1,9 @@
 import api from "./api";
 
-export function getJobPosts(params) {
+export function getEmploymentTypes(params) {
 
-  return api.get(`/job-posts`, {params});
-
+  return api.get(`/employment_types`, {params});
+  
 }
 
 // export function refreshToken(refreshToken) {

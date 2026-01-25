@@ -8,7 +8,7 @@
         <!-- Sidebar - Categories & Filters -->
         <aside class="hidden lg:block w-64 shrink-0">
           <div class="bg-white rounded-lg shadow p-4 sticky top-6">
-            <h3 class="font-semibold text-lg mb-4 text-gray-900">Kategori</h3>
+            <h3 class="font-semibold text-lg mb-4 text-gray-900">Categories</h3>
             <ul class="space-y-2">
               <!-- All -->
               <li>
@@ -19,7 +19,7 @@
                     selectedCategory === '' ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
                   ]"
                 >
-                  <span>Semua Kategori</span>
+                  <span>All Categories</span>
                 </button>
               </li>
 
@@ -38,7 +38,7 @@
                   <span class="text-sm text-gray-500">{{ category.job_count }}</span>
                 </button>
               </li>
-              
+
               <div
                 v-if="categories.length > CATEGORY_LIMIT"
                 class="mt-4 pt-3 border-t border-gray-100"
@@ -79,32 +79,36 @@
                   </svg>
                 </button>
               </div>
-
-
             </ul>
 
 
             <div class="mt-6 pt-6 border-t">
-              <h4 class="font-semibold text-sm mb-3 text-gray-900">Tipe Pekerjaan</h4>
+              <h4 class="font-semibold text-sm mb-3 text-gray-900">
+                Employment Types
+              </h4>
+
               <div class="space-y-2">
-                <label class="flex items-center gap-2 text-sm text-gray-700">
-                  <input v-model="jobTypes" type="checkbox" value="fulltime" class="rounded" />
-                  <span>Full-time</span>
-                </label>
-                <label class="flex items-center gap-2 text-sm text-gray-700">
-                  <input v-model="jobTypes" type="checkbox" value="parttime" class="rounded" />
-                  <span>Part-time</span>
-                </label>
-                <label class="flex items-center gap-2 text-sm text-gray-700">
-                  <input v-model="jobTypes" type="checkbox" value="remote" class="rounded" />
-                  <span>Remote</span>
-                </label>
-                <label class="flex items-center gap-2 text-sm text-gray-700">
-                  <input v-model="jobTypes" type="checkbox" value="freelance" class="rounded" />
-                  <span>Freelance</span>
+                <label
+                  v-for="type in employmentTypes"
+                  :key="type.id"
+                  class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    v-model="selectedEmploymentTypes"
+                    :value="type.name"
+                    class="rounded"
+                  />
+                  <span>{{ type.name }}</span>
                 </label>
               </div>
             </div>
+            <p class="text-xs text-gray-400 mt-2">
+              Selected: {{ selectedEmploymentTypes}}
+            </p>
+
+
+
           </div>
         </aside>
 
@@ -127,7 +131,7 @@
           <div class="bg-white rounded-lg shadow p-4 mb-4">
             <div class="flex items-center justify-between">
               <h2 class="text-xl font-semibold text-gray-900">
-                Ditemukan {{ totalData }} lowongan pekerjaan
+                Found {{ totalData }} Job Vacancies
               </h2>
               <select v-model="sortBy" class="px-4 py-2 border border-gray-300 rounded text-sm text-gray-700">
                 <option value="latest">Terbaru</option>
@@ -255,6 +259,7 @@ import axios from 'axios';
 import { getJobPosts } from '../services/jobposts.api';
 import { getCategoriesWithJobcount } from '../services/categories.api';
 import { useRoute, useRouter } from 'vue-router'
+import { getEmploymentTypes } from '../services/employment_types.api';
 
 const route = useRoute();
 const router = useRouter();
@@ -273,8 +278,11 @@ const router = useRouter();
     const currentPage = ref(1);
     const totalPages = ref(5);
     const totalData = ref(0);
-    const CATEGORY_LIMIT = 6
-    const showAllCategories = ref(false)
+    const CATEGORY_LIMIT = 6;
+    const showAllCategories = ref(false);
+    const employmentTypes = ref([]);
+    const selectedEmploymentTypes = ref([]);
+
 
     // Computed
     const displayPages = computed(() => {
@@ -327,6 +335,9 @@ const router = useRouter();
       if (searchQuery.value) query.search = searchQuery.value
       if (selectedCategory.value) query.category = selectedCategory.value
       if (currentPage.value > 1) query.page = currentPage.value
+      if (selectedEmploymentTypes.value.length) {
+        query.employment_types = selectedEmploymentTypes.value.join(',')
+      }
 
       router.replace({ query })
     }
@@ -351,6 +362,10 @@ const router = useRouter();
           
           if (filters.category !== '') {
             params.category = filters.category;
+          }
+
+          if (filters.employmentTypes?.length) {
+            params.employment_type = filters.employmentTypes.join(',');
           }
 
           // const response = await axios.get('http://localhost:5000/api/v1/job-posts', {
@@ -389,6 +404,16 @@ const router = useRouter();
           console.error('Error fetching categories:', error);
           throw error;
         }
+      },
+
+      async fetchEmploymentTypes() {
+        try {
+          const response = await getEmploymentTypes();
+          return response.data;
+        } catch (error) {
+          console.error('Error fetching employment types:', error);
+          throw error;
+        }
       }
     };
 
@@ -400,7 +425,7 @@ const router = useRouter();
           search: searchQuery.value,
           // location: locationFilter.value,
           category: selectedCategory.value,
-          // jobTypes: jobTypes.value,
+          employmentTypes: selectedEmploymentTypes.value,
           // sortBy: sortBy.value,
           page: currentPage.value,
           limit: 3
@@ -425,6 +450,15 @@ const router = useRouter();
         console.error('Error loading categories:', error);
       }
     };
+
+    const loadEmploymentTypes = async () => {
+      try {
+        const data = await jobService.fetchEmploymentTypes();
+        employmentTypes.value = data.data;
+      } catch (err) {
+        console.error('Error loading employment types:', err)
+      }
+    }
 
     const handleSearchFromHero = (value) => {
       const keyword = value?.trim()
@@ -471,7 +505,7 @@ const router = useRouter();
     };
 
     // Watchers
-    watch([selectedCategory, jobTypes, sortBy], () => {
+    watch([selectedCategory, selectedEmploymentTypes, sortBy], () => {
       currentPage.value = 1;
       syncUrl();
       loadJobs();
@@ -480,11 +514,12 @@ const router = useRouter();
     watch(
       () => route.query,
       (q) => {
-        searchQuery.value = q.search || ''
-        selectedCategory.value = q.category || ''
-        currentPage.value = Number(q.page || 1)
+        searchQuery.value = q.search || '';
+        selectedCategory.value = q.category || '';
+        currentPage.value = Number(q.page || 1);
+        selectedEmploymentTypes.value = q.employment_types ? q.employment_types.split(',') : [];
 
-        loadJobs()
+        loadJobs();
       }
     )
 
@@ -496,6 +531,7 @@ const router = useRouter();
 
       loadJobs();
       loadCategories();
+      loadEmploymentTypes();
     });
 
 </script>

@@ -6,12 +6,12 @@ export function getCategoriesWithJobcount(params) {
   
 }
 
-export function refreshToken(refreshToken) {
-  return api.post("/users/refresh-token", {
-    refreshToken,
-  });
-}
+// export function refreshToken(refreshToken) {
+//   return api.post("/users/refresh-token", {
+//     refreshToken,
+//   });
+// }
 
-export function register(payload) {
-  return api.post("/users/register", payload);
-}
+// export function register(payload) {
+//   return api.post("/users/register", payload);
+// }
