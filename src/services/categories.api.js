@@ -1,12 +1,9 @@
 import api from "./api";
 
-export function getJobPosts(params) {
-  return api.get(`/job-posts`, { params });
-}
+export function getCategoriesWithJobcount(params) {
 
-export function getJobPostsSelf(params) {
-  const res = api.get(`/recruiters/job-posts/self`, { params });
-  return res;
+  return api.get(`/categories/jobcount`, {params});
+  
 }
 
 // export function refreshToken(refreshToken) {

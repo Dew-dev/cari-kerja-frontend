@@ -8,54 +8,108 @@
         <!-- Sidebar - Categories & Filters -->
         <aside class="hidden lg:block w-64 shrink-0">
           <div class="bg-white rounded-lg shadow p-4 sticky top-6">
-            <h3 class="font-semibold text-lg mb-4 text-gray-900">Kategori</h3>
+            <h3 class="font-semibold text-lg mb-4 text-gray-900">Categories</h3>
             <ul class="space-y-2">
+              <!-- All -->
               <li>
                 <button
-                  @click="selectedCategory = ''"
+                  @click="resetCategory"
                   :class="[
                     'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
                     selectedCategory === '' ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
                   ]"
                 >
-                  <span>Semua Kategori</span>
+                  <span>All Categories</span>
                 </button>
               </li>
-              <li v-for="category in categories" :key="category.id">
+
+              <!-- Categories -->
+              <li v-for="category in visibleCategories" :key="category.id">
                 <button
-                  @click="selectedCategory = category.id"
+                  @click="selectedCategory = category.name; handleFilterChange()"
                   :class="[
                     'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
-                    selectedCategory === category.id ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
+                    selectedCategory === category.name
+                      ? 'bg-blue-50 text-blue-600'
+                      : 'text-gray-700'
                   ]"
                 >
                   <span>{{ category.name }}</span>
-                  <span class="text-sm text-gray-500">{{ category.count }}</span>
+                  <span class="text-sm text-gray-500">{{ category.job_count }}</span>
                 </button>
               </li>
+
+              <div
+                v-if="categories.length > CATEGORY_LIMIT"
+                class="mt-4 pt-3 border-t border-gray-100"
+              >
+                <button
+                  @click="showAllCategories = !showAllCategories"
+                  class="
+                    w-full
+                    flex items-center justify-center gap-2
+                    px-3 py-2
+                    rounded-md
+                    text-sm font-medium
+                    text-gray-600
+                    hover:text-blue-600
+                    hover:bg-blue-50
+                    transition
+                    cursor-pointer
+                    focus:outline-none
+                  "
+                >
+                  <span>
+                    {{ showAllCategories ? 'View less categories' : 'View more categories' }}
+                  </span>
+
+                  <svg
+                    class="w-4 h-4 transition-transform duration-200"
+                    :class="{ 'rotate-180': showAllCategories }"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+              </div>
             </ul>
 
+
             <div class="mt-6 pt-6 border-t">
-              <h4 class="font-semibold text-sm mb-3 text-gray-900">Tipe Pekerjaan</h4>
+              <h4 class="font-semibold text-sm mb-3 text-gray-900">
+                Employment Types
+              </h4>
+
               <div class="space-y-2">
-                <label class="flex items-center gap-2 text-sm text-gray-700">
-                  <input v-model="jobTypes" type="checkbox" value="fulltime" class="rounded" />
-                  <span>Full-time</span>
-                </label>
-                <label class="flex items-center gap-2 text-sm text-gray-700">
-                  <input v-model="jobTypes" type="checkbox" value="parttime" class="rounded" />
-                  <span>Part-time</span>
-                </label>
-                <label class="flex items-center gap-2 text-sm text-gray-700">
-                  <input v-model="jobTypes" type="checkbox" value="remote" class="rounded" />
-                  <span>Remote</span>
-                </label>
-                <label class="flex items-center gap-2 text-sm text-gray-700">
-                  <input v-model="jobTypes" type="checkbox" value="freelance" class="rounded" />
-                  <span>Freelance</span>
+                <label
+                  v-for="type in employmentTypes"
+                  :key="type.id"
+                  class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    v-model="selectedEmploymentTypes"
+                    @change="handleFilterChange"
+                    :value="type.name"
+                    class="rounded"
+                  />
+                  <span>{{ type.name }}</span>
                 </label>
               </div>
             </div>
+            <p class="text-xs text-gray-400 mt-2">
+              Selected: {{ selectedEmploymentTypes}}
+            </p>
+
+
+
           </div>
         </aside>
 
@@ -78,7 +132,7 @@
           <div class="bg-white rounded-lg shadow p-4 mb-4">
             <div class="flex items-center justify-between">
               <h2 class="text-xl font-semibold text-gray-900">
-                Ditemukan {{ jobs.length }} lowongan pekerjaan
+                Found {{ totalData }} Job Vacancies
               </h2>
               <select v-model="sortBy" class="px-4 py-2 border border-gray-300 rounded text-sm text-gray-700">
                 <option value="latest">Terbaru</option>
@@ -204,6 +258,13 @@ import { ref, onMounted, watch, computed } from 'vue';
 import HeroSearch from "../components/home/HeroSearch.vue";
 import axios from 'axios';
 import { getJobPosts } from '../services/jobposts.api';
+import { getCategoriesWithJobcount } from '../services/categories.api';
+import { useRoute, useRouter } from 'vue-router'
+import { getEmploymentTypes } from '../services/employment_types.api';
+
+const route = useRoute();
+const router = useRouter();
+
 
 // State
     const jobs = ref([]);
@@ -217,6 +278,12 @@ import { getJobPosts } from '../services/jobposts.api';
     const sortBy = ref('latest');
     const currentPage = ref(1);
     const totalPages = ref(5);
+    const totalData = ref(0);
+    const CATEGORY_LIMIT = 6;
+    const showAllCategories = ref(false);
+    const employmentTypes = ref([]);
+    const selectedEmploymentTypes = ref([]);
+
 
     // Computed
     const displayPages = computed(() => {
@@ -228,6 +295,11 @@ import { getJobPosts } from '../services/jobposts.api';
         pages.push(i);
       }
       return pages;
+    });
+    const visibleCategories = computed(() => {
+      return showAllCategories.value
+        ? categories.value
+        : categories.value.slice(0, CATEGORY_LIMIT)
     });
 
     const formatNumber = (num) =>
@@ -258,6 +330,27 @@ import { getJobPosts } from '../services/jobposts.api';
         return 'posted just now'
     }
 
+    const syncUrl = () => {
+      const query = { ...route.query }
+
+      if (searchQuery.value) query.search = searchQuery.value
+      else delete query.search
+
+      if (selectedCategory.value) query.category = selectedCategory.value
+      else delete query.category
+
+      if (currentPage.value > 1) query.page = currentPage.value
+      else delete query.page
+
+      if (selectedEmploymentTypes.value.length) {
+        query.employment_types = selectedEmploymentTypes.value.join(',')
+      } else {
+        delete query.employment_types
+      }
+
+      router.push({ query })
+    }
+
     // API Service menggunakan Axios
     const jobService = {
       async fetchJobs(filters = {}) {
@@ -274,6 +367,14 @@ import { getJobPosts } from '../services/jobposts.api';
 
           if (filters.search && filters.search.trim() !== '') {
             params.search = filters.search.trim()
+          }
+          
+          if (filters.category !== '') {
+            params.category = filters.category;
+          }
+
+          if (filters.employmentTypes?.length) {
+            params.employment_type = filters.employmentTypes.join(',');
           }
 
           // const response = await axios.get('http://localhost:5000/api/v1/job-posts', {
@@ -294,20 +395,32 @@ import { getJobPosts } from '../services/jobposts.api';
           // const response = await axios.get('http://your-api.com/api/categories');
           // return response.data;
 
+          const response = await getCategoriesWithJobcount();
+          return response.data;
           // Simulasi data untuk demo
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve([
-                { id: 1, name: 'IT / Software', count: 45 },
-                { id: 2, name: 'Marketing', count: 28 },
-                { id: 3, name: 'Design', count: 22 },
-                { id: 4, name: 'Finance', count: 18 },
-                { id: 5, name: 'Sales', count: 35 }
-              ]);
-            }, 300);
-          });
+          // return new Promise((resolve) => {
+          //   setTimeout(() => {
+          //     resolve([
+          //       { id: 1, name: 'IT / Software', count: 45 },
+          //       { id: 2, name: 'Marketing', count: 28 },
+          //       { id: 3, name: 'Design', count: 22 },
+          //       { id: 4, name: 'Finance', count: 18 },
+          //       { id: 5, name: 'Sales', count: 35 }
+          //     ]);
+          //   }, 300);
+          // });
         } catch (error) {
           console.error('Error fetching categories:', error);
+          throw error;
+        }
+      },
+
+      async fetchEmploymentTypes() {
+        try {
+          const response = await getEmploymentTypes();
+          return response.data;
+        } catch (error) {
+          console.error('Error fetching employment types:', error);
           throw error;
         }
       }
@@ -320,14 +433,16 @@ import { getJobPosts } from '../services/jobposts.api';
         const data = await jobService.fetchJobs({
           search: searchQuery.value,
           // location: locationFilter.value,
-          // category: selectedCategory.value,
-          // jobTypes: jobTypes.value,
+          category: selectedCategory.value,
+          employmentTypes: selectedEmploymentTypes.value,
           // sortBy: sortBy.value,
           page: currentPage.value,
           limit: 3
         });
         jobs.value = data.data;
         totalPages.value = data.meta.totalPage;
+        totalData.value = data.meta.total;
+        
 
       } catch (error) {
         console.error('Error loading jobs:', error);
@@ -339,25 +454,43 @@ import { getJobPosts } from '../services/jobposts.api';
     const loadCategories = async () => {
       try {
         const data = await jobService.fetchCategories();
-        categories.value = data;
+        categories.value = data.data;
       } catch (error) {
         console.error('Error loading categories:', error);
       }
     };
 
-    const handleSearchFromHero = (value) => {
-      const keyword = value?.trim()
-      if (!keyword) {
-        // opsi 1: reset data
-        searchQuery.value = ''
-        currentPage.value = 1
-        loadJobs() // load default jobs
-        return
+    const loadEmploymentTypes = async () => {
+      try {
+        const data = await jobService.fetchEmploymentTypes();
+        employmentTypes.value = data.data;
+      } catch (err) {
+        console.error('Error loading employment types:', err)
       }
-      currentPage.value = 1;
-      searchQuery.value = value
-      loadJobs() // atau fetch API
     }
+
+    const handleSearchFromHero = (value) => {
+      const keyword = value?.trim();
+      
+      // Buat copy query yang ada sekarang
+      const newQuery = { ...route.query };
+
+      if (!keyword) {
+        // Jika kosong, hapus property search dari object query
+        searchQuery.value = '';
+        delete newQuery.search;
+      } else {
+        // Jika ada isinya, update property search
+        searchQuery.value = keyword;
+        newQuery.search = keyword;
+      }
+
+      // Setiap kali search berubah, kita harus reset ke halaman 1
+      newQuery.page = 1;
+
+      // Eksekusi navigasi
+      router.push({ query: newQuery });
+    };
 
     const viewJobDetail = (jobId) => {
       console.log('View job detail:', jobId);
@@ -367,33 +500,84 @@ import { getJobPosts } from '../services/jobposts.api';
 
     const prevPage = () => {
       if (currentPage.value > 1) {
-        currentPage.value--;
-        loadJobs();
+        goToPage(currentPage.value - 1);
       }
     };
 
     const nextPage = () => {
       if (currentPage.value < totalPages.value) {
-        currentPage.value++;
-        loadJobs();
+        goToPage(currentPage.value + 1);
       }
     };
 
     const goToPage = (page) => {
-      currentPage.value = page;
-      loadJobs();
+      // Cukup ubah URL, biarkan watcher route.query yang memanggil API
+      router.push({
+        query: {
+          ...route.query,
+          page: page
+        }
+      });
+    }
+
+    const handleFilterChange = () => {
+      router.push({
+        query: {
+          ...route.query,
+          category: selectedCategory.value || undefined,
+          employment_types: selectedEmploymentTypes.value.length
+            ? selectedEmploymentTypes.value.join(',')
+            : undefined,
+          page: 1 // Reset ke 1 hanya saat fungsi ini dipanggil
+        }
+      });
     };
 
+    const resetCategory = () => {
+      selectedCategory.value = ''; // Reset state internal
+      
+      // Buat copy dari query saat ini
+      const query = { ...route.query };
+      
+      // Hapus key category dari object query
+      delete query.category;
+      
+      // Reset ke halaman 1 saat ganti kategori
+      query.page = 1;
+
+      // Navigasi dengan query yang sudah bersih
+      router.push({ query });
+    };
+
+
     // Watchers
-    watch([selectedCategory, jobTypes, sortBy], () => {
-      currentPage.value = 1;
-      loadJobs();
-    });
+
+    watch(
+      () => route.query,
+      (q) => {
+        searchQuery.value = q.search || ''
+        selectedCategory.value = q.category || ''
+        selectedEmploymentTypes.value = q.employment_types
+          ? q.employment_types.split(',')
+          : []
+        currentPage.value = Number(q.page || 1)
+
+        loadJobs()
+      },
+      { immediate: true }
+    )
+
+    
+
 
     // Lifecycle
     onMounted(() => {
-      loadJobs();
+      searchQuery.value = route.query.search || ''
+      selectedCategory.value = route.query.category || ''
+      currentPage.value = Number(route.query.page || 1)
+
       loadCategories();
+      loadEmploymentTypes();
     });
 
 </script>
