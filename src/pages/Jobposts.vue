@@ -330,27 +330,6 @@ const router = useRouter();
         return 'posted just now'
     }
 
-    const syncUrl = () => {
-      const query = { ...route.query }
-
-      if (searchQuery.value) query.search = searchQuery.value
-      else delete query.search
-
-      if (selectedCategory.value) query.category = selectedCategory.value
-      else delete query.category
-
-      if (currentPage.value > 1) query.page = currentPage.value
-      else delete query.page
-
-      if (selectedEmploymentTypes.value.length) {
-        query.employment_types = selectedEmploymentTypes.value.join(',')
-      } else {
-        delete query.employment_types
-      }
-
-      router.push({ query })
-    }
-
     // API Service menggunakan Axios
     const jobService = {
       async fetchJobs(filters = {}) {
