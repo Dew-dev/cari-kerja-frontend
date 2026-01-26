@@ -104,12 +104,6 @@
                 </label>
               </div>
             </div>
-            <p class="text-xs text-gray-400 mt-2">
-              Selected: {{ selectedEmploymentTypes}}
-            </p>
-
-
-
           </div>
         </aside>
 
@@ -134,10 +128,11 @@
               <h2 class="text-xl font-semibold text-gray-900">
                 Found {{ totalData }} Job Vacancies
               </h2>
-              <select v-model="sortBy" class="px-4 py-2 border border-gray-300 rounded text-sm text-gray-700">
-                <option value="latest">Terbaru</option>
-                <option value="salary">Gaji Tertinggi</option>
-                <option value="relevant">Paling Relevan</option>
+              <select v-model="sortBy" @change="handleFilterChange" class="px-4 py-2 border border-gray-300 rounded text-sm text-gray-700">
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
+                <option value="highest-salary">Highest Salary</option>
+                <!-- <option value="relevant">Paling Relevan</option> -->
               </select>
             </div>
           </div>
@@ -244,7 +239,7 @@
               :disabled="currentPage === totalPages"
               class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Selanjutnya
+              Next
             </button>
           </div>
         </main>
@@ -271,11 +266,9 @@ const router = useRouter();
     const categories = ref([]);
     const loading = ref(true);
     const searchQuery = ref('');
-    const locationFilter = ref('');
     const selectedCategory = ref('');
-    const jobTypes = ref([]);
     const showFilters = ref(false);
-    const sortBy = ref('latest');
+    const sortBy = ref('created_at');
     const currentPage = ref(1);
     const totalPages = ref(5);
     const totalData = ref(0);
@@ -356,9 +349,22 @@ const router = useRouter();
             params.employment_type = filters.employmentTypes.join(',');
           }
 
-          // const response = await axios.get('http://localhost:5000/api/v1/job-posts', {
-          //   params
-          // });
+          if (filters.sortBy !== '') {
+            if (filters.sortBy === 'latest') {
+              params.sort_by = 'created_at';
+              params.sort_order = 'desc';
+            } else if(filters.sortBy === 'oldest') {
+              params.sort_by = 'created_at';
+              params.sort_order = 'asc';
+            } else if(filters.sortBy === "highest-salary") {
+              params.sort_by = 'salary_max';
+              params.sort_order = 'desc';
+            } else {
+              params.sort_by = 'created_at';
+              params.sort_order = 'desc';       
+            }
+          }
+
           const response = await getJobPosts(params);
           return response.data;
 
@@ -370,24 +376,8 @@ const router = useRouter();
 
       async fetchCategories() {
         try {
-          // PLACEHOLDER - Ganti dengan endpoint backend Anda
-          // const response = await axios.get('http://your-api.com/api/categories');
-          // return response.data;
-
           const response = await getCategoriesWithJobcount();
           return response.data;
-          // Simulasi data untuk demo
-          // return new Promise((resolve) => {
-          //   setTimeout(() => {
-          //     resolve([
-          //       { id: 1, name: 'IT / Software', count: 45 },
-          //       { id: 2, name: 'Marketing', count: 28 },
-          //       { id: 3, name: 'Design', count: 22 },
-          //       { id: 4, name: 'Finance', count: 18 },
-          //       { id: 5, name: 'Sales', count: 35 }
-          //     ]);
-          //   }, 300);
-          // });
         } catch (error) {
           console.error('Error fetching categories:', error);
           throw error;
@@ -414,7 +404,7 @@ const router = useRouter();
           // location: locationFilter.value,
           category: selectedCategory.value,
           employmentTypes: selectedEmploymentTypes.value,
-          // sortBy: sortBy.value,
+          sortBy: sortBy.value,
           page: currentPage.value,
           limit: 3
         });
@@ -503,6 +493,7 @@ const router = useRouter();
       router.push({
         query: {
           ...route.query,
+          sort_by: sortBy.value,
           category: selectedCategory.value || undefined,
           employment_types: selectedEmploymentTypes.value.length
             ? selectedEmploymentTypes.value.join(',')
@@ -534,27 +525,21 @@ const router = useRouter();
     watch(
       () => route.query,
       (q) => {
-        searchQuery.value = q.search || ''
-        selectedCategory.value = q.category || ''
+        searchQuery.value = q.search || '';
+        selectedCategory.value = q.category || '';
+        sortBy.value = q.sort_by || 'created_at';
         selectedEmploymentTypes.value = q.employment_types
           ? q.employment_types.split(',')
-          : []
-        currentPage.value = Number(q.page || 1)
+          : [];
+        currentPage.value = Number(q.page || 1);
 
-        loadJobs()
+        loadJobs();
       },
       { immediate: true }
     )
 
-    
-
-
     // Lifecycle
     onMounted(() => {
-      searchQuery.value = route.query.search || ''
-      selectedCategory.value = route.query.category || ''
-      currentPage.value = Number(route.query.page || 1)
-
       loadCategories();
       loadEmploymentTypes();
     });
