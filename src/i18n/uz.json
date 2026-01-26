@@ -4,6 +4,7 @@
   "salary": "Maosh",
   "dashboard": "Boshqaruv paneli",
   "createjob": "Ish Yaratish",
+  "editjob": "Ishni Tahrirlash",
   "applicants": "nomzodlar",
   "login": "Kirish",
   "apply": "Murojaat Qiling",
@@ -75,5 +76,7 @@
   "submit": "Yuborish",
   "country": "Mamlakat",
   "city": "Shahar",
-  "post_job": "Ish joylash"
+  "post_job": "Ish joylash",
+  "category": "Kategoriya",
+  "select_category": "Kategoriyani tanlang"
 }

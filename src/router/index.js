@@ -75,6 +75,10 @@ const routes = [
         path: "applicants",
         component: () => import("../pages/recruiter/Applicants.vue"),
       },
+      {
+        path: "/recruiter/jobs/:id/edit",
+        component: () => import("../pages/recruiter/EditJob.vue"),
+      },
     ],
   },
 ];
