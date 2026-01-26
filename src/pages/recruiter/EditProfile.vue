@@ -1,0 +1,190 @@
+<script setup>
+import { ref, reactive, onMounted } from "vue";
+import api from "../../services/api";
+import { useAuthStore } from "../../stores/authStore";
+
+const auth = useAuthStore();
+
+/* =====================
+   STATE
+===================== */
+const form = reactive({
+  company_name: "",
+  company_website: "",
+  contact_name: "",
+  contact_phone: "",
+  address: "",
+  industry_id: "",
+  description: "",
+});
+
+const industries = ref([]);
+const avatarFile = ref(null);
+const avatarPreview = ref(null);
+const avatarFromBackend = ref(null);
+const loading = ref(false);
+
+/* =====================
+   LOAD DATA
+===================== */
+async function loadProfile() {
+  try {
+    loading.value = true;
+
+    // recruiter profile
+    const res = await api.get(`/users/${auth.user.id}/recruiters`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const r = res.data.data;
+    console.log("Recruiter profile:", r);
+    form.company_name = r.company_name ?? "";
+    form.company_website = r.company_website ?? "";
+    form.contact_name = r.contact_name ?? "";
+    form.contact_phone = r.contact_phone ?? "";
+    form.address = r.address ?? "";
+    form.industry_id = r.industry_id ? String(r.industry_id) : "";
+    form.description = r.description ?? "";
+
+    if (r.avatar_url) {
+      avatarFromBackend.value = r.avatar_url;
+    }
+
+    // industries
+    const ind = await api.get("/industries");
+    industries.value = ind.data?.data || [];
+  } catch (err) {
+    console.error("Failed to load profile", err);
+  } finally {
+    loading.value = false;
+  }
+}
+
+/* =====================
+   SAVE
+===================== */
+async function saveProfile() {
+  try {
+    const fd = new FormData();
+
+    fd.append("company_name", form.company_name);
+    fd.append("company_website", form.company_website);
+    fd.append("contact_name", form.contact_name);
+    fd.append("contact_phone", form.contact_phone);
+    fd.append("address", form.address);
+    fd.append("industry_id", form.industry_id);
+    fd.append("description", form.description);
+
+    if (avatarFile.value) {
+      fd.append("avatar", avatarFile.value);
+    }
+
+    await api.put("/users/recruiters", fd, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    alert("Profile updated");
+  } catch (err) {
+    console.error("Save failed", err);
+    alert("Failed to update profile");
+  }
+}
+
+onMounted(loadProfile);
+</script>
+
+<template>
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="rounded-2xl border bg-white shadow-sm px-10 py-5">
+      <div class="border-b px-6 py-4">
+        <h1 class="text-xl font-semibold">Recruiter Profile</h1>
+        <p class="text-sm text-gray-500">
+          This information will be visible to candidates
+        </p>
+      </div>
+
+      <div v-if="loading">Loading...</div>
+
+      <form
+        v-else
+        @submit.prevent="saveProfile"
+        class="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
+        <!-- AVATAR -->
+        <div class="flex items-center gap-6 pt-5 col-span-2">
+          <div class="relative">
+            <div
+              class="h-28 w-28 rounded-full overflow-hidden border bg-gray-100"
+            >
+              <img
+                v-if="avatarPreview || avatarFromBackend"
+                :src="
+                  avatarPreview || `http://localhost:5000${avatarFromBackend}`
+                "
+                class="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1"> Company Logo </label>
+            <input type="file" accept="image/*" class="text-sm w-full rounded-lg border px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <p class="text-xs text-gray-500 mt-1">JPG or PNG, max 2MB</p>
+          </div>
+        </div>
+
+        <input
+          v-model="form.company_name"
+          class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Company Name"
+        />
+        <input
+          v-model="form.company_website"
+          class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Company Website"
+        />
+        <input
+          v-model="form.contact_name"
+          class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Contact Name"
+        />
+        <input
+          v-model="form.contact_phone"
+          class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Contact Phone"
+        />
+
+        <textarea
+          v-model="form.address"
+          class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          rows="2"
+          placeholder="Company Address"
+        />
+
+        <!-- INDUSTRY (PLAIN SELECT) -->
+        <select v-model="form.industry_id" class="w-full rounded-lg border px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="">Select Industry</option>
+          <option v-for="i in industries" :key="i.id" :value="String(i.id)">
+            {{ i.name }}
+          </option>
+        </select>
+
+        <textarea
+          v-model="form.description"
+          class="w-full rounded-lg border px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 col-span-2"
+          rows="4"
+          placeholder="Company Description"
+        />
+        <div class="flex justify-end pt-4 border-t col-span-2">
+          <button
+            type="submit"
+            class="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>

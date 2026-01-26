@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue"
 import { useI18n } from "vue-i18n"
+import { useAuthStore } from "../../stores/authStore"
+const auth = useAuthStore()
 
 const { locale, t } = useI18n()
 const open = ref(false)
@@ -53,22 +55,17 @@ function setLang(lang) {
         <!-- RIGHT SIDE -->
         <div class="flex items-center gap-3 flex-wrap">
 
-
           <!-- Employers -->
-          <button class="border border-blue-500 text-blue-500 px-4 py-1 rounded">
+          <router-link to="/regcruiter" v-if="!auth.isLoggedIn" class="border border-blue-500 text-blue-500 px-4 py-1 rounded">
             {{ t("nav.forEmployers") }} →
-          </button>
+          </router-link>
         </div>
       </div>
 
       <!-- LINKS -->
       <div class="flex flex-wrap items-center gap-4 mb-2">
-        <a href="#" class="hover:underline">{{ t("footer.resources") }}</a>
         <a href="#" class="hover:underline">{{ t("footer.contact") }}</a>
         <a href="#" class="hover:underline">{{ t("footer.about") }}</a>
-        <a href="#" class="hover:underline">{{ t("footer.career") }}</a>
-        <a href="#" class="hover:underline">{{ t("footer.news") }}</a>
-        <a href="#" class="hover:underline">{{ t("footer.help") }}</a>
         <a href="#" class="hover:underline">{{ t("footer.terms") }}</a>
       </div>
 
