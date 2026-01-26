@@ -304,7 +304,6 @@ async function confirmUpdateStatus() {
 
     // optimistic update
     selectedJob.value.status_id = nextStatus.value
-
     
     const arr = [
       "OPEN",
@@ -323,36 +322,4 @@ async function confirmUpdateStatus() {
   }
 }
 
-
-
-async function updateJobStatus(job, newStatus) {
-  const confirmMsg =
-    newStatus === 1 ? "Publish this job?" : "Close this job?";
-
-  if (!confirm(confirmMsg)) return;
-
-  try {
-    await api.post(`/job-posts/status/${job.id}`, {
-      status_id: newStatus,
-    }, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    // update UI langsung (tanpa refetch)
-    
-    const arr = [
-      "OPEN",
-      "CLOSED",
-      "DRAFT",
-      "ARCHIVED"
-    ]
-    job.status_id = newStatus;
-    job.status = arr[newStatus - 1];
-  } catch (err) {
-    console.error("Failed to update job status", err);
-    alert("Failed to update job status");
-  }
-}
 </script>
