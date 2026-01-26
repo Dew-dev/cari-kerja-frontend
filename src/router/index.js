@@ -38,6 +38,12 @@ const routes = [
     component: () => import("../pages/Jobposts.vue"),
   },
   {
+  path: '/jobposts/viewJobDetail',
+  name: 'JobDetail',
+  component: () => import('../pages/JobDetailView.vue'), // Sesuaikan path-nya
+  props: true // Mengizinkan ID dari URL masuk sebagai props ke komponen
+  },
+  {
     path: "/register",
     meta: { guestOnly: true },
     component: () => import("../pages/auth/Register.vue"),
