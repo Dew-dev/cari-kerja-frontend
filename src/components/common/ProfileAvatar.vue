@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router"
 
+const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
 defineProps({
   name: {
     type: String,
@@ -30,7 +31,7 @@ function goProfile() {
     >
       <img
         v-if="avatar"
-        :src="avatar"
+        :src="linkStorageUrl + avatar"
         class="w-full h-full object-cover"
       />
       <span

@@ -1,11 +1,16 @@
 <script setup>
-import { reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../../stores/authstore";
 
 const { t } = useI18n();
 const auth = useAuthStore();
 import api from "@/services/api"; // axios instance
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter();
+const route = useRoute();
+const loading = ref(false);
+
 
 /* ======================
    TAG SEARCH STATE
@@ -100,6 +105,48 @@ const form = reactive({
 });
 
 /* ======================
+   FETCH JOB
+====================== */
+async function fetchJob() {
+  try {
+    loading.value = true
+    const res = await api.get(`/job-posts/${route.params.id}`)
+    const resTags = await api.get(`/job-posts/${route.params.id}/tags`)
+    const job = res.data?.data
+    console.log("EDIT JOB DATA:", job)
+    // PREFILL
+    form.title = job.title
+    form.description = job.description
+    form.location = job.location
+    form.salary_min = job.salary_min
+    form.salary_max = job.salary_max
+    form.currency_id = job.currency_id
+    form.category_id = job.category_id
+    form.deadline = job.deadline?.slice(0, 10)
+    form.tags = resTags.data?.data || []
+    form.employment_type_id = job.employment_type_id
+    form.experience_level_id = job.experience_level_id
+    form.country = res.data?.data?.location?.split(", ")[1] || ""
+    form.city = res.data?.data?.location?.split(", ")[0] || ""
+    selectCurrency({
+      id: res.data?.data?.currency_id,
+      name: res.data?.data?.currency,
+      code: res.data?.data?.currency_code,
+    })
+    selectCategory({
+      id: res.data?.data?.category_id,
+      name: res.data?.data?.category_name,
+    })
+
+  } catch (err) {
+    console.error("Failed to load job", err)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(fetchJob)
+/* ======================
    SALARY VALIDATION
 ====================== */ /* ======================
    CURRENCY SEARCH STATE
@@ -112,7 +159,7 @@ const isSelectingCurrency = ref(false);
 let currencyTimeout = null;
 const salaryError = ref(null);
 
-async function fetchCurrencies(keyword = "UZS") {
+async function fetchCurrencies(keyword = "_") {
   try {
     console.log("FETCH CURRENCIES WITH KEYWORD:", keyword);
     currencyLoading.value = true;
@@ -239,26 +286,12 @@ async function submit() {
   });
 
   console.log(res);
-  if (res?.status !== 201) {
+  if (!res?.success) {
     return;
   }
-
-  const { tags } = payload;
-  console.log("TAGS TO ADD:", tags);
-  tags.map(async (t) => {
-    console.log("ADDING TAG:", t);
-    // console.log("JOB POST ID:", res?.data);
-    const resTags = await api.post(`/tags/${res?.data.data.id}`, t, {
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-      },
-    });
-
-    if (resTags?.success) return;
-  });
-
+  
   router.push("/recruiter/jobs")
-}     
+}
 </script>
 
 <template>
@@ -268,7 +301,7 @@ async function submit() {
       <h1 class="text-xl font-semibold">
         {{ t("createjob") }}
       </h1>
-      <p class="text-sm text-gray-500 my-2"> 
+      <p class="text-sm text-gray-500 my-2">
         Fill in the details to publish a new job vacancy
       </p>
 

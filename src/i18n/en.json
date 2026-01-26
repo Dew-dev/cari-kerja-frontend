@@ -4,13 +4,14 @@
   "salary": "Salary",
   "dashboard": "Dashboard",
   "createjob": "Create Job",
+  "editjob": "Edit Job",
   "applicants": "Applicants",
   "login": "Login",
   "apply": "Apply",
   "signUp": "Sign Up",
   "dontHaveAccount": "Don't have an account?",
   "signing": "Signing in...",
-  "signingUp": "Signing up...", 
+  "signingUp": "Signing up...",
   "nav": {
     "searchJobs": "Search jobs",
     "postResume": "Post resume",
@@ -55,7 +56,6 @@
     "contactPerson": "Contact Person",
     "signUp": "Sign Up",
     "noAccount": "Don't have an account?"
-    
   },
   "job_description": "Job Description",
   "job_title": "Job Title",
@@ -76,5 +76,7 @@
   "submit": "Submit",
   "country": "Country",
   "city": "City",
-  "post_job": "Post Job"
+  "post_job": "Post Job",
+  "category": "Category",
+  "select_category": "Select Category"
 }
