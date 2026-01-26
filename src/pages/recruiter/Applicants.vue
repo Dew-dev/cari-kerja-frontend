@@ -198,7 +198,18 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
                 </div>
               </td>
 
-              <td class="px-4 py-3 text-right"></td>
+              <td class="px-4 py-3 text-right">
+                <button
+                  @click.stop="
+                    $router.push(
+                      `/recruiter/jobs/${jobId}/applicants/${a.application_id}`,
+                    )
+                  "
+                  class="text-blue-600 text-sm hover:underline"
+                >
+                  View
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>

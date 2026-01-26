@@ -82,7 +82,7 @@ const routes = [
       {
         path: "/recruiter/jobs/:jobId/applicants/:applicationId",
         name: "recruiter-applicant-detail",
-        component: () => import("@/pages/recruiter/ApplicantDetail.vue"),
+        component: () => import("../pages/recruiter/ApplicantDetail.vue"),
         meta: { requiresAuth: true, role: "recruiter" },
       },
     ],
