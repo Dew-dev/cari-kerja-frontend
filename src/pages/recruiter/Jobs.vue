@@ -34,7 +34,7 @@
               <th class="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="jobs.length > 0 && !loading">
             <tr
               v-for="job in jobs"
               :key="job.id"
@@ -102,7 +102,29 @@
                   >
                     Close
                   </button>
+                  <button
+                    class="text-blue-600 hover:underline"
+                    @click="
+                      $router.push(`/recruiter/jobs/${job.id}/applicants`)
+                    "
+                  >
+                    Applicants
+                  </button>
                 </div>
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else-if="loading">
+            <tr>
+              <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+                Loading...
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+                No jobs found.
               </td>
             </tr>
           </tbody>
@@ -122,9 +144,10 @@
             :disabled="page === 1"
             class="px-3 py-1.5 border rounded-md"
             :class="
-              page === 1
+              (page === 1
                 ? 'text-gray-400 cursor-not-allowed'
-                : 'hover:bg-gray-100'
+                : 'hover:bg-gray-100',
+              loading ? 'opacity-50 cursor-not-allowed' : '')
             "
           >
             Prev
@@ -137,9 +160,10 @@
             @click="changePage(p)"
             class="px-3 py-1.5 border rounded-md"
             :class="
-              p === page
+              (p === page
                 ? 'bg-blue-600 text-white border-blue-600'
-                : 'hover:bg-gray-100'
+                : 'hover:bg-gray-100',
+              loading ? 'opacity-50 cursor-not-allowed' : '')
             "
           >
             {{ p }}
@@ -151,9 +175,10 @@
             :disabled="page === totalPages"
             class="px-3 py-1.5 border rounded-md"
             :class="
-              page === totalPages
+              (page === totalPages
                 ? 'text-gray-400 cursor-not-allowed'
-                : 'hover:bg-gray-100'
+                : 'hover:bg-gray-100',
+              loading ? 'opacity-50 cursor-not-allowed' : '')
             "
           >
             Next
@@ -163,61 +188,49 @@
     </div>
   </div>
   <!-- CONFIRM MODAL -->
-<div
-  v-if="showConfirmModal"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
->
-  <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6">
+  <div
+    v-if="showConfirmModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+  >
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6">
+      <!-- TITLE -->
+      <h3 class="text-lg font-semibold text-gray-900">
+        {{ nextStatus === 1 ? "Publish Job" : "Close Job" }}
+      </h3>
 
-    <!-- TITLE -->
-    <h3 class="text-lg font-semibold text-gray-900">
-      {{
-        nextStatus === 1
-          ? "Publish Job"
-          : "Close Job"
-      }}
-    </h3>
-
-    <!-- MESSAGE -->
-    <p class="text-sm text-gray-600 mt-2">
-      {{
-        nextStatus === 1
-          ? "Are you sure you want to publish this job?"
-          : "Are you sure you want to close this job?"
-      }}
-    </p>
-
-    <!-- ACTIONS -->
-    <div class="mt-6 flex justify-end gap-3">
-      <button
-        @click="showConfirmModal = false"
-        class="px-4 py-2 text-sm rounded-md border hover:bg-gray-100"
-      >
-        Cancel
-      </button>
-
-      <button
-        @click="confirmUpdateStatus"
-        :class="
-          nextStatus === 1
-            ? 'bg-green-600 hover:bg-green-700'
-            : 'bg-red-600 hover:bg-red-700'
-        "
-        class="px-4 py-2 text-sm text-white rounded-md"
-      >
+      <!-- MESSAGE -->
+      <p class="text-sm text-gray-600 mt-2">
         {{
           nextStatus === 1
-            ? "Publish"
-            : "Close"
+            ? "Are you sure you want to publish this job?"
+            : "Are you sure you want to close this job?"
         }}
-      </button>
+      </p>
+
+      <!-- ACTIONS -->
+      <div class="mt-6 flex justify-end gap-3">
+        <button
+          @click="showConfirmModal = false"
+          class="px-4 py-2 text-sm rounded-md border hover:bg-gray-100"
+        >
+          Cancel
+        </button>
+
+        <button
+          @click="confirmUpdateStatus"
+          :class="
+            nextStatus === 1
+              ? 'bg-green-600 hover:bg-green-700'
+              : 'bg-red-600 hover:bg-red-700'
+          "
+          class="px-4 py-2 text-sm text-white rounded-md"
+        >
+          {{ nextStatus === 1 ? "Publish" : "Close" }}
+        </button>
+      </div>
     </div>
-
   </div>
-</div>
-
 </template>
-
 
 <script setup>
 import { ref, onMounted } from "vue";
@@ -227,10 +240,9 @@ import api from "../../services/api";
 const { t } = useI18n();
 const jobs = ref([]);
 const loading = ref(false);
-const showConfirmModal = ref(false)
-const selectedJob = ref(null)
-const nextStatus = ref(null)
-
+const showConfirmModal = ref(false);
+const selectedJob = ref(null);
+const nextStatus = ref(null);
 
 const page = ref(1);
 const limit = ref(5);
@@ -290,36 +302,35 @@ function changePage(p) {
 }
 
 function openConfirmModal(job, status) {
-  selectedJob.value = job
-  nextStatus.value = status
-  console.log("Selected Job:", selectedJob.value.id, "Next Status:", nextStatus.value)
-  showConfirmModal.value = true
+  selectedJob.value = job;
+  nextStatus.value = status;
+  console.log(
+    "Selected Job:",
+    selectedJob.value.id,
+    "Next Status:",
+    nextStatus.value,
+  );
+  showConfirmModal.value = true;
 }
 
 async function confirmUpdateStatus() {
   try {
     await api.post(`/job-posts/status/${selectedJob.value.id}`, {
       status_id: nextStatus.value,
-    })
+    });
 
     // optimistic update
-    selectedJob.value.status_id = nextStatus.value
-    
-    const arr = [
-      "OPEN",
-      "CLOSED",
-      "DRAFT",
-      "ARCHIVED"
-    ]
+    selectedJob.value.status_id = nextStatus.value;
+
+    const arr = ["OPEN", "CLOSED", "DRAFT", "ARCHIVED"];
     selectedJob.value.status = arr[nextStatus.value - 1];
   } catch (err) {
-    console.error("Failed to update job status", err)
-    alert("Failed to update job status")
+    console.error("Failed to update job status", err);
+    alert("Failed to update job status");
   } finally {
-    showConfirmModal.value = false
-    selectedJob.value = null
-    nextStatus.value = null
+    showConfirmModal.value = false;
+    selectedJob.value = null;
+    nextStatus.value = null;
   }
 }
-
 </script>

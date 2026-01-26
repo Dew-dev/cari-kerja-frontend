@@ -17,7 +17,7 @@ const menu = computed(() => [
   { label: t("dashboard"), path: "/recruiter" },
   { label: t("jobs"), path: "/recruiter/jobs" },
   { label: t("createjob"), path: "/recruiter/jobs/create" },
-  { label: t("applicants"), path: "/recruiter/applicants" },
+  // { label: t("applicants"), path: "/recruiter/applicants" },
 ])
 
 function isActive(path) {

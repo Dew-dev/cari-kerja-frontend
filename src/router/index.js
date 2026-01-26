@@ -72,12 +72,18 @@ const routes = [
         component: () => import("../pages/recruiter/CreateJob.vue"),
       },
       {
-        path: "applicants",
+        path: "/recruiter/jobs/:id/edit",
+        component: () => import("../pages/recruiter/EditJob.vue"),
+      },
+      {
+        path: "/recruiter/jobs/:id/applicants",
         component: () => import("../pages/recruiter/Applicants.vue"),
       },
       {
-        path: "/recruiter/jobs/:id/edit",
-        component: () => import("../pages/recruiter/EditJob.vue"),
+        path: "/recruiter/jobs/:jobId/applicants/:applicationId",
+        name: "recruiter-applicant-detail",
+        component: () => import("@/pages/recruiter/ApplicantDetail.vue"),
+        meta: { requiresAuth: true, role: "recruiter" },
       },
     ],
   },
