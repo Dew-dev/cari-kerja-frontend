@@ -38,7 +38,7 @@ const routes = [
     component: () => import("../pages/Jobposts.vue"),
   },
   {
-  path: '/jobposts/viewJobDetail',
+  path: '/jobposts/:id',
   name: 'JobDetail',
   component: () => import('../pages/JobDetailView.vue'), // Sesuaikan path-nya
   props: true // Mengizinkan ID dari URL masuk sebagai props ke komponen
@@ -97,7 +97,14 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { top: 0, behavior: 'smooth' };
+    }
+  },
 })
 
 
