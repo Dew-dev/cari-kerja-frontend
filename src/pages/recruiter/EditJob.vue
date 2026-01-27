@@ -6,6 +6,7 @@ import { useAuthStore } from "../../stores/authstore";
 const { t } = useI18n();
 const auth = useAuthStore();
 import api from "@/services/api"; // axios instance
+import { updateJob } from "@/services/jobposts.api";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
@@ -279,11 +280,7 @@ async function submit() {
 
   // console.log("CREATE JOB PAYLOAD:", payload);
   // TODO: POST /jobs
-  const res = await api.post("/job-posts", payload, {
-    headers: {
-      Authorization: `Bearer ${auth.token}`,
-    },
-  });
+  const res = await updateJob(route.params.id, payload)
 
   console.log(res);
   if (!res?.success) {
@@ -548,7 +545,7 @@ async function submit() {
             type="submit"
             class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-6 py-2.5 rounded-md"
           >
-            {{ t("post_job") }}
+            {{ t("edit_job") }}
           </button>
         </div>
       </form>

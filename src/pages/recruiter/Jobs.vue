@@ -82,9 +82,9 @@
               <td class="px-4 py-3 text-right">
                 <div class="flex justify-end gap-3">
                   <button class="text-blue-600 hover:underline">View</button>
-                  <!-- <router-link
+                  <router-link
                     :to="`/recruiter/jobs/${job.id}/edit`"
-                    class="text-green-600 hover:underline">Edit</router-link> -->
+                    class="text-green-600 hover:underline">Edit</router-link>
                   <!-- PUBLISH -->
                   <button
                     v-if="job.status_id === 3"
