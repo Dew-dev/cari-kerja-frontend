@@ -79,34 +79,61 @@
               </td>
 
               <!-- ACTIONS -->
-              <td class="px-4 py-3 text-right">
-                <div class="flex justify-end gap-3">
-                  <button class="text-blue-600 hover:underline">View</button>
+              <td class="px-4 py-3 relative overflow-visible text-right">
+                <button
+                  @click.stop="toggleDropdown(job.id)"
+                  class="p-1 rounded hover:bg-gray-100"
+                >
+                  <span class="text-xl leading-none">⋯</span>
+                </button>
+
+                <div
+                  v-if="openActionDropdown === job.id"
+                  ref="dropdownRef"
+                  class="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-50"
+                >
+                  <button
+                    class="block w-full text-center px-4 py-2 text-sm hover:bg-gray-50 text-blue-600"
+                  >
+                    View
+                  </button>
+
                   <router-link
                     :to="`/recruiter/jobs/${job.id}/edit`"
-                    class="text-green-600 hover:underline">Edit</router-link>
-                  <!-- PUBLISH -->
+                    class="block px-4 py-2 text-center hover:bg-gray-50 text-emerald-600"
+                    @click="closeDropdown"
+                  >
+                    Edit
+                  </router-link>
+
                   <button
                     v-if="job.status_id === 3"
-                    class="text-green-600 hover:underline"
-                    @click="openConfirmModal(job, 1)"
+                    @click="
+                      closeDropdown();
+                      openConfirmModal(job, 1);
+                    "
+                    class="block w-full text-center px-4 py-2 text-sm hover:bg-gray-50 text-green-600"
                   >
                     Publish
                   </button>
 
-                  <!-- CLOSE -->
                   <button
                     v-if="job.status_id === 1"
-                    class="text-red-600 hover:underline"
-                    @click="openConfirmModal(job, 2)"
+                    @click="
+                      closeDropdown();
+                      openConfirmModal(job, 2);
+                    "
+                    class="block w-full text-center px-4 py-2 text-sm hover:bg-gray-50 text-red-600"
                   >
                     Close
                   </button>
+
                   <button
-                    class="text-blue-600 hover:underline"
                     @click="
-                      $router.push(`/recruiter/jobs/${job.id}/applicants`)
+                      closeDropdown();
+                      $router.push(`/recruiter/jobs/${job.id}/applicants`);
                     "
+                    class="block w-full text-center px-4 py-2 text-sm hover:bg-gray-50 text-indigo-600 font-medium"
                   >
                     Applicants
                   </button>
@@ -233,7 +260,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { getJobPostsSelf } from "../../services/jobposts.api";
 import api from "../../services/api";
@@ -333,4 +360,29 @@ async function confirmUpdateStatus() {
     nextStatus.value = null;
   }
 }
+
+const openActionDropdown = ref(null); // job.id
+const dropdownRef = ref(null);
+
+function toggleDropdown(jobId) {
+  openActionDropdown.value = openActionDropdown.value === jobId ? null : jobId;
+}
+
+function closeDropdown() {
+  openActionDropdown.value = null;
+}
+
+function handleClickOutside(e) {
+  if (!dropdownRef.value?.contains(e.target)) {
+    closeDropdown();
+  }
+}
+
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>

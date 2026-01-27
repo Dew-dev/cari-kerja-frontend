@@ -11,6 +11,7 @@ import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 const loading = ref(false);
+const buttonLoading = ref(false);
 
 
 /* ======================
@@ -269,6 +270,7 @@ function selectCategory(category) {
    SUBMIT
 ====================== */
 async function submit() {
+  buttonLoading.value = true;
   const payload = {
     ...form,
     recruiter_id: auth.user?.recruiter_id,
@@ -282,12 +284,13 @@ async function submit() {
   // TODO: POST /jobs
   const res = await updateJob(route.params.id, payload)
 
-  console.log(res);
-  if (!res?.success) {
+  // console.log(res);
+  if (!res?.data?.success) {
     return;
   }
-  
-  router.push("/recruiter/jobs")
+  buttonLoading.value = false;
+  alert("Job updated successfully!");
+  // router.push("/recruiter/jobs")
 }
 </script>
 
@@ -543,7 +546,8 @@ async function submit() {
         <div class="pt-1  flex justify-end">
           <button
             type="submit"
-            class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-6 py-2.5 rounded-md"
+            :class="buttonLoading ? 'bg-blue-400 cursor-not-allowed text-white text-sm font-medium px-6 py-2.5 rounded-md' : 'bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-6 py-2.5 rounded-md'"
+            :disabled="buttonLoading"
           >
             {{ t("edit_job") }}
           </button>
