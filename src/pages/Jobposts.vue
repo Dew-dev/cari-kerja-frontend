@@ -158,7 +158,8 @@
               <div class="flex gap-4">
                 <div class="shrink-0">
                   <img
-                    :src="job.avatar_url"
+                    :src="'http://localhost:5000'+job.avatar_url || '/company-default-image.png'"
+                    @error="e => e.target.src = '/company-default-image.png'"
                     :alt="job.company_name"
                     class="w-16 h-16 rounded border border-gray-200"
                   />
@@ -251,7 +252,6 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
 import HeroSearch from "../components/home/HeroSearch.vue";
-import axios from 'axios';
 import { getJobPosts } from '../services/jobposts.api';
 import { getCategoriesWithJobcount } from '../services/categories.api';
 import { useRoute, useRouter } from 'vue-router'
@@ -462,9 +462,10 @@ const router = useRouter();
     };
 
     const viewJobDetail = (jobId) => {
-      console.log('View job detail:', jobId);
-      // Implementasi navigasi ke detail page
-      // this.$router.push(`/jobs/${jobId}`);
+      router.push({ 
+          name: 'JobDetail', // Harus match dengan 'name' di router/index.js
+          params: { id: jobId } 
+      });
     };
 
     const prevPage = () => {
