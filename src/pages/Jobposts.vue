@@ -462,9 +462,10 @@ const router = useRouter();
     };
 
     const viewJobDetail = (jobId) => {
-      console.log('View job detail:', jobId);
-      // Implementasi navigasi ke detail page
-      // this.$router.push(`/jobs/${jobId}`);
+      router.push({ 
+          name: 'JobDetail', // Harus match dengan 'name' di router/index.js
+          params: { id: jobId } 
+      });
     };
 
     const prevPage = () => {

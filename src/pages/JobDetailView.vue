@@ -240,6 +240,7 @@ const route = useRoute();
 const router = useRouter();
 
 // State
+const props = defineProps(['id']);
 const job = ref(null);
 const similarJobs = ref([]);
 const loading = ref(true);
