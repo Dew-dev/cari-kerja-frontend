@@ -24,6 +24,19 @@ const avatarPreview = ref(null);
 const avatarFromBackend = ref(null);
 const loading = ref(false);
 
+const onLogoChange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // validasi size 2MB
+  if (file.size > 2 * 1024 * 1024) {
+    alert("Max file size 2MB");
+    return;
+  }
+
+  avatarFile.value = file;
+  avatarPreview.value = URL.createObjectURL(file);
+};
 /* =====================
    LOAD DATA
 ===================== */
@@ -129,7 +142,7 @@ onMounted(loadProfile);
 
           <div>
             <label class="block text-sm font-medium mb-1"> Company Logo </label>
-            <input type="file" accept="image/*" class="text-sm w-full rounded-lg border px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <input type="file" accept="image/*" @change="onLogoChange" class="text-sm w-full rounded-lg border px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             <p class="text-xs text-gray-500 mt-1">JPG or PNG, max 2MB</p>
           </div>
         </div>
