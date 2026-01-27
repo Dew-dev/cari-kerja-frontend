@@ -158,7 +158,7 @@
               <div class="flex gap-4">
                 <div class="shrink-0">
                   <img
-                    :src="job.avatar_url || '/company-default-image.png'"
+                    :src="'http://localhost:5000'+job.avatar_url || '/company-default-image.png'"
                     @error="e => e.target.src = '/company-default-image.png'"
                     :alt="job.company_name"
                     class="w-16 h-16 rounded border border-gray-200"
