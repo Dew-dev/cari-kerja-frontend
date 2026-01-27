@@ -1,6 +1,8 @@
 <script setup>
 import { useRouter } from "vue-router"
+import { useAuthStore } from "../../stores/authStore";
 
+const auth = useAuthStore();
 const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
 defineProps({
   name: {
@@ -16,7 +18,11 @@ defineProps({
 const router = useRouter()
 
 function goProfile() {
-  router.push("/profile/edit")
+  if (auth.role === "recruiter") {
+    router.push("/recruiter/profile/edit")
+  } else {
+    router.push("/profile/edit")
+  }
 }
 </script>
 

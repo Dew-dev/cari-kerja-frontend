@@ -202,7 +202,7 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
                 <button
                   @click.stop="
                     $router.push(
-                      `/recruiter/jobs/${jobId}/applicants/${a.application_id}`,
+                      `/recruiter/jobs/${route.params.id}/applicants/${a.application_id}`,
                     )
                   "
                   class="text-blue-600 text-sm hover:underline"

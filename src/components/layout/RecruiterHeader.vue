@@ -5,17 +5,17 @@ import { useRouter } from "vue-router"
 
 import { useI18n } from "vue-i18n"
 import { computed } from "vue"
-// import { useAuthStore } from "@/stores/auth.store"
+import { useAuthStore } from "../../stores/authStore"
 // import ProfileAvatar from "@/components/common/ProfileAvatar.vue"
 const { locale,t } = useI18n()
 const router = useRouter()
 const route = router.currentRoute
-// const auth = useAuthStore() 
+const auth = useAuthStore() 
 // computed
 
 const menu = computed(() => [
-  { label: t("dashboard"), path: "/recruiter" },
-  { label: t("jobs"), path: "/recruiter/jobs" },
+  { label: t("your") + " " + t("Profile"), path: `/recruiters/${auth.user?.id}` },
+  { label: t("your") + " " + t("jobs"), path: "/recruiter/jobs" },
   { label: t("createjob"), path: "/recruiter/jobs/create" },
   // { label: t("applicants"), path: "/recruiter/applicants" },
 ])
@@ -45,6 +45,7 @@ function isActive(path) {
         :key="item.path"
         @click="router.push(item.path)"
         class="cursor-pointer pb-1"
+        
         :class="
           isActive(item.path)
             ? 'text-blue-600 border-b-2 border-blue-600'

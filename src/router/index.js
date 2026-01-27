@@ -60,7 +60,11 @@ const routes = [
       template: "<div class='p-6'>EDIT PROFILE (COMING SOON)</div>",
     },
   },
-
+  {
+    path: "/recruiters/:id",
+    name: "public-recruiter-profile",
+    component: () => import("../pages/public/RecruiterProfile.vue"),
+  },
   {
     path: "/recruiter",
     meta: { requiresAuth: true, role: "recruiter" },
@@ -90,6 +94,11 @@ const routes = [
         name: "recruiter-applicant-detail",
         component: () => import("../pages/recruiter/ApplicantDetail.vue"),
         meta: { requiresAuth: true, role: "recruiter" },
+      },
+      {
+        path: "profile/edit",
+        meta: { requiresAuth: true },
+        component: () => import("../pages/recruiter/EditProfile.vue"),
       },
     ],
   },
