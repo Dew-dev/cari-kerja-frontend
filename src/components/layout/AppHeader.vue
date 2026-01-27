@@ -50,7 +50,7 @@
 
           <ProfileAvatar
             :name="auth.user?.name"
-            :avatar="auth.user?.avatar"
+            :avatar="auth.user?.avatar_url"
           />
 
           <button

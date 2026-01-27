@@ -16,7 +16,9 @@ export function getJobPostById(id) {
   const res = api.get(`/job_posts/${id}`);
   return res;
 }
-
+export const getRecruiterJobs = (params = {}) => {
+  return api.get("/job-posts/self", { params });
+};
 // export function refreshToken(refreshToken) {
 //   return api.post("/users/refresh-token", {
 //     refreshToken,

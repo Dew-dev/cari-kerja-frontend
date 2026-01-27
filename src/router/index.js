@@ -38,10 +38,10 @@ const routes = [
     component: () => import("../pages/Jobposts.vue"),
   },
   {
-  path: '/jobposts/:id',
-  name: 'JobDetail',
-  component: () => import('../pages/JobDetailView.vue'), // Sesuaikan path-nya
-  props: true // Mengizinkan ID dari URL masuk sebagai props ke komponen
+    path: "/jobposts/:id",
+    name: "JobDetail",
+    component: () => import("../pages/JobDetailView.vue"), // Sesuaikan path-nya
+    props: true, // Mengizinkan ID dari URL masuk sebagai props ke komponen
   },
   {
     path: "/register",
@@ -82,15 +82,15 @@ const routes = [
         component: () => import("../pages/recruiter/CreateJob.vue"),
       },
       {
-        path: "/recruiter/jobs/:id/edit",
+        path: "jobs/:id/edit",
         component: () => import("../pages/recruiter/EditJob.vue"),
       },
       {
-        path: "/recruiter/jobs/:id/applicants",
+        path: "jobs/:id/applicants",
         component: () => import("../pages/recruiter/Applicants.vue"),
       },
       {
-        path: "/recruiter/jobs/:jobId/applicants/:applicationId",
+        path: "jobs/:jobId/applicants/:applicationId",
         name: "recruiter-applicant-detail",
         component: () => import("../pages/recruiter/ApplicantDetail.vue"),
         meta: { requiresAuth: true, role: "recruiter" },
@@ -99,6 +99,12 @@ const routes = [
         path: "profile/edit",
         meta: { requiresAuth: true },
         component: () => import("../pages/recruiter/EditProfile.vue"),
+      },
+      {
+        path: "jobs/archived",
+        name: "recruiter-jobs-archived",
+        component: () => import("@/pages/recruiter/Jobs.vue"),
+        meta: { requiresAuth: true, role: "recruiter" },
       },
     ],
   },
