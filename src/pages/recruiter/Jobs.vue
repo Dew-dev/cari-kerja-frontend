@@ -7,9 +7,7 @@
           <h1 class="text-xl font-semibold">
             {{ t("jobs") }}
           </h1>
-          <p class="text-sm text-gray-500 mt-1">
-            Manage your published job vacancies
-          </p>
+          <p class="text-sm text-gray-500 mt-1">Manage your job vacancies</p>
         </div>
 
         <router-link
@@ -19,7 +17,32 @@
           + {{ t("createjob") }}
         </router-link>
       </div>
+      <!-- TABS -->
+      <div class="mb-6 border-b">
+        <div class="flex gap-6 text-sm font-medium">
+          <button
+            @click="activeTab = 'active', fetchJobs()"
+            :class="
+              activeTab === 'active'
+                ? 'border-b-2 border-blue-600 pb-2 text-blue-600'
+                : 'pb-2 text-gray-500 hover:text-gray-700'
+            "
+          >
+            Active Jobs
+          </button>
 
+          <button
+            @click="activeTab = 'archived', fetchJobs()"
+            :class="
+              activeTab === 'archived'
+                ? 'border-b-2 border-blue-600 pb-2 text-blue-600'
+                : 'pb-2 text-gray-500 hover:text-gray-700'
+            "
+          >
+            Archived Jobs
+          </button>
+        </div>
+      </div>
       <!-- TABLE CARD -->
       <div class="bg-white border rounded-lg shadow-sm overflow-hidden">
         <!-- TABLE -->
@@ -79,37 +102,97 @@
               </td>
 
               <!-- ACTIONS -->
-              <td class="px-4 py-3 text-right">
-                <div class="flex justify-end gap-3">
-                  <button class="text-blue-600 hover:underline">View</button>
-                  <!-- <router-link
-                    :to="`/recruiter/jobs/${job.id}/edit`"
-                    class="text-green-600 hover:underline">Edit</router-link> -->
-                  <!-- PUBLISH -->
-                  <button
-                    v-if="job.status_id === 3"
-                    class="text-green-600 hover:underline"
-                    @click="openConfirmModal(job, 1)"
-                  >
-                    Publish
-                  </button>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <!-- ACTIVE TAB -->
+                  <template v-if="activeTab === 'active'">
+                    <!-- VIEW -->
+                    <button
+                      title="View job"
+                      class="action-btn text-blue-600 hover:bg-blue-200 border rounded-full p-1"
+                    >
+                      <i class="pi pi-eye"></i>
+                    </button>
 
-                  <!-- CLOSE -->
-                  <button
-                    v-if="job.status_id === 1"
-                    class="text-red-600 hover:underline"
-                    @click="openConfirmModal(job, 2)"
-                  >
-                    Close
-                  </button>
-                  <button
-                    class="text-blue-600 hover:underline"
-                    @click="
-                      $router.push(`/recruiter/jobs/${job.id}/applicants`)
-                    "
-                  >
-                    Applicants
-                  </button>
+                    <!-- EDIT -->
+                    <router-link
+                      :to="`/recruiter/jobs/${job.id}/edit`"
+                      title="Edit job"
+                      class="action-btn text-green-600 hover:bg-emerald-200 border rounded-full p-1"
+                    >
+                      <i class="pi pi-pencil"></i>
+                    </router-link>
+
+                    <!-- APPLICANTS -->
+                    <button
+                      title="View applicants"
+                      @click="
+                        $router.push(`/recruiter/jobs/${job.id}/applicants`)
+                      "
+                      class="action-btn text-indigo-600 hover:bg-indigo-200 border rounded-full p-1"
+                    >
+                      <i class="pi pi-users"></i>
+                    </button>
+
+                    <!-- DUPLICATE -->
+                    <button
+                      title="Duplicate job"
+                      @click="duplicateJob(job.id)"
+                      class="action-btn text-purple-600 hover:bg-purple-200 border rounded-full p-1"
+                    >
+                      <i class="pi pi-copy"></i>
+                    </button>
+
+                    <!-- ARCHIVE -->
+                    <button
+                      title="Archive job"
+                      @click="archiveJob(job.id)"
+                      class="action-btn text-gray-600 hover:bg-gray-200 border rounded-full p-1"
+                    >
+                      <i class="pi pi-folder"></i>
+                    </button>
+
+                    <!-- PUBLISH -->
+                    <button
+                      v-if="job.status_id === 3"
+                      title="Publish job"
+                      @click="openConfirmModal(job, 1)"
+                      class="action-btn text-green-600 hover:bg-green-200 border rounded-full p-1"
+                    >
+                      <i class="pi pi-upload"></i>
+                    </button>
+
+                    <!-- CLOSE -->
+                    <button
+                      v-if="job.status_id === 1"
+                      title="Close job"
+                      @click="openConfirmModal(job, 2)"
+                      class="action-btn text-red-600 hover:bg-red-200 border rounded-full p-1"
+                    >
+                      <i class="pi pi-times-circle"></i>
+                    </button>
+                  </template>
+
+                  <!-- ARCHIVED TAB -->
+                  <template v-else>
+                    <!-- RESTORE -->
+                    <button
+                      title="Restore job"
+                      @click="restoreJob(job.id)"
+                      class="action-btn text-green-600 hover:bg-green-200 border rounded-full p-1"
+                    >
+                      <i class="pi pi-undo"></i>
+                    </button>
+
+                    <!-- DUPLICATE -->
+                    <button
+                      title="Duplicate job"
+                      @click="duplicateJob(job.id)"
+                      class="action-btn text-purple-600 hover:bg-purple-200 border rounded-full p-1"
+                    >
+                      <i class="pi pi-copy"></i>
+                    </button>
+                  </template>
                 </div>
               </td>
             </tr>
@@ -123,9 +206,11 @@
           </tbody>
           <tbody v-else>
             <tr>
-              <td colspan="6" class="px-4 py-6 text-center text-gray-500">
-                No jobs found.
+              <td v-if="activeTab == 'archived'" colspan="6" class="px-4 py-6 text-center text-gray-500">
+                No archived jobs found.
               </td>
+              <td v-else colspan="6" class="px-4 py-6 text-center text-gray-500">
+                No active jobs found. Create your first job posting!</td> 
             </tr>
           </tbody>
         </table>
@@ -233,10 +318,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { getJobPostsSelf } from "../../services/jobposts.api";
+import { useRouter } from "vue-router";
 import api from "../../services/api";
+
+const activeTab = ref("active"); // active | archived
+
+const router = useRouter();
 const { t } = useI18n();
 const jobs = ref([]);
 const loading = ref(false);
@@ -261,6 +351,25 @@ function statusClass(status) {
   }
 }
 
+async function archiveJob(jobId) {
+  if (!confirm("Archive this job?")) return;
+  await api.post(`/job-posts/${jobId}/archive`, {}, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+  fetchJobs();
+}
+
+async function restoreJob(jobId) {
+  await api.post(`/job-posts/${jobId}/restore`, {}, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  } );
+  fetchJobs();
+}
+
 async function fetchJobs() {
   try {
     loading.value = true;
@@ -268,6 +377,7 @@ async function fetchJobs() {
     const res = await getJobPostsSelf({
       page: page.value,
       limit: limit.value,
+      archive: activeTab.value === "archived" ? true : false,
     });
 
     jobs.value = res.data?.data || [];
@@ -331,6 +441,20 @@ async function confirmUpdateStatus() {
     showConfirmModal.value = false;
     selectedJob.value = null;
     nextStatus.value = null;
+  }
+}
+
+async function duplicateJob(jobId) {
+  try {
+    const res = await api.post(`/job-posts/${jobId}/duplicate`);
+    console.log("Duplicate job response:", res);
+    const newId = res.data?.data?.id;
+
+    // langsung ke edit
+    router.push(`/recruiter/jobs/${newId}/edit`);
+  } catch (err) {
+    console.error("Duplicate failed", err);
+    alert("Failed to duplicate job");
   }
 }
 </script>

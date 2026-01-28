@@ -79,6 +79,7 @@
   "country": "Country",
   "city": "City",
   "post_job": "Post Job",
+  "edit_job": "Edit Job",
   "category": "Category",
   "select_category": "Select Category"
 }

@@ -9,11 +9,16 @@ export function getJobPostsSelf(params) {
   return res;
 }
 
+export const updateJob = (id, payload) => {
+  return api.put(`/job-posts/${id}`, payload);
+};
 export function getJobPostById(id) {
   const res = api.get(`/job-posts/${id}`);
   return res;
 }
-
+export const getRecruiterJobs = (params = {}) => {
+  return api.get("/job-posts/self", { params });
+};
 // export function refreshToken(refreshToken) {
 //   return api.post("/users/refresh-token", {
 //     refreshToken,

@@ -16,7 +16,7 @@
             @click="open = !open"
             class="flex items-center gap-1 border border-white px-4 py-3 rounded font-semibold hover:bg-white hover:text-blue-500 transition duration-200"
           >
-            {{ locale.toUpperCase() }}
+            {{ locale.toUpperCase() }}  
             <span>▾</span>
           </button>
 
@@ -50,7 +50,7 @@
 
           <ProfileAvatar
             :name="auth.user?.name"
-            :avatar="auth.user?.avatar"
+            :avatar="auth.user?.avatar_url"
           />
 
           <button
