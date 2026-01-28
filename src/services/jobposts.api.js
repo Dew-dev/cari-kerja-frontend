@@ -10,7 +10,7 @@ export function getJobPostsSelf(params) {
 }
 
 export function getJobPostById(id) {
-  const res = api.get(`/job_posts/${id}`);
+  const res = api.get(`/job-posts/${id}`);
   return res;
 }
 

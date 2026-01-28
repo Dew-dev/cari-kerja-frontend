@@ -22,7 +22,7 @@
           </li>
           <li>/</li>
           <li>
-            <router-link to="/jobs" class="hover:text-blue-600">Jobs</router-link>
+            <router-link to="/jobposts" class="hover:text-blue-600">Jobs</router-link>
           </li>
           <li>/</li>
           <li class="text-gray-900 font-medium">{{ job.title }}</li>
@@ -38,8 +38,9 @@
             <div class="flex gap-4 mb-6">
               <div class="shrink-0">
                 <img
-                  :src="job.company.avatar_url"
-                  :alt="job.company.name"
+                  :src="'http://localhost:5000'+job.avatar_url || '/company-default-image.png'"
+                  @error="e => e.target.src = '/company-default-image.png'"
+                  :alt="job.company_name"
                   class="w-20 h-20 rounded-lg border border-gray-200 object-cover"
                 />
               </div>
@@ -52,7 +53,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
-                    <span class="font-medium">{{ job.company.name }}</span>
+                    <span class="font-medium">{{ job.company_name }}</span>
                   </div>
                   <div class="flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +77,7 @@
               <div class="border border-gray-200 rounded-lg p-4">
                 <div class="text-xs text-gray-500 mb-1">Salary</div>
                 <div class="text-lg font-semibold text-green-600">
-                  {{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }} {{ job.currency }}
+                  {{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }} {{ job.currency_code }}
                 </div>
               </div>
               <div class="border border-gray-200 rounded-lg p-4">
@@ -88,7 +89,7 @@
               <div class="border border-gray-200 rounded-lg p-4">
                 <div class="text-xs text-gray-500 mb-1">Category</div>
                 <div class="text-lg font-semibold text-gray-900">
-                  {{ job.category }}
+                  {{ job.category_name }}
                 </div>
               </div>
             </div>
@@ -146,35 +147,36 @@
             <h3 class="text-lg font-bold text-gray-900 mb-4">About Company</h3>
             <div class="flex items-center gap-3 mb-4">
               <img
-                :src="job.company.avatar_url"
-                :alt="job.company.name"
+                :src="'http://localhost:5000'+job.avatar_url || '/company-default-image.png'"
+                @error="e => e.target.src = '/company-default-image.png'"
+                :alt="job.company_name"
                 class="w-16 h-16 rounded-lg border border-gray-200 object-cover"
               />
               <div>
-                <h4 class="font-semibold text-gray-900">{{ job.company.name }}</h4>
-                <p class="text-sm text-gray-600">{{ job.company.industry || 'Technology' }}</p>
+                <h4 class="font-semibold text-gray-900">{{ job.company_name }}</h4>
+                <p class="text-sm text-gray-600">{{ job.industry || 'Technology' }}</p>
               </div>
             </div>
 
             <div class="space-y-3 text-sm">
-              <div v-if="job.company.website" class="flex items-start gap-2">
+              <div v-if="job.company_website" class="flex items-start gap-2">
                 <svg class="w-4 h-4 mt-0.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                 </svg>
-                <a :href="job.company.website" target="_blank" class="text-blue-600 hover:underline break-all">
-                  {{ job.company.website }}
+                <a :href="job.company_website" target="_blank" class="text-blue-600 hover:underline break-all">
+                  {{ job.company_website }}
                 </a>
               </div>
 
-              <div v-if="job.company.email" class="flex items-start gap-2">
+              <div v-if="job.email" class="flex items-start gap-2">
                 <svg class="w-4 h-4 mt-0.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                <span class="text-gray-600 break-all">{{ job.company.email }}</span>
+                <span class="text-gray-600 break-all">{{ job.email }}</span>
               </div>
 
-              <div v-if="job.company.description" class="mt-4 pt-4 border-t">
-                <p class="text-gray-600 text-sm">{{ job.company.description }}</p>
+              <div v-if="job.company_description" class="mt-4 pt-4 border-t">
+                <p class="text-gray-600 text-sm">{{ job.company_description }}</p>
               </div>
             </div>
 
@@ -222,7 +224,7 @@
         <h3 class="text-xl font-semibold text-gray-900 mb-2">Job Not Found</h3>
         <p class="text-gray-600 mb-6">The job you're looking for doesn't exist or has been removed.</p>
         <router-link
-          to="/jobs"
+          to="/jobposts"
           class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
         >
           Back to Job Listings
@@ -235,6 +237,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { getJobPostById, getJobPosts } from '../services/jobposts.api'
 
 const route = useRoute();
 const router = useRouter();
@@ -283,62 +286,65 @@ const jobDetailService = {
       // PLACEHOLDER - Ganti dengan endpoint backend Anda
       // const response = await axios.get(`http://your-api.com/api/jobs/${id}`);
       // return response.data;
+      
+      const response = await getJobPostById(id);
+      return response.data;
 
       // Simulasi data untuk demo
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            data: {
-              id: id,
-              title: 'Senior Frontend Developer',
-              company: {
-                name: 'Tech Solutions Inc.',
-                avatar_url: 'https://via.placeholder.com/80',
-                industry: 'Information Technology',
-                website: 'https://techsolutions.com',
-                email: 'hr@techsolutions.com',
-                description: 'Leading technology solutions provider with over 10 years of experience in delivering innovative software products.'
-              },
-              location: 'Jakarta, Indonesia',
-              salary_min: 15000000,
-              salary_max: 25000000,
-              currency: 'IDR',
-              employment_type: 'Full-time',
-              category: 'IT / Software',
-              created_at: '2025-01-20T10:00:00Z',
-              description: `We are looking for an experienced Senior Frontend Developer to join our dynamic team. 
+//       return new Promise((resolve) => {
+//         setTimeout(() => {
+//           resolve({
+//             data: {
+//               id: id,
+//               title: 'Senior Frontend Developer',
+//               company: {
+//                 name: 'Tech Solutions Inc.',
+//                 avatar_url: 'https://via.placeholder.com/80',
+//                 industry: 'Information Technology',
+//                 website: 'https://techsolutions.com',
+//                 email: 'hr@techsolutions.com',
+//                 description: 'Leading technology solutions provider with over 10 years of experience in delivering innovative software products.'
+//               },
+//               location: 'Jakarta, Indonesia',
+//               salary_min: 15000000,
+//               salary_max: 25000000,
+//               currency: 'IDR',
+//               employment_type: 'Full-time',
+//               category: 'IT / Software',
+//               created_at: '2025-01-20T10:00:00Z',
+//               description: `We are looking for an experienced Senior Frontend Developer to join our dynamic team. 
 
-In this role, you will be responsible for building modern, responsive web applications using Vue.js and other cutting-edge technologies.
+// In this role, you will be responsible for building modern, responsive web applications using Vue.js and other cutting-edge technologies.
 
-The ideal candidate should have strong problem-solving skills and a passion for creating exceptional user experiences.`,
-              requirements: `• 5+ years of experience in frontend development
-• Expert knowledge of Vue.js, JavaScript/TypeScript
-• Strong understanding of HTML5, CSS3, and responsive design
-• Experience with state management (Vuex/Pinia)
-• Familiarity with RESTful APIs and GraphQL
-• Experience with version control (Git)
-• Strong communication skills in English
-• Bachelor's degree in Computer Science or related field`,
-              responsibilities: `• Develop and maintain web applications using Vue.js
-• Collaborate with designers and backend developers
-• Write clean, maintainable, and testable code
-• Participate in code reviews and provide constructive feedback
-• Optimize application performance and ensure cross-browser compatibility
-• Mentor junior developers and share best practices
-• Stay up-to-date with latest frontend technologies and trends`,
-              benefits: `• Competitive salary package
-• Health insurance coverage
-• Flexible working hours
-• Remote work options
-• Annual performance bonus
-• Professional development opportunities
-• Modern office facilities
-• Team building activities`,
-              is_applied: false
-            }
-          });
-        }, 800);
-      });
+// The ideal candidate should have strong problem-solving skills and a passion for creating exceptional user experiences.`,
+//               requirements: `• 5+ years of experience in frontend development
+// • Expert knowledge of Vue.js, JavaScript/TypeScript
+// • Strong understanding of HTML5, CSS3, and responsive design
+// • Experience with state management (Vuex/Pinia)
+// • Familiarity with RESTful APIs and GraphQL
+// • Experience with version control (Git)
+// • Strong communication skills in English
+// • Bachelor's degree in Computer Science or related field`,
+//               responsibilities: `• Develop and maintain web applications using Vue.js
+// • Collaborate with designers and backend developers
+// • Write clean, maintainable, and testable code
+// • Participate in code reviews and provide constructive feedback
+// • Optimize application performance and ensure cross-browser compatibility
+// • Mentor junior developers and share best practices
+// • Stay up-to-date with latest frontend technologies and trends`,
+//               benefits: `• Competitive salary package
+// • Health insurance coverage
+// • Flexible working hours
+// • Remote work options
+// • Annual performance bonus
+// • Professional development opportunities
+// • Modern office facilities
+// • Team building activities`,
+//               is_applied: false
+//             }
+//           });
+//         }, 800);
+//       });
     } catch (error) {
       console.error('Error fetching job detail:', error);
       throw error;
@@ -352,40 +358,47 @@ The ideal candidate should have strong problem-solving skills and a passion for 
       //   params: { category }
       // });
       // return response.data;
+      const params = {
+        category: category,
+        exclude_id: jobId,
+        limit: 3
+      }
+      const response = await getJobPosts(params);
+      return response.data;
 
       // Simulasi data untuk demo
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            data: [
-              {
-                id: 2,
-                title: 'Frontend Developer (Vue.js)',
-                company_name: 'Digital Agency',
-                location: 'Bandung',
-                salary_max: 20000000,
-                currency: 'IDR'
-              },
-              {
-                id: 3,
-                title: 'Full Stack Developer',
-                company_name: 'Startup Tech',
-                location: 'Jakarta',
-                salary_max: 22000000,
-                currency: 'IDR'
-              },
-              {
-                id: 4,
-                title: 'React Developer',
-                company_name: 'Web Solutions',
-                location: 'Surabaya',
-                salary_max: 18000000,
-                currency: 'IDR'
-              }
-            ]
-          });
-        }, 600);
-      });
+      // return new Promise((resolve) => {
+      //   setTimeout(() => {
+      //     resolve({
+      //       data: [
+      //         {
+      //           id: 2,
+      //           title: 'Frontend Developer (Vue.js)',
+      //           company_name: 'Digital Agency',
+      //           location: 'Bandung',
+      //           salary_max: 20000000,
+      //           currency: 'IDR'
+      //         },
+      //         {
+      //           id: 3,
+      //           title: 'Full Stack Developer',
+      //           company_name: 'Startup Tech',
+      //           location: 'Jakarta',
+      //           salary_max: 22000000,
+      //           currency: 'IDR'
+      //         },
+      //         {
+      //           id: 4,
+      //           title: 'React Developer',
+      //           company_name: 'Web Solutions',
+      //           location: 'Surabaya',
+      //           salary_max: 18000000,
+      //           currency: 'IDR'
+      //         }
+      //       ]
+      //     });
+      //   }, 600);
+      // });
     } catch (error) {
       console.error('Error fetching similar jobs:', error);
       throw error;
@@ -473,6 +486,7 @@ const loadJobDetail = async () => {
     const response = await jobDetailService.fetchJobDetail(jobId.value);
     job.value = response.data;
     
+    
     // Check if user has already applied
     if (authService.isAuthenticated() && authService.isWorker()) {
       const statusResponse = await jobDetailService.checkApplicationStatus(jobId.value);
@@ -492,7 +506,7 @@ const loadJobDetail = async () => {
 const loadSimilarJobs = async () => {
   try {
     if (!job.value) return;
-    const response = await jobDetailService.fetchSimilarJobs(jobId.value, job.value.category);
+    const response = await jobDetailService.fetchSimilarJobs(jobId.value, job.value.category_name);
     similarJobs.value = response.data;
   } catch (error) {
     console.error('Error loading similar jobs:', error);
@@ -543,7 +557,10 @@ const viewCompanyProfile = () => {
 };
 
 const goToJob = (id) => {
-  router.push(`/jobs/${id}`);
+  router.push({ 
+      name: 'JobDetail', // Harus match dengan 'name' di router/index.js
+      params: { id: id } 
+  });
 };
 
 // Lifecycle
