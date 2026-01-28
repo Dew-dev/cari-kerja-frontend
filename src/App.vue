@@ -10,7 +10,7 @@ import 'primeicons/primeicons.css'
 <template>
   <div class="min-h-screen bg-white text-gray-900">
     <AppHeader />
-    <router-view />
+    <router-view :key="$route.fullPath"/>
     <AppFooter />
   </div>
 </template>
