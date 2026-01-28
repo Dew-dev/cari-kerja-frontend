@@ -81,6 +81,19 @@ async function submit() {
             {{ t("register.signUp") }}  
           </span>
         </p>
+        <p class=" text-center text-sm">
+          OR
+        </p>
+        <p class=" text-center text-sm">
+          {{ t("forgotyourPassword") }}
+          
+          <span
+            class="text-blue-600 cursor-pointer"
+             @click="router.push('/forgot-password')"
+          >
+            {{ t("clickHere") }}  
+          </span>
+        </p>
       </form>
     </div>
   </div>

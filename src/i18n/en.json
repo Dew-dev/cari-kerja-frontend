@@ -81,5 +81,26 @@
   "post_job": "Post Job",
   "edit_job": "Edit Job",
   "category": "Category",
-  "select_category": "Select Category"
+  "select_category": "Select Category",
+  "activeJobs"  : "Active Jobs",
+  "archivedJobs"  : "Archived Jobs",
+  "noJobsFound"  : "No jobs found.",
+  "loadingJobs"  : "Loading jobs...",
+  "managejobs": "Manage Your Job Vacancies",
+  "status": "Status",
+  "actions": "Actions",
+  "clickHere": "Click Here",
+  "forgotyourPassword": "Forget your Password?",
+  "forgotPasswordSubtitle": "Enter your email to reset your password.", 
+  "resetPassword": "Reset Password", 
+  "sendingResetLink": "Sending reset link...",
+  "backToLogin": "Back to Login",
+  "resetLinkSent": "A password reset link has been sent to your email.",
+  "newPassword": "New Password",
+  "confirmNewPassword": "Confirm New Password",
+  "updatePassword": "Update Password",
+  "updatingPassword": "Updating password...",
+  "passwordUpdated": "Your password has been updated successfully.",
+  "goToLogin": "Go to Login"
+  
 }

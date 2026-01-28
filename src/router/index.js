@@ -66,6 +66,14 @@ const routes = [
     component: () => import("../pages/public/RecruiterProfile.vue"),
   },
   {
+    path: "/forgot-password",
+    component: () => import("@/pages/auth/ForgotPassword.vue"),
+  },
+  {
+    path: "/reset-password",
+    component: () => import("@/pages/auth/ResetPassword.vue"),
+  },
+  {
     path: "/recruiter",
     meta: { requiresAuth: true, role: "recruiter" },
     children: [
