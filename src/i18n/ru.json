@@ -102,5 +102,7 @@
   "updatePassword": "Обновить пароль",
   "updatingPassword": "Обновление пароля...",
   "passwordUpdated": "Ваш пароль был успешно обновлен.",
-  "goToLogin": "Перейти к входу"
+  "goToLogin": "Перейти к входу",
+  "saveChanges": "Сохранить изменения",
+  "companyLogo": "Логотип компании"
 }   

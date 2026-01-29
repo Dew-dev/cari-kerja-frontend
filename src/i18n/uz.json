@@ -101,5 +101,7 @@
   "updatePassword": "Parolni yangilash",
   "updatingPassword": "Parol yangilanmoqda...",
   "passwordUpdated": "Parolingiz muvaffaqiyatli yangilandi.",
-  "goToLogin": "Kirishga o'tish"
+  "goToLogin": "Kirishga o'tish",
+  "saveChanges": "O'zgarishlarni saqlash",
+  "companyLogo": "Kompaniya logotipi"
 }

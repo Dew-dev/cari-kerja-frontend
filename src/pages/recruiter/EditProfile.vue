@@ -2,8 +2,10 @@
 import { ref, reactive, onMounted } from "vue";
 import api from "../../services/api";
 import { useAuthStore } from "../../stores/authStore";
+import { useI18n } from "vue-i18n";
 
 const auth = useAuthStore();
+const { t } = useI18n();
 
 /* =====================
    STATE
@@ -141,7 +143,7 @@ onMounted(loadProfile);
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1"> Company Logo </label>
+            <label class="block text-sm font-medium mb-1"> {{ t("companyLogo") }} </label>
             <input type="file" accept="image/*" @change="onLogoChange" class="text-sm w-full rounded-lg border px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             <p class="text-xs text-gray-500 mt-1">JPG or PNG, max 2MB</p>
           </div>
@@ -190,11 +192,18 @@ onMounted(loadProfile);
           placeholder="Company Description"
         />
         <div class="flex justify-end pt-4 border-t col-span-2">
+            
+          <RouterLink
+            to="/change-password"
+            class="rounded-xl bg-gray-200 px-6 py-2.5 text-sm font-semibold text-black hover:bg-gray-400 transition mx-2"
+          >
+            Change Password
+          </RouterLink>
           <button
             type="submit"
             class="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition"
           >
-            Save Changes
+            {{ t("saveChanges") }}
           </button>
         </div>
       </form>

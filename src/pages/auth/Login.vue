@@ -98,3 +98,12 @@ async function submit() {
     </div>
   </div>
 </template>
+
+<style scoped>
+header {
+  display: none;
+}
+footer {
+  display: none;
+}
+</style>

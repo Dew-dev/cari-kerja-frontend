@@ -101,6 +101,8 @@
   "updatePassword": "Update Password",
   "updatingPassword": "Updating password...",
   "passwordUpdated": "Your password has been updated successfully.",
-  "goToLogin": "Go to Login"
+  "goToLogin": "Go to Login",
+  "saveChanges": "Save Changes",
+  "companyLogo": "Company Logo"
   
 }
