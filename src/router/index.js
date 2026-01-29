@@ -79,6 +79,10 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/verify-email",
+    component: () => import("@/pages/auth/VerifyEmail.vue"),
+  },
+  {
     path: "/recruiter",
     meta: { requiresAuth: true, role: "recruiter" },
     children: [
