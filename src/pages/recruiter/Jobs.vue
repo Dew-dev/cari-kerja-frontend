@@ -21,7 +21,7 @@
       <div class="mb-6 border-b">
         <div class="flex gap-6 text-sm font-medium">
           <button
-            @click="((activeTab = 'active'), fetchJobs())"
+            @click="setActiveTab('active')"
             :class="
               activeTab === 'active'
                 ? 'border-b-2 border-blue-600 pb-2 text-blue-600'
@@ -32,7 +32,7 @@
           </button>
 
           <button
-            @click="((activeTab = 'archived'), archivedJobs())"
+            @click="setActiveTab('archived')"
             :class="
               activeTab === 'archived'
                 ? 'border-b-2 border-blue-600 pb-2 text-blue-600'
@@ -494,12 +494,11 @@ async function fetchJobs() {
       page: page.value,
       limit: limit.value,
     });
-    if(!countit.value && activeTab.value === 'active'){
+    if (!countit.value && activeTab.value === "active") {
       jobs.value = res.data?.data || [];
+      totalPages.value = res.data?.meta?.totalPage || 1;
     }
-    // jobs.value = res.data?.data || [];
     jobCounter.value = res.data?.meta?.total || 0;
-    totalPages.value = res.data?.meta?.totalPage || 1;
     countit.value = false;
   } catch (err) {
     console.error("Failed to fetch recruiter jobs", err);
@@ -515,11 +514,11 @@ async function archivedJobs() {
       limit: limit.value,
       archive: true,
     });
-    if(!countit.value && activeTab.value === 'archived'){
+    if (!countit.value && activeTab.value === "archived") {
       jobs.value = res.data?.data || [];
+      totalPages.value = res.data?.meta?.totalPage || 1;
     }
     archivedJobCounter.value = res.data?.meta?.total || 0;
-    totalPages.value = res.data?.meta?.totalPage || 1;
     countit.value = false;
   } catch (err) {
     console.error("Failed to count archived jobs", err);
@@ -549,7 +548,22 @@ function changePage(p) {
   page.value = p;
   console.log("toalPages:", totalPages.value);
   console.log("Changing to page:", page.value);
-  fetchJobs();
+  if (activeTab.value === "archived") {
+    archivedJobs();
+  } else {
+    fetchJobs();
+  }
+}
+
+function setActiveTab(tab) {
+  if (activeTab.value === tab) return;
+  activeTab.value = tab;
+  page.value = 1;
+  if (tab === "archived") {
+    archivedJobs();
+  } else {
+    fetchJobs();
+  }
 }
 
 function openConfirmModal(job, status) {

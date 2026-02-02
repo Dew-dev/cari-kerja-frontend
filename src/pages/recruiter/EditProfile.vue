@@ -1,9 +1,10 @@
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import api from "../../services/api";
 import { useAuthStore } from "../../stores/authStore";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
+import SearchableSelect from "../../components/common/SearchableSelect.vue";
 
 const auth = useAuthStore();
 const { t } = useI18n();
@@ -22,10 +23,21 @@ const form = reactive({
 });
 
 const industries = ref([]);
+const industrySearch = ref("");
+let industrySearchTimeout = null;
 const avatarFile = ref(null);
 const avatarPreview = ref(null);
 const avatarFromBackend = ref(null);
 const loading = ref(false);
+
+const industryOptions = computed(() =>
+  industries.value.map((i) => ({
+    label: i.name,
+    value: String(i.id),
+  })),
+);
+
+const filteredIndustryOptions = computed(() => industryOptions.value);
 
 const onLogoChange = (e) => {
   const file = e.target.files[0];
@@ -67,14 +79,34 @@ async function loadProfile() {
       avatarFromBackend.value = r.avatar_url;
     }
 
-    // industries
-    const ind = await api.get("/industries");
-    industries.value = ind.data?.data || [];
+    await fetchIndustries();
   } catch (err) {
     console.error("Failed to load profile", err);
   } finally {
     loading.value = false;
   }
+}
+
+async function fetchIndustries(keyword = "") {
+  try {
+    const params = keyword ? { search: keyword } : {};
+    const ind = await api.get("/industries", { params });
+    industries.value = ind.data?.data || [];
+  } catch (err) {
+    console.error("Failed to load industries", err);
+  }
+}
+
+function handleIndustrySearch(value) {
+  industrySearch.value = value;
+
+  if (industrySearchTimeout) {
+    clearTimeout(industrySearchTimeout);
+  }
+
+  industrySearchTimeout = setTimeout(() => {
+    fetchIndustries(value?.trim() || "");
+  }, 300);
 }
 
 /* =====================
@@ -178,13 +210,14 @@ onMounted(loadProfile);
           placeholder="Company Address"
         />
 
-        <!-- INDUSTRY (PLAIN SELECT) -->
-        <select v-model="form.industry_id" class="w-full rounded-lg border px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option value="">Select Industry</option>
-          <option v-for="i in industries" :key="i.id" :value="String(i.id)">
-            {{ i.name }}
-          </option>
-        </select>
+        <!-- INDUSTRY (SEARCHABLE SELECT) -->
+        <SearchableSelect
+          :options="filteredIndustryOptions"
+          :value="form.industry_id"
+          placeholder="Select Industry"
+          @change="(val) => (form.industry_id = String(val || ''))"
+          @search="handleIndustrySearch"
+        />
 
         <textarea
           v-model="form.description"
