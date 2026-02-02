@@ -137,7 +137,7 @@
                     <!-- DUPLICATE -->
                     <button
                       title="Duplicate job"
-                      @click="duplicateJob(job.id)"
+                      @click="openActionModal(job, 'duplicate')"
                       class="action-btn text-purple-600 hover:bg-purple-200 border rounded-full p-1"
                     >
                       <i class="pi pi-copy"></i>
@@ -187,7 +187,7 @@
                     <!-- DUPLICATE -->
                     <button
                       title="Duplicate job"
-                      @click="duplicateJob(job.id)"
+                      @click="openActionModal(job, 'duplicate')"
                       class="action-btn text-purple-600 hover:bg-purple-200 border rounded-full p-1"
                     >
                       <i class="pi pi-copy"></i>
@@ -325,21 +325,28 @@
     </div>
   </div>
 
-  <!-- ARCHIVE / RESTORE MODAL -->
+  <!-- ARCHIVE / RESTORE / DUPLICATE MODAL -->
   <div
     v-if="showActionModal"
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
   >
     <div class="w-full max-w-sm rounded-xl bg-white p-6 shadow-lg">
       <h3 class="text-lg font-semibold text-gray-900">
-        {{ actionType === "archive" ? "Archive job?" : "Restore job?" }}
+        <span v-if="actionType === 'archive'">Archive job?</span>
+        <span v-else-if="actionType === 'restore'">Restore job?</span>
+        <span v-else-if="actionType === 'duplicate'">Duplicate job?</span>
       </h3>
 
       <p class="mt-2 text-sm text-gray-600">
         <span v-if="actionType === 'archive'">
           This job will be moved to archived list and hidden from active jobs.
         </span>
-        <span v-else> This job will be restored to active jobs. </span>
+        <span v-else-if="actionType === 'restore'">
+          This job will be restored to active jobs.
+        </span>
+        <span v-else-if="actionType === 'duplicate'">
+          A copy of this job will be created as a draft.
+        </span>
       </p>
 
       <div class="mt-6 flex justify-end gap-3">
@@ -357,7 +364,9 @@
           :class="
             actionType === 'archive'
               ? 'bg-gray-700 hover:bg-gray-800'
-              : 'bg-green-600 hover:bg-green-700'
+              : actionType === 'restore'
+              ? 'bg-green-600 hover:bg-green-700'
+              : 'bg-purple-600 hover:bg-purple-700'
           "
           :disabled="actionLoading"
         >
@@ -457,7 +466,6 @@ async function confirmAction() {
           },
         },
       );
-      
     }
     
     if (actionType.value === "restore") {
@@ -470,11 +478,18 @@ async function confirmAction() {
           },
         },
       );
-      
     }
+
+    if (actionType.value === "duplicate") {
+      const res = await api.post(`/job-posts/${selectedJob.value.id}/duplicate`);
+      const newId = res.data?.data?.id;
+      router.push(`/recruiter/jobs/${newId}/edit`);
+      closeActionModal();
+      return;
+    }
+
     archivedJobs(); // refresh archived
     fetchJobs(); // refresh table
-
     closeActionModal();
     countit.value = !countit.value;
     page.value = 1; // reset to first page
