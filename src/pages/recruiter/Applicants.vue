@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import api from "@/services/api";
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -103,10 +105,10 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
           @click="router.back()"
           class="text-sm text-gray-600 hover:underline"
         >
-          ← Back
+          ← {{ $t('back') }}
         </button>
 
-        <h1 class="text-xl font-semibold">Applicants for {{ title }}</h1>
+        <h1 class="text-xl font-semibold">{{ $t('applicants') }} for {{ title }}</h1>
       </div>
 
       <!-- TABLE CARD -->
@@ -114,11 +116,11 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
         <table class="w-full text-sm">
           <thead class="bg-gray-50 text-gray-600">
             <tr>
-              <th class="px-4 py-3 text-left">Candidate</th>
-              <th class="px-4 py-3 text-left">Resume</th>
-              <th class="px-4 py-3 text-left">Applied At</th>
-              <th class="px-4 py-3 text-left">Status</th>
-              <th class="px-4 py-3 text-right">Action</th>
+              <th class="px-4 py-3 text-left">{{ $t('candidate') }}</th>
+              <th class="px-4 py-3 text-left">{{ $t('resume') }}</th>
+              <th class="px-4 py-3 text-left">{{ $t('applied_at') }}</th>
+              <th class="px-4 py-3 text-left">{{ $t('status') }}</th>
+              <th class="px-4 py-3 text-right">{{ $t('actions') }}</th>
             </tr>
           </thead>
 
@@ -126,14 +128,14 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
             <!-- LOADING -->
             <tr v-if="loading">
               <td colspan="5" class="px-4 py-6 text-center text-gray-500">
-                Loading applicants…
+                {{ $t('loadingApplicants') }}
               </td>
             </tr>
 
             <!-- EMPTY -->
             <tr v-else-if="!applicants.length">
               <td colspan="5" class="px-4 py-6 text-center text-gray-500">
-                No applicants yet
+                {{ $t('noApplicantsYet') }}
               </td>
             </tr>
 
@@ -159,10 +161,10 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
                   target="_blank"
                   class="text-blue-600 hover:underline"
                 >
-                  View Resume
+                  {{ $t('viewResume') }}
                 </a>
                 <span v-else class="text-gray-500 italic"
-                  >No Resume provided</span
+                  >{{ $t('noResumeProvided') }}</span
                 >
               </td>
 

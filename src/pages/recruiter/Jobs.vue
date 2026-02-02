@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-50 min-h-screen py-10">
+  <div class="bg-gray-50 min-h-full py-10">
     <div class="max-w-6xl mx-auto px-4">
       <!-- HEADER -->
       <div class="flex items-center justify-between mb-6">
@@ -7,7 +7,7 @@
           <h1 class="text-xl font-semibold">
             {{ t("jobs") }}
           </h1>
-          <p class="text-sm text-gray-500 mt-1">Manage your job vacancies</p>
+          <p class="text-sm text-gray-500 mt-1">{{ t("managejobs") }}</p>
         </div>
 
         <router-link
@@ -21,25 +21,25 @@
       <div class="mb-6 border-b">
         <div class="flex gap-6 text-sm font-medium">
           <button
-            @click="activeTab = 'active', fetchJobs()"
+            @click="((activeTab = 'active'), fetchJobs())"
             :class="
               activeTab === 'active'
                 ? 'border-b-2 border-blue-600 pb-2 text-blue-600'
                 : 'pb-2 text-gray-500 hover:text-gray-700'
             "
           >
-            Active Jobs
+            {{ t("activeJobs") }} ({{ jobCounter }})
           </button>
 
           <button
-            @click="activeTab = 'archived', fetchJobs()"
+            @click="((activeTab = 'archived'), archivedJobs())"
             :class="
               activeTab === 'archived'
                 ? 'border-b-2 border-blue-600 pb-2 text-blue-600'
                 : 'pb-2 text-gray-500 hover:text-gray-700'
             "
           >
-            Archived Jobs
+            {{ t("archivedJobs") }} ({{ archivedJobCounter }})
           </button>
         </div>
       </div>
@@ -49,12 +49,12 @@
         <table class="w-full text-sm">
           <thead class="bg-gray-50 text-gray-600">
             <tr>
-              <th class="px-4 py-3 text-left">Job</th>
-              <th class="px-4 py-3 text-left">Location</th>
-              <th class="px-4 py-3 text-left">Salary</th>
-              <th class="px-4 py-3 text-left">Status</th>
-              <th class="px-4 py-3 text-left">Applicants</th>
-              <th class="px-4 py-3 text-right">Actions</th>
+              <th class="px-4 py-3 text-left">{{ t("job_title") }}</th>
+              <th class="px-4 py-3 text-left">{{ t("location") }}</th>
+              <th class="px-4 py-3 text-left">{{ t("salary") }}</th>
+              <th class="px-4 py-3 text-left">{{ t("status") }}</th>
+              <th class="px-4 py-3 text-left">{{ t("applicants") }}</th>
+              <th class="px-4 py-3 text-right">{{ t("actions") }}</th>
             </tr>
           </thead>
           <tbody v-if="jobs.length > 0 && !loading">
@@ -146,7 +146,7 @@
                     <!-- ARCHIVE -->
                     <button
                       title="Archive job"
-                      @click="archiveJob(job.id)"
+                      @click="openActionModal(job, 'archive')"
                       class="action-btn text-gray-600 hover:bg-gray-200 border rounded-full p-1"
                     >
                       <i class="pi pi-folder"></i>
@@ -178,7 +178,7 @@
                     <!-- RESTORE -->
                     <button
                       title="Restore job"
-                      @click="restoreJob(job.id)"
+                      @click="openActionModal(job, 'restore')"
                       class="action-btn text-green-600 hover:bg-green-200 border rounded-full p-1"
                     >
                       <i class="pi pi-undo"></i>
@@ -200,24 +200,33 @@
           <tbody v-else-if="loading">
             <tr>
               <td colspan="6" class="px-4 py-6 text-center text-gray-500">
-                Loading...
+                {{ t("loadingJobs") }}
               </td>
             </tr>
           </tbody>
           <tbody v-else>
             <tr>
-              <td v-if="activeTab == 'archived'" colspan="6" class="px-4 py-6 text-center text-gray-500">
-                No archived jobs found.
+              <td
+                v-if="activeTab == 'archived'"
+                colspan="6"
+                class="px-4 py-6 text-center text-gray-500"
+              >
+                {{ $t('noArchivedJobs') }}
               </td>
-              <td v-else colspan="6" class="px-4 py-6 text-center text-gray-500">
-                No active jobs found. Create your first job posting!</td> 
+              <td
+                v-else
+                colspan="6"
+                class="px-4 py-6 text-center text-gray-500"
+              >
+                {{ $t('noActiveJobs') }}
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
       <!-- PAGINATION -->
       <div
-        v-if="totalPages > 1"
+        v-if="totalPages"
         class="flex items-center justify-between mt-6 text-sm"
       >
         <p class="text-gray-500">Page {{ page }} of {{ totalPages }}</p>
@@ -228,12 +237,12 @@
             @click="changePage(page - 1)"
             :disabled="page === 1"
             class="px-3 py-1.5 border rounded-md"
-            :class="
-              (page === 1
+            :class="[
+              page === 1
                 ? 'text-gray-400 cursor-not-allowed'
                 : 'hover:bg-gray-100',
-              loading ? 'opacity-50 cursor-not-allowed' : '')
-            "
+              loading ? 'opacity-50 cursor-not-allowed' : '',
+            ]"
           >
             Prev
           </button>
@@ -244,12 +253,12 @@
             :key="p"
             @click="changePage(p)"
             class="px-3 py-1.5 border rounded-md"
-            :class="
-              (p === page
+            :class="[
+              p === page
                 ? 'bg-blue-600 text-white border-blue-600'
                 : 'hover:bg-gray-100',
-              loading ? 'opacity-50 cursor-not-allowed' : '')
-            "
+              loading ? 'opacity-50 cursor-not-allowed' : '',
+            ]"
           >
             {{ p }}
           </button>
@@ -259,12 +268,12 @@
             @click="changePage(page + 1)"
             :disabled="page === totalPages"
             class="px-3 py-1.5 border rounded-md"
-            :class="
-              (page === totalPages
-                ? 'text-gray-400 cursor-not-allowed'
+            :class="[
+              page === totalPages
+                ? 'text-gray-400 cursor-not-allowed '
                 : 'hover:bg-gray-100',
-              loading ? 'opacity-50 cursor-not-allowed' : '')
-            "
+              loading ? 'opacity-50 cursor-not-allowed' : '',
+            ]"
           >
             Next
           </button>
@@ -280,7 +289,7 @@
     <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6">
       <!-- TITLE -->
       <h3 class="text-lg font-semibold text-gray-900">
-        {{ nextStatus === 1 ? "Publish Job" : "Close Job" }}
+        {{ nextStatus === 1 ? $t('publishJob') : $t('closeJob') }}
       </h3>
 
       <!-- MESSAGE -->
@@ -310,7 +319,49 @@
           "
           class="px-4 py-2 text-sm text-white rounded-md"
         >
-          {{ nextStatus === 1 ? "Publish" : "Close" }}
+          {{ nextStatus === 1 ? $t('publish') : $t('close') }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHIVE / RESTORE MODAL -->
+  <div
+    v-if="showActionModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+  >
+    <div class="w-full max-w-sm rounded-xl bg-white p-6 shadow-lg">
+      <h3 class="text-lg font-semibold text-gray-900">
+        {{ actionType === "archive" ? "Archive job?" : "Restore job?" }}
+      </h3>
+
+      <p class="mt-2 text-sm text-gray-600">
+        <span v-if="actionType === 'archive'">
+          This job will be moved to archived list and hidden from active jobs.
+        </span>
+        <span v-else> This job will be restored to active jobs. </span>
+      </p>
+
+      <div class="mt-6 flex justify-end gap-3">
+        <button
+          @click="closeActionModal"
+          class="rounded-md border px-4 py-2 text-sm hover:bg-gray-100"
+          :disabled="actionLoading"
+        >
+          Cancel
+        </button>
+
+        <button
+          @click="confirmAction"
+          class="rounded-md px-4 py-2 text-sm text-white"
+          :class="
+            actionType === 'archive'
+              ? 'bg-gray-700 hover:bg-gray-800'
+              : 'bg-green-600 hover:bg-green-700'
+          "
+          :disabled="actionLoading"
+        >
+          {{ actionLoading ? "Processing..." : "Confirm" }}
         </button>
       </div>
     </div>
@@ -333,7 +384,9 @@ const loading = ref(false);
 const showConfirmModal = ref(false);
 const selectedJob = ref(null);
 const nextStatus = ref(null);
-
+const jobCounter = ref(0);
+const archivedJobCounter = ref(0);
+const countit = ref(false);
 const page = ref(1);
 const limit = ref(5);
 const totalPages = ref(1);
@@ -351,23 +404,85 @@ function statusClass(status) {
   }
 }
 
-async function archiveJob(jobId) {
-  if (!confirm("Archive this job?")) return;
-  await api.post(`/job-posts/${jobId}/archive`, {}, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-  fetchJobs();
+const showActionModal = ref(false);
+const actionType = ref(null); // 'archive' | 'restore'
+// const selectedJob = ref(null);
+const actionLoading = ref(false);
+
+function openActionModal(job, type) {
+  selectedJob.value = job;
+  actionType.value = type;
+  showActionModal.value = true;
 }
 
-async function restoreJob(jobId) {
-  await api.post(`/job-posts/${jobId}/restore`, {}, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  } );
-  fetchJobs();
+function closeActionModal() {
+  showActionModal.value = false;
+  selectedJob.value = null;
+  actionType.value = null;
+}
+
+// async function archiveJob(jobId) {
+//   if (!confirm("Archive this job?")) return;
+//   await api.post(`/job-posts/${jobId}/archive`, {}, {
+//     headers: {
+//       Authorization: `Bearer ${localStorage.getItem("token")}`,
+//     },
+//   });
+//   fetchJobs();
+// }
+
+// async function restoreJob(jobId) {
+//   await api.post(`/job-posts/${jobId}/restore`, {}, {
+//     headers: {
+//       Authorization: `Bearer ${localStorage.getItem("token")}`,
+//     },
+//   } );
+//   fetchJobs();
+// }
+
+async function confirmAction() {
+  if (!selectedJob.value) return;
+
+  try {
+    actionLoading.value = true;
+
+    if (actionType.value === "archive") {
+      await api.post(
+        `/job-posts/${selectedJob.value.id}/archive`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      
+    }
+    
+    if (actionType.value === "restore") {
+      await api.post(
+        `/job-posts/${selectedJob.value.id}/restore`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      
+    }
+    archivedJobs(); // refresh archived
+    fetchJobs(); // refresh table
+
+    closeActionModal();
+    countit.value = !countit.value;
+    page.value = 1; // reset to first page
+  } catch (err) {
+    console.error("Action failed", err);
+    alert("Action failed. Please try again.");
+  } finally {
+    actionLoading.value = false;
+  }
 }
 
 async function fetchJobs() {
@@ -377,11 +492,14 @@ async function fetchJobs() {
     const res = await getJobPostsSelf({
       page: page.value,
       limit: limit.value,
-      archive: activeTab.value === "archived" ? true : false,
     });
-
-    jobs.value = res.data?.data || [];
+    if(!countit.value && activeTab.value === 'active'){
+      jobs.value = res.data?.data || [];
+    }
+    // jobs.value = res.data?.data || [];
+    jobCounter.value = res.data?.meta?.total || 0;
     totalPages.value = res.data?.meta?.totalPage || 1;
+    countit.value = false;
   } catch (err) {
     console.error("Failed to fetch recruiter jobs", err);
   } finally {
@@ -389,9 +507,29 @@ async function fetchJobs() {
   }
 }
 
+async function archivedJobs() {
+  try {
+    const res = await getJobPostsSelf({
+      page: page.value,
+      limit: limit.value,
+      archive: true,
+    });
+    if(!countit.value && activeTab.value === 'archived'){
+      jobs.value = res.data?.data || [];
+    }
+    archivedJobCounter.value = res.data?.meta?.total || 0;
+    totalPages.value = res.data?.meta?.totalPage || 1;
+    countit.value = false;
+  } catch (err) {
+    console.error("Failed to count archived jobs", err);
+  }
+}
+
 onMounted(() => {
   fetchJobs();
+  archivedJobs();
 });
+
 function formatSalary(job) {
   if (!job.salary_min || !job.salary_max) return "—";
   return `${job.salary_min} - ${job.salary_max} ${job.currency}`;
@@ -408,6 +546,8 @@ function formatDate(date) {
 function changePage(p) {
   if (p < 1 || p > totalPages.value) return;
   page.value = p;
+  console.log("toalPages:", totalPages.value);
+  console.log("Changing to page:", page.value);
   fetchJobs();
 }
 

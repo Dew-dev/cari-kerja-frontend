@@ -112,7 +112,7 @@ const isSelectingCurrency = ref(false);
 let currencyTimeout = null;
 const salaryError = ref(null);
 
-async function fetchCurrencies(keyword = "UZS") {
+async function fetchCurrencies(keyword = "_") {
   try {
     console.log("FETCH CURRENCIES WITH KEYWORD:", keyword);
     currencyLoading.value = true;

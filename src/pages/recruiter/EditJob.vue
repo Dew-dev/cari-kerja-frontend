@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../../stores/authstore";
-
+import { useToast } from "vue-toastification";
 const { t } = useI18n();
 const auth = useAuthStore();
 import api from "@/services/api"; // axios instance
@@ -12,6 +12,7 @@ const router = useRouter();
 const route = useRoute();
 const loading = ref(false);
 const buttonLoading = ref(false);
+const toast = useToast();
 
 
 /* ======================
@@ -289,7 +290,7 @@ async function submit() {
     return;
   }
   buttonLoading.value = false;
-  alert("Job updated successfully!");
+  toast.success("Job updated successfully!");
   // router.push("/recruiter/jobs")
 }
 </script>

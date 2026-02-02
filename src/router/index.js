@@ -66,6 +66,23 @@ const routes = [
     component: () => import("../pages/public/RecruiterProfile.vue"),
   },
   {
+    path: "/forgot-password",
+    component: () => import("@/pages/auth/ForgotPassword.vue"),
+  },
+  {
+    path: "/reset-password",
+    component: () => import("@/pages/auth/ResetPassword.vue"),
+  },
+  {
+    path: "/change-password",
+    component: () => import("@/pages/profile/ChangePassword.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/verify-email",
+    component: () => import("@/pages/auth/VerifyEmail.vue"),
+  },
+  {
     path: "/recruiter",
     meta: { requiresAuth: true, role: "recruiter" },
     children: [
@@ -128,7 +145,7 @@ router.beforeEach((to) => {
 
   // 🚫 GUEST ONLY (login/register)
   if (to.meta.guestOnly && auth.isLoggedIn) {
-    return auth.role === "recruiter" ? "/recruiter" : "/jobposts";
+    return auth.role === "recruiter" ? "/recruiter/jobs" : "/jobposts";
   }
 
   // 🔒 PROTECTED ROUTE

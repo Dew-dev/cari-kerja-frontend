@@ -9,6 +9,8 @@ export const useAuthStore = defineStore("auth", {
     user: JSON.parse(localStorage.getItem("user")),
     loading: false,
     error: null,
+    needVerifyEmail: false,
+    lastLoginEmail: null,
   }),
 
   getters: {
@@ -37,7 +39,17 @@ export const useAuthStore = defineStore("auth", {
         return true;
       } catch (err) {
         console.error("Login error:", err);
-        this.error = err.response?.data?.message || "Login failed";
+        const msg = err?.response?.data?.message;
+
+        if (msg === "Email not verified") {
+          this.error = "Please verify your email before logging in.";
+          this.needVerifyEmail = true;
+          this.lastLoginEmail = payload.email;
+        } else {
+          this.error = "Invalid email or password";
+        }
+
+        this.error = msg || "Login failed";
         return false;
       } finally {
         this.loading = false;

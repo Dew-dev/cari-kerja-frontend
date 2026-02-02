@@ -1,20 +1,19 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import AppFooter from './components/layout/AppFooter.vue';
+import HelloWorld from "./components/HelloWorld.vue";
+import AppFooter from "./components/layout/AppFooter.vue";
 import AppHeader from "./components/layout/AppHeader.vue";
-import { useI18n } from "vue-i18n"
-const { locale, t } = useI18n()
-import 'primeicons/primeicons.css'
+import { useI18n } from "vue-i18n";
+const { locale, t } = useI18n();
+import "primeicons/primeicons.css";
 </script>
 
 <template>
   <div class="min-h-screen bg-white text-gray-900">
     <AppHeader />
-    <router-view :key="$route.fullPath"/>
+    <router-view :key="$route.fullPath" />
     <AppFooter />
   </div>
 </template>
-
 
 <style scoped>
 .logo {
@@ -29,13 +28,11 @@ import 'primeicons/primeicons.css'
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
 }
-body{
+body {
   background: grey;
 }
-.hover-button:hover{
+.hover-button:hover {
   scale: calc(1.05);
 }
 </style>
-<script>
-  
-</script>
+<script></script>
