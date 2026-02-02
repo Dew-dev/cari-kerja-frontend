@@ -13,8 +13,10 @@
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "jsonwebtoken": "^9.0.3",
+    "notivue": "^2.4.5",
     "pinia": "^3.0.4",
     "primeicons": "^7.0.0",
+    "toast": "^0.5.4",
     "vue": "^3.5.24",
     "vue-i18n": "^11.2.8",
     "vue-router": "^4.6.4"

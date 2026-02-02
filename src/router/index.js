@@ -145,7 +145,7 @@ router.beforeEach((to) => {
 
   // 🚫 GUEST ONLY (login/register)
   if (to.meta.guestOnly && auth.isLoggedIn) {
-    return auth.role === "recruiter" ? "/recruiter" : "/jobposts";
+    return auth.role === "recruiter" ? "/recruiter/jobs" : "/jobposts";
   }
 
   // 🔒 PROTECTED ROUTE

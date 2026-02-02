@@ -18,11 +18,11 @@
       <nav class="mb-6">
         <ol class="flex items-center gap-2 text-sm text-gray-600">
           <li>
-            <router-link to="/" class="hover:text-blue-600">Home</router-link>
+            <router-link to="/" class="hover:text-blue-600">{{ $t('home') }}</router-link>
           </li>
           <li>/</li>
           <li>
-            <router-link to="/jobposts" class="hover:text-blue-600">Jobs</router-link>
+            <router-link to="/jobposts" class="hover:text-blue-600">{{ $t('jobs') }}</router-link>
           </li>
           <li>/</li>
           <li class="text-gray-900 font-medium">{{ job.title }}</li>
@@ -75,19 +75,19 @@
             <!-- Job Key Info -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div class="border border-gray-200 rounded-lg p-4">
-                <div class="text-xs text-gray-500 mb-1">Salary</div>
+                <div class="text-xs text-gray-500 mb-1">{{ $t('salary') }}</div>
                 <div class="text-lg font-semibold text-green-600">
                   {{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }} {{ job.currency_code }}
                 </div>
               </div>
               <div class="border border-gray-200 rounded-lg p-4">
-                <div class="text-xs text-gray-500 mb-1">Employment Type</div>
+                <div class="text-xs text-gray-500 mb-1">{{ $t('employmentType') }}</div>
                 <div class="text-lg font-semibold text-gray-900">
                   {{ job.employment_type }}
                 </div>
               </div>
               <div class="border border-gray-200 rounded-lg p-4">
-                <div class="text-xs text-gray-500 mb-1">Category</div>
+                <div class="text-xs text-gray-500 mb-1">{{ $t('category') }}</div>
                 <div class="text-lg font-semibold text-gray-900">
                   {{ job.category_name }}
                 </div>
@@ -103,13 +103,13 @@
               <svg v-if="hasApplied" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
-              <span>{{ hasApplied ? 'Already Applied' : isApplying ? 'Applying...' : 'Apply Now' }}</span>
+              <span>{{ hasApplied ? $t('alreadyApplied') : isApplying ? $t('applying') : $t('applyNow') }}</span>
             </button>
           </div>
 
           <!-- Job Description -->
           <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Job Description</h2>
+            <h2 class="text-xl font-bold text-gray-900 mb-4">{{ $t('jobDescription') }}</h2>
             <div class="prose max-w-none text-gray-700 whitespace-pre-line">
               {{ job.description }}
             </div>
@@ -117,7 +117,7 @@
 
           <!-- Requirements -->
           <div v-if="job.requirements" class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Requirements</h2>
+            <h2 class="text-xl font-bold text-gray-900 mb-4">{{ $t('requirements') }}</h2>
             <div class="prose max-w-none text-gray-700 whitespace-pre-line">
               {{ job.requirements }}
             </div>
@@ -125,7 +125,7 @@
 
           <!-- Responsibilities -->
           <div v-if="job.responsibilities" class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Responsibilities</h2>
+            <h2 class="text-xl font-bold text-gray-900 mb-4">{{ $t('responsibilities') }}</h2>
             <div class="prose max-w-none text-gray-700 whitespace-pre-line">
               {{ job.responsibilities }}
             </div>
@@ -133,7 +133,7 @@
 
           <!-- Benefits -->
           <div v-if="job.benefits" class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Benefits</h2>
+            <h2 class="text-xl font-bold text-gray-900 mb-4">{{ $t('benefits') }}</h2>
             <div class="prose max-w-none text-gray-700 whitespace-pre-line">
               {{ job.benefits }}
             </div>
@@ -144,7 +144,7 @@
         <div class="lg:col-span-1 space-y-6">
           <!-- Company Info Card -->
           <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">About Company</h3>
+            <h3 class="text-lg font-bold text-gray-900 mb-4">{{ $t('aboutCompany') }}</h3>
             <div class="flex items-center gap-3 mb-4">
               <img
                 :src="'http://localhost:5000'+job.avatar_url || '/company-default-image.png'"
@@ -184,13 +184,13 @@
               @click="viewCompanyProfile"
               class="mt-4 w-full border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-lg transition duration-200"
             >
-              View Company Profile
+              {{ $t('viewCompanyProfile') }}
             </button>
           </div>
 
           <!-- Similar Jobs -->
           <div v-if="similarJobs.length > 0" class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Similar Jobs</h3>
+            <h3 class="text-lg font-bold text-gray-900 mb-4">{{ $t('similarJobs') }}</h3>
             <div class="space-y-4">
               <div
                 v-for="similarJob in similarJobs"
@@ -221,13 +221,13 @@
         <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">Job Not Found</h3>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ $t('jobNotFound') }}</h3>
         <p class="text-gray-600 mb-6">The job you're looking for doesn't exist or has been removed.</p>
         <router-link
           to="/jobposts"
           class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
         >
-          Back to Job Listings
+          {{ $t('backToJobListings') }}
         </router-link>
       </div>
     </div>
@@ -237,8 +237,11 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { getJobPostById, getJobPosts } from '../services/jobposts.api'
-
+import { useToast } from 'vue-toastification';
+const { t } = useI18n();
+const toast = useToast();
 const route = useRoute();
 const router = useRouter();
 
@@ -526,7 +529,7 @@ const handleApply = async () => {
 
   // Check if user is recruiter
   if (authService.isRecruiter()) {
-    alert('Recruiters cannot apply to jobs. This feature is only for workers.');
+    toast.warning('Recruiters cannot apply to jobs. This feature is only for workers.');
     return;
   }
 
@@ -541,10 +544,10 @@ const handleApply = async () => {
     hasApplied.value = true;
     
     // Show success message
-    alert('Application submitted successfully! The recruiter will review your application soon.');
+    toast.success('Application submitted successfully! The recruiter will review your application soon.');
   } catch (error) {
     console.error('Error applying to job:', error);
-    alert('Failed to submit application. Please try again.');
+    toast.error('Failed to submit application. Please try again.');
   } finally {
     isApplying.value = false;
   }

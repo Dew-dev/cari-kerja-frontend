@@ -73,10 +73,12 @@ async function submit() {
 
   state.loading = true
   try {
-    await register(form)
-
+    const response = await register(form)
+    if(response && response.data && response.data.message){
+      alert(response.data.message)
+      router.push("/login")
+    }
     // setelah register → login
-    router.push("/login")
   } catch (err) {
     state.error =
       err.response?.data?.message || "Registration failed"

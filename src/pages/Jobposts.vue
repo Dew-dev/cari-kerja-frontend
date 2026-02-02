@@ -8,7 +8,7 @@
         <!-- Sidebar - Categories & Filters -->
         <aside class="hidden lg:block w-64 shrink-0">
           <div class="bg-white rounded-lg shadow p-4 sticky top-6">
-            <h3 class="font-semibold text-lg mb-4 text-gray-900">Categories</h3>
+            <h3 class="font-semibold text-lg mb-4 text-gray-900">{{ $t('categories') }}</h3>
             <ul class="space-y-2">
               <!-- All -->
               <li>
@@ -19,7 +19,7 @@
                     selectedCategory === '' ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
                   ]"
                 >
-                  <span>All Categories</span>
+                  <span>{{ $t('allCategories') }}</span>
                 </button>
               </li>
 
@@ -60,7 +60,7 @@
                   "
                 >
                   <span>
-                    {{ showAllCategories ? 'View less categories' : 'View more categories' }}
+                    {{ showAllCategories ? $t('viewLessCategories') : $t('viewMoreCategories') }}
                   </span>
 
                   <svg
@@ -84,7 +84,7 @@
 
             <div class="mt-6 pt-6 border-t">
               <h4 class="font-semibold text-sm mb-3 text-gray-900">
-                Employment Types
+                {{ $t('employmentTypes') }}
               </h4>
 
               <div class="space-y-2">
@@ -118,7 +118,7 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
-              <span>Filter</span>
+              <span>{{ $t('filter') }}</span>
             </button>
           </div>
 
@@ -126,12 +126,12 @@
           <div class="bg-white rounded-lg shadow p-4 mb-4">
             <div class="flex items-center justify-between">
               <h2 class="text-xl font-semibold text-gray-900">
-                Found {{ totalData }} Job Vacancies
+                Found {{ totalData }} {{ $t('jobs') }} Vacancies
               </h2>
               <select v-model="sortBy" @change="handleFilterChange" class="px-4 py-2 border border-gray-300 rounded text-sm text-gray-700">
-                <option value="latest">Latest</option>
-                <option value="oldest">Oldest</option>
-                <option value="highest-salary">Highest Salary</option>
+                <option value="latest">{{ $t('latest') }}</option>
+                <option value="oldest">{{ $t('oldest') }}</option>
+                <option value="highest-salary">{{ $t('highestSalary') }}</option>
                 <!-- <option value="relevant">Paling Relevan</option> -->
               </select>
             </div>
@@ -251,12 +251,14 @@
 
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import HeroSearch from "../components/home/HeroSearch.vue";
 import { getJobPosts } from '../services/jobposts.api';
 import { getCategoriesWithJobcount } from '../services/categories.api';
 import { useRoute, useRouter } from 'vue-router'
 import { getEmploymentTypes } from '../services/employment_types.api';
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 

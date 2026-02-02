@@ -1,12 +1,13 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/authstore";
 
+import { Notivue, Notification, push } from "notivue";
 import { useI18n } from "vue-i18n";
 import api from "../../services/api";
 const { locale, t } = useI18n();
-
+const loading = ref(false);
 const router = useRouter();
 const auth = useAuthStore();
 
@@ -21,7 +22,7 @@ async function submit() {
 
   // ROLE BASED REDIRECT
   if (auth.role === "recruiter") {
-    router.push("/recruiter");
+    router.push("/recruiter/jobs");
   } else {
     router.push("/jobposts");
   }
@@ -29,10 +30,17 @@ async function submit() {
 
 async function resendVerification() {
   try {
-    await api.post("/auth/verify-email/resend",form)
-    alert("Verification email sent")
-  } catch {
-    alert("Failed to send verification email")
+    await api.post("/auth/verify-email/resend", form);
+    push.success("Verification email sent");
+    loading.value = true;
+  } catch (e) {
+    if (e?.response?.status === 429) {
+      push.warning(e.response.data.message);
+    } else {
+      push.error("Failed to send verification email");
+    }
+  } finally{
+    loading.value = false;
   }
 }
 </script>
@@ -46,6 +54,9 @@ async function resendVerification() {
         {{ t("login") }}
       </h1>
 
+    <Notivue v-slot="item">
+      <Notification :item="item" />
+    </Notivue>
       <form @submit.prevent="submit" class="space-y-4">
         <div>
           <label class="block text-sm mb-1">Email</label>
@@ -74,7 +85,7 @@ async function resendVerification() {
         </p>
         <p v-if="auth.needVerifyEmail" class="text-sm text-yellow-600">
           Your email is not verified.
-          <span class="underline cursor-pointer" @click="resendVerification">
+          <span class="underline" :class="[loading ? 'cursor-not-allowed' : 'cursor-pointer']" @click="resendVerification">
             Resend verification email
           </span>
         </p>

@@ -211,14 +211,14 @@
                 colspan="6"
                 class="px-4 py-6 text-center text-gray-500"
               >
-                No archived jobs found.
+                {{ $t('noArchivedJobs') }}
               </td>
               <td
                 v-else
                 colspan="6"
                 class="px-4 py-6 text-center text-gray-500"
               >
-                No active jobs found. Create your first job posting!
+                {{ $t('noActiveJobs') }}
               </td>
             </tr>
           </tbody>
@@ -289,7 +289,7 @@
     <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6">
       <!-- TITLE -->
       <h3 class="text-lg font-semibold text-gray-900">
-        {{ nextStatus === 1 ? "Publish Job" : "Close Job" }}
+        {{ nextStatus === 1 ? $t('publishJob') : $t('closeJob') }}
       </h3>
 
       <!-- MESSAGE -->
@@ -319,7 +319,7 @@
           "
           class="px-4 py-2 text-sm text-white rounded-md"
         >
-          {{ nextStatus === 1 ? "Publish" : "Close" }}
+          {{ nextStatus === 1 ? $t('publish') : $t('close') }}
         </button>
       </div>
     </div>
