@@ -116,27 +116,29 @@
           </div>
 
           <!-- Requirements -->
-          <div v-if="job.requirements" class="bg-white rounded-lg shadow-md p-6">
+          <div 
+          v-if="job.requirements" 
+          class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4">Requirements</h2>
-            <div class="prose max-w-none text-gray-700 whitespace-pre-line">
-              {{ job.requirements }}
-            </div>
+            <ul v-for="requirement in job.requirements" class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line">
+              <li>{{ requirement.requirement }}</li>
+            </ul>
           </div>
 
           <!-- Responsibilities -->
           <div v-if="job.responsibilities" class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4">Responsibilities</h2>
-            <div class="prose max-w-none text-gray-700 whitespace-pre-line">
-              {{ job.responsibilities }}
-            </div>
+            <ul v-for="responsibility in job.responsibilities" class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line">
+              <li>{{ responsibility.responsibility }}</li>
+            </ul>
           </div>
 
           <!-- Benefits -->
           <div v-if="job.benefits" class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4">Benefits</h2>
-            <div class="prose max-w-none text-gray-700 whitespace-pre-line">
-              {{ job.benefits }}
-            </div>
+            <ul v-for="benefit in job.benefits" class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line">
+              <li>{{ benefit.benefit }}</li>
+            </ul>
           </div>
         </div>
 
@@ -237,7 +239,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getJobPostById, getJobPosts } from '../services/jobposts.api'
+import { getJobPostBenefits, getJobPostById, getJobPostRequirements, getJobPostResponsibilities, getJobPosts } from '../services/jobposts.api'
 
 const route = useRoute();
 const router = useRouter();
@@ -288,6 +290,7 @@ const jobDetailService = {
       // return response.data;
       
       const response = await getJobPostById(id);
+
       return response.data;
 
       // Simulasi data untuk demo
@@ -347,6 +350,34 @@ const jobDetailService = {
 //       });
     } catch (error) {
       console.error('Error fetching job detail:', error);
+      throw error;
+    }
+  },
+
+  async fetchJobPostRequirements(id) {
+    try {
+      const jobPostRequirements = await getJobPostRequirements(id);
+      return jobPostRequirements.data;
+    } catch (error) {
+      console.error('Error fetching jobPostRequirements:', error);
+      throw error;
+    }
+  },
+  async fetchJobPostResponsibilities(id) {
+    try {
+      const jobPostResponsibilities = await getJobPostResponsibilities(id);
+      return jobPostResponsibilities.data;
+    } catch (error) {
+      console.error('Error fetching jobPostResponsibilities:', error);
+      throw error;
+    }
+  },
+  async fetchJobPostBenefits(id) {
+    try {
+      const jobPostBenefits = await getJobPostBenefits(id);
+      return jobPostBenefits.data;
+    } catch (error) {
+      console.error('Error fetching jobPostBenefits:', error);
       throw error;
     }
   },
@@ -455,9 +486,12 @@ const authService = {
     // PLACEHOLDER - Ganti dengan logika autentikasi Anda
     // Contoh: Cek token di localStorage
     // return !!localStorage.getItem('auth_token');
+    const user = localStorage.getItem("user");
+    if (!user || user.token === undefined || user.token === null || user.token === "") {
+      return false;
+    }
     
-    // Untuk demo, return false (belum login)
-    return false;
+    return true;
   },
 
   getUserRole() {
@@ -465,13 +499,15 @@ const authService = {
     // Contoh: Parse JWT token atau ambil dari store/localStorage
     // const user = JSON.parse(localStorage.getItem('user'));
     // return user?.role; // 'worker' atau 'recruiter'
+    const user = localStorage.getItem("user");
+    const role = user.role;
+
     
-    // Untuk demo
-    return 'worker'; // atau 'recruiter'
+    return role;
   },
 
   isWorker() {
-    return this.getUserRole() === 'worker';
+    return this.getUserRole() === 'user';
   },
 
   isRecruiter() {
@@ -495,6 +531,9 @@ const loadJobDetail = async () => {
 
     // Load similar jobs
     await loadSimilarJobs();
+    await loadJobPostRequirements();
+    await loadJobPostResponsibilities();
+    await loadJobPostBenefits();
   } catch (error) {
     console.error('Error loading job detail:', error);
     job.value = null;
@@ -502,6 +541,34 @@ const loadJobDetail = async () => {
     loading.value = false;
   }
 };
+
+const loadJobPostRequirements = async () => {
+  try {
+    if (!job.value) return;
+    const response = await jobDetailService.fetchJobPostRequirements(jobId.value);
+    job.value = {...job.value, requirements: response.data};
+  } catch (error) {
+    console.error('Error loading requirements: ', error);
+  }
+}
+const loadJobPostResponsibilities = async () => {
+  try {
+    if (!job.value) return;
+    const response = await jobDetailService.fetchJobPostResponsibilities(jobId.value);
+    job.value = {...job.value, responsibilities: response.data};
+  } catch (error) {
+    console.error('Error loading responsibilities: ', error);
+  }
+}
+const loadJobPostBenefits = async () => {
+  try {
+    if (!job.value) return;
+    const response = await jobDetailService.fetchJobPostBenefits(jobId.value);
+    job.value = {...job.value, benefits: response.data};
+  } catch (error) {
+    console.error('Error loading benefits: ', error);
+  }
+}
 
 const loadSimilarJobs = async () => {
   try {
