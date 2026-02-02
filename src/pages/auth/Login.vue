@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "../../stores/authstore";
 
 import { push } from "notivue";
@@ -9,6 +9,7 @@ import api from "../../services/api";
 const { locale, t } = useI18n();
 const loading = ref(false);
 const router = useRouter();
+const route = useRoute();
 const auth = useAuthStore();
 
 const form = reactive({
@@ -20,11 +21,19 @@ async function submit() {
   const success = await auth.login(form);
   if (!success) return;
 
-  // ROLE BASED REDIRECT
-  if (auth.role === "recruiter") {
-    router.push("/recruiter/jobs");
+  // Check if there's a redirect query parameter
+  const redirectTo = route.query.redirect;
+  
+  if (redirectTo) {
+    // Redirect back to the page they came from
+    router.push(redirectTo);
   } else {
-    router.push("/jobposts");
+    // ROLE BASED REDIRECT
+    if (auth.role === "recruiter") {
+      router.push("/recruiter/jobs");
+    } else {
+      router.push("/jobposts");
+    }
   }
 }
 

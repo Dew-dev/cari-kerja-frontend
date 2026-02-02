@@ -100,7 +100,20 @@ const form = reactive({
   requirements: [],
   benefits: [],
   responsibilities: [],
+  job_post_questions: [],
 });
+
+const QUESTION_TYPES = [
+  { id: 1, label: "TEXT" },
+  { id: 2, label: "RATING" },
+  { id: 3, label: "MULTIPLE_CHOICE" },
+  { id: 4, label: "BOOLEAN" },
+  { id: 5, label: "OPTIONS" },
+];
+
+function needsOptions(typeId) {
+  return [3, 5].includes(Number(typeId));
+}
 
 /* ======================
    DYNAMIC LISTS
@@ -155,6 +168,50 @@ function removeResponsibility(index) {
   form.responsibilities.forEach((item, i) => {
     item.order_index = i;
   });
+}
+
+function addQuestion() {
+  form.job_post_questions.push({
+    question_text: "",
+    question_type_id: 1,
+    optionsText: "",
+    is_required: true,
+    order_index: form.job_post_questions.length,
+  });
+}
+
+function handleQuestionTypeChange(question) {
+  if (!needsOptions(question.question_type_id)) {
+    question.optionsText = "";
+  }
+}
+
+function removeQuestion(index) {
+  form.job_post_questions.splice(index, 1);
+  form.job_post_questions.forEach((item, i) => {
+    item.order_index = i;
+  });
+}
+
+function buildQuestionsPayload() {
+  return form.job_post_questions
+    .map((q, index) => {
+      const trimmedText = q.question_text?.trim();
+      if (!trimmedText) return null;
+      const typeId = Number(q.question_type_id) || 1;
+      const choices = (q.optionsText || "")
+        .split(",")
+        .map((c) => c.trim())
+        .filter(Boolean);
+      return {
+        question_text: trimmedText,
+        question_type_id: typeId,
+        options: needsOptions(typeId) && choices.length ? { choices } : null,
+        is_required: !!q.is_required,
+        order_index: index,
+      };
+    })
+    .filter(Boolean);
 }
 
 /* ======================
@@ -280,15 +337,24 @@ function selectCategory(category) {
 ====================== */
 async function submit() {
   const payload = {
-    ...form,
     recruiter_id: auth.user?.recruiter_id,
-    tags: form.tags,
+    title: form.title,
+    description: form.description,
+    employment_type_id: form.employment_type_id,
+    experience_level_id: form.experience_level_id,
+    salary_type_id: form.salary_type_id || 1,
+    job_post_status_id: 1,
     location: `${form.city}, ${form.country}`,
-    job_post_status_id: 1, // default to 'open'
+    salary_min: form.salary_min,
+    salary_max: form.salary_max,
+    currency_id: form.currency_id,
+    deadline: form.deadline,
     category_id: form.category_id,
+    tags: form.tags,
     requirements: form.requirements,
     benefits: form.benefits,
     responsibilities: form.responsibilities,
+    job_post_questions: buildQuestionsPayload(),
   };
 
   // console.log("CREATE JOB PAYLOAD:", payload);
@@ -315,10 +381,10 @@ async function submit() {
       },
     });
 
-    if (resTags?.success) return;
+    if (!resTags?.success) return;
+    router.push("/recruiter/jobs")
   });
 
-  router.push("/recruiter/jobs")
 }     
 </script>
 
@@ -338,6 +404,8 @@ async function submit() {
         <div>
           <label class="block text-sm font-medium text-gray-700">
             {{ t("job_title") }}
+            <span class="text-red-500 ml-1">*</span>
+            <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
           </label>
           <input
             v-model="form.title"
@@ -351,6 +419,7 @@ async function submit() {
         <div class="relative">
           <label class="block text-sm font-medium text-gray-700">
             {{ t("tags") }}
+            <span class="ml-2 text-xs text-gray-400">{{ t("optional") }}</span>
           </label>
 
           <!-- SELECTED TAGS -->
@@ -408,6 +477,8 @@ async function submit() {
         <div>
           <label class="block text-sm font-medium text-gray-700">
             {{ t("salary") }}
+            <span class="text-red-500 ml-1">*</span>
+            <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
           </label>
 
           <div class="grid md:grid-cols-3 gap-4 mt-1">
@@ -469,7 +540,11 @@ async function submit() {
           </h3>
 
           <div class="col-span-2">
-            <label>{{ t("job_type") }}</label>
+            <label>
+              {{ t("job_type") }}
+              <span class="text-red-500 ml-1">*</span>
+              <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
+            </label>
             <select
               v-model="form.employment_type_id"
               class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -484,7 +559,11 @@ async function submit() {
           </div>
 
           <div class="col-span-2">
-            <label>{{ t("job_level") }}</label>
+            <label>
+              {{ t("job_level") }}
+              <span class="text-red-500 ml-1">*</span>
+              <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
+            </label>
             <select
               v-model="form.experience_level_id"
               class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -498,7 +577,11 @@ async function submit() {
           </div>
 
           <div class="col-span-2">
-            <label>{{ t("deadline") }}</label>
+            <label>
+              {{ t("deadline") }}
+              <span class="text-red-500 ml-1">*</span>
+              <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
+            </label>
             <input
               v-model="form.deadline"
               type="date"
@@ -509,6 +592,8 @@ async function submit() {
           <div class="col-span-2 relative">
             <label class="block text-sm font-medium text-gray-700">
               {{ t("category") }}
+              <span class="text-red-500 ml-1">*</span>
+              <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
             </label>
 
             <input
@@ -542,6 +627,8 @@ async function submit() {
         <div>
           <label class="block text-sm font-medium text-gray-700">
             {{ t("location") }}
+            <span class="text-red-500 ml-1">*</span>
+            <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
           </label>
 
           <div class="grid md:grid-cols-2 gap-4 mt-1">
@@ -562,6 +649,7 @@ async function submit() {
         <div>
           <label class="block text-sm font-medium text-gray-700">
             {{ t("requirements") }}
+            <span class="ml-2 text-xs text-gray-400">{{ t("optional") }}</span>
           </label>
           <div class="mt-2 space-y-2">
             <div
@@ -600,6 +688,7 @@ async function submit() {
         <div>
           <label class="block text-sm font-medium text-gray-700">
             {{ t("responsibilities") }}
+            <span class="ml-2 text-xs text-gray-400">{{ t("optional") }}</span>
           </label>
           <div class="mt-2 space-y-2">
             <div
@@ -638,6 +727,7 @@ async function submit() {
         <div>
           <label class="block text-sm font-medium text-gray-700">
             {{ t("benefits") }}
+            <span class="ml-2 text-xs text-gray-400">{{ t("optional") }}</span>
           </label>
           <div class="mt-2 space-y-2">
             <div
@@ -672,14 +762,110 @@ async function submit() {
           </div>
         </div>
 
+        <!-- QUESTIONS -->
+        <div>
+          <div class="flex items-center justify-between">
+            <label class="block text-sm font-medium text-gray-700">
+              {{ t("questions") }}
+              <span class="ml-2 text-xs text-gray-400">{{ t("optional") }}</span>
+            </label>
+            <button
+              type="button"
+              @click="addQuestion"
+              class="text-sm text-blue-600 hover:text-blue-700"
+            >
+              + {{ t("add_question") }}
+            </button>
+          </div>
+
+          <div v-if="form.job_post_questions && form.job_post_questions.length" class="mt-3 space-y-4">
+            <div
+              v-for="(q, index) in form.job_post_questions"
+              :key="index"
+              class="rounded-md border p-3"
+            >
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-700">
+                  {{ t("question") }} {{ index + 1 }}
+                </span>
+                <button
+                  type="button"
+                  @click="removeQuestion(index)"
+                  class="text-xs text-red-500 hover:text-red-700"
+                >
+                  {{ t("remove") }}
+                </button>
+              </div>
+
+              <input
+                v-model="q.question_text"
+                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :placeholder="t('question_text')"
+              />
+
+              <div class="grid md:grid-cols-3 gap-3 mt-3">
+                <div>
+                  <label class="block text-xs text-gray-600 mb-1">
+                    {{ t("question_type") }}
+                  </label>
+                  <select
+                    v-model="q.question_type_id"
+                    @change="handleQuestionTypeChange(q)"
+                    class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option
+                      v-for="type in QUESTION_TYPES"
+                      :key="type.id"
+                      :value="type.id"
+                    >
+                      {{
+                        t(
+                          type.id === 1
+                            ? "type_text"
+                            : type.id === 2
+                            ? "type_rating"
+                            : type.id === 3
+                            ? "type_multiple_choice"
+                            : type.id === 4
+                            ? "type_boolean"
+                            : "type_options"
+                        )
+                      }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-xs text-gray-600 mb-1">
+                    {{ t("options") }}
+                  </label>
+                  <input
+                    v-model="q.optionsText"
+                    :disabled="!needsOptions(q.question_type_id)"
+                    class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    :placeholder="t('options_placeholder')"
+                  />
+                </div>
+              </div>
+
+              <label class="flex items-center gap-2 mt-3 text-sm text-gray-700">
+                <input type="checkbox" v-model="q.is_required" />
+                {{ t("required") }}
+              </label>
+            </div>
+          </div>
+        </div>
+
         <!-- DESCRIPTION -->
         <div>
           <label class="block text-sm font-medium text-gray-700">
             {{ t("job_description") }}
+            <span class="text-red-500 ml-1">*</span>
+            <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
           </label>
           <textarea
             v-model="form.description"
-            class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[150px]"
+            class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-37.5"
             :placeholder="t('job_description_placeholder')"
           />
         </div>

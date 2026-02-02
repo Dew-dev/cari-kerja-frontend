@@ -16,6 +16,13 @@ const notes = ref([]);
 const noteInput = ref("");
 
 const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
+
+function formatAnswer(answer) {
+  if (!answer) return "";
+  if (typeof answer === "string") return answer;
+  if (answer.text !== undefined && answer.text !== null) return String(answer.text);
+  return "";
+}
 async function fetchWorker() {
   try {
     loading.value = true;
@@ -142,8 +149,8 @@ onMounted(fetchWorker);
           <p class="text-gray-600 text-sm">
             {{ worker.email }}
           </p>
-          <p v-if="worker.phone" class="text-gray-600 text-sm">
-            {{ worker.phone }}
+          <p v-if="worker.telephone" class="text-gray-600 text-sm">
+            {{ worker.telephone }}
           </p>
         </div>
 
@@ -196,6 +203,48 @@ onMounted(fetchWorker);
         </div>
 
         <p v-else class="text-gray-500 text-sm">{{ $t('noResumeUploaded') }}</p>
+      </div>
+
+      <!-- ANSWERS -->
+      <div class="bg-white border rounded-lg p-4" v-if="worker.answers?.length">
+        <h2 class="font-semibold mb-2">{{ $t('answers') }}</h2>
+        <div class="space-y-3">
+          <div
+            v-for="(ans, index) in worker.answers"
+            :key="ans.id || ans.question_id || index"
+            class="border rounded-md p-3"
+          >
+            <div class="text-sm font-medium text-gray-800">
+              {{ index + 1 }}. {{ ans.question_text }}
+            </div>
+            <div class="text-xs text-gray-500 mt-1">
+              {{ ans.question_type?.replace('_', ' ') || '' }}
+            </div>
+            
+            <div v-if="ans.options?.choices?.length" class="mt-2">
+              <div class="text-xs text-gray-500 mb-1">
+                {{ $t('choices') }}
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="(choice, cIdx) in ans.options.choices"
+                  :key="cIdx"
+                  class="text-xs px-2 py-1 rounded border"
+                  :class="
+                    choice === formatAnswer(ans.answer)
+                      ? 'bg-blue-100 text-blue-700 border-blue-200'
+                      : 'bg-gray-100 text-gray-700 border-gray-200'
+                  "
+                >
+                  {{ choice }}
+                </span>
+              </div>
+            </div>
+            <div v-else class="mt-2 text-sm text-gray-700 whitespace-pre-line">
+              {{ formatAnswer(ans.answer) || '-' }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

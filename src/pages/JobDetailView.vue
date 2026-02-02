@@ -18,11 +18,15 @@
       <nav class="mb-6">
         <ol class="flex items-center gap-2 text-sm text-gray-600">
           <li>
-            <router-link to="/" class="hover:text-blue-600">{{ $t('home') }}</router-link>
+            <router-link to="/" class="hover:text-blue-600">{{
+              $t("home")
+            }}</router-link>
           </li>
           <li>/</li>
           <li>
-            <router-link to="/jobposts" class="hover:text-blue-600">{{ $t('jobs') }}</router-link>
+            <router-link to="/jobposts" class="hover:text-blue-600">{{
+              $t("jobs")
+            }}</router-link>
           </li>
           <li>/</li>
           <li class="text-gray-900 font-medium">{{ job.title }}</li>
@@ -38,8 +42,11 @@
             <div class="flex gap-4 mb-6">
               <div class="shrink-0">
                 <img
-                  :src="'http://localhost:5000'+job.avatar_url || '/company-default-image.png'"
-                  @error="e => e.target.src = '/company-default-image.png'"
+                  :src="
+                    'http://localhost:5000' + job.avatar_url ||
+                    '/company-default-image.png'
+                  "
+                  @error="(e) => (e.target.src = '/company-default-image.png')"
                   :alt="job.company_name"
                   class="w-20 h-20 rounded-lg border border-gray-200 object-cover"
                 />
@@ -48,23 +55,60 @@
                 <h1 class="text-2xl font-bold text-gray-900 mb-2">
                   {{ job.title }}
                 </h1>
-                <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                <div
+                  class="flex flex-wrap items-center gap-4 text-sm text-gray-600"
+                >
                   <div class="flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                      />
                     </svg>
                     <span class="font-medium">{{ job.company_name }}</span>
                   </div>
                   <div class="flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
                     </svg>
                     <span>{{ job.location }}</span>
                   </div>
                   <div class="flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <span>{{ timeAgo(job.created_at) }}</span>
                   </div>
@@ -75,19 +119,24 @@
             <!-- Job Key Info -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div class="border border-gray-200 rounded-lg p-4">
-                <div class="text-xs text-gray-500 mb-1">{{ $t('salary') }}</div>
+                <div class="text-xs text-gray-500 mb-1">{{ $t("salary") }}</div>
                 <div class="text-lg font-semibold text-green-600">
-                  {{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }} {{ job.currency_code }}
+                  {{ formatNumber(job.salary_min) }} -
+                  {{ formatNumber(job.salary_max) }} {{ job.currency_code }}
                 </div>
               </div>
               <div class="border border-gray-200 rounded-lg p-4">
-                <div class="text-xs text-gray-500 mb-1">{{ $t('employmentType') }}</div>
+                <div class="text-xs text-gray-500 mb-1">
+                  {{ $t("employmentType") }}
+                </div>
                 <div class="text-lg font-semibold text-gray-900">
                   {{ job.employment_type }}
                 </div>
               </div>
               <div class="border border-gray-200 rounded-lg p-4">
-                <div class="text-xs text-gray-500 mb-1">{{ $t('category') }}</div>
+                <div class="text-xs text-gray-500 mb-1">
+                  {{ $t("category") }}
+                </div>
                 <div class="text-lg font-semibold text-gray-900">
                   {{ job.category_name }}
                 </div>
@@ -96,39 +145,71 @@
 
             <!-- Apply Button -->
             <button
+              v-if="!auth.isLoggedIn || auth.role === 'user'"
               @click="handleApply"
               :disabled="isApplying || hasApplied"
               class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-2"
             >
-              <svg v-if="hasApplied" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              <svg
+                v-if="hasApplied"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
-              <span>{{ hasApplied ? $t('alreadyApplied') : isApplying ? $t('applying') : $t('applyNow') }}</span>
+              <span>{{
+                hasApplied
+                  ? $t("alreadyApplied")
+                  : isApplying
+                  ? $t("applying")
+                  : $t("applyNow")
+              }}</span>
             </button>
           </div>
 
           <!-- Job Description -->
           <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">{{ $t('jobDescription') }}</h2>
+            <h2 class="text-xl font-bold text-gray-900 mb-4">
+              {{ $t("jobDescription") }}
+            </h2>
             <div class="prose max-w-none text-gray-700 whitespace-pre-line">
               {{ job.description }}
             </div>
           </div>
 
           <!-- Requirements -->
-          <div 
-          v-if="job.requirements" 
-          class="bg-white rounded-lg shadow-md p-6">
+          <div
+            v-if="job.requirements"
+            class="bg-white rounded-lg shadow-md p-6"
+          >
             <h2 class="text-xl font-bold text-gray-900 mb-4">Requirements</h2>
-            <ul v-for="requirement in job.requirements" class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line">
+            <ul
+              v-for="requirement in job.requirements"
+              class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line"
+            >
               <li>{{ requirement.requirement }}</li>
             </ul>
           </div>
 
           <!-- Responsibilities -->
-          <div v-if="job.responsibilities" class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Responsibilities</h2>
-            <ul v-for="responsibility in job.responsibilities" class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line">
+          <div
+            v-if="job.responsibilities"
+            class="bg-white rounded-lg shadow-md p-6"
+          >
+            <h2 class="text-xl font-bold text-gray-900 mb-4">
+              Responsibilities
+            </h2>
+            <ul
+              v-for="responsibility in job.responsibilities"
+              class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line"
+            >
               <li>{{ responsibility.responsibility }}</li>
             </ul>
           </div>
@@ -136,7 +217,10 @@
           <!-- Benefits -->
           <div v-if="job.benefits" class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4">Benefits</h2>
-            <ul v-for="benefit in job.benefits" class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line">
+            <ul
+              v-for="benefit in job.benefits"
+              class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line"
+            >
               <li>{{ benefit.benefit }}</li>
             </ul>
           </div>
@@ -146,39 +230,74 @@
         <div class="lg:col-span-1 space-y-6">
           <!-- Company Info Card -->
           <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">{{ $t('aboutCompany') }}</h3>
+            <h3 class="text-lg font-bold text-gray-900 mb-4">
+              {{ $t("aboutCompany") }}
+            </h3>
             <div class="flex items-center gap-3 mb-4">
               <img
-                :src="'http://localhost:5000'+job.avatar_url || '/company-default-image.png'"
-                @error="e => e.target.src = '/company-default-image.png'"
+                :src="
+                  'http://localhost:5000' + job.avatar_url ||
+                  '/company-default-image.png'
+                "
+                @error="(e) => (e.target.src = '/company-default-image.png')"
                 :alt="job.company_name"
                 class="w-16 h-16 rounded-lg border border-gray-200 object-cover"
               />
               <div>
-                <h4 class="font-semibold text-gray-900">{{ job.company_name }}</h4>
-                <p class="text-sm text-gray-600">{{ job.industry || 'Technology' }}</p>
+                <h4 class="font-semibold text-gray-900">
+                  {{ job.company_name }}
+                </h4>
+                <p class="text-sm text-gray-600">
+                  {{ job.industry || "Technology" }}
+                </p>
               </div>
             </div>
 
             <div class="space-y-3 text-sm">
               <div v-if="job.company_website" class="flex items-start gap-2">
-                <svg class="w-4 h-4 mt-0.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                <svg
+                  class="w-4 h-4 mt-0.5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+                  />
                 </svg>
-                <a :href="job.company_website" target="_blank" class="text-blue-600 hover:underline break-all">
+                <a
+                  :href="job.company_website"
+                  target="_blank"
+                  class="text-blue-600 hover:underline break-all"
+                >
                   {{ job.company_website }}
                 </a>
               </div>
 
               <div v-if="job.email" class="flex items-start gap-2">
-                <svg class="w-4 h-4 mt-0.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <svg
+                  class="w-4 h-4 mt-0.5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
                 </svg>
                 <span class="text-gray-600 break-all">{{ job.email }}</span>
               </div>
 
               <div v-if="job.company_description" class="mt-4 pt-4 border-t">
-                <p class="text-gray-600 text-sm">{{ job.company_description }}</p>
+                <p class="text-gray-600 text-sm">
+                  {{ job.company_description }}
+                </p>
               </div>
             </div>
 
@@ -186,13 +305,18 @@
               @click="viewCompanyProfile"
               class="mt-4 w-full border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-lg transition duration-200"
             >
-              {{ $t('viewCompanyProfile') }}
+              {{ $t("viewCompanyProfile") }}
             </button>
           </div>
 
           <!-- Similar Jobs -->
-          <div v-if="similarJobs.length > 0" class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">{{ $t('similarJobs') }}</h3>
+          <div
+            v-if="similarJobs.length > 0"
+            class="bg-white rounded-lg shadow-md p-6"
+          >
+            <h3 class="text-lg font-bold text-gray-900 mb-4">
+              {{ $t("similarJobs") }}
+            </h3>
             <div class="space-y-4">
               <div
                 v-for="similarJob in similarJobs"
@@ -200,14 +324,21 @@
                 @click="goToJob(similarJob.id)"
                 class="border border-gray-200 rounded-lg p-4 hover:border-blue-400 hover:shadow-md cursor-pointer transition"
               >
-                <h4 class="font-semibold text-gray-900 mb-1 hover:text-blue-600">
+                <h4
+                  class="font-semibold text-gray-900 mb-1 hover:text-blue-600"
+                >
                   {{ similarJob.title }}
                 </h4>
-                <p class="text-sm text-gray-600 mb-2">{{ similarJob.company_name }}</p>
-                <div class="flex items-center justify-between text-xs text-gray-500">
+                <p class="text-sm text-gray-600 mb-2">
+                  {{ similarJob.company_name }}
+                </p>
+                <div
+                  class="flex items-center justify-between text-xs text-gray-500"
+                >
                   <span>{{ similarJob.location }}</span>
                   <span class="text-green-600 font-semibold">
-                    {{ formatNumber(similarJob.salary_max) }} {{ similarJob.currency }}
+                    {{ formatNumber(similarJob.salary_max) }}
+                    {{ similarJob.currency }}
                   </span>
                 </div>
               </div>
@@ -220,46 +351,334 @@
     <!-- Error State -->
     <div v-else class="max-w-5xl mx-auto px-4 py-16 text-center">
       <div class="bg-white rounded-lg shadow p-8">
-        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg
+          class="w-16 h-16 mx-auto text-gray-400 mb-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ $t('jobNotFound') }}</h3>
-        <p class="text-gray-600 mb-6">The job you're looking for doesn't exist or has been removed.</p>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">
+          {{ $t("jobNotFound") }}
+        </h3>
+        <p class="text-gray-600 mb-6">
+          The job you're looking for doesn't exist or has been removed.
+        </p>
         <router-link
           to="/jobposts"
           class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
         >
-          {{ $t('backToJobListings') }}
+          {{ $t("backToJobListings") }}
         </router-link>
+      </div>
+    </div>
+    <!-- Application Modal -->
+    <div
+      v-if="showApplicationModal"
+      @click.self="closeApplicationModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+    >
+      <div
+        class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+      >
+        <!-- Modal Header -->
+        <div
+          class="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between"
+        >
+          <h2 class="text-xl font-bold text-gray-900">
+            {{ $t("applyForJob") }}
+          </h2>
+          <button
+            @click="closeApplicationModal"
+            class="text-gray-400 hover:text-gray-600"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 space-y-6">
+          <!-- Job Info -->
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="font-semibold text-gray-900">{{ job.title }}</h3>
+            <p class="text-sm text-gray-600">{{ job.company_name }}</p>
+          </div>
+
+          <!-- Resume Selection -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              {{ $t("selectResume") }}
+              <span class="text-red-500 ml-1">*</span>
+            </label>
+            <select
+              v-model="applicationForm.resume_id"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            >
+              <option value="">{{ $t("chooseResume") }}</option>
+              <option
+                v-for="resume in resumes"
+                :key="resume.id"
+                :value="resume.id"
+              >
+                {{ resume.title || resume.name }}
+              </option>
+            </select>
+            <p v-if="resumes.length === 0" class="text-xs text-gray-500 mt-1">
+              {{ $t("noResumesAvailable") }}
+            </p>
+          </div>
+
+          <!-- Cover Letter -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              {{ $t("coverLetter") }}
+              <span class="ml-2 text-xs text-gray-400">{{
+                $t("optional")
+              }}</span>
+            </label>
+            <textarea
+              v-model="applicationForm.cover_letter"
+              rows="4"
+              class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :placeholder="$t('coverLetterPlaceholder')"
+            ></textarea>
+          </div>
+
+          <!-- Questions Section -->
+          <div v-if="jobQuestions.length > 0" class="space-y-4">
+            <h3 class="font-semibold text-gray-900">
+              {{ $t("additionalQuestions") }}
+            </h3>
+
+            <div
+              v-for="(question, index) in jobQuestions"
+              :key="question.id"
+              class="border border-gray-200 rounded-lg p-4"
+            >
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {{ index + 1 }}. {{ question.question_text }}
+                <span v-if="question.is_required" class="text-red-500 ml-1"
+                  >*</span
+                >
+              </label>
+
+              <!-- TEXT Question Type -->
+              <textarea
+                v-if="question.question_type_id === 1"
+                v-model="applicationForm.answers[index].answer"
+                rows="3"
+                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :placeholder="$t('yourAnswer')"
+                :required="question.is_required"
+              ></textarea>
+
+              <!-- RATING Question Type (1-5 stars) -->
+              <div
+                v-else-if="question.question_type_id === 2"
+                class="flex items-center gap-2"
+              >
+                <button
+                  v-for="rating in 5"
+                  :key="rating"
+                  type="button"
+                  @click="
+                    applicationForm.answers[index].answer = rating.toString()
+                  "
+                  class="text-2xl transition"
+                  :class="
+                    Number(applicationForm.answers[index].answer) >= rating
+                      ? 'text-yellow-400'
+                      : 'text-gray-300'
+                  "
+                >
+                  ★
+                </button>
+                <span class="text-sm text-gray-600 ml-2">
+                  {{ applicationForm.answers[index].answer || "0" }}/5
+                </span>
+              </div>
+
+              <!-- MULTIPLE_CHOICE Question Type -->
+              <div
+                v-else-if="question.question_type_id === 3"
+                class="space-y-2"
+              >
+                <label
+                  v-for="(option, optIndex) in question.options?.choices || []"
+                  :key="optIndex"
+                  class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded"
+                >
+                  <input
+                    type="radio"
+                    :name="`question_${question.id}`"
+                    :value="option"
+                    v-model="applicationForm.answers[index].answer"
+                    :required="question.is_required"
+                    class="text-blue-600"
+                  />
+                  <span class="text-sm text-gray-700">{{ option }}</span>
+                </label>
+              </div>
+
+              <!-- BOOLEAN Question Type -->
+              <div
+                v-else-if="question.question_type_id === 4"
+                class="flex gap-4"
+              >
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    :name="`question_${question.id}`"
+                    value="Yes"
+                    v-model="applicationForm.answers[index].answer"
+                    :required="question.is_required"
+                    class="text-blue-600"
+                  />
+                  <span class="text-sm text-gray-700">{{ $t("yes") }}</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    :name="`question_${question.id}`"
+                    value="No"
+                    v-model="applicationForm.answers[index].answer"
+                    :required="question.is_required"
+                    class="text-blue-600"
+                  />
+                  <span class="text-sm text-gray-700">{{ $t("no") }}</span>
+                </label>
+              </div>
+
+              <!-- OPTIONS Question Type (dropdown) -->
+              <select
+                v-else-if="question.question_type_id === 5"
+                v-model="applicationForm.answers[index].answer"
+                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :required="question.is_required"
+              >
+                <option value="">{{ $t("selectOption") }}</option>
+                <option
+                  v-for="(option, optIndex) in question.options?.choices || []"
+                  :key="optIndex"
+                  :value="option"
+                >
+                  {{ option }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div
+          class="sticky bottom-0 bg-gray-50 border-t px-6 py-4 flex justify-end gap-3"
+        >
+          <button
+            @click="closeApplicationModal"
+            type="button"
+            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition"
+          >
+            {{ $t("cancel") }}
+          </button>
+          <button
+            @click="submitApplication"
+            :disabled="isSubmitting || !applicationForm.resume_id"
+            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-md transition flex items-center gap-2"
+          >
+            <svg
+              v-if="isSubmitting"
+              class="animate-spin h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <span>{{
+              isSubmitting ? $t("submitting") : $t("submitApplication")
+            }}</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { getJobPostBenefits, getJobPostById, getJobPostRequirements, getJobPostResponsibilities, getJobPosts } from '../services/jobposts.api'
-import { useI18n } from 'vue-i18n';
-import { push } from 'notivue';
+import { ref, onMounted, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import {
+  getJobPostBenefits,
+  getJobPostById,
+  getJobPostRequirements,
+  getJobPostResponsibilities,
+  getJobPosts,
+} from "../services/jobposts.api";
+import { useI18n } from "vue-i18n";
+import { push } from "notivue";
+import { useAuthStore } from "../stores/authStore";
+import api from "@/services/api";
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const auth = useAuthStore();
 
 // State
-const props = defineProps(['id']);
+const props = defineProps(["id"]);
 const job = ref(null);
 const similarJobs = ref([]);
 const loading = ref(true);
 const isApplying = ref(false);
 const hasApplied = ref(false);
+const showApplicationModal = ref(false);
+const isSubmitting = ref(false);
+const resumes = ref([]);
+const jobQuestions = ref([]);
+
+// Application Form
+const applicationForm = ref({
+  resume_id: "",
+  cover_letter: "",
+  application_status_id: 1,
+  answers: [],
+});
 
 // Computed
 const jobId = computed(() => route.params.id);
 
 // Helper Functions
-const formatNumber = (num) => new Intl.NumberFormat('en-US').format(num);
+const formatNumber = (num) => new Intl.NumberFormat("en-US").format(num);
 
 function timeAgo(dateString) {
   const date = new Date(dateString);
@@ -267,21 +686,23 @@ function timeAgo(dateString) {
   const seconds = Math.floor((now - date) / 1000);
 
   const units = [
-    { name: 'year', seconds: 31536000 },
-    { name: 'month', seconds: 2592000 },
-    { name: 'day', seconds: 86400 },
-    { name: 'hour', seconds: 3600 },
-    { name: 'minute', seconds: 60 },
+    { name: "year", seconds: 31536000 },
+    { name: "month", seconds: 2592000 },
+    { name: "day", seconds: 86400 },
+    { name: "hour", seconds: 3600 },
+    { name: "minute", seconds: 60 },
   ];
 
   for (const unit of units) {
     const value = Math.floor(seconds / unit.seconds);
     if (value >= 1) {
-      return `Posted ${new Intl.RelativeTimeFormat('en', { numeric: 'always' }).format(-value, unit.name)}`;
+      return `Posted ${new Intl.RelativeTimeFormat("en", {
+        numeric: "always",
+      }).format(-value, unit.name)}`;
     }
   }
 
-  return 'Posted just now';
+  return "Posted just now";
 }
 
 // API Service
@@ -291,68 +712,68 @@ const jobDetailService = {
       // PLACEHOLDER - Ganti dengan endpoint backend Anda
       // const response = await axios.get(`http://your-api.com/api/jobs/${id}`);
       // return response.data;
-      
+
       const response = await getJobPostById(id);
 
       return response.data;
-
+      
       // Simulasi data untuk demo
-//       return new Promise((resolve) => {
-//         setTimeout(() => {
-//           resolve({
-//             data: {
-//               id: id,
-//               title: 'Senior Frontend Developer',
-//               company: {
-//                 name: 'Tech Solutions Inc.',
-//                 avatar_url: 'https://via.placeholder.com/80',
-//                 industry: 'Information Technology',
-//                 website: 'https://techsolutions.com',
-//                 email: 'hr@techsolutions.com',
-//                 description: 'Leading technology solutions provider with over 10 years of experience in delivering innovative software products.'
-//               },
-//               location: 'Jakarta, Indonesia',
-//               salary_min: 15000000,
-//               salary_max: 25000000,
-//               currency: 'IDR',
-//               employment_type: 'Full-time',
-//               category: 'IT / Software',
-//               created_at: '2025-01-20T10:00:00Z',
-//               description: `We are looking for an experienced Senior Frontend Developer to join our dynamic team. 
+      //       return new Promise((resolve) => {
+      //         setTimeout(() => {
+      //           resolve({
+      //             data: {
+      //               id: id,
+      //               title: 'Senior Frontend Developer',
+      //               company: {
+      //                 name: 'Tech Solutions Inc.',
+      //                 avatar_url: 'https://via.placeholder.com/80',
+      //                 industry: 'Information Technology',
+      //                 website: 'https://techsolutions.com',
+      //                 email: 'hr@techsolutions.com',
+      //                 description: 'Leading technology solutions provider with over 10 years of experience in delivering innovative software products.'
+      //               },
+      //               location: 'Jakarta, Indonesia',
+      //               salary_min: 15000000,
+      //               salary_max: 25000000,
+      //               currency: 'IDR',
+      //               employment_type: 'Full-time',
+      //               category: 'IT / Software',
+      //               created_at: '2025-01-20T10:00:00Z',
+      //               description: `We are looking for an experienced Senior Frontend Developer to join our dynamic team.
 
-// In this role, you will be responsible for building modern, responsive web applications using Vue.js and other cutting-edge technologies.
+      // In this role, you will be responsible for building modern, responsive web applications using Vue.js and other cutting-edge technologies.
 
-// The ideal candidate should have strong problem-solving skills and a passion for creating exceptional user experiences.`,
-//               requirements: `• 5+ years of experience in frontend development
-// • Expert knowledge of Vue.js, JavaScript/TypeScript
-// • Strong understanding of HTML5, CSS3, and responsive design
-// • Experience with state management (Vuex/Pinia)
-// • Familiarity with RESTful APIs and GraphQL
-// • Experience with version control (Git)
-// • Strong communication skills in English
-// • Bachelor's degree in Computer Science or related field`,
-//               responsibilities: `• Develop and maintain web applications using Vue.js
-// • Collaborate with designers and backend developers
-// • Write clean, maintainable, and testable code
-// • Participate in code reviews and provide constructive feedback
-// • Optimize application performance and ensure cross-browser compatibility
-// • Mentor junior developers and share best practices
-// • Stay up-to-date with latest frontend technologies and trends`,
-//               benefits: `• Competitive salary package
-// • Health insurance coverage
-// • Flexible working hours
-// • Remote work options
-// • Annual performance bonus
-// • Professional development opportunities
-// • Modern office facilities
-// • Team building activities`,
-//               is_applied: false
-//             }
-//           });
-//         }, 800);
-//       });
+      // The ideal candidate should have strong problem-solving skills and a passion for creating exceptional user experiences.`,
+      //               requirements: `• 5+ years of experience in frontend development
+      // • Expert knowledge of Vue.js, JavaScript/TypeScript
+      // • Strong understanding of HTML5, CSS3, and responsive design
+      // • Experience with state management (Vuex/Pinia)
+      // • Familiarity with RESTful APIs and GraphQL
+      // • Experience with version control (Git)
+      // • Strong communication skills in English
+      // • Bachelor's degree in Computer Science or related field`,
+      //               responsibilities: `• Develop and maintain web applications using Vue.js
+      // • Collaborate with designers and backend developers
+      // • Write clean, maintainable, and testable code
+      // • Participate in code reviews and provide constructive feedback
+      // • Optimize application performance and ensure cross-browser compatibility
+      // • Mentor junior developers and share best practices
+      // • Stay up-to-date with latest frontend technologies and trends`,
+      //               benefits: `• Competitive salary package
+      // • Health insurance coverage
+      // • Flexible working hours
+      // • Remote work options
+      // • Annual performance bonus
+      // • Professional development opportunities
+      // • Modern office facilities
+      // • Team building activities`,
+      //               is_applied: false
+      //             }
+      //           });
+      //         }, 800);
+      //       });
     } catch (error) {
-      console.error('Error fetching job detail:', error);
+      console.error("Error fetching job detail:", error);
       throw error;
     }
   },
@@ -362,7 +783,7 @@ const jobDetailService = {
       const jobPostRequirements = await getJobPostRequirements(id);
       return jobPostRequirements.data;
     } catch (error) {
-      console.error('Error fetching jobPostRequirements:', error);
+      console.error("Error fetching jobPostRequirements:", error);
       throw error;
     }
   },
@@ -371,7 +792,7 @@ const jobDetailService = {
       const jobPostResponsibilities = await getJobPostResponsibilities(id);
       return jobPostResponsibilities.data;
     } catch (error) {
-      console.error('Error fetching jobPostResponsibilities:', error);
+      console.error("Error fetching jobPostResponsibilities:", error);
       throw error;
     }
   },
@@ -380,7 +801,7 @@ const jobDetailService = {
       const jobPostBenefits = await getJobPostBenefits(id);
       return jobPostBenefits.data;
     } catch (error) {
-      console.error('Error fetching jobPostBenefits:', error);
+      console.error("Error fetching jobPostBenefits:", error);
       throw error;
     }
   },
@@ -395,8 +816,8 @@ const jobDetailService = {
       const params = {
         category: category,
         exclude_id: jobId,
-        limit: 3
-      }
+        limit: 3,
+      };
       const response = await getJobPosts(params);
       return response.data;
 
@@ -434,7 +855,7 @@ const jobDetailService = {
       //   }, 600);
       // });
     } catch (error) {
-      console.error('Error fetching similar jobs:', error);
+      console.error("Error fetching similar jobs:", error);
       throw error;
     }
   },
@@ -452,12 +873,12 @@ const jobDetailService = {
         setTimeout(() => {
           resolve({
             success: true,
-            message: 'Application submitted successfully'
+            message: "Application submitted successfully",
           });
         }, 1000);
       });
     } catch (error) {
-      console.error('Error applying to job:', error);
+      console.error("Error applying to job:", error);
       throw error;
     }
   },
@@ -472,50 +893,15 @@ const jobDetailService = {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve({
-            has_applied: false
+            has_applied: false,
           });
         }, 500);
       });
     } catch (error) {
-      console.error('Error checking application status:', error);
+      console.error("Error checking application status:", error);
       throw error;
     }
-  }
-};
-
-// Auth Helper Functions
-const authService = {
-  isAuthenticated() {
-    // PLACEHOLDER - Ganti dengan logika autentikasi Anda
-    // Contoh: Cek token di localStorage
-    // return !!localStorage.getItem('auth_token');
-    const user = localStorage.getItem("user");
-    if (!user || user.token === undefined || user.token === null || user.token === "") {
-      return false;
-    }
-    
-    return true;
   },
-
-  getUserRole() {
-    // PLACEHOLDER - Ganti dengan logika untuk mendapatkan role user
-    // Contoh: Parse JWT token atau ambil dari store/localStorage
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // return user?.role; // 'worker' atau 'recruiter'
-    const user = localStorage.getItem("user");
-    const role = user.role;
-
-    
-    return role;
-  },
-
-  isWorker() {
-    return this.getUserRole() === 'user';
-  },
-
-  isRecruiter() {
-    return this.getUserRole() === 'recruiter';
-  }
 };
 
 // Methods
@@ -524,12 +910,13 @@ const loadJobDetail = async () => {
     loading.value = true;
     const response = await jobDetailService.fetchJobDetail(jobId.value);
     job.value = response.data;
-    
-    
+
     // Check if user has already applied
-    if (authService.isAuthenticated() && authService.isWorker()) {
-      const statusResponse = await jobDetailService.checkApplicationStatus(jobId.value);
-      hasApplied.value = statusResponse.has_applied || job.value.is_applied;
+    if (auth.isLoggedIn && auth.role === "user") {
+      const statusResponse = await jobDetailService.checkApplicationStatus(
+        jobId.value,
+      );
+      hasApplied.value = statusResponse.has_applied || job.value.applied;
     }
 
     // Load similar jobs
@@ -537,8 +924,9 @@ const loadJobDetail = async () => {
     await loadJobPostRequirements();
     await loadJobPostResponsibilities();
     await loadJobPostBenefits();
+    await loadJobQuestions();
   } catch (error) {
-    console.error('Error loading job detail:', error);
+    console.error("Error loading job detail:", error);
     job.value = null;
   } finally {
     loading.value = false;
@@ -548,55 +936,152 @@ const loadJobDetail = async () => {
 const loadJobPostRequirements = async () => {
   try {
     if (!job.value) return;
-    const response = await jobDetailService.fetchJobPostRequirements(jobId.value);
-    job.value = {...job.value, requirements: response.data};
+    const response = await jobDetailService.fetchJobPostRequirements(
+      jobId.value,
+    );
+    job.value = { ...job.value, requirements: response.data };
   } catch (error) {
-    console.error('Error loading requirements: ', error);
+    console.error("Error loading requirements: ", error);
   }
-}
+};
 const loadJobPostResponsibilities = async () => {
   try {
     if (!job.value) return;
-    const response = await jobDetailService.fetchJobPostResponsibilities(jobId.value);
-    job.value = {...job.value, responsibilities: response.data};
+    const response = await jobDetailService.fetchJobPostResponsibilities(
+      jobId.value,
+    );
+    job.value = { ...job.value, responsibilities: response.data };
   } catch (error) {
-    console.error('Error loading responsibilities: ', error);
+    console.error("Error loading responsibilities: ", error);
   }
-}
+};
 const loadJobPostBenefits = async () => {
   try {
     if (!job.value) return;
     const response = await jobDetailService.fetchJobPostBenefits(jobId.value);
-    job.value = {...job.value, benefits: response.data};
+    job.value = { ...job.value, benefits: response.data };
   } catch (error) {
-    console.error('Error loading benefits: ', error);
+    console.error("Error loading benefits: ", error);
   }
-}
+};
+
+const loadJobQuestions = async () => {
+  try {
+    const response = await api.get(`/job-posts/${jobId.value}/questions`);
+    jobQuestions.value = response.data?.data || [];
+
+    // Initialize answers array
+    applicationForm.value.answers = jobQuestions.value.map((q) => ({
+      question_id: q.id,
+      answer: "",
+    }));
+  } catch (error) {
+    console.error("Error loading questions:", error);
+    jobQuestions.value = [];
+  }
+};
+
+const loadResumes = async () => {
+  try {
+    const response = await api.get(`/workers/resumes`, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    });
+    resumes.value = response.data?.data || [];
+  } catch (error) {
+    console.error("Error loading resumes:", error);
+    resumes.value = [];
+  }
+};
+
+const closeApplicationModal = () => {
+  showApplicationModal.value = false;
+  // Reset form
+  applicationForm.value = {
+    resume_id: "",
+    cover_letter: "",
+    application_status_id: 1,
+    answers: jobQuestions.value.map((q) => ({
+      question_id: q.id,
+      answer: "",
+    })),
+  };
+};
+
+const submitApplication = async () => {
+  // Validate required questions
+  for (let i = 0; i < jobQuestions.value.length; i++) {
+    const question = jobQuestions.value[i];
+    const answer = applicationForm.value.answers[i];
+
+    if (
+      question.is_required &&
+      (!answer.answer || answer.answer.trim() === "")
+    ) {
+      push.error(`Please answer question ${i + 1}: ${question.question_text}`);
+      return;
+    }
+  }
+
+  try {
+    isSubmitting.value = true;
+
+    const payload = {
+      resume_id: applicationForm.value.resume_id,
+      cover_letter: applicationForm.value.cover_letter,
+      application_status_id: 1,
+      answers: applicationForm.value.answers.filter(
+        (a) => a.answer && a.answer.trim() !== "",
+      ),
+    };
+
+    await api.post(`/job-posts/${jobId.value}/apply`, payload, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    });
+
+    hasApplied.value = true;
+    closeApplicationModal();
+    push.success(t("applicationSubmittedSuccess"));
+  } catch (error) {
+    console.error("Error submitting application:", error);
+    const errorMsg =
+      error.response?.data?.message || t("applicationSubmitFailed");
+    push.error(errorMsg);
+  } finally {
+    isSubmitting.value = false;
+  }
+};
 
 const loadSimilarJobs = async () => {
   try {
     if (!job.value) return;
-    const response = await jobDetailService.fetchSimilarJobs(jobId.value, job.value.category_name);
+    const response = await jobDetailService.fetchSimilarJobs(
+      jobId.value,
+      job.value.category_name,
+    );
     similarJobs.value = response.data;
   } catch (error) {
-    console.error('Error loading similar jobs:', error);
+    console.error("Error loading similar jobs:", error);
   }
 };
 
 const handleApply = async () => {
   // Check if user is authenticated
-  if (!authService.isAuthenticated()) {
+  if (!auth.isLoggedIn) {
     // Redirect to login page with return URL
     router.push({
-      path: '/login',
-      query: { redirect: route.fullPath }
+      path: "/login",
+      query: { redirect: route.fullPath },
     });
     return;
   }
 
   // Check if user is recruiter
-  if (authService.isRecruiter()) {
-    push.warning('Recruiters cannot apply to jobs. This feature is only for workers.');
+  if (auth.role === "recruiter") {
+    push.warning(t("recruitersCannotApply"));
     return;
   }
 
@@ -605,31 +1090,21 @@ const handleApply = async () => {
     return;
   }
 
-  try {
-    isApplying.value = true;
-    await jobDetailService.applyToJob(jobId.value);
-    hasApplied.value = true;
-    
-    // Show success message
-    push.success('Application submitted successfully! The recruiter will review your application soon.');
-  } catch (error) {
-    console.error('Error applying to job:', error);
-    push.error('Failed to submit application. Please try again.');
-  } finally {
-    isApplying.value = false;
-  }
+  // Load resumes and show modal
+  await loadResumes();
+  showApplicationModal.value = true;
 };
 
 const viewCompanyProfile = () => {
   // Navigate to company profile page
   // router.push(`/companies/${job.value.company.id}`);
-  console.log('Navigate to company profile');
+  console.log("Navigate to company profile");
 };
 
 const goToJob = (id) => {
-  router.push({ 
-      name: 'JobDetail', // Harus match dengan 'name' di router/index.js
-      params: { id: id } 
+  router.push({
+    name: "JobDetail", // Harus match dengan 'name' di router/index.js
+    params: { id: id },
   });
 };
 
