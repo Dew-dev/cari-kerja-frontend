@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { push } from "notivue";
 import { getWorkerByApplication } from "@/services/applications";
 import api from "@/services/api";
 const { t } = useI18n();
@@ -65,7 +66,7 @@ async function changeStatus(status) {
     showStatusDropdown.value = false;
   } catch (err) {
     console.error("Failed to update status", err);
-    alert("Failed to update applicant status");
+    push.error(t("failedToUpdateStatus"));
   } finally {
     updatingStatus.value = false;
   }

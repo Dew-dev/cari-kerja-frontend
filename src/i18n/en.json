@@ -109,7 +109,6 @@
   "back": "Back",
   "loading": "Loading",
   "loadingDots": "Loading...",
-  "home": "Home",
   "employmentType": "Employment Type",
   "jobDescription": "Job Description",
   "requirements": "Requirements",
@@ -157,5 +156,7 @@
   "postedJustNow": "Posted just now",
   "postedAgo": "Posted {time} ago",
   "failedToUpdateStatus": "Failed to update applicant status",
-  "failed": "Failed"
+  "failed": "Failed",
+  "resetFilters": "Reset filters",
+  "sortBy": "Sort By"
 }

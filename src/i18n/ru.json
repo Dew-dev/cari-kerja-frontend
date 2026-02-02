@@ -158,5 +158,7 @@
   "postedJustNow": "Опубликовано только что",
   "postedAgo": "Опубликовано {time} назад",
   "failedToUpdateStatus": "Ошибка при обновлении статуса кандидата",
-  "failed": "Ошибка"
+  "failed": "Ошибка",
+  "resetFilters": "Сбросить фильтры",
+  "sortBy": "Сортировать по"
 }   

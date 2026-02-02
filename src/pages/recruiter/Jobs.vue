@@ -371,6 +371,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { push } from "notivue";
 import { getJobPostsSelf } from "../../services/jobposts.api";
 import { useRouter } from "vue-router";
 import api from "../../services/api";
@@ -479,7 +480,7 @@ async function confirmAction() {
     page.value = 1; // reset to first page
   } catch (err) {
     console.error("Action failed", err);
-    alert("Action failed. Please try again.");
+    push.error("Action failed. Please try again.");
   } finally {
     actionLoading.value = false;
   }
@@ -576,7 +577,7 @@ async function confirmUpdateStatus() {
     selectedJob.value.status = arr[nextStatus.value - 1];
   } catch (err) {
     console.error("Failed to update job status", err);
-    alert("Failed to update job status");
+    push.error("Failed to update job status");
   } finally {
     showConfirmModal.value = false;
     selectedJob.value = null;
@@ -594,7 +595,7 @@ async function duplicateJob(jobId) {
     router.push(`/recruiter/jobs/${newId}/edit`);
   } catch (err) {
     console.error("Duplicate failed", err);
-    alert("Failed to duplicate job");
+    push.error("Failed to duplicate job");
   }
 }
 </script>

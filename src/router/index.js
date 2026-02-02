@@ -31,7 +31,7 @@ const routes = [
     path: "/login",
     name: "login",
     meta: { guestOnly: true },
-    component: () => import("../pages/auth/Login.vue"),
+    component: () => import("../pages/auth/login.vue"),
   },
   {
     path: "/jobposts",
