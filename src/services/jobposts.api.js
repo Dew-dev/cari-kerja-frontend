@@ -19,6 +19,19 @@ export function getJobPostById(id) {
 export const getRecruiterJobs = (params = {}) => {
   return api.get("/job-posts/self", { params });
 };
+
+export function getJobPostRequirements(job_post_id) {
+  return api.get(`/job-posts/job-post-requirements/${job_post_id}`);
+}
+
+export function getJobPostResponsibilities(job_post_id) {
+  return api.get(`/job-posts/job-post-responsibilities/${job_post_id}`);
+}
+
+export function getJobPostBenefits(job_post_id) {
+  return api.get(`/job-posts/job-post-benefits/${job_post_id}`);
+}
+
 // export function refreshToken(refreshToken) {
 //   return api.post("/users/refresh-token", {
 //     refreshToken,
