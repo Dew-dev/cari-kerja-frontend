@@ -97,7 +97,65 @@ const form = reactive({
   // country: "",
   // city: "",
   description: "",
+  requirements: [],
+  benefits: [],
+  responsibilities: [],
 });
+
+/* ======================
+   DYNAMIC LISTS
+====================== */
+const newRequirement = ref("");
+const newBenefit = ref("");
+const newResponsibility = ref("");
+
+function addRequirement() {
+  if (!newRequirement.value.trim()) return;
+  form.requirements.push({
+    requirement: newRequirement.value.trim(),
+    order_index: form.requirements.length,
+  });
+  newRequirement.value = "";
+}
+
+function removeRequirement(index) {
+  form.requirements.splice(index, 1);
+  form.requirements.forEach((item, i) => {
+    item.order_index = i;
+  });
+}
+
+function addBenefit() {
+  if (!newBenefit.value.trim()) return;
+  form.benefits.push({
+    benefit: newBenefit.value.trim(),
+    order_index: form.benefits.length,
+  });
+  newBenefit.value = "";
+}
+
+function removeBenefit(index) {
+  form.benefits.splice(index, 1);
+  form.benefits.forEach((item, i) => {
+    item.order_index = i;
+  });
+}
+
+function addResponsibility() {
+  if (!newResponsibility.value.trim()) return;
+  form.responsibilities.push({
+    responsibility: newResponsibility.value.trim(),
+    order_index: form.responsibilities.length,
+  });
+  newResponsibility.value = "";
+}
+
+function removeResponsibility(index) {
+  form.responsibilities.splice(index, 1);
+  form.responsibilities.forEach((item, i) => {
+    item.order_index = i;
+  });
+}
 
 /* ======================
    SALARY VALIDATION
@@ -228,6 +286,9 @@ async function submit() {
     location: `${form.city}, ${form.country}`,
     job_post_status_id: 1, // default to 'open'
     category_id: form.category_id,
+    requirements: form.requirements,
+    benefits: form.benefits,
+    responsibilities: form.responsibilities,
   };
 
   // console.log("CREATE JOB PAYLOAD:", payload);
@@ -494,6 +555,120 @@ async function submit() {
               class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('city')"
             />
+          </div>
+        </div>
+
+        <!-- REQUIREMENTS -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            {{ t("requirements") }}
+          </label>
+          <div class="mt-2 space-y-2">
+            <div
+              v-for="(req, index) in form.requirements"
+              :key="index"
+              class="flex items-center gap-2"
+            >
+              <span class="text-sm text-gray-700 flex-1">{{ index + 1 }}. {{ req.requirement }}</span>
+              <button
+                type="button"
+                @click="removeRequirement(index)"
+                class="text-red-500 hover:text-red-700 text-sm"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <input
+              v-model="newRequirement"
+              @keydown.enter.prevent="addRequirement"
+              class="flex-1 border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :placeholder="t('add_requirement')"
+            />
+            <button
+              type="button"
+              @click="addRequirement"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
+            >
+              {{ t("add") }}
+            </button>
+          </div>
+        </div>
+
+        <!-- RESPONSIBILITIES -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            {{ t("responsibilities") }}
+          </label>
+          <div class="mt-2 space-y-2">
+            <div
+              v-for="(resp, index) in form.responsibilities"
+              :key="index"
+              class="flex items-center gap-2"
+            >
+              <span class="text-sm text-gray-700 flex-1">{{ index + 1 }}. {{ resp.responsibility }}</span>
+              <button
+                type="button"
+                @click="removeResponsibility(index)"
+                class="text-red-500 hover:text-red-700 text-sm"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <input
+              v-model="newResponsibility"
+              @keydown.enter.prevent="addResponsibility"
+              class="flex-1 border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :placeholder="t('add_responsibility')"
+            />
+            <button
+              type="button"
+              @click="addResponsibility"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
+            >
+              {{ t("add") }}
+            </button>
+          </div>
+        </div>
+
+        <!-- BENEFITS -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            {{ t("benefits") }}
+          </label>
+          <div class="mt-2 space-y-2">
+            <div
+              v-for="(ben, index) in form.benefits"
+              :key="index"
+              class="flex items-center gap-2"
+            >
+              <span class="text-sm text-gray-700 flex-1">{{ index + 1 }}. {{ ben.benefit }}</span>
+              <button
+                type="button"
+                @click="removeBenefit(index)"
+                class="text-red-500 hover:text-red-700 text-sm"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <input
+              v-model="newBenefit"
+              @keydown.enter.prevent="addBenefit"
+              class="flex-1 border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :placeholder="t('add_benefit')"
+            />
+            <button
+              type="button"
+              @click="addBenefit"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
+            >
+              {{ t("add") }}
+            </button>
           </div>
         </div>
 

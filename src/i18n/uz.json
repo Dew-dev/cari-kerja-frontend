@@ -158,5 +158,9 @@
   "failedToUpdateStatus": "Nomzodning holatini yangilashni boshdan urinib ko'ring",
   "failed": "Xato",
   "resetFilters": "Filtrlarni tozalash",
-  "sortBy": "Saralash bo'yicha"
+  "sortBy": "Saralash bo'yicha",
+  "add_requirement": "Talab qo'shish",
+  "add_responsibility": "Mas'uliyat qo'shish",
+  "add_benefit": "Imtiyoz qo'shish",
+  "add": "Qo'shish"
 }

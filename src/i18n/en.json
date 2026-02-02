@@ -158,5 +158,9 @@
   "failedToUpdateStatus": "Failed to update applicant status",
   "failed": "Failed",
   "resetFilters": "Reset filters",
-  "sortBy": "Sort By"
+  "sortBy": "Sort By",
+  "add_requirement": "Add requirement",
+  "add_responsibility": "Add responsibility",
+  "add_benefit": "Add benefit",
+  "add": "Add"
 }
