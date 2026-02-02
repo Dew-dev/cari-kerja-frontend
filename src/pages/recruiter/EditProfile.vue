@@ -3,6 +3,7 @@ import { ref, reactive, onMounted } from "vue";
 import api from "../../services/api";
 import { useAuthStore } from "../../stores/authStore";
 import { useI18n } from "vue-i18n";
+import { push } from "notivue";
 
 const auth = useAuthStore();
 const { t } = useI18n();
@@ -32,7 +33,7 @@ const onLogoChange = (e) => {
 
   // validasi size 2MB
   if (file.size > 2 * 1024 * 1024) {
-    alert("Max file size 2MB");
+    push.warning("Max file size 2MB");
     return;
   }
 
@@ -99,10 +100,10 @@ async function saveProfile() {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    alert("Profile updated");
+    push.success("Profile updated");
   } catch (err) {
     console.error("Save failed", err);
-    alert("Failed to update profile");
+    push.error("Failed to update profile");
   }
 }
 

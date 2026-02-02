@@ -240,7 +240,10 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getJobPostBenefits, getJobPostById, getJobPostRequirements, getJobPostResponsibilities, getJobPosts } from '../services/jobposts.api'
+import { useI18n } from 'vue-i18n';
+import { push } from 'notivue';
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -593,7 +596,7 @@ const handleApply = async () => {
 
   // Check if user is recruiter
   if (authService.isRecruiter()) {
-    toast.warning('Recruiters cannot apply to jobs. This feature is only for workers.');
+    push.warning('Recruiters cannot apply to jobs. This feature is only for workers.');
     return;
   }
 
@@ -608,10 +611,10 @@ const handleApply = async () => {
     hasApplied.value = true;
     
     // Show success message
-    toast.success('Application submitted successfully! The recruiter will review your application soon.');
+    push.success('Application submitted successfully! The recruiter will review your application soon.');
   } catch (error) {
     console.error('Error applying to job:', error);
-    toast.error('Failed to submit application. Please try again.');
+    push.error('Failed to submit application. Please try again.');
   } finally {
     isApplying.value = false;
   }

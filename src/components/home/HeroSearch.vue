@@ -21,14 +21,14 @@
           class=" bg-white flex-1 px-4 py-3 rounded text-black hover:scale-101 transition duration-200 ease-in-out"
           :placeholder="t('home.keywordPlaceholder')"
         />
-
+<!-- 
         <select class="bg-white px-5 py-3 rounded text-black">
           <option>{{ t("home.allUkraine") }}</option>
-        </select>
+        </select> -->
 
-        <button 
-        @click="emit('search', keyword)"
-        class="bg-pink-600 px-6 py-3 rounded font-semibold hover:scale-105 transition duration-200 ease-in-out"
+        <button
+          @click="handleSearch"
+          class="bg-pink-600 px-6 py-3 rounded font-semibold hover:scale-105 transition duration-200 ease-in-out"
         >
           {{ t("home.findJobs") }}
         </button>
@@ -43,12 +43,35 @@
 </template>
 
 <script setup>
-import { useI18n } from "vue-i18n"
-import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { ref, watch } from "vue";
 
 const { t } = useI18n();
-const keyword = ref('');
-const emit = defineEmits(['search']);
 
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+});
 
+const emit = defineEmits(["update:modelValue", "search"]);
+const keyword = ref(props.modelValue || "");
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (value !== keyword.value) {
+      keyword.value = value || "";
+    }
+  }
+);
+
+watch(keyword, (value) => {
+  emit("update:modelValue", value);
+});
+
+function handleSearch() {
+  emit("search", keyword.value);
+}
 </script>

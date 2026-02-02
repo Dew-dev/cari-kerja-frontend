@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import { register } from "@/services/auth.api"
 
 import { useI18n } from "vue-i18n"
+import { push } from "notivue"
 
 const { locale, t } = useI18n()
 const router = useRouter()
@@ -74,14 +75,15 @@ async function submit() {
   state.loading = true
   try {
     const response = await register(form)
-    if(response && response.data && response.data.message){
-      alert(response.data.message)
+    if (response && response.data && response.data.message) {
+      push.success(response.data.message)
       router.push("/login")
     }
     // setelah register → login
   } catch (err) {
     state.error =
       err.response?.data?.message || "Registration failed"
+    push.error(state.error)
   } finally {
     state.loading = false
   }

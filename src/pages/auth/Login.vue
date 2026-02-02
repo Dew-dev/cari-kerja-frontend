@@ -3,7 +3,7 @@ import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/authstore";
 
-import { Notivue, Notification, push } from "notivue";
+import { push } from "notivue";
 import { useI18n } from "vue-i18n";
 import api from "../../services/api";
 const { locale, t } = useI18n();
@@ -54,9 +54,6 @@ async function resendVerification() {
         {{ t("login") }}
       </h1>
 
-    <Notivue v-slot="item">
-      <Notification :item="item" />
-    </Notivue>
       <form @submit.prevent="submit" class="space-y-4">
         <div>
           <label class="block text-sm mb-1">Email</label>
