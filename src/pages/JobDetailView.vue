@@ -48,7 +48,7 @@
                   "
                   @error="(e) => (e.target.src = '/company-default-image.png')"
                   :alt="job.company_name"
-                  class="w-20 h-20 rounded-lg border border-gray-200 object-cover"
+                  class="w-20 h-20 rounded-lg shadow-sm object-cover"
                 />
               </div>
               <div class="flex-1">
@@ -241,7 +241,7 @@
                 "
                 @error="(e) => (e.target.src = '/company-default-image.png')"
                 :alt="job.company_name"
-                class="w-16 h-16 rounded-lg border border-gray-200 object-cover"
+                class="w-16 h-16 rounded-lg shadow-sm object-cover"
               />
               <div>
                 <h4 class="font-semibold text-gray-900">
@@ -294,7 +294,7 @@
                 <span class="text-gray-600 break-all">{{ job.email }}</span>
               </div>
 
-              <div v-if="job.company_description" class="mt-4 pt-4 border-t">
+              <div v-if="job.company_description" class="mt-4 pt-4 shadow-sm">
                 <p class="text-gray-600 text-sm">
                   {{ job.company_description }}
                 </p>
@@ -303,7 +303,7 @@
 
             <button
               @click="viewCompanyProfile"
-              class="mt-4 w-full border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-lg transition duration-200"
+              class="mt-4 w-full shadow-md text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-lg transition duration-200"
             >
               {{ $t("viewCompanyProfile") }}
             </button>
@@ -322,7 +322,7 @@
                 v-for="similarJob in similarJobs"
                 :key="similarJob.id"
                 @click="goToJob(similarJob.id)"
-                class="border border-gray-200 rounded-lg p-4 hover:border-blue-400 hover:shadow-md cursor-pointer transition"
+                class="shadow-sm rounded-lg p-4 hover:shadow-md cursor-pointer transition"
               >
                 <h4
                   class="font-semibold text-gray-900 mb-1 hover:text-blue-600"
@@ -368,7 +368,7 @@
           {{ $t("jobNotFound") }}
         </h3>
         <p class="text-gray-600 mb-6">
-          The job you're looking for doesn't exist or has been removed.
+          {{ $t("jobnotfoundSub") }}
         </p>
         <router-link
           to="/jobposts"
@@ -389,7 +389,7 @@
       >
         <!-- Modal Header -->
         <div
-          class="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between"
+          class="sticky top-0 bg-white shadow-sm px-6 py-4 flex items-center justify-between"
         >
           <h2 class="text-xl font-bold text-gray-900">
             {{ $t("applyForJob") }}
@@ -472,7 +472,7 @@
             <div
               v-for="(question, index) in jobQuestions"
               :key="question.id"
-              class="border border-gray-200 rounded-lg p-4"
+              class="shadow-sm rounded-lg p-4"
             >
               <label class="block text-sm font-medium text-gray-700 mb-2">
                 {{ index + 1 }}. {{ question.question_text }}
@@ -590,12 +590,12 @@
 
         <!-- Modal Footer -->
         <div
-          class="sticky bottom-0 bg-gray-50 border-t px-6 py-4 flex justify-end gap-3"
+          class="sticky bottom-0 bg-gray-50 shadow-sm px-6 py-4 flex justify-end gap-3"
         >
           <button
             @click="closeApplicationModal"
             type="button"
-            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition"
+            class="px-4 py-2 shadow-sm rounded-md text-gray-700 hover:bg-gray-100 transition"
           >
             {{ $t("cancel") }}
           </button>

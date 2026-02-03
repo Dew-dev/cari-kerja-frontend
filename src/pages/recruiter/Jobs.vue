@@ -18,7 +18,7 @@
         </router-link>
       </div>
       <!-- TABS -->
-      <div class="mb-6 border-b">
+      <div class="mb-6 border-b border-gray-300 pb-2">
         <div class="flex gap-6 text-sm font-medium">
           <button
             @click="setActiveTab('active')"
@@ -44,7 +44,7 @@
         </div>
       </div>
       <!-- TABLE CARD -->
-      <div class="bg-white border rounded-lg shadow-sm overflow-hidden">
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <!-- TABLE -->
         <table class="w-full text-sm">
           <thead class="bg-gray-50 text-gray-600">
@@ -61,7 +61,7 @@
             <tr
               v-for="job in jobs"
               :key="job.id"
-              class="border-t hover:bg-gray-50 transition"
+              class="shadow-sm hover:bg-gray-50 transition"
             >
               <!-- JOB -->
               <td class="px-4 py-3">
@@ -109,7 +109,7 @@
                     <!-- VIEW -->
                     <button
                       title="View job"
-                      class="action-btn text-blue-600 hover:bg-blue-200 border rounded-full p-1"
+                      class="action-btn text-blue-600 hover:bg-blue-200 border border-blue-600 shadow-sm rounded-full p-1"
                     >
                       <i class="pi pi-eye"></i>
                     </button>
@@ -118,7 +118,7 @@
                     <router-link
                       :to="`/recruiter/jobs/${job.id}/edit`"
                       title="Edit job"
-                      class="action-btn text-green-600 hover:bg-emerald-200 border rounded-full p-1"
+                      class="action-btn text-green-600 hover:bg-emerald-200 border border-green-600 shadow-sm rounded-full p-1"
                     >
                       <i class="pi pi-pencil"></i>
                     </router-link>
@@ -236,7 +236,7 @@
           <button
             @click="changePage(page - 1)"
             :disabled="page === 1"
-            class="px-3 py-1.5 border rounded-md"
+            class="px-3 py-1.5 border border-gray-300 shadow-sm rounded-md"
             :class="[
               page === 1
                 ? 'text-gray-400 cursor-not-allowed'
@@ -252,7 +252,7 @@
             v-for="p in totalPages"
             :key="p"
             @click="changePage(p)"
-            class="px-3 py-1.5 border rounded-md"
+            class="px-3 py-1.5 border border-gray-300 shadow-sm rounded-md"
             :class="[
               p === page
                 ? 'bg-blue-600 text-white border-blue-600'
@@ -267,7 +267,7 @@
           <button
             @click="changePage(page + 1)"
             :disabled="page === totalPages"
-            class="px-3 py-1.5 border rounded-md"
+            class="px-3 py-1.5 border border-gray-300 shadow-sm rounded-md"
             :class="[
               page === totalPages
                 ? 'text-gray-400 cursor-not-allowed '
@@ -305,7 +305,7 @@
       <div class="mt-6 flex justify-end gap-3">
         <button
           @click="showConfirmModal = false"
-          class="px-4 py-2 text-sm rounded-md border hover:bg-gray-100"
+          class="px-4 py-2 text-sm rounded-md border border-gray-300 shadow-sm hover:bg-gray-100"
         >
           Cancel
         </button>
@@ -352,7 +352,7 @@
       <div class="mt-6 flex justify-end gap-3">
         <button
           @click="closeActionModal"
-          class="rounded-md border px-4 py-2 text-sm hover:bg-gray-100"
+          class="rounded-md border border-gray-300 shadow-sm px-4 py-2 text-sm hover:bg-gray-100"
           :disabled="actionLoading"
         >
           Cancel

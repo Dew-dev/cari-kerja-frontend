@@ -85,7 +85,7 @@
             <div class="mt-4">
               <button
                 @click="resetFilters"
-                class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                class="w-full rounded-md border border-gray-200 shadow-sm px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 {{ $t("resetFilters") }}
               </button>
@@ -150,7 +150,7 @@
               <select
                 v-model="sortBy"
                 @change="handleFilterChange"
-                class="px-4 py-2 border border-gray-300 rounded text-sm text-gray-700"
+                class="px-4 py-2 border border-gray-300 shadow-sm rounded text-sm text-gray-700"
               >
                 <option value="">{{ $t("sortBy") }}</option>
                 <option value="latest">{{ $t("latest") }}</option>
@@ -195,7 +195,7 @@
                       (e) => (e.target.src = '/company-default-image.png')
                     "
                     :alt="job.company_name"
-                    class="w-16 h-16 rounded border border-gray-200"
+                    class="w-16 h-16 rounded shadow-sm"
                   />
                 </div>
                 <div class="flex-1">
@@ -321,7 +321,7 @@
             <button
               @click="prevPage"
               :disabled="currentPage === 1"
-              class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-4 py-2 border border-gray-300 shadow-sm rounded hover:bg-gray-50 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Previous
             </button>
@@ -330,7 +330,7 @@
               :key="page"
               @click="goToPage(page)"
               :class="[
-                'px-4 py-2 rounded',
+                'px-4 py-2 shadow-sm rounded',
                 currentPage === page
                   ? 'bg-blue-600 text-white'
                   : 'border border-gray-300 hover:bg-gray-50 text-gray-700',
@@ -341,7 +341,7 @@
             <button
               @click="nextPage"
               :disabled="currentPage === totalPages"
-              class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-4 py-2 border border-gray-300 shadow-sm rounded hover:bg-gray-50 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </button>

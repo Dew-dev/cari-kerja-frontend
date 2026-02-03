@@ -113,7 +113,7 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
       </div>
 
       <!-- TABLE CARD -->
-      <div class="bg-white border rounded-lg shadow-sm overflow-hidden">
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <table class="w-full text-sm">
           <thead class="bg-gray-50 text-gray-600">
             <tr>
@@ -144,7 +144,7 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
             <tr
               v-for="a in applicants"
               :key="a.id"
-              class="border-t hover:bg-gray-50 transition min-h-48"
+              class="shadow-sm hover:bg-gray-50 transition min-h-48"
             >
               <td class="px-4 py-9">
                 <div class="font-medium text-gray-900">
@@ -187,7 +187,7 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
                 <div
                   v-if="openStatusDropdown === a.application_id"
                   ref="dropdownRef"
-                  class="absolute left-0 top-0 mt-2 w-44 z-[9999] bg-white border rounded-md shadow-lg z-50 overflow-auto max-h-25"
+                  class="absolute left-0 top-0 mt-2 w-44 z-[9999] bg-white shadow-lg rounded-md z-50 overflow-auto max-h-25"
                 >
                   <div
                     v-for="status in APPLICATION_STATUSES"

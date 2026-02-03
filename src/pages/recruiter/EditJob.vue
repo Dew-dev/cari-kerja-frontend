@@ -465,7 +465,7 @@ async function submit() {
           </label>
           <input
             v-model="form.title"
-            class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             :placeholder="t('job_title_placeholder')"
           />
         </div>
@@ -493,7 +493,7 @@ async function submit() {
           <!-- INPUT -->
           <input
             v-model="tagInput"
-            class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             :placeholder="t('add_tag')"
             @keydown.enter.prevent="addTag"
           />
@@ -501,7 +501,7 @@ async function submit() {
           <!-- DROPDOWN -->
           <div
             v-if="tagInput"
-            class="absolute z-10 bg-white border w-full mt-1 max-h-48 overflow-y-auto"
+            class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto"
           >
             <!-- HAS SUGGESTIONS -->
             <div
@@ -541,7 +541,7 @@ async function submit() {
             <input
               v-model="form.salary_min"
               type="number"
-              class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('min_salary')"
               @input="validateSalary"
             />
@@ -549,7 +549,7 @@ async function submit() {
             <input
               v-model="form.salary_max"
               type="number"
-              class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('max_salary')"
               @input="validateSalary"
             />
@@ -558,7 +558,7 @@ async function submit() {
               <input
                 v-model="currencyInput"
                 ref="currencyInputRef"
-                class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 :placeholder="t('select_currency')"
                 @click="fetchCurrencies()"
               />
@@ -566,7 +566,7 @@ async function submit() {
               <!-- DROPDOWN -->
               <div
                 v-if="currencyOptions.length"
-                class="absolute z-10 bg-white border w-full mt-1 max-h-48 overflow-y-auto"
+                class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto"
               >
                 <div
                   v-for="c in currencyOptions"
@@ -603,7 +603,7 @@ async function submit() {
             </label>
             <select
               v-model="form.employment_type_id"
-              class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">{{ t("select") }}</option>
               <option value="1">Full Time</option>
@@ -622,7 +622,7 @@ async function submit() {
             </label>
             <select
               v-model="form.experience_level_id"
-              class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">{{ t("select") }}</option>
               <option value="1">Fresh Graduate</option>
@@ -641,7 +641,7 @@ async function submit() {
             <input
               v-model="form.deadline"
               type="date"
-              class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <!-- CATEGORY -->
@@ -654,14 +654,14 @@ async function submit() {
 
             <input
               v-model="categoryInput"
-              class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('select_category')"
             />
 
             <!-- DROPDOWN -->
             <div
               v-if="categoryOptions.length"
-              class="absolute z-10 bg-white border w-full mt-1 max-h-48 overflow-y-auto"
+              class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto"
             >
               <div
                 v-for="cat in categoryOptions"
@@ -690,12 +690,12 @@ async function submit() {
           <div class="grid md:grid-cols-2 gap-4 mt-1">
             <input
               v-model="form.country"
-              class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('country')"
             />
             <input
               v-model="form.city"
-              class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('city')"
             />
           </div>
@@ -727,7 +727,7 @@ async function submit() {
             <input
               v-model="newRequirement"
               @keydown.enter.prevent="addRequirement"
-              class="flex-1 border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="flex-1 border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('add_requirement')"
             />
             <button
@@ -766,7 +766,7 @@ async function submit() {
             <input
               v-model="newResponsibility"
               @keydown.enter.prevent="addResponsibility"
-              class="flex-1 border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="flex-1 border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('add_responsibility')"
             />
             <button
@@ -805,7 +805,7 @@ async function submit() {
             <input
               v-model="newBenefit"
               @keydown.enter.prevent="addBenefit"
-              class="flex-1 border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="flex-1 border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('add_benefit')"
             />
             <button
@@ -838,7 +838,7 @@ async function submit() {
             <div
               v-for="(q, index) in form.job_post_questions"
               :key="index"
-              class="rounded-md border p-3"
+              class="rounded-md shadow-sm p-3"
             >
               <div class="flex items-center justify-between mb-2">
                 <span class="text-sm font-medium text-gray-700">
@@ -855,7 +855,7 @@ async function submit() {
 
               <input
                 v-model="q.question_text"
-                class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 :placeholder="t('question_text')"
               />
 
@@ -867,7 +867,7 @@ async function submit() {
                   <select
                     v-model="q.question_type_id"
                     @change="handleQuestionTypeChange(q)"
-                    class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option
                       v-for="type in QUESTION_TYPES"
@@ -898,7 +898,7 @@ async function submit() {
                   <input
                     v-model="q.optionsText"
                     :disabled="!needsOptions(q.question_type_id)"
-                    class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     :placeholder="t('options_placeholder')"
                   />
                 </div>
@@ -921,7 +921,7 @@ async function submit() {
           </label>
           <textarea
             v-model="form.description"
-            class="mt-1 w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-37.5"
+            class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-37.5"
             :placeholder="t('job_description_placeholder')"
           />
         </div>
