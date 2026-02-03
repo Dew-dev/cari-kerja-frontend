@@ -34,8 +34,12 @@
           {{ t("home.findJobs") }}
         </button>
 
-        <button class="bg-white text-blue-600 px-6 py-3 rounded font-semibold hover:scale-105 transition duration-200 ease-in-out">
-          {{ t("home.pickUpJobs") }}
+        <button
+          @click="handlePickUpJobs"
+          :disabled="isLoadingPickup"
+          class="bg-white text-blue-600 px-6 py-3 rounded font-semibold hover:scale-105 transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ isLoadingPickup ? t("loading") : t("home.pickUpJobs") }}
         </button>
       </div>
 
@@ -46,8 +50,11 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { getJobPosts } from "../../services/jobposts.api";
 
 const { t } = useI18n();
+const router = useRouter();
 
 const props = defineProps({
   modelValue: {
@@ -58,6 +65,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "search"]);
 const keyword = ref(props.modelValue || "");
+const isLoadingPickup = ref(false);
 
 watch(
   () => props.modelValue,
@@ -74,5 +82,31 @@ watch(keyword, (value) => {
 
 function handleSearch() {
   emit("search", keyword.value);
+}
+
+async function handlePickUpJobs() {
+  try {
+    isLoadingPickup.value = true;
+    const response = await getJobPosts({ limit: 1000 });
+    const jobPosts = response.data.data || [];
+    
+    if (jobPosts.length === 0) {
+      alert(t("home.noJobsAvailable"));
+      return;
+    }
+    
+    const randomIndex = Math.floor(Math.random() * jobPosts.length);
+    const randomJob = jobPosts[randomIndex];
+    
+    router.push({
+      name: "JobDetail",
+      params: { id: randomJob.id },
+    });
+  } catch (error) {
+    console.error("Error picking up random job:", error);
+    alert(t("home.errorPickingJob"));
+  } finally {
+    isLoadingPickup.value = false;
+  }
 }
 </script>

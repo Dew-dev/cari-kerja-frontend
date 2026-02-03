@@ -42,6 +42,13 @@ const routes = [
     name: "JobDetail",
     component: () => import("../pages/JobDetailView.vue"), // Sesuaikan path-nya
     props: true, // Mengizinkan ID dari URL masuk sebagai props ke komponen
+    meta: { public: true }, // Accessible tanpa login
+  },
+  {
+    path: "/categories",
+    name: "categories",
+    component: () => import("../pages/Categories.vue"),
+    meta: { public: true },
   },
   {
     path: "/register",

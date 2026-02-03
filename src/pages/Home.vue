@@ -1,13 +1,15 @@
 <template>
   <HeroSearch @search="handleSearch" />
   <QuickLinks />
-  <CompanyLogos />
+  <FeaturedJobs />
+  <!-- <CompanyLogos /> -->
 </template>
 
 <script setup>
 import { useRouter } from "vue-router";
 import HeroSearch from "../components/home/HeroSearch.vue";
 import QuickLinks from "../components/home/QuickLinks.vue";
+import FeaturedJobs from "../components/home/FeaturedJobs.vue";
 import CompanyLogos from "../components/home/CompanyLogos.vue";
 
 const router = useRouter();

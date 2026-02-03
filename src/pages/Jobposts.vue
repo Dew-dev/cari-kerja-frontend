@@ -145,14 +145,14 @@
           <div class="bg-white rounded-lg shadow p-4 mb-4">
             <div class="flex items-center justify-between">
               <h2 class="text-xl font-semibold text-gray-900">
-                Found {{ totalData }} {{ $t("jobs") }} Vacancies
+                {{ $t("found") }} {{ totalData }} {{ $t("vacancies") }}
               </h2>
               <select
                 v-model="sortBy"
                 @change="handleFilterChange"
                 class="px-4 py-2 border border-gray-300 shadow-sm rounded text-sm text-gray-700"
+                :placeholder="$t('sortBy')"
               >
-                <option value="">{{ $t("sortBy") }}</option>
                 <option value="latest">{{ $t("latest") }}</option>
                 <option value="oldest">{{ $t("oldest") }}</option>
                 <option value="highest-salary">
@@ -199,11 +199,32 @@
                   />
                 </div>
                 <div class="flex-1">
-                  <h3
-                    class="text-lg font-semibold text-gray-900 mb-1 hover:text-blue-600"
-                  >
-                    {{ job.title }}
-                  </h3>
+                  <div class="flex items-center gap-2 mb-1">
+                    <h3
+                      class="text-lg font-semibold text-gray-900 hover:text-blue-600"
+                    >
+                      {{ job.title }}
+                    </h3>
+                    <span
+                      v-if="job.applied"
+                      class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full"
+                    >
+                      <svg
+                        class="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      {{ $t("applied") }}
+                    </span>
+                  </div>
                   <div
                     class="flex items-center gap-4 text-sm text-gray-600 mb-2"
                   >
@@ -372,7 +393,7 @@ const loading = ref(true);
 const searchQuery = ref("");
 const selectedCategory = ref("");
 const showFilters = ref(false);
-const sortBy = ref("created_at");
+const sortBy = ref("highest-salary");
 const currentPage = ref(1);
 const totalPages = ref(5);
 const totalData = ref(0);
@@ -508,7 +529,7 @@ const loadJobs = async () => {
       employmentTypes: selectedEmploymentTypes.value,
       sortBy: sortBy.value,
       page: currentPage.value,
-      limit: 3,
+      limit: 5,
     });
     jobs.value = data.data;
     totalPages.value = data.meta.totalPage;

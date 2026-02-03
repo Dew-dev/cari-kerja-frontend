@@ -144,34 +144,65 @@
             </div>
 
             <!-- Apply Button -->
-            <button
-              v-if="!auth.isLoggedIn || auth.role === 'user'"
-              @click="handleApply"
-              :disabled="isApplying || hasApplied"
-              class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-2"
-            >
-              <svg
-                v-if="hasApplied"
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            <div class="flex gap-3">
+              <button
+                v-if="!auth.isLoggedIn || auth.role === 'user'"
+                @click="handleApply"
+                :disabled="isApplying || hasApplied"
+                class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-2"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              <span>{{
-                hasApplied
-                  ? $t("alreadyApplied")
-                  : isApplying
-                  ? $t("applying")
-                  : $t("applyNow")
-              }}</span>
-            </button>
+                <svg
+                  v-if="hasApplied"
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span>{{
+                  hasApplied
+                    ? $t("alreadyApplied")
+                    : isApplying
+                    ? $t("applying")
+                    : $t("applyNow")
+                }}</span>
+              </button>
+              
+              <!-- Save Job Button -->
+              <button
+                v-if="!auth.isLoggedIn || auth.role === 'user'"
+                @click="handleSaveJob"
+                :disabled="isSavingJob"
+                :class="[
+                  'px-6 py-3 rounded-lg font-semibold transition duration-200 flex items-center justify-center gap-2',
+                  isSaved
+                    ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
+                  isSavingJob && 'opacity-50 cursor-not-allowed'
+                ]"
+              >
+                <svg
+                  class="w-5 h-5"
+                  :fill="isSaved ? 'currentColor' : 'none'"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 5a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 19V5z"
+                  />
+                </svg>
+                <span>{{ isSaved ? $t("saved") : $t("save") }}</span>
+              </button>
+            </div>
           </div>
 
           <!-- Job Description -->
@@ -644,6 +675,7 @@ import {
   getJobPostResponsibilities,
   getJobPosts,
 } from "../services/jobposts.api";
+import { saveJob, removeSavedJob } from "../services/saved-jobs.api";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { useAuthStore } from "../stores/authStore";
@@ -673,6 +705,9 @@ const applicationForm = ref({
   application_status_id: 1,
   answers: [],
 });
+
+const isSaved = ref(false);
+const isSavingJob = ref(false);
 
 // Computed
 const jobId = computed(() => route.params.id);
@@ -821,39 +856,6 @@ const jobDetailService = {
       const response = await getJobPosts(params);
       return response.data;
 
-      // Simulasi data untuk demo
-      // return new Promise((resolve) => {
-      //   setTimeout(() => {
-      //     resolve({
-      //       data: [
-      //         {
-      //           id: 2,
-      //           title: 'Frontend Developer (Vue.js)',
-      //           company_name: 'Digital Agency',
-      //           location: 'Bandung',
-      //           salary_max: 20000000,
-      //           currency: 'IDR'
-      //         },
-      //         {
-      //           id: 3,
-      //           title: 'Full Stack Developer',
-      //           company_name: 'Startup Tech',
-      //           location: 'Jakarta',
-      //           salary_max: 22000000,
-      //           currency: 'IDR'
-      //         },
-      //         {
-      //           id: 4,
-      //           title: 'React Developer',
-      //           company_name: 'Web Solutions',
-      //           location: 'Surabaya',
-      //           salary_max: 18000000,
-      //           currency: 'IDR'
-      //         }
-      //       ]
-      //     });
-      //   }, 600);
-      // });
     } catch (error) {
       console.error("Error fetching similar jobs:", error);
       throw error;
@@ -911,6 +913,9 @@ const loadJobDetail = async () => {
     const response = await jobDetailService.fetchJobDetail(jobId.value);
     job.value = response.data;
 
+    // Check if saved dari response data
+    isSaved.value = job.value?.saved_id || false;
+    console.log("Job detail loaded:", job.value);
     // Check if user has already applied
     if (auth.isLoggedIn && auth.role === "user") {
       const statusResponse = await jobDetailService.checkApplicationStatus(
@@ -967,6 +972,12 @@ const loadJobPostBenefits = async () => {
 
 const loadJobQuestions = async () => {
   try {
+    // Hanya load questions jika user sudah login dan role adalah user
+    if (!auth.isLoggedIn || auth.role !== "user") {
+      jobQuestions.value = [];
+      return;
+    }
+
     const response = await api.get(`/job-posts/${jobId.value}/questions`);
     jobQuestions.value = response.data?.data || [];
 
@@ -1093,6 +1104,53 @@ const handleApply = async () => {
   // Load resumes and show modal
   await loadResumes();
   showApplicationModal.value = true;
+};
+
+const handleSaveJob = async () => {
+  if (!auth.isLoggedIn) {
+    router.push({
+      path: "/login",
+      query: { redirect: route.fullPath },
+    });
+    return;
+  }
+
+  if (auth.role === "recruiter") {
+    push.warning(t("recruitersCannotApply"));
+    return;
+  }
+
+  try {
+    isSavingJob.value = true;
+    
+    if (isSaved.value) {
+      // Remove from saved jobs
+      await removeSavedJob(jobId.value);
+      isSaved.value = false;
+      push.success(t("jobRemovedFromSaved"));
+    } else {
+      // Save job
+      await saveJob(jobId.value);
+      isSaved.value = true;
+      push.success(t("jobSavedSuccessfully"));
+    }
+  } catch (error) {
+    console.error("Error saving job:", error);
+    const errorMsg = error.response?.data?.message || t("errorSavingJob");
+    push.error(errorMsg);
+  } finally {
+    isSavingJob.value = false;
+  }
+};
+
+const checkIfSaved = async () => {
+  if (!auth.isLoggedIn) {
+    isSaved.value = false;
+    return;
+  }
+
+  // Sudah di-set dari job.saved saat load job detail
+  // Jadi tidak perlu API call lagi
 };
 
 const viewCompanyProfile = () => {

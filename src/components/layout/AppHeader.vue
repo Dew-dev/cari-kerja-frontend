@@ -3,7 +3,13 @@
     
     <div class="max-w-290 mx-auto py-10 h-14 flex items-center justify-between">
 
-        <div class="text-xl font-bold hover:cursor-pointer hover:scale-110 hover:text-pink-500 transition duration-200 ease-in-out" @click="router.push('/')">JOBS.UZ</div>
+        <div
+          class="text-xl font-bold hover:cursor-pointer hover:scale-110 transition duration-200 ease-in-out"
+          @click="router.push('/')"
+        >
+          <span :class="route.path === '/' ? 'text-red-500' : 'text-white hover:text-pink-500'">JOBS</span>
+          <span class="text-white">.UZ</span>
+        </div>
       
     <RecruiterHeader v-if="auth.role === 'recruiter'" />
     <UserHeader v-else />
@@ -76,10 +82,11 @@ import UserHeader from "@/components/layout/UserHeader.vue"
 const { locale } = useI18n()
 const open = ref(false)
 
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useAuthStore } from "../../stores/authStore"
 
 const router = useRouter()
+const route = useRoute()
 const auth = useAuthStore()
 
 function logout() {
