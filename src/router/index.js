@@ -63,9 +63,7 @@ const routes = [
   {
     path: "/profile/edit",
     meta: { requiresAuth: true },
-    component: {
-      template: "<div class='p-6'>EDIT PROFILE (COMING SOON)</div>",
-    },
+    component: () => import("../pages/profile/UserProfile.vue"),
   },
   {
     path: "/recruiters/:id",

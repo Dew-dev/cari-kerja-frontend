@@ -193,7 +193,7 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
                     v-for="status in APPLICATION_STATUSES"
                     :key="status.id"
                     @click="updateApplicantStatus(a, status)"
-                    class="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+                    class="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer "
                     :class="status.name === a.status && 'font-semibold'"
                   >
                     {{ status.name.replace("_", " ") }}

@@ -325,7 +325,7 @@
                 <span class="text-gray-600 break-all">{{ job.email }}</span>
               </div>
 
-              <div v-if="job.company_description" class="mt-4 pt-4 shadow-sm">
+              <div v-if="job.company_description" class="mt-4 pt-4 ">
                 <p class="text-gray-600 text-sm">
                   {{ job.company_description }}
                 </p>

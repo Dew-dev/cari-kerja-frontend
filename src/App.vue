@@ -9,7 +9,7 @@ import "primeicons/primeicons.css";
 </script>
 
 <template>
-  <div class="min-h-screen bg-white text-gray-900">
+  <div class="min-h-screen bg-white text-gray-900 ">
     <AppHeader />
     <router-view :key="$route.fullPath" />
     <Notivue v-slot="item">
