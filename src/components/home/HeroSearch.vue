@@ -18,6 +18,7 @@
         <input
           type="text"
           v-model="keyword"
+          @keydown.enter="handleSearch"
           class=" bg-white flex-1 px-4 py-3 rounded text-black hover:scale-101 transition duration-200 ease-in-out"
           :placeholder="t('home.keywordPlaceholder')"
         />

@@ -601,11 +601,14 @@ const goToPage = (page) => {
 };
 
 const handleFilterChange = () => {
+  
+  searchQuery.value = ""; // Reset search saat filter diubah
   router.push({
     query: {
       ...route.query,
       sort_by: sortBy.value,
       category: selectedCategory.value || undefined,
+      search: undefined, // Hapus search dari query
       employment_types: selectedEmploymentTypes.value.length
         ? selectedEmploymentTypes.value.join(",")
         : undefined,
