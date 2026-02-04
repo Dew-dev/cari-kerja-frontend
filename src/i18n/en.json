@@ -104,8 +104,7 @@
   "passwordUpdated": "Your password has been updated successfully.",
   "goToLogin": "Go to Login",
   "saveChanges": "Save Changes",
-  "companyLogo": "Company Logo"
-  ,
+  "companyLogo": "Company Logo",
   "faq": {
     "title": "Help & FAQ",
     "subtitle": "Answers to common questions for job seekers and employers.",
@@ -170,8 +169,14 @@
       }
     ],
     "popular": [
-      { "title": "How to apply for a job", "excerpt": "Step-by-step guide for applicants" },
-      { "title": "Posting a job: best practices", "excerpt": "Tips to write an effective job ad" }
+      {
+        "title": "How to apply for a job",
+        "excerpt": "Step-by-step guide for applicants"
+      },
+      {
+        "title": "Posting a job: best practices",
+        "excerpt": "Tips to write an effective job ad"
+      }
     ],
     "contact": {
       "stillNeedHelp": "Still need help?",
