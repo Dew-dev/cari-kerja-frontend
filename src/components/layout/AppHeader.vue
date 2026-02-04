@@ -8,7 +8,7 @@
           @click="router.push('/')"
         >
           <span :class="route.path === '/' ? 'text-red-500' : 'text-white hover:text-pink-500'">JOBS</span>
-          <span class="text-white">.UZ</span>
+          <span :class="route.path === '/' ? 'text-white hover:text-pink-500' : 'text-red-500' ">.UZ</span>
         </div>
       
     <RecruiterHeader v-if="auth.role === 'recruiter'" />

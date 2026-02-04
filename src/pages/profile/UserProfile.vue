@@ -783,7 +783,7 @@ watch(activeTab, (newTab) => {
         class="bg-white w-full rounded-lg md:rounded-2xl shadow-sm p-1 md:p-2 flex gap-1 md:gap-2 mb-6 md:mb-8 overflow-x-auto flex-nowrap justify-around"
       >
         <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors"
+          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
           :class="
             activeTab === 'profile'
               ? 'bg-blue-600 text-white'
@@ -795,7 +795,7 @@ watch(activeTab, (newTab) => {
           <span class="sm:hidden">{{ $t('profile.profilePhoto') }}</span>
         </button>
         <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors"
+          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
           :class="
             activeTab === 'resumes'
               ? 'bg-blue-600 text-white'
@@ -806,7 +806,7 @@ watch(activeTab, (newTab) => {
           {{ $t('resume') }}
         </button>
         <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors"
+          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
           :class="
             activeTab === 'work'
               ? 'bg-blue-600 text-white'
@@ -818,7 +818,7 @@ watch(activeTab, (newTab) => {
           <span class="sm:hidden">{{ $t('profile.work') }}</span>
         </button>
         <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors"
+          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
           :class="
             activeTab === 'education'
               ? 'bg-blue-600 text-white'
@@ -830,7 +830,7 @@ watch(activeTab, (newTab) => {
           <span class="sm:hidden">{{ $t('profile.edu') }}</span>
         </button>
         <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors"
+          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
           :class="
             activeTab === 'certifications'
               ? 'bg-blue-600 text-white'
@@ -842,7 +842,7 @@ watch(activeTab, (newTab) => {
           <span class="sm:hidden">{{ $t('profile.cert') }}</span>
         </button>
         <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors"
+          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
           :class="
             activeTab === 'applied'
               ? 'bg-blue-600 text-white'
@@ -854,7 +854,7 @@ watch(activeTab, (newTab) => {
           <span class="sm:hidden">{{ $t('profile.applied') }}</span>
         </button>
         <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors"
+          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
           :class="
             activeTab === 'saved'
               ? 'bg-blue-600 text-white'
@@ -1293,7 +1293,7 @@ watch(activeTab, (newTab) => {
       <!-- EDUCATION TAB -->
       <div v-else-if="activeTab === 'education'" class="bg-white rounded-lg md:rounded-2xl shadow-sm p-4 md:p-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-          <h2 class="text-base md:text-lg font-semibold">{{ $t('profile.education') }}</h2>
+          <h2 class="text-base md:text-lg font-semibold">{{ $t('education') }}</h2>
           <button
             @click="addEducation"
             class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 whitespace-nowrap"

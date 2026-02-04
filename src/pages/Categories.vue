@@ -56,7 +56,7 @@
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          {{ $t("home") }}
+          {{ $t("home.home") }}
         </router-link>
       </div>
 
