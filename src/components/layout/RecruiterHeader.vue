@@ -48,7 +48,7 @@ function isActive(path) {
         
         :class="
           isActive(item.path)
-            ? 'text-blue-600 border-b-2 border-blue-600'
+            ? 'text-white font-bold underline decoration-white/80 decoration-2 underline-offset-8'
             : 'cursor-pointer text-lg font-semibold hover:scale-105 hover:text-pink-500 transition duration-200 ease-in-out'
         "
       >

@@ -35,7 +35,7 @@ onMounted(fetchRecruiter)
     <div v-else-if="recruiter" class="space-y-8">
       <!-- HEADER -->
       <div class="flex items-center gap-6">
-        <div class="h-24 w-24 rounded-full overflow-hidden border bg-gray-100">
+        <div class="h-24 w-24 rounded-full overflow-hidden shadow-md bg-gray-100">
           <img
             v-if="recruiter.avatar_url"
             :src="`http://localhost:5000${recruiter.avatar_url}`"
@@ -63,7 +63,7 @@ onMounted(fetchRecruiter)
       </div>
 
       <!-- ABOUT -->
-      <section class="rounded-xl border bg-white p-6">
+      <section class="rounded-xl shadow-md bg-white p-6">
         <h2 class="text-lg font-semibold mb-2">About Company</h2>
         <p class="text-sm text-gray-700 whitespace-pre-line">
           {{ recruiter.description || "No description provided." }}
@@ -73,7 +73,7 @@ onMounted(fetchRecruiter)
       <!-- CONTACT -->
       <section
         v-if="recruiter.contact_name || recruiter.contact_phone"
-        class="rounded-xl border bg-white p-6"
+        class="rounded-xl shadow-md bg-white p-6"
       >
         <h2 class="text-lg font-semibold mb-2">Contact</h2>
         <p class="text-sm text-gray-700">
@@ -97,7 +97,7 @@ onMounted(fetchRecruiter)
           <div
             v-for="job in openJobs.value"
             :key="job.id"
-            class="rounded-xl border bg-white p-4 hover:shadow-sm"
+            class="rounded-xl shadow-sm bg-white p-4 hover:shadow-md"
           >
             <h3 class="font-medium text-base">
               {{ job.title }}

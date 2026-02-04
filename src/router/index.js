@@ -46,7 +46,7 @@ const routes = [
     path: "/login",
     name: "login",
     meta: { guestOnly: true },
-    component: () => import("../pages/auth/Login.vue"),
+    component: () => import("../pages/auth/login.vue"),
   },
   {
     path: "/jobposts",
@@ -57,6 +57,13 @@ const routes = [
     name: "JobDetail",
     component: () => import("../pages/JobDetailView.vue"), // Sesuaikan path-nya
     props: true, // Mengizinkan ID dari URL masuk sebagai props ke komponen
+    meta: { public: true }, // Accessible tanpa login
+  },
+  {
+    path: "/categories",
+    name: "categories",
+    component: () => import("../pages/Categories.vue"),
+    meta: { public: true },
   },
   {
     path: "/register",
@@ -71,9 +78,7 @@ const routes = [
   {
     path: "/profile/edit",
     meta: { requiresAuth: true },
-    component: {
-      template: "<div class='p-6'>EDIT PROFILE (COMING SOON)</div>",
-    },
+    component: () => import("../pages/profile/UserProfile.vue"),
   },
   {
     path: "/recruiters/:id",
@@ -159,7 +164,7 @@ router.beforeEach((to) => {
 
   // 🚫 GUEST ONLY (login/register)
   if (to.meta.guestOnly && auth.isLoggedIn) {
-    return auth.role === "recruiter" ? "/recruiter" : "/jobposts";
+    return auth.role === "recruiter" ? "/recruiter/jobs" : "/jobposts";
   }
 
   // 🔒 PROTECTED ROUTE

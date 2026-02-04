@@ -1,13 +1,15 @@
 <script setup>
-import { reactive } from "vue";
-import { useRouter } from "vue-router";
+import { reactive, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "../../stores/authstore";
 
+import { push } from "notivue";
 import { useI18n } from "vue-i18n";
 import api from "../../services/api";
 const { locale, t } = useI18n();
-
+const loading = ref(false);
 const router = useRouter();
+const route = useRoute();
 const auth = useAuthStore();
 
 const form = reactive({
@@ -19,20 +21,35 @@ async function submit() {
   const success = await auth.login(form);
   if (!success) return;
 
-  // ROLE BASED REDIRECT
-  if (auth.role === "recruiter") {
-    router.push("/recruiter");
+  // Check if there's a redirect query parameter
+  const redirectTo = route.query.redirect;
+  
+  if (redirectTo) {
+    // Redirect back to the page they came from
+    router.push(redirectTo);
   } else {
-    router.push("/jobposts");
+    // ROLE BASED REDIRECT
+    if (auth.role === "recruiter") {
+      router.push("/recruiter/jobs");
+    } else {
+      router.push("/jobposts");
+    }
   }
 }
 
 async function resendVerification() {
   try {
-    await api.post("/auth/verify-email/resend",form)
-    alert("Verification email sent")
-  } catch {
-    alert("Failed to send verification email")
+    await api.post("/auth/verify-email/resend", form);
+    push.success("Verification email sent");
+    loading.value = true;
+  } catch (e) {
+    if (e?.response?.status === 429) {
+      push.warning(e.response.data.message);
+    } else {
+      push.error("Failed to send verification email");
+    }
+  } finally{
+    loading.value = false;
   }
 }
 </script>
@@ -74,7 +91,7 @@ async function resendVerification() {
         </p>
         <p v-if="auth.needVerifyEmail" class="text-sm text-yellow-600">
           Your email is not verified.
-          <span class="underline cursor-pointer" @click="resendVerification">
+          <span class="underline" :class="[loading ? 'cursor-not-allowed' : 'cursor-pointer']" @click="resendVerification">
             Resend verification email
           </span>
         </p>

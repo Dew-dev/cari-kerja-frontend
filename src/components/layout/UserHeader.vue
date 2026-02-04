@@ -1,5 +1,5 @@
 <script setup>
-import { useRouter } from "vue-router"
+import { useRouter, useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { computed } from "vue"
 // import { useAuthStore } from "@/stores/auth.store"
@@ -7,16 +7,16 @@ import { computed } from "vue"
 const { locale,t } = useI18n()
 // computed
 const router = useRouter()
+const route = useRoute()
 // const auth = useAuthStore()
 // const router = useRouter()
-const route = router.currentRoute
 // const auth = useAuthStore() 
 // computed
 
 const menu = computed(() => [
   { label: t("jobs"), path: "/jobposts" },
-  { label: t("companies"), path: "/companies" },
-  { label: t("salary"), path: "/salary" },
+  { label: t("categories"), path: "/categories" },
+  { label: t("Profile"), path: "/profile/edit" },
 ])
 
 function isActive(path) {
@@ -38,7 +38,7 @@ function isActive(path) {
         class="cursor-pointer pb-1"
         :class="
           isActive(item.path)
-            ? 'text-blue-600 border-b-2 border-blue-600'
+            ? 'text-pink-500 text-lg font-bold scale-105'
             : 'cursor-pointer text-lg font-semibold hover:scale-105 hover:text-pink-500 transition duration-200 ease-in-out'
         "
       >

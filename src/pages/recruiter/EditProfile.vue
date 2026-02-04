@@ -1,8 +1,10 @@
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import api from "../../services/api";
 import { useAuthStore } from "../../stores/authStore";
 import { useI18n } from "vue-i18n";
+import { push } from "notivue";
+import SearchableSelect from "../../components/common/SearchableSelect.vue";
 
 const auth = useAuthStore();
 const { t } = useI18n();
@@ -21,10 +23,21 @@ const form = reactive({
 });
 
 const industries = ref([]);
+const industrySearch = ref("");
+let industrySearchTimeout = null;
 const avatarFile = ref(null);
 const avatarPreview = ref(null);
 const avatarFromBackend = ref(null);
 const loading = ref(false);
+
+const industryOptions = computed(() =>
+  industries.value.map((i) => ({
+    label: i.name,
+    value: String(i.id),
+  })),
+);
+
+const filteredIndustryOptions = computed(() => industryOptions.value);
 
 const onLogoChange = (e) => {
   const file = e.target.files[0];
@@ -32,7 +45,7 @@ const onLogoChange = (e) => {
 
   // validasi size 2MB
   if (file.size > 2 * 1024 * 1024) {
-    alert("Max file size 2MB");
+    push.warning("Max file size 2MB");
     return;
   }
 
@@ -66,14 +79,34 @@ async function loadProfile() {
       avatarFromBackend.value = r.avatar_url;
     }
 
-    // industries
-    const ind = await api.get("/industries");
-    industries.value = ind.data?.data || [];
+    await fetchIndustries();
   } catch (err) {
     console.error("Failed to load profile", err);
   } finally {
     loading.value = false;
   }
+}
+
+async function fetchIndustries(keyword = "") {
+  try {
+    const params = keyword ? { search: keyword } : {};
+    const ind = await api.get("/industries", { params });
+    industries.value = ind.data?.data || [];
+  } catch (err) {
+    console.error("Failed to load industries", err);
+  }
+}
+
+function handleIndustrySearch(value) {
+  industrySearch.value = value;
+
+  if (industrySearchTimeout) {
+    clearTimeout(industrySearchTimeout);
+  }
+
+  industrySearchTimeout = setTimeout(() => {
+    fetchIndustries(value?.trim() || "");
+  }, 300);
 }
 
 /* =====================
@@ -99,10 +132,10 @@ async function saveProfile() {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    alert("Profile updated");
+    push.success("Profile updated");
   } catch (err) {
     console.error("Save failed", err);
-    alert("Failed to update profile");
+    push.error("Failed to update profile");
   }
 }
 
@@ -111,11 +144,11 @@ onMounted(loadProfile);
 
 <template>
   <div class="max-w-4xl mx-auto px-4 py-8">
-    <div class="rounded-2xl border bg-white shadow-sm px-10 py-5">
+    <div class="rounded-2xl shadow-md bg-white px-10 py-5">
       <div class="border-b px-6 py-4">
-        <h1 class="text-xl font-semibold">Recruiter Profile</h1>
+        <h1 class="text-xl font-semibold">{{ t("recruiterProfile") }}</h1>
         <p class="text-sm text-gray-500">
-          This information will be visible to candidates
+          {{ t("visibleToCandidates") }}
         </p>
       </div>
 
@@ -130,7 +163,7 @@ onMounted(loadProfile);
         <div class="flex items-center gap-6 pt-5 col-span-2">
           <div class="relative">
             <div
-              class="h-28 w-28 rounded-full overflow-hidden border bg-gray-100"
+              class="h-28 w-28 rounded-full overflow-hidden border border-gray-200 shadow-sm bg-gray-100"
             >
               <img
                 v-if="avatarPreview || avatarFromBackend"
@@ -144,52 +177,53 @@ onMounted(loadProfile);
 
           <div>
             <label class="block text-sm font-medium mb-1"> {{ t("companyLogo") }} </label>
-            <input type="file" accept="image/*" @change="onLogoChange" class="text-sm w-full rounded-lg border px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            <p class="text-xs text-gray-500 mt-1">JPG or PNG, max 2MB</p>
+            <input type="file" accept="image/*" @change="onLogoChange" class="text-sm w-full rounded-lg border border-gray-200 shadow-sm px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <p class="text-xs text-gray-500 mt-1">{{ t("fileTypeAndSize") }}</p>
           </div>
         </div>
 
         <input
           v-model="form.company_name"
-          class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Company Name"
+          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          :placeholder="t('companyName')"
         />
         <input
           v-model="form.company_website"
-          class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Company Website"
+          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          :placeholder="t('companyWebsite')"
         />
         <input
           v-model="form.contact_name"
-          class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Contact Name"
+          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          :placeholder="t('contactName')"
         />
         <input
           v-model="form.contact_phone"
-          class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Contact Phone"
+          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          :placeholder="t('contactPhone')"
         />
 
         <textarea
           v-model="form.address"
-          class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           rows="2"
-          placeholder="Company Address"
+          :placeholder="t('companyAddress')"
         />
 
-        <!-- INDUSTRY (PLAIN SELECT) -->
-        <select v-model="form.industry_id" class="w-full rounded-lg border px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option value="">Select Industry</option>
-          <option v-for="i in industries" :key="i.id" :value="String(i.id)">
-            {{ i.name }}
-          </option>
-        </select>
+        <!-- INDUSTRY (SEARCHABLE SELECT) -->
+        <SearchableSelect
+          :options="filteredIndustryOptions"
+          :value="form.industry_id"
+          :placeholder="t('selectIndustry')"
+          @change="(val) => (form.industry_id = String(val || ''))"
+          @search="handleIndustrySearch"
+        />
 
         <textarea
           v-model="form.description"
-          class="w-full rounded-lg border px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 col-span-2"
+          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 col-span-2"
           rows="4"
-          placeholder="Company Description"
+          :placeholder="t('companyDescription')"
         />
         <div class="flex justify-end pt-4 border-t col-span-2">
             
@@ -197,7 +231,7 @@ onMounted(loadProfile);
             to="/change-password"
             class="rounded-xl bg-gray-200 px-6 py-2.5 text-sm font-semibold text-black hover:bg-gray-400 transition mx-2"
           >
-            Change Password
+            {{ t("changePassword") }}
           </RouterLink>
           <button
             type="submit"

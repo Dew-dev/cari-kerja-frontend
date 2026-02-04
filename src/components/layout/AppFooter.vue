@@ -21,7 +21,7 @@ function setLang(lang) {
 </script>
 
 <template>
-  <footer class="border-t border-gray-200 bg-white text-sm text-gray-600">
+  <footer class="shadow-sm bg-white text-sm text-gray-600">
     <div class="max-w-290 w-full mx-auto px-4 py-6 text-sm text-gray-600">
       <!-- TOP ROW -->
       <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
@@ -29,7 +29,7 @@ function setLang(lang) {
         <div class="relative">
           <button
             @click="open = !open"
-            class="flex items-center gap-1 border px-3 py-1 rounded text-gray-700"
+            class="flex items-center gap-1 border border-gray-300 shadow-sm px-3 py-1 rounded text-gray-700"
           >
             {{ locale.toUpperCase() }}
             <span>▾</span>
@@ -37,7 +37,7 @@ function setLang(lang) {
 
           <div
             v-if="open"
-            class="absolute left-0 mt-1 bg-white border rounded shadow-sm min-w-[140px] z-50"
+            class="absolute left-0 mt-1 bg-white shadow-lg rounded min-w-[140px] z-50"
           >
             <button
               v-for="lang in languages"

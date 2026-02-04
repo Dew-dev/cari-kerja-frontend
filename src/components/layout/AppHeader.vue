@@ -3,7 +3,13 @@
     
     <div class="max-w-290 mx-auto py-10 h-14 flex items-center justify-between">
 
-        <div class="text-xl font-bold hover:cursor-pointer hover:scale-110 hover:text-pink-500 transition duration-200 ease-in-out" @click="router.push('/')">JOBS.UZ</div>
+        <div
+          class="text-xl font-bold hover:cursor-pointer hover:scale-110 transition duration-200 ease-in-out"
+          @click="router.push('/')"
+        >
+          <span :class="route.path === '/' ? 'text-red-500' : 'text-white hover:text-pink-500'">JOBS</span>
+          <span :class="route.path === '/' ? 'text-white hover:text-pink-500' : 'text-red-500' ">.UZ</span>
+        </div>
       
     <RecruiterHeader v-if="auth.role === 'recruiter'" />
     <UserHeader v-else />
@@ -14,7 +20,7 @@
         <div class="relative">
           <button
             @click="open = !open"
-            class="flex items-center gap-1 border border-white px-4 py-3 rounded font-semibold hover:bg-white hover:text-blue-500 transition duration-200"
+            class="flex items-center gap-1 border border-white shadow-sm px-4 py-3 rounded font-semibold hover:bg-white hover:text-blue-500 transition duration-200"
           >
             {{ locale.toUpperCase() }}  
             <span>▾</span>
@@ -22,7 +28,7 @@
 
           <div
             v-if="open"
-            class="absolute right-0 mt-1 bg-white text-gray-800  rounded shadow-sm min-w-[140px] z-50 font-semibold rounded-md"
+            class="absolute right-0 mt-1 bg-white text-gray-800 shadow-lg min-w-[140px] z-50 font-semibold rounded-md"
           >
             <button
               v-for="lang in languages"
@@ -38,7 +44,7 @@
         <!-- SIGN IN -->
         <template v-if="!auth.isLoggedIn">
           <button
-            class="border border-white px-4 py-3 rounded font-semibold hover:bg-white hover:text-blue-500 transition duration-200"
+            class="border border-white shadow-sm px-4 py-3 rounded font-semibold hover:bg-white hover:text-blue-500 transition duration-200"
             @click="router.push('/login')"
           >
             {{ $t("nav.signIn") }}
@@ -54,7 +60,7 @@
           />
 
           <button
-            class="border border-white px-4 py-3 rounded hover:bg-white hover:text-blue-500 font-semibold transition duration-200"
+            class="border border-white shadow-sm px-4 py-3 rounded hover:bg-white hover:text-blue-500 font-semibold transition duration-200"
             @click="logout"
           >
             Logout
@@ -76,10 +82,11 @@ import UserHeader from "@/components/layout/UserHeader.vue"
 const { locale } = useI18n()
 const open = ref(false)
 
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useAuthStore } from "../../stores/authStore"
 
 const router = useRouter()
+const route = useRoute()
 const auth = useAuthStore()
 
 function logout() {

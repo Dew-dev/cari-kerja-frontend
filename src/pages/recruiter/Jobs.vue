@@ -18,10 +18,10 @@
         </router-link>
       </div>
       <!-- TABS -->
-      <div class="mb-6 border-b">
+      <div class="mb-6 border-b border-gray-300 pb-2">
         <div class="flex gap-6 text-sm font-medium">
           <button
-            @click="((activeTab = 'active'), fetchJobs())"
+            @click="setActiveTab('active')"
             :class="
               activeTab === 'active'
                 ? 'border-b-2 border-blue-600 pb-2 text-blue-600'
@@ -32,7 +32,7 @@
           </button>
 
           <button
-            @click="((activeTab = 'archived'), archivedJobs())"
+            @click="setActiveTab('archived')"
             :class="
               activeTab === 'archived'
                 ? 'border-b-2 border-blue-600 pb-2 text-blue-600'
@@ -44,7 +44,7 @@
         </div>
       </div>
       <!-- TABLE CARD -->
-      <div class="bg-white border rounded-lg shadow-sm overflow-hidden">
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <!-- TABLE -->
         <table class="w-full text-sm">
           <thead class="bg-gray-50 text-gray-600">
@@ -61,7 +61,7 @@
             <tr
               v-for="job in jobs"
               :key="job.id"
-              class="border-t hover:bg-gray-50 transition"
+              class="shadow-sm hover:bg-gray-50 transition"
             >
               <!-- JOB -->
               <td class="px-4 py-3">
@@ -109,7 +109,7 @@
                     <!-- VIEW -->
                     <button
                       title="View job"
-                      class="action-btn text-blue-600 hover:bg-blue-200 border rounded-full p-1"
+                      class="action-btn text-blue-600 hover:bg-blue-200 border border-blue-600 shadow-sm rounded-full p-1"
                     >
                       <i class="pi pi-eye"></i>
                     </button>
@@ -118,7 +118,7 @@
                     <router-link
                       :to="`/recruiter/jobs/${job.id}/edit`"
                       title="Edit job"
-                      class="action-btn text-green-600 hover:bg-emerald-200 border rounded-full p-1"
+                      class="action-btn text-green-600 hover:bg-emerald-200 border border-green-600 shadow-sm rounded-full p-1"
                     >
                       <i class="pi pi-pencil"></i>
                     </router-link>
@@ -137,7 +137,7 @@
                     <!-- DUPLICATE -->
                     <button
                       title="Duplicate job"
-                      @click="duplicateJob(job.id)"
+                      @click="openActionModal(job, 'duplicate')"
                       class="action-btn text-purple-600 hover:bg-purple-200 border rounded-full p-1"
                     >
                       <i class="pi pi-copy"></i>
@@ -187,7 +187,7 @@
                     <!-- DUPLICATE -->
                     <button
                       title="Duplicate job"
-                      @click="duplicateJob(job.id)"
+                      @click="openActionModal(job, 'duplicate')"
                       class="action-btn text-purple-600 hover:bg-purple-200 border rounded-full p-1"
                     >
                       <i class="pi pi-copy"></i>
@@ -211,14 +211,14 @@
                 colspan="6"
                 class="px-4 py-6 text-center text-gray-500"
               >
-                No archived jobs found.
+                {{ $t('noArchivedJobs') }}
               </td>
               <td
                 v-else
                 colspan="6"
                 class="px-4 py-6 text-center text-gray-500"
               >
-                No active jobs found. Create your first job posting!
+                {{ $t('noActiveJobs') }}
               </td>
             </tr>
           </tbody>
@@ -236,7 +236,7 @@
           <button
             @click="changePage(page - 1)"
             :disabled="page === 1"
-            class="px-3 py-1.5 border rounded-md"
+            class="px-3 py-1.5 border border-gray-300 shadow-sm rounded-md"
             :class="[
               page === 1
                 ? 'text-gray-400 cursor-not-allowed'
@@ -252,7 +252,7 @@
             v-for="p in totalPages"
             :key="p"
             @click="changePage(p)"
-            class="px-3 py-1.5 border rounded-md"
+            class="px-3 py-1.5 border border-gray-300 shadow-sm rounded-md"
             :class="[
               p === page
                 ? 'bg-blue-600 text-white border-blue-600'
@@ -267,7 +267,7 @@
           <button
             @click="changePage(page + 1)"
             :disabled="page === totalPages"
-            class="px-3 py-1.5 border rounded-md"
+            class="px-3 py-1.5 border border-gray-300 shadow-sm rounded-md"
             :class="[
               page === totalPages
                 ? 'text-gray-400 cursor-not-allowed '
@@ -289,7 +289,7 @@
     <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6">
       <!-- TITLE -->
       <h3 class="text-lg font-semibold text-gray-900">
-        {{ nextStatus === 1 ? "Publish Job" : "Close Job" }}
+        {{ nextStatus === 1 ? $t('publishJob') : $t('closeJob') }}
       </h3>
 
       <!-- MESSAGE -->
@@ -305,7 +305,7 @@
       <div class="mt-6 flex justify-end gap-3">
         <button
           @click="showConfirmModal = false"
-          class="px-4 py-2 text-sm rounded-md border hover:bg-gray-100"
+          class="px-4 py-2 text-sm rounded-md border border-gray-300 shadow-sm hover:bg-gray-100"
         >
           Cancel
         </button>
@@ -319,33 +319,40 @@
           "
           class="px-4 py-2 text-sm text-white rounded-md"
         >
-          {{ nextStatus === 1 ? "Publish" : "Close" }}
+          {{ nextStatus === 1 ? $t('publish') : $t('close') }}
         </button>
       </div>
     </div>
   </div>
 
-  <!-- ARCHIVE / RESTORE MODAL -->
+  <!-- ARCHIVE / RESTORE / DUPLICATE MODAL -->
   <div
     v-if="showActionModal"
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
   >
     <div class="w-full max-w-sm rounded-xl bg-white p-6 shadow-lg">
       <h3 class="text-lg font-semibold text-gray-900">
-        {{ actionType === "archive" ? "Archive job?" : "Restore job?" }}
+        <span v-if="actionType === 'archive'">Archive job?</span>
+        <span v-else-if="actionType === 'restore'">Restore job?</span>
+        <span v-else-if="actionType === 'duplicate'">Duplicate job?</span>
       </h3>
 
       <p class="mt-2 text-sm text-gray-600">
         <span v-if="actionType === 'archive'">
           This job will be moved to archived list and hidden from active jobs.
         </span>
-        <span v-else> This job will be restored to active jobs. </span>
+        <span v-else-if="actionType === 'restore'">
+          This job will be restored to active jobs.
+        </span>
+        <span v-else-if="actionType === 'duplicate'">
+          A copy of this job will be created as a draft.
+        </span>
       </p>
 
       <div class="mt-6 flex justify-end gap-3">
         <button
           @click="closeActionModal"
-          class="rounded-md border px-4 py-2 text-sm hover:bg-gray-100"
+          class="rounded-md border border-gray-300 shadow-sm px-4 py-2 text-sm hover:bg-gray-100"
           :disabled="actionLoading"
         >
           Cancel
@@ -357,7 +364,9 @@
           :class="
             actionType === 'archive'
               ? 'bg-gray-700 hover:bg-gray-800'
-              : 'bg-green-600 hover:bg-green-700'
+              : actionType === 'restore'
+              ? 'bg-green-600 hover:bg-green-700'
+              : 'bg-purple-600 hover:bg-purple-700'
           "
           :disabled="actionLoading"
         >
@@ -371,6 +380,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { push } from "notivue";
 import { getJobPostsSelf } from "../../services/jobposts.api";
 import { useRouter } from "vue-router";
 import api from "../../services/api";
@@ -456,7 +466,6 @@ async function confirmAction() {
           },
         },
       );
-      
     }
     
     if (actionType.value === "restore") {
@@ -469,17 +478,24 @@ async function confirmAction() {
           },
         },
       );
-      
     }
+
+    if (actionType.value === "duplicate") {
+      const res = await api.post(`/job-posts/${selectedJob.value.id}/duplicate`);
+      const newId = res.data?.data?.id;
+      router.push(`/recruiter/jobs/${newId}/edit`);
+      closeActionModal();
+      return;
+    }
+
     archivedJobs(); // refresh archived
     fetchJobs(); // refresh table
-
     closeActionModal();
     countit.value = !countit.value;
     page.value = 1; // reset to first page
   } catch (err) {
     console.error("Action failed", err);
-    alert("Action failed. Please try again.");
+    push.error("Action failed. Please try again.");
   } finally {
     actionLoading.value = false;
   }
@@ -493,12 +509,11 @@ async function fetchJobs() {
       page: page.value,
       limit: limit.value,
     });
-    if(!countit.value && activeTab.value === 'active'){
+    if (!countit.value && activeTab.value === "active") {
       jobs.value = res.data?.data || [];
+      totalPages.value = res.data?.meta?.totalPage || 1;
     }
-    // jobs.value = res.data?.data || [];
     jobCounter.value = res.data?.meta?.total || 0;
-    totalPages.value = res.data?.meta?.totalPage || 1;
     countit.value = false;
   } catch (err) {
     console.error("Failed to fetch recruiter jobs", err);
@@ -514,11 +529,11 @@ async function archivedJobs() {
       limit: limit.value,
       archive: true,
     });
-    if(!countit.value && activeTab.value === 'archived'){
+    if (!countit.value && activeTab.value === "archived") {
       jobs.value = res.data?.data || [];
+      totalPages.value = res.data?.meta?.totalPage || 1;
     }
     archivedJobCounter.value = res.data?.meta?.total || 0;
-    totalPages.value = res.data?.meta?.totalPage || 1;
     countit.value = false;
   } catch (err) {
     console.error("Failed to count archived jobs", err);
@@ -548,7 +563,22 @@ function changePage(p) {
   page.value = p;
   console.log("toalPages:", totalPages.value);
   console.log("Changing to page:", page.value);
-  fetchJobs();
+  if (activeTab.value === "archived") {
+    archivedJobs();
+  } else {
+    fetchJobs();
+  }
+}
+
+function setActiveTab(tab) {
+  if (activeTab.value === tab) return;
+  activeTab.value = tab;
+  page.value = 1;
+  if (tab === "archived") {
+    archivedJobs();
+  } else {
+    fetchJobs();
+  }
 }
 
 function openConfirmModal(job, status) {
@@ -576,7 +606,7 @@ async function confirmUpdateStatus() {
     selectedJob.value.status = arr[nextStatus.value - 1];
   } catch (err) {
     console.error("Failed to update job status", err);
-    alert("Failed to update job status");
+    push.error("Failed to update job status");
   } finally {
     showConfirmModal.value = false;
     selectedJob.value = null;
@@ -594,7 +624,7 @@ async function duplicateJob(jobId) {
     router.push(`/recruiter/jobs/${newId}/edit`);
   } catch (err) {
     console.error("Duplicate failed", err);
-    alert("Failed to duplicate job");
+    push.error("Failed to duplicate job");
   }
 }
 </script>

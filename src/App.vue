@@ -3,6 +3,7 @@ import HelloWorld from "./components/HelloWorld.vue";
 import AppFooter from "./components/layout/AppFooter.vue";
 import AppHeader from "./components/layout/AppHeader.vue";
 import { useI18n } from "vue-i18n";
+import { Notivue, Notification } from "notivue";
 const { locale, t } = useI18n();
 import "primeicons/primeicons.css";
 </script>
@@ -11,6 +12,9 @@ import "primeicons/primeicons.css";
   <div class="min-h-screen bg-white text-gray-900">
     <AppHeader />
     <router-view :key="$route.fullPath" />
+    <Notivue v-slot="item">
+      <Notification :item="item" />
+    </Notivue>
     <AppFooter />
   </div>
 </template>

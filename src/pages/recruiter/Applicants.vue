@@ -1,8 +1,11 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import { push } from "notivue";
 import api from "@/services/api";
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -63,7 +66,7 @@ async function updateApplicantStatus(applicant, status) {
     openStatusDropdown.value = null;
   } catch (err) {
     console.error("Failed to update applicant status", err);
-    alert("Failed to update applicant status");
+    push.error(t("failedToUpdateStatus"));
   }
 }
 
@@ -103,22 +106,22 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
           @click="router.back()"
           class="text-sm text-gray-600 hover:underline"
         >
-          ← Back
+          ← {{ $t('back') }}
         </button>
 
-        <h1 class="text-xl font-semibold">Applicants for {{ title }}</h1>
+        <h1 class="text-xl font-semibold">{{ $t('applicants') }} for {{ title }}</h1>
       </div>
 
       <!-- TABLE CARD -->
-      <div class="bg-white border rounded-lg shadow-sm overflow-hidden">
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <table class="w-full text-sm">
           <thead class="bg-gray-50 text-gray-600">
             <tr>
-              <th class="px-4 py-3 text-left">Candidate</th>
-              <th class="px-4 py-3 text-left">Resume</th>
-              <th class="px-4 py-3 text-left">Applied At</th>
-              <th class="px-4 py-3 text-left">Status</th>
-              <th class="px-4 py-3 text-right">Action</th>
+              <th class="px-4 py-3 text-left">{{ $t('candidate') }}</th>
+              <th class="px-4 py-3 text-left">{{ $t('resume') }}</th>
+              <th class="px-4 py-3 text-left">{{ $t('applied_at') }}</th>
+              <th class="px-4 py-3 text-left">{{ $t('status') }}</th>
+              <th class="px-4 py-3 text-right">{{ $t('actions') }}</th>
             </tr>
           </thead>
 
@@ -126,14 +129,14 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
             <!-- LOADING -->
             <tr v-if="loading">
               <td colspan="5" class="px-4 py-6 text-center text-gray-500">
-                Loading applicants…
+                {{ $t('loadingApplicants') }}
               </td>
             </tr>
 
             <!-- EMPTY -->
             <tr v-else-if="!applicants.length">
               <td colspan="5" class="px-4 py-6 text-center text-gray-500">
-                No applicants yet
+                {{ $t('noApplicantsYet') }}
               </td>
             </tr>
 
@@ -141,7 +144,7 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
             <tr
               v-for="a in applicants"
               :key="a.id"
-              class="border-t hover:bg-gray-50 transition min-h-48"
+              class="shadow-sm hover:bg-gray-50 transition min-h-48"
             >
               <td class="px-4 py-9">
                 <div class="font-medium text-gray-900">
@@ -159,10 +162,10 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
                   target="_blank"
                   class="text-blue-600 hover:underline"
                 >
-                  View Resume
+                  {{ $t('viewResume') }}
                 </a>
                 <span v-else class="text-gray-500 italic"
-                  >No Resume provided</span
+                  >{{ $t('noResumeProvided') }}</span
                 >
               </td>
 
@@ -184,13 +187,13 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
                 <div
                   v-if="openStatusDropdown === a.application_id"
                   ref="dropdownRef"
-                  class="absolute left-0 top-0 mt-2 w-44 z-[9999] bg-white border rounded-md shadow-lg z-50 overflow-auto max-h-25"
+                  class="absolute left-0 top-0 mt-2 w-44 z-[9999] bg-white shadow-lg rounded-md z-50 overflow-auto max-h-25"
                 >
                   <div
                     v-for="status in APPLICATION_STATUSES"
                     :key="status.id"
                     @click="updateApplicantStatus(a, status)"
-                    class="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+                    class="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer "
                     :class="status.name === a.status && 'font-semibold'"
                   >
                     {{ status.name.replace("_", " ") }}

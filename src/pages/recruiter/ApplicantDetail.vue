@@ -1,15 +1,28 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import { push } from "notivue";
 import { getWorkerByApplication } from "@/services/applications";
 import api from "@/services/api";
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
 const loading = ref(false);
 const worker = ref(null);
 
+const notes = ref([]);
+const noteInput = ref("");
+
 const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
+
+function formatAnswer(answer) {
+  if (!answer) return "";
+  if (typeof answer === "string") return answer;
+  if (answer.text !== undefined && answer.text !== null) return String(answer.text);
+  return "";
+}
 async function fetchWorker() {
   try {
     loading.value = true;
@@ -24,8 +37,16 @@ async function fetchWorker() {
 
 const APPLICATION_STATUSES = [
   { id: 1, name: "APPLIED", color: "bg-blue-100 shadow-sm text-blue-700" },
-  { id: 2, name: "IN REVIEW", color: "bg-yellow-100 shadow-sm text-yellow-700" },
-  { id: 3, name: "SHORTLISTED", color: "bg-purple-100 shadow-sm text-purple-700" },
+  {
+    id: 2,
+    name: "IN REVIEW",
+    color: "bg-yellow-100 shadow-sm text-yellow-700",
+  },
+  {
+    id: 3,
+    name: "SHORTLISTED",
+    color: "bg-purple-100 shadow-sm text-purple-700",
+  },
   { id: 4, name: "REJECTED", color: "bg-red-100 shadow-sm text-red-700" },
   { id: 5, name: "HIRED", color: "bg-green-100 shadow-sm text-green-700" },
 ];
@@ -52,12 +73,32 @@ async function changeStatus(status) {
     showStatusDropdown.value = false;
   } catch (err) {
     console.error("Failed to update status", err);
-    alert("Failed to update applicant status");
+    push.error(t("failedToUpdateStatus"));
   } finally {
     updatingStatus.value = false;
   }
 }
 
+async function fetchNotes() {
+  const res = await api.get(
+    `/job-applications/${route.params.applicationId}/notes`,
+  );
+  notes.value = res.data.data || [];
+}
+
+async function addNote() {
+  if (!noteInput.value.trim()) return;
+
+  loading.value = true;
+  await api.post(`/job-applications/${route.params.applicationId}/notes`, {
+    note: noteInput.value,
+  });
+  noteInput.value = "";
+  await fetchNotes();
+  loading.value = false;
+}
+
+onMounted(fetchNotes);
 onMounted(fetchWorker);
 </script>
 
@@ -68,49 +109,49 @@ onMounted(fetchWorker);
       @click="router.back()"
       class="text-sm text-gray-600 hover:text-gray-900 mb-4"
     >
-      ← Back
+      ← {{ $t('back') }}
     </button>
 
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading">{{ $t('loadingDots') }}</div>
 
     <div v-else-if="worker" class="space-y-6">
       <!-- HEADER -->
       <div class="flex justify-between items-start">
         <div>
           <h1 class="text-2xl font-semibold">
-            {{ worker.name }} <span class="relative">
-            <span
-              class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-md cursor-pointer"
-              :class="getStatusMeta(worker.status)?.color"
-              @click.stop="showStatusDropdown = !showStatusDropdown"
-            >
-              {{ worker.status }}
-            </span>
-
-            <!-- DROPDOWN -->
-            <div
-              v-if="showStatusDropdown"
-              class="absolute right-0 mt-2 w-44 bg-white border rounded-md shadow-lg z-50"
-            >
-              <div
-                v-for="status in APPLICATION_STATUSES"
-                :key="status.id"
-                @click="changeStatus(status)"
-                class="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer"
-                :class="status.name === worker.status && 'font-semibold'"
+            {{ worker.name }}
+            <span class="relative">
+              <span
+                class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-md cursor-pointer"
+                :class="getStatusMeta(worker.status)?.color"
+                @click.stop="showStatusDropdown = !showStatusDropdown"
               >
-                {{ status.name.replace("_", " ") }}
+                {{ worker.status }}
+              </span>
+
+              <!-- DROPDOWN -->
+              <div
+                v-if="showStatusDropdown"
+                class="absolute right-0 mt-2 w-44 bg-white shadow-lg rounded-md z-50"
+              >
+                <div
+                  v-for="status in APPLICATION_STATUSES"
+                  :key="status.id"
+                  @click="changeStatus(status)"
+                  class="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+                  :class="status.name === worker.status && 'font-semibold'"
+                >
+                  {{ status.name.replace("_", " ") }}
+                </div>
               </div>
-            </div>
-          </span>
+            </span>
           </h1>
           <p class="text-gray-600 text-sm">
             {{ worker.email }}
           </p>
-          <p v-if="worker.phone" class="text-gray-600 text-sm">
-            {{ worker.phone }}
+          <p v-if="worker.telephone" class="text-gray-600 text-sm">
+            {{ worker.telephone }}
           </p>
-          
         </div>
 
         <div
@@ -130,22 +171,22 @@ onMounted(fetchWorker);
       <!-- META -->
       <div class="flex gap-6 text-sm text-gray-600">
         <div>
-          <span class="font-medium text-gray-800">Applied at:</span>
+          <span class="font-medium text-gray-800">{{ $t('applied_at') }}:</span>
           {{ new Date(worker.applied_at).toLocaleDateString() }}
         </div>
       </div>
 
       <!-- COVER LETTER -->
-      <div class="bg-white border rounded-lg p-4">
-        <h2 class="font-semibold mb-2">Cover Letter</h2>
+      <div class="bg-white shadow-md rounded-lg p-4">
+        <h2 class="font-semibold mb-2">{{ $t('coverLetter') }}</h2>
         <p class="text-gray-700 whitespace-pre-line">
-          {{ worker.cover_letter || "No cover letter provided." }}
+          {{ worker.cover_letter || $t('noCoverLetterProvided') }}
         </p>
       </div>
 
       <!-- RESUME -->
-      <div class="bg-white border rounded-lg p-4">
-        <h2 class="font-semibold mb-2">Resume</h2>
+      <div class="bg-white shadow-md rounded-lg p-4">
+        <h2 class="font-semibold mb-2">{{ $t('resume') }}</h2>
 
         <div v-if="worker.resume_url">
           <p class="text-sm text-gray-600 mb-2">
@@ -157,12 +198,82 @@ onMounted(fetchWorker);
             target="_blank"
             class="inline-flex items-center text-blue-600 hover:underline text-sm"
           >
-            View / Download Resume →
+            {{ $t('viewDownloadResume') }} →
           </a>
         </div>
 
-        <p v-else class="text-gray-500 text-sm">No resume uploaded.</p>
+        <p v-else class="text-gray-500 text-sm">{{ $t('noResumeUploaded') }}</p>
       </div>
+
+      <!-- ANSWERS -->
+      <div class="bg-white shadow-md rounded-lg p-4" v-if="worker.answers?.length">
+        <h2 class="font-semibold mb-2">{{ $t('answers') }}</h2>
+        <div class="space-y-3">
+          <div
+            v-for="(ans, index) in worker.answers"
+            :key="ans.id || ans.question_id || index"
+            class="shadow-sm rounded-md p-3"
+          >
+            <div class="text-sm font-medium text-gray-800">
+              {{ index + 1 }}. {{ ans.question_text }}
+            </div>
+            <div class="text-xs text-gray-500 mt-1">
+              {{ ans.question_type?.replace('_', ' ') || '' }}
+            </div>
+            
+            <div v-if="ans.options?.choices?.length" class="mt-2">
+              <div class="text-xs text-gray-500 mb-1">
+                {{ $t('choices') }}
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="(choice, cIdx) in ans.options.choices"
+                  :key="cIdx"
+                  class="text-xs px-2 py-1 rounded border shadow-sm"
+                  :class="
+                    choice === formatAnswer(ans.answer)
+                      ? 'bg-blue-100 text-blue-700 border-blue-200'
+                      : 'bg-gray-100 text-gray-700 border-gray-200'
+                  "
+                >
+                  {{ choice }}
+                </span>
+              </div>
+            </div>
+            <div v-else class="mt-2 text-sm text-gray-700 whitespace-pre-line">
+              {{ formatAnswer(ans.answer) || '-' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 shadow-md rounded-lg p-4 bg-white">
+      <h3 class="font-semibold mb-2">{{ $t('internalNotes') }}</h3>
+
+      <div class="space-y-2 mb-3">
+        <div v-for="n in notes" :key="n.id" class="text-sm shadow-sm pb-2">
+          <div class="text-gray-700">{{ n.note }}</div>
+          <div class="text-xs text-gray-400">
+            {{ new Date(n.created_at).toLocaleString() }}
+          </div>
+        </div>
+      </div>
+
+      <textarea
+        v-model="noteInput"
+        rows="2"
+        class="w-full border border-gray-200 shadow-sm rounded px-3 py-2 text-sm"
+        :placeholder="$t('addInternalNote')"
+      />
+
+      <button
+        @click="addNote"
+        :disabled="loading"
+        class="mt-2 bg-blue-600 text-white px-4 py-1.5 rounded text-sm"
+      >
+        {{ $t('addNote') }}
+      </button>
     </div>
   </div>
 </template>
