@@ -13,7 +13,7 @@
   "signUp": "Ro'yxatdan o'tish",
   "dontHaveAccount": "Hisobingiz yo'qmi?",
   "signing": "Kirish amalga oshirilmoqda...",
-  "signingUp": "Ro'yxatdan o'tish amalga oshirilmoqda...", 
+  "signingUp": "Ro'yxatdan o'tish amalga oshirilmoqda...",
   "nav": {
     "searchJobs": "Ish qidirish",
     "postResume": "Rezyume joylash",
@@ -82,10 +82,10 @@
   "edit_job": "Ishni tahrirlash",
   "category": "Kategoriya",
   "select_category": "Kategoriyani tanlang",
-  "activeJobs"  : "Faol ish o'rinlari",
-  "archivedJobs"  : "Arxivlangan ish o'rinlari",
-  "noJobsFound"  : "Ish topilmadi.",
-  "loadingJobs"  : "Ishlar yuklanmoqda...",
+  "activeJobs": "Faol ish o'rinlari",
+  "archivedJobs": "Arxivlangan ish o'rinlari",
+  "noJobsFound": "Ish topilmadi.",
+  "loadingJobs": "Ishlar yuklanmoqda...",
   "managejobs": "Ish o'rinlaringizni boshqaring",
   "status": "Holat",
   "actions": "Harakatlar",
@@ -103,5 +103,87 @@
   "passwordUpdated": "Parolingiz muvaffaqiyatli yangilandi.",
   "goToLogin": "Kirishga o'tish",
   "saveChanges": "O'zgarishlarni saqlash",
-  "companyLogo": "Kompaniya logotipi"
+  "companyLogo": "Kompaniya logotipi",
+  "faq": {
+    "title": "Yordam va FAQ",
+    "subtitle": "Ish izlovchilar va ish beruvchilar uchun tez-tez so'raladigan savollarga javoblar.",
+    "searchPlaceholder": "Yordam maqolalarini qidiring, masalan: 'qanday murojaat qilish', 'vakansiyani joylash'",
+    "searchButton": "Qidirish",
+    "categoriesHeading": "Mashhur bo'limlar",
+    "popularHeading": "Foydali maqolalar",
+    "categories": {
+      "seekers": {
+        "title": "Ish izlovchilarga",
+        "description": "Murojaat qilish, profil va rezyume",
+        "links": {
+          "apply": "Ishga qanday murojaat qilish",
+          "cv": "Rezyume yaratish va tahrirlash",
+          "applications": "Murojaatlarni boshqarish"
+        }
+      },
+      "employers": {
+        "title": "Ish beruvchilarga",
+        "description": "Vakansiyalarni joylash va nomzodlar bilan ishlash",
+        "links": {
+          "postJob": "Vakansiyani joylash",
+          "searchResumes": "Rezyumelarni qidirish",
+          "pricing": "Rejimlar va narxlar"
+        }
+      },
+      "account": {
+        "title": "Hisob va sozlamalar",
+        "description": "Kirish, ro'yxatdan o'tish va elektron pochta",
+        "links": {
+          "register": "Ro'yxatdan o'tish / Kirish",
+          "reset": "Parolni tiklash"
+        }
+      },
+      "technical": {
+        "title": "Texnik masalalar",
+        "description": "Sayt muammolari va xatoliklarni bildirish",
+        "links": {
+          "report": "Xatolikni bildirish",
+          "browsers": "Qo'llab-quvvatlanadigan brauzerlar"
+        }
+      }
+    },
+    "faqs": [
+      {
+        "q": "Qanday hisob yaratishim mumkin?",
+        "a": "Hisob yaratish uchun <strong>Ro'yxatdan o'tish</strong> tugmasini bosing va ko'rsatmalarga amal qiling. Siz ish izlovchi yoki ish beruvchi sifatida ro'yxatdan o'tishingiz mumkin.",
+        "tag": "Hisob"
+      },
+      {
+        "q": "Ishga qanday murojaat qilaman?",
+        "a": "Vakansiya sahifasini oching va <strong>Murojaat qilish</strong> tugmasini bosing. Rezyumeni ilova qilishingiz yoki profilingiz orqali yuborishingiz mumkin.",
+        "tag": "Vakansiyalar"
+      },
+      {
+        "q": "Vakansiyani qanday joylash mumkin?",
+        "a": "Ish beruvchi sifatida ro'yxatdan o'ting va kompaniyangizni tasdiqlang. Keyin <strong>Vakansiyani joylash</strong> bo'limiga o'tib formani to'ldiring.",
+        "tag": "Ish beruvchilar"
+      },
+      {
+        "q": "Parolni unutgan bo'lsam nima qilaman?",
+        "a": "Kirish sahifasidagi <strong>Parolni unutdingizmi</strong> havolasidan foydalanib, parolni tiklash uchun elektron pochta qabul qiling.",
+        "tag": "Hisob"
+      }
+    ],
+    "popular": [
+      {
+        "title": "Ishga qanday murojaat qilish",
+        "excerpt": "Ish izlovchilar uchun bosqichma-bosqich qo'llanma"
+      },
+      {
+        "title": "Vakansiyani joylash: eng yaxshi amaliyotlar",
+        "excerpt": "Samarali ish e'lonini yozish bo'yicha maslahatlar"
+      }
+    ],
+    "contact": {
+      "stillNeedHelp": "Yana yordam kerakmi?",
+      "supportSubtitle": "Bizning qo'llab-quvvatlash jamoasiga murojaat qiling — biz 2 ish kuni ichida javob beramiz.",
+      "emailSupport": "Qo'llab-quvvatlashga yozish",
+      "callUs": "Qo'ng'iroq qilish"
+    }
+  }
 }

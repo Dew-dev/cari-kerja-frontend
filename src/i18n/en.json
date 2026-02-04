@@ -35,7 +35,8 @@
     "career": "Career",
     "news": "Work.ua news",
     "help": "Help",
-    "terms": "Terms of use"
+    "terms": "Terms of use",
+    "faq": "FAQ"
   },
   "register": {
     "titleRecruiter": "Recruiter Registration",
@@ -82,17 +83,17 @@
   "edit_job": "Edit Job",
   "category": "Category",
   "select_category": "Select Category",
-  "activeJobs"  : "Active Jobs",
-  "archivedJobs"  : "Archived Jobs",
-  "noJobsFound"  : "No jobs found.",
-  "loadingJobs"  : "Loading jobs...",
+  "activeJobs": "Active Jobs",
+  "archivedJobs": "Archived Jobs",
+  "noJobsFound": "No jobs found.",
+  "loadingJobs": "Loading jobs...",
   "managejobs": "Manage Your Job Vacancies",
   "status": "Status",
   "actions": "Actions",
   "clickHere": "Click Here",
   "forgotyourPassword": "Forget your Password?",
-  "forgotPasswordSubtitle": "Enter your email to reset your password.", 
-  "resetPassword": "Reset Password", 
+  "forgotPasswordSubtitle": "Enter your email to reset your password.",
+  "resetPassword": "Reset Password",
   "sendingResetLink": "Sending reset link...",
   "backToLogin": "Back to Login",
   "resetLinkSent": "A password reset link has been sent to your email.",
@@ -104,5 +105,79 @@
   "goToLogin": "Go to Login",
   "saveChanges": "Save Changes",
   "companyLogo": "Company Logo"
-  
+  ,
+  "faq": {
+    "title": "Help & FAQ",
+    "subtitle": "Answers to common questions for job seekers and employers.",
+    "searchPlaceholder": "Search help articles, e.g. 'how to apply', 'post a job'",
+    "searchButton": "Search",
+    "categories": {
+      "seekers": {
+        "title": "For job seekers",
+        "description": "Applying, profiles and CVs",
+        "links": {
+          "apply": "How to apply for a job",
+          "cv": "Creating and editing your CV",
+          "applications": "Managing applications"
+        }
+      },
+      "employers": {
+        "title": "For employers",
+        "description": "Posting jobs, managing candidates",
+        "links": {
+          "postJob": "Post a job",
+          "searchResumes": "Search resumes",
+          "pricing": "Plans & pricing"
+        }
+      },
+      "account": {
+        "title": "Account & settings",
+        "description": "Sign in, registration, email",
+        "links": {
+          "register": "Register / Login",
+          "reset": "Reset password"
+        }
+      },
+      "technical": {
+        "title": "Technical issues",
+        "description": "Site problems and reporting bugs",
+        "links": {
+          "report": "Report a bug",
+          "browsers": "Supported browsers"
+        }
+      }
+    },
+    "faqs": [
+      {
+        "q": "How do I create an account?",
+        "a": "To create an account click <strong>Register</strong> and follow the steps. You can sign up as a job seeker or as an employer.",
+        "tag": "Account"
+      },
+      {
+        "q": "How do I apply for a job?",
+        "a": "Open the job listing and click <strong>Apply</strong>. You can attach your CV or use your profile to send an application.",
+        "tag": "Jobs"
+      },
+      {
+        "q": "How do I post a job?",
+        "a": "Employers must register and verify their company. After logging in, go to <strong>Post a job</strong> and fill out the form.",
+        "tag": "Employers"
+      },
+      {
+        "q": "I forgot my password — what now?",
+        "a": "Use the <strong>Forgot password</strong> link on the login page to receive an email with reset instructions.",
+        "tag": "Account"
+      }
+    ],
+    "popular": [
+      { "title": "How to apply for a job", "excerpt": "Step-by-step guide for applicants" },
+      { "title": "Posting a job: best practices", "excerpt": "Tips to write an effective job ad" }
+    ],
+    "contact": {
+      "stillNeedHelp": "Still need help?",
+      "supportSubtitle": "Contact our support team and we'll get back to you within 2 business days.",
+      "emailSupport": "Email support",
+      "callUs": "Call us"
+    }
+  }
 }

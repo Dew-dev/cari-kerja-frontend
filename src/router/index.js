@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router"
+import { createRouter, createWebHistory } from "vue-router";
 
 import { useAuthStore } from "../stores/authStore";
 // router.beforeEach((to) => {
@@ -26,6 +26,21 @@ const routes = [
     path: "/",
     name: "home",
     component: () => import("../pages/Home.vue"),
+  },
+  {
+    path: "/about",
+    name: "about",
+    component: () => import("../pages/About.vue"),
+  },
+  {
+    path: "/contact",
+    name: "contact",
+    component: () => import("../pages/Contact.vue"),
+  },
+  {
+    path: "/faq",
+    name: "faq",
+    component: () => import("../pages/FAQ.vue"),
   },
   {
     path: "/login",
@@ -134,11 +149,10 @@ const router = createRouter({
     if (savedPosition) {
       return savedPosition;
     } else {
-      return { top: 0, behavior: 'smooth' };
+      return { top: 0, behavior: "smooth" };
     }
   },
-})
-
+});
 
 router.beforeEach((to) => {
   const auth = useAuthStore();
@@ -161,5 +175,4 @@ router.beforeEach((to) => {
   return true;
 });
 
-
-export default router
+export default router;

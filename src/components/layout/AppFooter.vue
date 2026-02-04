@@ -1,33 +1,30 @@
 <script setup>
-import { ref } from "vue"
-import { useI18n } from "vue-i18n"
-import { useAuthStore } from "../../stores/authStore"
-const auth = useAuthStore()
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useAuthStore } from "../../stores/authStore";
+const auth = useAuthStore();
 
-const { locale, t } = useI18n()
-const open = ref(false)
+const { locale, t } = useI18n();
+const open = ref(false);
 
 const languages = [
   { code: "en", label: "English" },
   { code: "ru", label: "Русский" },
   { code: "uz", label: "O‘zbekcha" },
-]
+];
 
 function setLang(lang) {
-  locale.value = lang
-  localStorage.setItem("lang", lang)
-  open.value = false
+  locale.value = lang;
+  localStorage.setItem("lang", lang);
+  open.value = false;
 }
 </script>
 
 <template>
   <footer class="border-t border-gray-200 bg-white text-sm text-gray-600">
-    
     <div class="max-w-290 w-full mx-auto px-4 py-6 text-sm text-gray-600">
-
       <!-- TOP ROW -->
       <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
-
         <!-- LANGUAGE DROPDOWN -->
         <div class="relative">
           <button
@@ -54,9 +51,12 @@ function setLang(lang) {
         </div>
         <!-- RIGHT SIDE -->
         <div class="flex items-center gap-3 flex-wrap">
-
           <!-- Employers -->
-          <router-link to="/regcruiter" v-if="!auth.isLoggedIn" class="border border-blue-500 text-blue-500 px-4 py-1 rounded">
+          <router-link
+            to="/regcruiter"
+            v-if="!auth.isLoggedIn"
+            class="border border-blue-500 text-blue-500 px-4 py-1 rounded"
+          >
             {{ t("nav.forEmployers") }} →
           </router-link>
         </div>
@@ -64,16 +64,15 @@ function setLang(lang) {
 
       <!-- LINKS -->
       <div class="flex flex-wrap items-center gap-4 mb-2">
-        <a href="#" class="hover:underline">{{ t("footer.contact") }}</a>
-        <a href="#" class="hover:underline">{{ t("footer.about") }}</a>
-        <a href="#" class="hover:underline">{{ t("footer.terms") }}</a>
+        <a href="/contact" class="hover:underline">{{ t("footer.contact") }}</a>
+        <a href="/about" class="hover:underline">{{ t("footer.about") }}</a>
+        <a href="/faq" class="hover:underline">{{ t("footer.faq") }}</a>
       </div>
 
       <!-- COPYRIGHT -->
       <div class="text-gray-500 text-xs">
         © 2006–2026 Jobs.uz. Uzbekistan's #1 job service.
       </div>
-
     </div>
   </footer>
 </template>
