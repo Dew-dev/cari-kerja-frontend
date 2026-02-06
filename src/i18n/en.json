@@ -111,6 +111,11 @@
     "subtitle": "Answers to common questions for job seekers and employers.",
     "searchPlaceholder": "Search help articles, e.g. 'how to apply', 'post a job'",
     "searchButton": "Search",
+    "categoriesHeading": "Popular Categories",
+    "resultSingular": "result",
+    "resultPlural": "results",
+    "resultsFoundFor": "found for",
+    "noResults": "No results found for \"{query}\" — try different keywords",
     "categories": {
       "seekers": {
         "title": "For job seekers",
@@ -448,5 +453,945 @@
     "failedToRemoveSavedJob": "Failed to remove saved job",
     "selectFile": "Please select a file",
     "maxFileSize2MB": "Max file size 2MB"
+  },
+  "about": {
+    "pageTitle": "About",
+    "title": "About Jobs.uz",
+    "heroDescription": "Jobs.uz is a modern job marketplace dedicated to connecting talented professionals with companies in Uzbekistan. We are focused on building a transparent, efficient platform where both job seekers and employers can find the right match.",
+    "ourMission": "Our mission",
+    "history": "History",
+    "missionTitle": "Our mission",
+    "missionDescription": "We believe that every talented professional deserves access to meaningful opportunities, and every company deserves to find the right people for their team. Our platform is designed to make the job search process simpler, faster, and more effective for everyone involved.",
+    "missionDetails": "We are committed to building trust through transparency, providing excellent customer service, and continuously improving our platform. Whether you are looking for your next career move or searching for exceptional talent, Jobs.uz is here to help you succeed. Our growing community includes job seekers from various industries and forward-thinking companies that are shaping Uzbekistan's economy.",
+    "ourStory": "Our story",
+    "launched": "Launched",
+    "launchedDescription": "Jobs.uz was founded with a simple vision: to create a reliable platform where job seekers and employers can connect easily. Starting with core features and a dedicated team, we launched our platform to serve the Uzbek job market.",
+    "expansion": "Building momentum",
+    "expansionDescription": "Throughout 2025, we have focused on expanding our features, improving user experience, and growing our community. We introduced advanced search filters, job recommendations, and enhanced profile management tools to better serve our users.",
+    "future": "Looking ahead",
+    "futureDescription": "As we move into 2026 and beyond, we are committed to continuous innovation. We plan to expand our services, improve our technology infrastructure, and create an even more comprehensive platform for job seekers and employers.",
+    "getInTouch": "Get in touch",
+    "contactDescription": "For partnerships, inquiries, or if you'd like to join our growing team, we would love to hear from you:",
+    "headOffice": "Head Office",
+    "location": "Tashkent, Uzbekistan",
+    "email": "Email",
+    "careers": "Careers",
+    "careersDescription": "Interested in working with us? Send your CV to ",
+    "ctaTitle": "Looking for talent or your next job?",
+    "searchJobs": "Search jobs",
+    "forEmployers": "For employers"
+  },
+  "help": {
+    "common": {
+      "quickNav": "Quick Navigation"
+    },
+    "cv": {
+      "pageTitle": "How to Improve Your CV - Jobs.uz Help",
+      "heroTitle": "How to Improve Your CV",
+      "heroSubtitle": "A well-crafted CV is essential for landing interviews. Learn tips and best practices to make your CV stand out.",
+      "toc": {
+        "format": {
+          "title": "Choose the Right Format",
+          "desc": "Learn about formatting standards"
+        },
+        "summary": {
+          "title": "Write a Strong Summary",
+          "desc": "Capture attention in the first section"
+        },
+        "achievements": {
+          "title": "Highlight Achievements",
+          "desc": "Show results, not just responsibilities"
+        },
+        "education": {
+          "title": "Education and Certifications",
+          "desc": "List qualifications effectively"
+        },
+        "ats": {
+          "title": "Optimize for ATS",
+          "desc": "Ensure systems can read your CV"
+        },
+        "upload": {
+          "title": "Upload Your CV",
+          "desc": "Get noticed by employers"
+        }
+      },
+      "sections": {
+        "format": {
+          "title": "Choose the Right Format",
+          "bullets": [
+            "Use a clean, professional layout with consistent fonts (e.g., Arial, Calibri).",
+            "Keep it concise: 1-2 pages for most roles.",
+            "Avoid fancy graphics unless you're in a creative field.",
+            "Use bullet points and headings to improve readability."
+          ],
+          "note": "A simple, structured CV allows recruiters to quickly find key information."
+        },
+        "summary": {
+          "title": "Write a Strong Summary",
+          "bullets": [
+            "Start with 2-3 sentences about your experience and goals.",
+            "Mention key skills and what you bring to the role.",
+            "Tailor your summary for each job application."
+          ],
+          "example": "Example: 'Experienced software engineer with 5+ years in backend development, specializing in Python and cloud infrastructure. Seeking a senior role to lead innovative projects.'"
+        },
+        "achievements": {
+          "title": "Highlight Achievements",
+          "bullets": [
+            "Use numbers and metrics: 'Increased sales by 20%' instead of 'Responsible for sales.'",
+            "Focus on impact and results rather than duties.",
+            "Demonstrate problem-solving and initiative."
+          ]
+        },
+        "education": {
+          "title": "Education and Certifications",
+          "bullets": [
+            "List your highest degree first, with university name and graduation year.",
+            "Include relevant certifications (e.g., PMP, AWS, Google Analytics).",
+            "Mention honors or awards if applicable."
+          ]
+        },
+        "ats": {
+          "title": "Optimize for Applicant Tracking Systems (ATS)",
+          "bullets": [
+            "Use standard section titles: Work Experience, Education, Skills.",
+            "Include keywords from the job description.",
+            "Avoid images, tables, and complex formatting that ATS cannot parse."
+          ]
+        },
+        "upload": {
+          "title": "Upload Your CV to Jobs.uz",
+          "bullets": [
+            "Go to your profile and upload a PDF version of your CV.",
+            "Keep it updated with your latest experience and skills.",
+            "Employers can view your CV when you apply for jobs or when they search our database."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Ready to update your CV?",
+        "subtitle": "Upload or edit your CV in your profile to get started.",
+        "button": "Go to Profile"
+      }
+    },
+    "applications": {
+      "pageTitle": "Track Your Job Applications - Jobs.uz Help",
+      "heroTitle": "Track Your Job Applications",
+      "heroSubtitle": "Stay organized and follow up effectively on all your applications.",
+      "toc": {
+        "track": {
+          "title": "How to Track Applications",
+          "desc": "View all your submitted applications"
+        },
+        "status": {
+          "title": "Application Status",
+          "desc": "Understand what each status means"
+        },
+        "notes": {
+          "title": "Keep Notes",
+          "desc": "Document your application progress"
+        },
+        "followUp": {
+          "title": "Follow Up",
+          "desc": "Best practices for following up"
+        },
+        "keepApplying": {
+          "title": "Keep Applying",
+          "desc": "Don't wait for one response"
+        }
+      },
+      "sections": {
+        "track": {
+          "title": "How to Track Applications",
+          "body": "Once you apply for a job on Jobs.uz, you can view all your applications in your profile under Applied Jobs. Each entry shows the job title, company, date applied, and current status."
+        },
+        "status": {
+          "title": "Application Status",
+          "bullets": [
+            "Pending: Your application has been submitted and is awaiting review.",
+            "Reviewed: The recruiter has viewed your application.",
+            "Interview: You've been shortlisted for an interview.",
+            "Rejected: Unfortunately, you were not selected for this role.",
+            "Accepted: Congratulations! You've been offered the position."
+          ]
+        },
+        "notes": {
+          "title": "Keep Notes",
+          "body": "Consider maintaining your own notes for each application: date applied, job details, recruiter contact, interview dates, and follow-up reminders. This helps you stay organized and professional."
+        },
+        "followUp": {
+          "title": "Follow Up",
+          "tips": [
+            "Wait at least 1-2 weeks after applying before following up.",
+            "Send a polite email to the recruiter reiterating your interest.",
+            "Keep it brief and professional.",
+            "If you don't hear back after 2 follow-ups, it's time to move on."
+          ]
+        },
+        "keepApplying": {
+          "title": "Keep Applying",
+          "body": "Don't put all your hopes on one application. Continue to search and apply for other positions while you wait. The more applications you submit, the better your chances of landing interviews."
+        }
+      },
+      "cta": {
+        "title": "Check Your Applications",
+        "subtitle": "See all jobs you've applied for and track your progress.",
+        "button": "View My Applications"
+      }
+    },
+    "searchResumes": {
+      "pageTitle": "How to Search Resumes - Jobs.uz Help",
+      "heroTitle": "How to Search Resumes",
+      "heroSubtitle": "Find the right candidates quickly using our resume search tools.",
+      "toc": {
+        "filters": {
+          "title": "Use Filters",
+          "desc": "Narrow down by skills, location, experience"
+        },
+        "keywords": {
+          "title": "Keyword Search",
+          "desc": "Find candidates with specific expertise"
+        },
+        "review": {
+          "title": "Review Profiles",
+          "desc": "Check CVs, experience, and skills"
+        },
+        "shortlist": {
+          "title": "Shortlist Candidates",
+          "desc": "Save promising profiles for later"
+        },
+        "contact": {
+          "title": "Contact Candidates",
+          "desc": "Reach out directly or invite to apply"
+        }
+      },
+      "sections": {
+        "filters": {
+          "title": "Use Filters",
+          "body": "Our resume search allows you to filter by location, skills, job title, education level, and years of experience. Apply multiple filters to find candidates that match your requirements."
+        },
+        "keywords": {
+          "title": "Keyword Search",
+          "body": "Enter keywords related to the skills, tools, or technologies you need. For example, searching for 'Python Django' will show candidates with experience in those areas.",
+          "bullets": [
+            "Search for specific skills like 'Java', 'React', 'Project Management', or 'Sales'.",
+            "Use multiple keywords for more targeted results: 'Full Stack Developer', 'Python Django Developer'.",
+            "Combine keyword search with filters to narrow down candidates even further."
+          ]
+        },
+        "review": {
+          "title": "Review Profiles",
+          "body": "Once you've found potential candidates, take time to review their profiles thoroughly. Check their work experience, skills, education, and endorsements. Download or view their CV to get a better understanding of their qualifications and whether they're a good fit for the role.",
+          "bullets": [
+            "Check the candidate's work experience and achievements.",
+            "Review their education and certifications.",
+            "Look at their skills and endorsements.",
+            "Download or view their uploaded CV for more details."
+          ]
+        },
+        "shortlist": {
+          "title": "Shortlist Candidates",
+          "body": "Save promising candidates to a shortlist so you can easily return to their profiles later. You can also add notes to help you remember why they stood out."
+        },
+        "contact": {
+          "title": "Contact Candidates",
+          "body": "Reach out to candidates directly via the contact information they've provided, or invite them to apply for one of your open positions. Be clear about the role and why you think they'd be a good fit."
+        }
+      },
+      "cta": {
+        "title": "Start Searching for Talent",
+        "subtitle": "Find qualified candidates for your open roles today.",
+        "button": "Search Resumes"
+      }
+    },
+    "pricing": {
+      "pageTitle": "Pricing and Plans - Jobs.uz Help",
+      "heroTitle": "Pricing and Plans",
+      "heroSubtitle": "Understand our pricing options and choose the best plan for your hiring needs.",
+      "toc": {
+        "plans": {
+          "title": "Our Plans",
+          "desc": "Free and premium options"
+        },
+        "credits": {
+          "title": "Job Posting Credits",
+          "desc": "How credits work"
+        },
+        "team": {
+          "title": "Team Accounts",
+          "desc": "Manage multiple recruiters"
+        },
+        "billing": {
+          "title": "Billing",
+          "desc": "Payment methods and invoices"
+        },
+        "trials": {
+          "title": "Free Trials",
+          "desc": "Try premium features risk-free"
+        },
+        "custom": {
+          "title": "Custom Plans",
+          "desc": "For large organizations"
+        }
+      },
+      "sections": {
+        "plans": {
+          "title": "Our Plans",
+          "bullets": [
+            "Free Plan: Post up to 3 jobs per month, basic candidate search.",
+            "Starter: 10 job postings/month, advanced search filters, priority listing.",
+            "Professional: 50 job postings/month, resume database access, dedicated support.",
+            "Enterprise: Unlimited postings, custom branding, API access, account manager."
+          ],
+          "note": "Prices are listed on our Pricing page. All plans include basic features like application tracking and email notifications."
+        },
+        "credits": {
+          "title": "Job Posting Credits",
+          "body": "Each plan includes a certain number of job posting credits per month. If you need more, you can purchase additional credits. Credits roll over for up to 3 months."
+        },
+        "team": {
+          "title": "Team Accounts",
+          "body": "Professional and Enterprise plans allow you to add multiple team members. Each member can manage job postings, review applications, and communicate with candidates."
+        },
+        "billing": {
+          "title": "Billing",
+          "bullets": [
+            "We accept credit cards, PayPal, and bank transfers.",
+            "Subscriptions renew automatically each month or year.",
+            "Invoices are sent by email and available in your account.",
+            "You can cancel anytime with no penalties."
+          ]
+        },
+        "trials": {
+          "title": "Free Trials",
+          "body": "New users can try premium features for 14 days at no cost. No credit card required. After the trial, you can choose to upgrade or continue with the free plan."
+        },
+        "custom": {
+          "title": "Custom Plans",
+          "body": "If you have unique needs or require features not included in our standard plans, contact our sales team to discuss a custom solution. We work with large enterprises and recruitment agencies to create tailored packages."
+        }
+      },
+      "cta": {
+        "title": "Ready to Upgrade?",
+        "subtitle": "Choose a plan that fits your hiring needs.",
+        "button": "View Pricing"
+      }
+    },
+    "register": {
+      "pageTitle": "How to Register - Jobs.uz Help",
+      "heroTitle": "How to Register",
+      "heroSubtitle": "Create your account and start applying for jobs or posting vacancies.",
+      "toc": {
+        "type": {
+          "title": "Choose Account Type",
+          "desc": "Job seeker or recruiter account"
+        },
+        "registration": {
+          "title": "Registration Steps",
+          "desc": "Fill out the form and submit"
+        },
+        "verify": {
+          "title": "Verify Your Email",
+          "desc": "Check your inbox for a confirmation link"
+        },
+        "profile": {
+          "title": "Complete Your Profile",
+          "desc": "Add details to get started"
+        },
+        "security": {
+          "title": "Security Tips",
+          "desc": "Keep your account safe"
+        }
+      },
+      "sections": {
+        "type": {
+          "title": "Choose Account Type",
+          "body": "When registering on Jobs.uz, you need to choose between two account types: Job Seeker or Recruiter/Employer. Job Seekers can create a profile, upload their CV, and apply for jobs. Recruiters and Employers can post jobs, search resumes, and manage candidates. You can only have one account type per email address, so choose carefully based on your primary goal.",
+          "bullets": [
+            "Job Seeker: Create a profile, upload your CV, and apply for jobs.",
+            "Recruiter/Employer: Post jobs, search resumes, and manage candidates."
+          ],
+          "note": "You can only have one account type per email address. Choose carefully based on your primary goal."
+        },
+        "registration": {
+          "title": "Registration Steps",
+          "bullets": [
+            "Click Register or Sign Up on the homepage.",
+            "Select your account type (Job Seeker or Recruiter).",
+            "Enter your email, create a password, and fill in your name."
+          ]
+        },
+        "verify": {
+          "title": "Verify Your Email",
+          "body": "After registration, we'll send a verification email to the address you provided. Click the link in the email to activate your account. If you don't see the email, check your spam folder or request a new verification link."
+        },
+        "profile": {
+          "title": "Complete Your Profile",
+          "body": "After verifying your email, take time to complete your profile. Job Seekers should add their work experience, education, skills, and upload their CV. Recruiters should add company details, logo, and contact information. A complete profile increases your visibility and helps you get better results on the platform.",
+          "bullets": [
+            "Job Seekers: Add your work experience, education, skills, and upload your CV.",
+            "Recruiters: Add company details, logo, and contact information."
+          ],
+          "note": "A complete profile increases your visibility and helps you get better results."
+        },
+        "security": {
+          "title": "Security Tips",
+          "body": "Keep your account secure by following these best practices: Use a strong, unique password that you don't use on other websites. Enable two-factor authentication if available to add an extra layer of security. Never share your password with anyone, and always log out when using shared or public computers.",
+          "bullets": [
+            "Use a strong, unique password.",
+            "Enable two-factor authentication if available.",
+            "Never share your password with anyone.",
+            "Log out when using shared or public computers."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Ready to Get Started?",
+        "subtitle": "Create your account now and unlock all features.",
+        "button": "Register Now"
+      }
+    },
+    "resetPassword": {
+      "pageTitle": "How to Reset Your Password - Jobs.uz Help",
+      "heroTitle": "How to Reset Your Password",
+      "heroSubtitle": "Forgot your password? Follow these steps to regain access to your account.",
+      "toc": {
+        "start": {
+          "title": "Start the Reset Process",
+          "desc": "Click 'Forgot Password' on login page"
+        },
+        "email": {
+          "title": "Check Your Email",
+          "desc": "Look for the reset link"
+        },
+        "password": {
+          "title": "Set a New Password",
+          "desc": "Choose a strong, unique password"
+        },
+        "issues": {
+          "title": "Troubleshooting",
+          "desc": "What to do if it doesn't work"
+        },
+        "security": {
+          "title": "Security Best Practices",
+          "desc": "Keep your account safe"
+        }
+      },
+      "sections": {
+        "start": {
+          "title": "Start the Reset Process",
+          "body": "If you've forgotten your password, you can easily reset it by following these steps: Go to the login page, click 'Forgot Password' or 'Reset Password' link, enter the email address associated with your account, and click 'Send Reset Link'. You'll receive an email with instructions to create a new password.",
+          "steps": [
+            "Go to the login page.",
+            "Click Forgot Password or Reset Password link.",
+            "Enter the email address associated with your account.",
+            "Click Send Reset Link."
+          ]
+        },
+        "email": {
+          "title": "Check Your Email",
+          "body": "We'll send a password reset link to your email address. This link is valid for 1 hour. If you don't receive the email within a few minutes, check your spam folder or try requesting a new link."
+        },
+        "password": {
+          "title": "Set a New Password",
+          "bullets": [
+            "Click the link in the email to open the reset page.",
+            "Enter your new password (at least 8 characters, including letters and numbers).",
+            "Confirm your new password by typing it again.",
+            "Click Update Password."
+          ],
+          "note": "Your new password must be different from your previous password."
+        },
+        "issues": {
+          "title": "Troubleshooting",
+          "body": "If you're having trouble resetting your password, here are some common issues and solutions: Check your spam folder if the email hasn't arrived, request a new link if the previous one expired, verify you're using the correct email address associated with your account, and contact our support team if problems persist.",
+          "bullets": [
+            "Email not arriving? Check spam or wait a few minutes before requesting again.",
+            "Link expired? Request a new reset link.",
+            "Email address not recognized? Make sure you're using the correct email associated with your account.",
+            "Still having trouble? Contact our support team."
+          ]
+        },
+        "security": {
+          "title": "Security Best Practices",
+          "body": "Keep your account secure by following these best practices: Use a unique, strong password that you don't use on other websites, consider using a password manager to generate and store complex passwords, update your password regularly (every 3-6 months), and if you suspect any unauthorized access to your account, reset your password immediately and review your account activity.",
+          "bullets": [
+            "Use a unique password for Jobs.uz (don't reuse passwords from other sites).",
+            "Consider using a password manager.",
+            "Update your password regularly.",
+            "If you suspect unauthorized access, reset your password immediately."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Need More Help?",
+        "subtitle": "Contact our support team if you're unable to reset your password.",
+        "button": "Contact Support"
+      }
+    },
+    "reportIssue": {
+      "pageTitle": "How to Report an Issue - Jobs.uz Help",
+      "heroTitle": "How to Report an Issue",
+      "heroSubtitle": "Encountered a bug or technical problem? Let us know so we can fix it.",
+      "toc": {
+        "describe": {
+          "title": "Describe the Problem",
+          "desc": "Explain what went wrong"
+        },
+        "steps": {
+          "title": "Steps to Reproduce",
+          "desc": "Help us understand how it happened"
+        },
+        "screenshots": {
+          "title": "Include Screenshots",
+          "desc": "Visual evidence helps"
+        },
+        "device": {
+          "title": "Device and Browser Info",
+          "desc": "Tell us your setup"
+        },
+        "response": {
+          "title": "What Happens Next",
+          "desc": "Our support process"
+        }
+      },
+      "sections": {
+        "describe": {
+          "title": "Describe the Problem",
+          "body": "Provide a clear description of the issue. What were you trying to do? What happened instead? The more details you provide, the faster we can identify and fix the problem.",
+          "example": "Example: 'I tried to upload my CV in PDF format, but I got an error message saying the file type is not supported, even though it's a valid PDF.'"
+        },
+        "steps": {
+          "title": "Steps to Reproduce",
+          "body": "List the exact steps that led to the issue:",
+          "bullets": [
+            "What page were you on?",
+            "What actions did you take (clicked a button, filled a form, etc.)?",
+            "What error message or unexpected behavior occurred?"
+          ]
+        },
+        "screenshots": {
+          "title": "Include Screenshots",
+          "body": "If possible, attach screenshots or screen recordings showing the problem. This helps our team see exactly what you're experiencing."
+        },
+        "device": {
+          "title": "Device and Browser Info",
+          "body": "Tell us:",
+          "bullets": [
+            "What device are you using (desktop, mobile, tablet)?",
+            "What browser and version (Chrome, Firefox, Safari, etc.)?",
+            "What operating system (Windows, macOS, iOS, Android)?"
+          ]
+        },
+        "response": {
+          "title": "What Happens Next",
+          "body": "Our support team will review your report within 1-2 business days. If we need more information, we'll reach out via email. Once the issue is resolved, we'll notify you. Thank you for helping us improve Jobs.uz!"
+        }
+      },
+      "cta": {
+        "title": "Ready to Report?",
+        "subtitle": "Use our contact form or email support@jobs.uz.",
+        "button": "Contact Support"
+      }
+    },
+    "supportedBrowsers": {
+      "pageTitle": "Supported Browsers - Jobs.uz Help",
+      "heroTitle": "Supported Browsers",
+      "heroSubtitle": "Ensure the best experience by using a modern, up-to-date browser.",
+      "toc": {
+        "browsers": {
+          "title": "Recommended Browsers",
+          "desc": "Which browsers we support"
+        },
+        "requirements": {
+          "title": "Minimum Requirements",
+          "desc": "Versions and settings"
+        },
+        "cookies": {
+          "title": "Enable Cookies",
+          "desc": "Required for login and features"
+        },
+        "cache": {
+          "title": "Clear Cache",
+          "desc": "Fix loading issues"
+        },
+        "mobile": {
+          "title": "Mobile Browsers",
+          "desc": "Using Jobs.uz on your phone"
+        }
+      },
+      "sections": {
+        "browsers": {
+          "title": "Recommended Browsers",
+          "body": "Jobs.uz works best on the latest versions of:",
+          "bullets": [
+            "Google Chrome",
+            "Mozilla Firefox",
+            "Microsoft Edge",
+            "Safari (macOS and iOS)",
+            "Opera"
+          ],
+          "note": "We strongly recommend keeping your browser updated to ensure security and compatibility."
+        },
+        "requirements": {
+          "title": "Minimum Requirements",
+          "bullets": [
+            "Chrome 90+",
+            "Firefox 88+",
+            "Edge 90+",
+            "Safari 14+",
+            "Opera 76+"
+          ],
+          "body": "Older versions may work but could have display or functionality issues."
+        },
+        "cookies": {
+          "title": "Enable Cookies",
+          "body": "Jobs.uz requires cookies to maintain your session and remember your preferences. Make sure cookies are enabled in your browser settings. Without cookies, you won't be able to log in or use certain features."
+        },
+        "cache": {
+          "title": "Clear Cache",
+          "body": "If you experience loading problems or see outdated content, try clearing your browser cache:",
+          "bullets": [
+            "Chrome: Settings > Privacy and security > Clear browsing data",
+            "Firefox: Options > Privacy & Security > Cookies and Site Data > Clear Data",
+            "Safari: Preferences > Privacy > Manage Website Data > Remove All",
+            "Edge: Settings > Privacy, search, and services > Clear browsing data"
+          ]
+        },
+        "mobile": {
+          "title": "Mobile Browsers",
+          "body": "Jobs.uz is fully responsive and works on mobile devices. We recommend using:",
+          "bullets": [
+            "Safari on iOS",
+            "Chrome on Android",
+            "Firefox on Android"
+          ],
+          "note": "For the best mobile experience, make sure your browser is up to date and you have a stable internet connection."
+        }
+      },
+      "cta": {
+        "title": "Still Having Issues?",
+        "subtitle": "Contact our support team if you experience problems with your browser.",
+        "button": "Contact Support"
+      }
+    },
+    "apply": {
+      "pageTitle": "How to Apply for a Job - Jobs.uz Help",
+      "heroTitle": "How to Apply for a Job",
+      "heroSubtitle": "A complete guide to applying for jobs and landing interviews on Jobs.uz.",
+      "toc": {
+        "profile": {
+          "title": "Complete Your Profile",
+          "desc": "Set up your account first"
+        },
+        "resume": {
+          "title": "Prepare Your Resume",
+          "desc": "Upload and optimize your CV"
+        },
+        "search": {
+          "title": "Search for Jobs",
+          "desc": "Find the right opportunities"
+        },
+        "apply": {
+          "title": "Submit Your Application",
+          "desc": "Apply with confidence"
+        },
+        "followUp": {
+          "title": "Follow Up",
+          "desc": "What to do after applying"
+        },
+        "mistakes": {
+          "title": "Common Mistakes",
+          "desc": "Avoid these errors"
+        },
+        "interview": {
+          "title": "Prepare for Interviews",
+          "desc": "Get ready to impress"
+        }
+      },
+      "sections": {
+        "profile": {
+          "title": "Complete Your Profile",
+          "cardTitle": "Profile Essentials",
+          "bullets": [
+            "Add your full name, contact information, and location.",
+            "Upload a professional photo.",
+            "Write a compelling profile summary (2-3 sentences about your experience and goals).",
+            "List your skills, work experience, and education.",
+            "Keep your profile updated as you gain new skills or experience.",
+            "Make sure all information is accurate and up-to-date."
+          ],
+          "note": "Tip: Employers often review your profile before deciding to contact you. A complete, professional profile increases your chances of being noticed."
+        },
+        "resume": {
+          "title": "Prepare Your Resume",
+          "cardTitle": "Resume Best Practices",
+          "bullets": [
+            "Use a clear, professional format (avoid fancy graphics unless you're in a creative field).",
+            "Keep it concise: 1-2 pages for most roles.",
+            "Tailor your resume for each job by highlighting relevant experience and skills.",
+            "Use bullet points and quantify achievements (e.g., 'Increased sales by 25%').",
+            "Proofread carefully for spelling and grammar errors.",
+            "Save your resume as a PDF to preserve formatting.",
+            "Include your contact information and professional links (LinkedIn, portfolio, etc.)."
+          ],
+          "tipLabel": "Pro Tip",
+          "tipBody": "Upload your resume to your Jobs.uz profile so you can quickly apply to multiple jobs without re-uploading each time."
+        },
+        "search": {
+          "title": "Search for Jobs",
+          "cardTitle": "Job Search Tips",
+          "bullets": [
+            "Enter keywords related to the job title, skills, or industry.",
+            "Filter by location, salary range, employment type (full-time, part-time, remote), and more.",
+            "Set up job alerts to receive email notifications when new matching jobs are posted.",
+            "Save jobs you're interested in to your 'Saved Jobs' list for later review.",
+            "Use specific keywords from the job description to improve search results.",
+            "Regularly check your saved jobs and update your search criteria."
+          ],
+          "note": "Pro Tip: Apply early. Many employers review applications as they come in, so applying soon after a job is posted can give you an advantage."
+        },
+        "apply": {
+          "title": "Submit Your Application",
+          "cardTitle": "Application Submission Steps",
+          "bullets": [
+            "Click Apply on the job listing.",
+            "Choose the resume you want to submit (or upload a new one).",
+            "Write a cover letter if required. Tailor it to the specific job and company.",
+            "Answer any additional questions the employer has included (e.g., availability, salary expectations).",
+            "Review your application to make sure everything is correct.",
+            "Click Submit Application.",
+            "You'll receive a confirmation email after successful submission."
+          ],
+          "templateTitle": "Sample Cover Letter",
+          "templateBody": "Dear [Hiring Manager Name],\n\nI am writing to express my strong interest in the [Job Title] position at [Company Name]. With [X years] of experience in [relevant field] and a proven track record of [key achievement], I am confident I can make a significant contribution to your team.\n\nKey strengths I would bring:\n- [Relevant skill/achievement #1]\n- [Relevant skill/achievement #2]\n- [Relevant skill/achievement #3]\n\nI am excited about the opportunity to contribute to [Company Name] and would welcome the chance to discuss how my background aligns with your needs.\n\nThank you for considering my application.\nBest regards,\n[Your Name]"
+        },
+        "followUp": {
+          "title": "Follow Up",
+          "cardTitle": "Following Up After Applying",
+          "bullets": [
+            "Track your application status in your profile under 'Applied Jobs.'",
+            "Wait at least 1-2 weeks before following up with the employer.",
+            "If you have the recruiter's contact information, send a polite email reiterating your interest and asking about the timeline.",
+            "Keep applying to other jobs while you wait. Don't put all your hopes on one application.",
+            "Be professional and courteous in all communication.",
+            "Document follow-up dates and responses for your records."
+          ],
+          "tipLabel": "Follow-up Tip",
+          "tipBody": "If you don't hear back after 2-3 weeks, it's okay to follow up once more. After that, it's time to focus on other opportunities."
+        },
+        "mistakes": {
+          "title": "Common Mistakes to Avoid",
+          "items": [
+            {
+              "title": "Generic Applications",
+              "body": "Applying without tailoring your resume or cover letter to the job. Each application should address why you're a good fit for that specific role."
+            },
+            {
+              "title": "Careless Errors",
+              "body": "Submitting applications with typos, formatting errors, or outdated information. Proofread everything before submitting."
+            },
+            {
+              "title": "Ignoring Instructions",
+              "body": "Not following application instructions (e.g., answering required questions, using specific file formats). Employers notice when you don't follow directions."
+            },
+            {
+              "title": "Overqualification or Underqualification",
+              "body": "Applying for jobs that are far above or below your skill level. Choose positions where you meet at least 70% of the requirements."
+            },
+            {
+              "title": "No Follow-up Strategy",
+              "body": "Forgetting to follow up or track your applications. Keep organized notes on every job you apply for and when to follow up."
+            }
+          ]
+        },
+        "interview": {
+          "title": "Prepare for Interviews",
+          "cardTitle": "Interview Preparation Guide",
+          "bullets": [
+            "Research the company: Learn about their products, services, culture, and recent news.",
+            "Review the job description and prepare examples of how your experience matches the requirements.",
+            "Practice answering common interview questions (e.g., 'Tell me about yourself,' 'Why do you want this job?').",
+            "Prepare questions to ask the interviewer (e.g., 'What does success look like in this role?').",
+            "Dress professionally and arrive (or log in) on time.",
+            "Follow up with a thank-you email within 24 hours after the interview.",
+            "Be confident, authentic, and show genuine interest in the role and company."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Ready to Start Applying?",
+        "subtitle": "Search for jobs and submit your first application today.",
+        "button": "Search Jobs"
+      }
+    },
+    "postJob": {
+      "pageTitle": "How to Post a Job - Jobs.uz Help",
+      "heroTitle": "How to Post a Job",
+      "heroSubtitle": "A comprehensive guide for employers and recruiters to post effective job listings on Jobs.uz.",
+      "toc": {
+        "start": {
+          "title": "Getting Started",
+          "desc": "Account setup and requirements"
+        },
+        "description": {
+          "title": "Write a Job Description",
+          "desc": "Craft a compelling listing"
+        },
+        "details": {
+          "title": "Add Job Details",
+          "desc": "Location, salary, employment type"
+        },
+        "skills": {
+          "title": "Required Skills",
+          "desc": "List qualifications and experience"
+        },
+        "attract": {
+          "title": "Attract Candidates",
+          "desc": "Make your job stand out"
+        },
+        "manage": {
+          "title": "Manage Applications",
+          "desc": "Review and respond to candidates"
+        },
+        "mistakes": {
+          "title": "Common Mistakes",
+          "desc": "Avoid these pitfalls"
+        },
+        "optimize": {
+          "title": "Optimize Your Listing",
+          "desc": "Get more qualified applicants"
+        },
+        "after": {
+          "title": "After Posting",
+          "desc": "Next steps and best practices"
+        }
+      },
+      "sections": {
+        "start": {
+          "title": "Getting Started",
+          "cardTitle": "Steps to Post Your First Job",
+          "body": "To post a job on Jobs.uz, you need a recruiter or employer account:",
+          "bullets": [
+            "Register as a recruiter/employer if you haven't already.",
+            "Complete your company profile (add logo, description, website, etc.).",
+            "Verify your email and company information.",
+            "Choose a pricing plan or use your free job credits.",
+            "Click 'Post a Job' from your dashboard."
+          ],
+          "tipLabel": "Important Note",
+          "tipBody": "You must have an active account and available job posting credits to publish a job."
+        },
+        "description": {
+          "title": "Write a Job Description",
+          "body": "A clear, detailed job description attracts the right candidates and saves you time:",
+          "bullets": [
+            "Start with a brief summary: What is the role and why is it important?",
+            "List key responsibilities: What will the person do day-to-day?",
+            "Outline required qualifications: Education, experience, skills, certifications.",
+            "Mention preferred qualifications: Nice-to-have skills or experience.",
+            "Describe your company culture and values.",
+            "Include benefits and perks (salary range, health insurance, remote work, etc.)."
+          ],
+          "template": "Example Template:",
+          "templateContent": "Job Title: Senior Software Engineer\n\nAbout Us: [Company Name] is a fast-growing tech company specializing in [industry]. We're looking for a talented engineer to join our team.\n\nResponsibilities:\n- Design and develop scalable web applications\n- Collaborate with product and design teams\n- Write clean, maintainable code\n\nQualifications:\n- 5+ years of experience in software development\n- Proficiency in Python, JavaScript, and SQL\n- Experience with cloud platforms (AWS, Azure, or GCP)\n\nWhat We Offer:\n- Competitive salary\n- Health insurance\n- Flexible working hours\n- Professional development opportunities"
+        },
+        "details": {
+          "title": "Add Job Details",
+          "cardTitle": "Essential Job Details",
+          "body": "Provide specific details to help candidates understand the role:",
+          "bullets": [
+            "Job Title: Use a clear, standard title (e.g., 'Marketing Manager' instead of 'Marketing Ninja').",
+            "Location: Specify city or if the job is remote.",
+            "Employment Type: Full-time, part-time, contract, or internship.",
+            "Salary Range: Be transparent about compensation. If you can't share exact numbers, provide a range.",
+            "Category: Choose the most relevant job category.",
+            "Deadline: Set an application deadline if applicable."
+          ],
+          "tipLabel": "Pro Tip",
+          "tipBody": "Jobs with salary information receive 30% more applications on average."
+        },
+        "skills": {
+          "title": "Required Skills",
+          "body": "List the technical and soft skills required for the role. Be specific:",
+          "examples": [
+            "Software Developer: Python, Django, REST APIs, Git, Docker",
+            "Marketing Manager: SEO, Google Analytics, Content Strategy, Social Media Marketing",
+            "Graphic Designer: Adobe Photoshop, Illustrator, Figma, UI/UX Design",
+            "Sales Representative: CRM software, Negotiation, Cold Calling, Lead Generation"
+          ],
+          "note": "Note: Don't list too many skills. Focus on the 5-10 most important ones to avoid overwhelming candidates."
+        },
+        "attract": {
+          "title": "Attract Top Candidates",
+          "body": "Make your job listing stand out:",
+          "bullets": [
+            "Use clear, engaging language (avoid jargon).",
+            "Highlight what makes your company unique (culture, mission, growth opportunities).",
+            "Emphasize benefits and perks.",
+            "Include photos or videos of your office or team if possible.",
+            "Respond promptly to applicants to show professionalism."
+          ],
+          "tip": "Tip: Candidates are more likely to apply if they feel a connection to your company's mission and values."
+        },
+        "manage": {
+          "title": "Manage Applications",
+          "body": "Once your job is live, applications will start coming in:",
+          "steps": [
+            "Review applications in your dashboard under 'Applicants.'",
+            "Sort and filter candidates by status, skills, or experience.",
+            "View resumes, cover letters, and any additional questions you asked.",
+            "Change applicant status (Pending, Reviewed, Interview, Rejected, Accepted).",
+            "Contact candidates directly via email or phone.",
+            "Keep notes on each candidate to stay organized.",
+            "Send interview invitations or rejection letters promptly."
+          ],
+          "tip": "Tip: Respond to all applicants, even if it's just a quick rejection email. It reflects well on your company and improves the candidate experience."
+        },
+        "mistakes": {
+          "title": "Common Mistakes to Avoid",
+          "bullets": [
+            "Vague job titles or descriptions that don't clearly explain the role.",
+            "Not including salary information (this can deter qualified candidates).",
+            "Listing too many requirements (this can discourage people from applying).",
+            "Failing to proofread (typos and errors make your company look unprofessional).",
+            "Not responding to applicants in a timely manner.",
+            "Posting duplicate jobs (this confuses candidates and wastes your credits)."
+          ]
+        },
+        "optimize": {
+          "title": "Optimize Your Listing",
+          "body": "Improve your job posting to get more qualified applicants:",
+          "tips": [
+            "Use relevant keywords that candidates might search for.",
+            "Be specific about the role and requirements.",
+            "Keep the description concise but informative (aim for 300-600 words).",
+            "Include a clear call to action (e.g., 'Apply now with your resume and cover letter').",
+            "Update your listing if you're not getting the right candidates.",
+            "Promote your job on social media or your website.",
+            "Consider using premium features like featured listings or job boosts.",
+            "Monitor your job's performance (views, applications) and adjust as needed."
+          ]
+        },
+        "after": {
+          "title": "After Posting",
+          "body": "What to do once your job is live:",
+          "steps": [
+            "Monitor applications daily and respond promptly.",
+            "Review your job posting analytics to see how many people are viewing and applying.",
+            "Edit your listing if needed (you can update details at any time).",
+            "Close the job once you've found the right candidate.",
+            "Leave feedback for candidates if they request it.",
+            "Archive old job postings to keep your dashboard organized.",
+            "Plan ahead: If you have ongoing hiring needs, consider a subscription plan for multiple postings."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Ready to Post Your First Job?",
+        "subtitle": "Start attracting top talent today.",
+        "button": "Post a Job"
+      }
+    }
   }
 }

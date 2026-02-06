@@ -30,7 +30,7 @@
         <ol class="flex items-center gap-2 text-sm text-gray-600">
           <li>
             <router-link to="/" class="hover:text-blue-600">{{
-              $t("home")
+              $t("home.home")
             }}</router-link>
           </li>
           <li>/</li>

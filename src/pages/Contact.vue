@@ -185,12 +185,16 @@
           <div class="flex items-center gap-3">
             <button
               type="submit"
-              class="bg-blue-500 text-white px-4 py-2 rounded font-semibold"
+              :disabled="loading"
+              class="bg-blue-500 text-white px-4 py-2 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Send message
+              {{ loading ? "Sending..." : "Send message" }}
             </button>
             <div v-if="sent" class="text-green-600 font-medium">
-              Your message was sent (demo).
+              Your message was sent successfully.
+            </div>
+            <div v-if="error" class="text-red-600 font-medium">
+              {{ error }}
             </div>
           </div>
         </form>
@@ -231,20 +235,39 @@
 
 <script setup>
 import { reactive, ref } from "vue";
+import axios from "axios";
 
 const form = reactive({ name: "", email: "", subject: "", message: "" });
 const sent = ref(false);
+const loading = ref(false);
+const error = ref("");
 
-function onSubmit() {
-  // Demo behavior: show a success message and reset form
-  sent.value = true;
-  setTimeout(() => {
-    form.name = "";
-    form.email = "";
-    form.subject = "";
-    form.message = "";
-    sent.value = false;
-  }, 1600);
+async function onSubmit() {
+  loading.value = true;
+  error.value = "";
+
+  try {
+    const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1";
+    const response = await axios.post(`${baseURL}/contact-us`, {
+      name: form.name,
+      email: form.email,
+      subject: form.subject,
+      message: form.message,
+    });
+
+    sent.value = true;
+    setTimeout(() => {
+      form.name = "";
+      form.email = "";
+      form.subject = "";
+      form.message = "";
+      sent.value = false;
+    }, 1600);
+  } catch (err) {
+    error.value = err.response?.data?.message || "Failed to send message. Please try again.";
+  } finally {
+    loading.value = false;
+  }
 }
 
 function mounted() {

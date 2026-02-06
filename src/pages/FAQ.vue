@@ -24,15 +24,29 @@
               <button
                 type="button"
                 @click="onSearch"
-                class="px-4 bg-blue-600 text-white font-semibold hover:opacity-95 focus:outline-none w-full sm:w-auto"
+                :disabled="!query.trim()"
+                class="px-4 bg-blue-600 text-white font-semibold hover:opacity-95 focus:outline-none w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Search"
               >
                 {{ t("faq.searchButton") }}
               </button>
+              <button
+                v-if="query"
+                type="button"
+                @click="clearSearch"
+                class="px-4 bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 focus:outline-none w-full sm:w-auto"
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
             </div>
-            <p v-if="query" class="text-sm text-gray-600 mt-2">
-              Showing results for "{{ query }}" — use the categories below to
-              refine.
+            <p v-if="query && searchResultsCount !== null" class="text-sm text-gray-600 mt-2">
+              {{ searchResultsCount }}
+              {{ searchResultsCount === 1 ? t("faq.resultSingular") : t("faq.resultPlural") }}
+              {{ t("faq.resultsFoundFor") }} "{{ query }}"
+            </p>
+            <p v-else-if="query && searchResultsCount === 0" class="text-sm text-red-600 mt-2">
+              {{ t("faq.noResults", { query }) }}
             </p>
           </div>
         </div>
@@ -171,26 +185,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
 const router = useRouter();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const query = ref("");
 const openIndex = ref(null);
 
-const categories = [
+const categories = computed(() => [
   {
     id: "seekers",
     title: t("faq.categories.seekers.title"),
     description: t("faq.categories.seekers.description"),
     links: [
-      { label: t("faq.categories.seekers.links.apply"), to: "/jobs" },
-      { label: t("faq.categories.seekers.links.cv"), to: "/profile" },
+      { label: t("faq.categories.seekers.links.apply"), to: "/help/apply" },
+      { label: t("faq.categories.seekers.links.cv"), to: "/help/cv" },
       {
         label: t("faq.categories.seekers.links.applications"),
-        to: "/profile",
+        to: "/help/applications",
       },
     ],
   },
@@ -201,16 +215,16 @@ const categories = [
     links: [
       {
         label: t("faq.categories.employers.links.postJob"),
-        to: "/recruiter/create-job",
+        to: "/help/post-job",
       },
       {
         label: t("faq.categories.employers.links.searchResumes"),
-        to: "/recruiter",
+        to: "/help/search-resumes",
       },
-      {
-        label: t("faq.categories.employers.links.pricing"),
-        to: "/pricing",
-      },
+      // {
+      //   label: t("faq.categories.employers.links.pricing"),
+      //   to: "/help/pricing",
+      // },
     ],
   },
   {
@@ -220,11 +234,11 @@ const categories = [
     links: [
       {
         label: t("faq.categories.account.links.register"),
-        to: "/auth/login",
+        to: "/help/register",
       },
       {
         label: t("faq.categories.account.links.reset"),
-        to: "/auth/forgot",
+        to: "/help/reset-password",
       },
     ],
   },
@@ -235,14 +249,17 @@ const categories = [
     links: [
       {
         label: t("faq.categories.technical.links.report"),
-        to: "/contact",
+        to: "/help/report-issue",
       },
-      { label: t("faq.categories.technical.links.browsers"), to: "/" },
+      {
+        label: t("faq.categories.technical.links.browsers"),
+        to: "/help/supported-browsers",
+      },
     ],
   },
-];
+]);
 
-const faqs = [
+const allFaqs = computed(() => [
   {
     q: t("faq.faqs.0.q"),
     a: t("faq.faqs.0.a"),
@@ -263,9 +280,34 @@ const faqs = [
     a: t("faq.faqs.3.a"),
     tag: t("faq.faqs.3.tag"),
   },
-];
+]);
 
-const popular = [
+const faqs = computed(() => {
+  if (!query.value.trim()) {
+    return allFaqs.value;
+  }
+
+  const searchTerm = query.value.toLowerCase();
+  return allFaqs.value.filter((faq) => {
+    const question = faq.q.toLowerCase();
+    const answer = faq.a.toLowerCase();
+    const tag = faq.tag.toLowerCase();
+    return (
+      question.includes(searchTerm) ||
+      answer.includes(searchTerm) ||
+      tag.includes(searchTerm)
+    );
+  });
+});
+
+const searchResultsCount = computed(() => {
+  if (!query.value.trim()) {
+    return null;
+  }
+  return faqs.value.length;
+});
+
+const popular = computed(() => [
   {
     title: t("faq.popular.0.title"),
     excerpt: t("faq.popular.0.excerpt"),
@@ -276,35 +318,37 @@ const popular = [
     excerpt: t("faq.popular.1.excerpt"),
     to: "/help/post-job",
   },
-];
+]);
 
 function toggle(i) {
   openIndex.value = openIndex.value === i ? null : i;
 }
 
 function onSearch() {
-  // Lightweight placeholder: in a full implementation we'd query the backend
-  if (!query.value) return;
-  // scroll to FAQ section and open first matching item
-  const first = faqs.findIndex((f) =>
-    f.q.toLowerCase().includes(query.value.toLowerCase()),
-  );
-  if (first >= 0) {
-    openIndex.value = first;
-    // smooth scroll to the matched item
+  if (!query.value.trim()) return;
+
+  // Close any open accordion and open first result
+  if (faqs.value.length > 0) {
+    const firstIndex = allFaqs.value.findIndex((f) => f === faqs.value[0]);
+    openIndex.value = firstIndex;
+
+    // Smooth scroll to the matched item
     setTimeout(() => {
-      const el = document.querySelectorAll(
-        ".max-w-290 .bg-white.border.rounded",
-      )[first];
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+      const sections = document.querySelectorAll(".bg-gray-50 .space-y-3");
+      if (sections[0]) {
+        sections[0].scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }, 100);
   }
 }
 
+function clearSearch() {
+  query.value = "";
+  openIndex.value = null;
+}
+
 function navigate(to) {
-  // small defensive check: if it's an external link or mailto/tel, just navigate
   if (!to) return;
-  // prefer router for internal routes
   if (
     to.startsWith("http") ||
     to.startsWith("mailto:") ||
@@ -325,6 +369,10 @@ function callSupport() {
 }
 
 onMounted(() => {
+  document.title = t("faq.title");
+});
+
+watch(locale, () => {
   document.title = t("faq.title");
 });
 </script>

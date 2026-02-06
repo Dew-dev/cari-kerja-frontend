@@ -773,7 +773,7 @@ watch(activeTab, (newTab) => {
         </div>
         <RouterLink
           to="/change-password"
-          class="rounded-full bg-gray-900 text-white px-4 py-2 text-sm hover:bg-gray-800 transition text-center md:text-left"
+          class="rounded-full font-semibold bg-gray-900 text-white px-4 py-2 text-sm hover:bg-gray-800 transition text-center md:text-left"
         >
           {{ $t('profile.changePassword') }}
         </RouterLink>

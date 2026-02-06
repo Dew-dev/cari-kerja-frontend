@@ -91,99 +91,136 @@ async function submit() {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50">
-    <div class="w-full max-w-sm bg-white p-6 rounded-lg shadow-lg">
-
-      <h1 class="text-xl font-semibold mb-4">
-        {{ t("register.title") }}
-      </h1>
-
-      <form @submit.prevent="submit" class="space-y-4">
-
-        <!-- NAME -->
-        <div>
-          <label class="block text-sm mb-1">{{ t("register.fullName") }}</label>
-          <input
-            v-model="form.name"
-            type="text"
-            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
-            required
-          />
-          <p v-if="errors.name" class="text-red-600 text-xs mt-1">
-            {{ errors.name }}
-          </p>
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div class="w-full max-w-md">
+      <!-- Card Container -->
+      <div class="bg-white shadow-2xl rounded-3xl p-8 md:p-10">
+        <!-- Logo/Branding -->
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-14 h-14 bg-linear-to-br from-blue-600 to-indigo-600 rounded-full mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ t("register.title") }}</h1>
+          <p class="text-gray-600">Join our community and find your next opportunity</p>
         </div>
 
-        <!-- USERNAME -->
-        <div>
-          <label class="block text-sm mb-1">{{ t("register.username") }}</label>
-          <input
-            v-model="form.username"
-            type="text"
-            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
-            required
-          />
-          <p v-if="errors.username" class="text-red-600 text-xs mt-1">
-            {{ errors.username }}
-          </p>
-        </div>
+        <!-- Form -->
+        <form @submit.prevent="submit" class="space-y-5">
+          <!-- Name Input -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.fullName") }}</label>
+            <input
+              v-model="form.name"
+              type="text"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-blue-50 transition bg-gray-50"
+              placeholder="John Doe"
+              required
+            />
+            <p v-if="errors.name" class="text-red-600 text-xs mt-2">{{ errors.name }}</p>
+          </div>
 
-        <!-- EMAIL -->
-        <div>
-          <label class="block text-sm mb-1">{{ t("register.email") }}</label>
-          <input
-            v-model="form.email"
-            type="email"
-            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
-            required
-          /><p v-if="errors.email" class="text-red-600 text-xs mt-1">
-            {{ errors.email }}
-          </p>
-        </div>
+          <!-- Username Input -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.username") }}</label>
+            <input
+              v-model="form.username"
+              type="text"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-blue-50 transition bg-gray-50"
+              placeholder="johndoe123"
+              required
+            />
+            <p v-if="errors.username" class="text-red-600 text-xs mt-2">{{ errors.username }}</p>
+          </div>
 
-        <!-- PASSWORD -->
-        <div>
-          <label class="block text-sm mb-1">{{ t("register.password") }}</label>
-          <input
-            v-model="form.password"
-            type="password"
-            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
-            required
-          />
-          <p class="text-xs text-gray-500 mt-1">
-            Min 8 chars, uppercase, lowercase, number & symbol
-          </p>
-          <p v-if="errors.password" class="text-red-600 text-xs mt-1">
-            {{ errors.password }}
-          </p>
-        </div>
+          <!-- Email Input -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.email") }}</label>
+            <input
+              v-model="form.email"
+              type="email"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-blue-50 transition bg-gray-50"
+              placeholder="john@example.com"
+              required
+            />
+            <p v-if="errors.email" class="text-red-600 text-xs mt-2">{{ errors.email }}</p>
+          </div>
 
-        <!-- ERROR -->
-        <p v-if="state.error" class="text-red-600 text-sm">
-          {{ state.error }}
-        </p>
+          <!-- Password Input -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.password") }}</label>
+            <input
+              v-model="form.password"
+              type="password"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-blue-50 transition bg-gray-50"
+              placeholder="••••••••"
+              required
+            />
+            <p class="text-xs text-gray-500 mt-2">Min 8 chars, uppercase, lowercase, number & symbol</p>
+            <p v-if="errors.password" class="text-red-600 text-xs mt-2">{{ errors.password }}</p>
+          </div>
 
-        <!-- SUBMIT -->
-        <button
-          type="submit"
-          :disabled="state.loading"
-          class="w-full bg-blue-600 text-white py-2 rounded-t-full rounded-b-full hover:bg-blue-700 disabled:opacity-50 rounded"
-        >
-          {{ state.loading ? t("register.loading") : t("register.signUp") }}
-        </button>
+          <!-- Error Message -->
+          <div v-if="state.serverError" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+            <p class="text-red-700 text-sm">{{ state.serverError }}</p>
+          </div>
 
-        <!-- FOOTER -->
-        <p class="text-sm text-center">
-          {{ t("register.haveAccount") }}
-          <span
-            class="text-blue-600 cursor-pointer"
-            @click="router.push('/login')"
+          <!-- Sign Up Button -->
+          <button
+            type="submit"
+            :disabled="state.loading"
+            class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
-            {{ t("register.signIn") }}
-          </span>
-        </p>
+            {{ state.loading ? t("register.loading") : t("register.signUp") }}
+          </button>
 
-      </form>
+          <!-- Divider -->
+          <div class="flex items-center my-4">
+            <div class="grow border-t border-gray-300"></div>
+            <span class="px-3 text-gray-500 text-sm">OR</span>
+            <div class="grow border-t border-gray-300"></div>
+          </div>
+
+          <!-- Sign In Link -->
+          <p class="text-center text-sm text-gray-600">
+            Already have an account?
+            <button
+              type="button"
+              @click="router.push('/login')"
+              class="text-blue-600 font-semibold hover:text-blue-700"
+            >
+              Sign in here
+            </button>
+          </p>
+        </form>
+      </div>
+
+      <!-- Footer Text -->
+      <p class="text-center text-xs text-gray-500 mt-6">
+        By creating an account, you agree to our
+        <router-link to="/terms-of-service" class="text-blue-600 hover:underline">Terms of Service</router-link>
+        and
+        <router-link to="/privacy-policy" class="text-blue-600 hover:underline">Privacy Policy</router-link>
+      </p>
     </div>
   </div>
 </template>
+
+<style scoped>
+header {
+  display: none;
+}
+footer {
+  display: none;
+}
+</style>
+
+<style scoped>
+header {
+  display: none;
+}
+footer {
+  display: none;
+}
+</style>
