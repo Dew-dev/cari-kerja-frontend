@@ -28,10 +28,11 @@ async function submit() {
     // Redirect back to the page they came from
     router.push(redirectTo);
   } else {
-    // ROLE BASED REDIRECT
+    // ROLE BASED REDIRECT - for recruiter login, go to recruiter dashboard
     if (auth.role === "recruiter") {
       router.push("/recruiter/jobs");
     } else {
+      // If user logged in as job seeker, redirect to job seeker area
       router.push("/jobposts");
     }
   }
@@ -55,31 +56,31 @@ async function resendVerification() {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+  <div class="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-50 to-pink-100 p-4">
     <div class="w-full max-w-md">
       <!-- Card Container -->
       <div class="bg-white shadow-2xl rounded-3xl p-8 md:p-10">
         <!-- Logo/Branding -->
         <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full mb-4">
+          <div class="inline-flex items-center justify-center w-14 h-14 bg-linear-to-br from-purple-600 to-pink-600 rounded-full mb-4">
             <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ t("login") }}</h1>
-          <p class="text-gray-600">Sign in to your job seeker account</p>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Recruiter Login</h1>
+          <p class="text-gray-600">Access your recruiting dashboard</p>
         </div>
 
         <!-- Form -->
         <form @submit.prevent="submit" class="space-y-5">
           <!-- Email Input -->
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
             <input
               v-model="form.email"
-              type="email"
-              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-blue-50 transition bg-gray-50"
-              placeholder="you@example.com"
+              type="text"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-purple-500 focus:bg-purple-50 transition bg-gray-50"
+              placeholder="you@company.com"
               required
             />
           </div>
@@ -90,7 +91,7 @@ async function resendVerification() {
             <input
               v-model="form.password"
               type="password"
-              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-blue-50 transition bg-gray-50"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-purple-500 focus:bg-purple-50 transition bg-gray-50"
               placeholder="••••••••"
               required
             />
@@ -101,7 +102,7 @@ async function resendVerification() {
             <button
               type="button"
               @click="router.push('/forgot-password')"
-              class="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              class="text-sm text-purple-600 hover:text-purple-700 font-medium"
             >
               Forgot password?
             </button>
@@ -130,9 +131,9 @@ async function resendVerification() {
           <button
             type="submit"
             :disabled="auth.loading"
-            class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+            class="w-full bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
-            {{ auth.loading ? "Signing in..." : "Sign In" }}
+            {{ auth.loading ? "Signing in..." : "Sign In as Recruiter" }}
           </button>
 
           <!-- Divider -->
@@ -142,26 +143,26 @@ async function resendVerification() {
             <div class="grow border-t border-gray-300"></div>
           </div>
 
-          <!-- Sign Up & Recruiter Links -->
+          <!-- Sign Up & Job Seeker Links -->
           <div class="space-y-3">
             <p class="text-center text-sm text-gray-600">
-              Don't have an account?
+              Don't have a recruiter account?
               <button
                 type="button"
-                @click="router.push('/register')"
-                class="text-blue-600 font-semibold hover:text-blue-700"
+                @click="router.push('/register-recruiter')"
+                class="text-purple-600 font-semibold hover:text-purple-700"
               >
-                Create account
+                Register here
               </button>
             </p>
             <p class="text-center text-sm text-gray-600">
-              Are you a recruiter?
+              Looking for a job?
               <button
                 type="button"
-                @click="router.push('/recruiter-login')"
-                class="text-indigo-600 font-semibold hover:text-indigo-700"
+                @click="router.push('/login')"
+                class="text-blue-600 font-semibold hover:text-blue-700"
               >
-                Sign in here
+                Job seeker login
               </button>
             </p>
           </div>
@@ -171,9 +172,9 @@ async function resendVerification() {
       <!-- Footer Text -->
       <p class="text-center text-xs text-gray-500 mt-6">
         By signing in, you agree to our
-        <router-link to="/terms-of-service" class="text-blue-600 hover:underline">Terms of Service</router-link>
+        <router-link to="/terms-of-service" class="text-purple-600 hover:underline">Terms of Service</router-link>
         and
-        <router-link to="/privacy-policy" class="text-blue-600 hover:underline">Privacy Policy</router-link>
+        <router-link to="/privacy-policy" class="text-purple-600 hover:underline">Privacy Policy</router-link>
       </p>
     </div>
   </div>

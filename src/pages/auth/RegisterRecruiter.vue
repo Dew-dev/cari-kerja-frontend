@@ -91,99 +91,152 @@ async function submit() {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50">
-    <div class="w-full max-w-md bg-white my-10 p-6  gap-4 rounded-lg shadow-lg ">
-
-      <h1 class="text-xl font-semibold mb-4 col-span-4">
-        {{ t("register.titleRecruiter") }}
-      </h1>
-
-      <form @submit.prevent="submit" class="space-y-4 grid grid-cols-4  gap-4">
-
-        <div class="col-span-4">
-          <label class="block text-sm mb-1">{{ t("register.username") }}</label>
-          <input v-model="form.username" class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md" />
-          <p v-if="errors.username" class="text-red-600 text-xs">
-            {{ errors.username }}
-          </p>
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-100 p-4">
+    <div class="w-full max-w-md">
+      <!-- Card Container -->
+      <div class="bg-white shadow-2xl rounded-3xl p-8 md:p-10">
+        <!-- Logo/Branding -->
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-14 h-14 bg-linear-to-br from-purple-600 to-pink-600 rounded-full mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5.5m0 0H9m0 0h5.5M9 7h1m-1 4h1m0 0h1m-1 4h1" />
+            </svg>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ t("register.titleRecruiter") }}</h1>
+          <p class="text-gray-600">Start posting jobs and finding talent</p>
         </div>
 
-        <div class="col-span-4">
-          <label class="block text-sm mb-1">{{ t("register.email") }}</label>
-          <input v-model="form.email" class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md" />
-          <p v-if="errors.email" class="text-red-600 text-xs">
-            {{ errors.email }}
-          </p>
-        </div>
+        <!-- Form -->
+        <form @submit.prevent="submit" class="space-y-5">
+          <!-- Username Input -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.username") }}</label>
+            <input
+              v-model="form.username"
+              type="text"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-purple-500 focus:bg-purple-50 transition bg-gray-50"
+              placeholder="company123"
+              required
+            />
+            <p v-if="errors.username" class="text-red-600 text-xs mt-2">{{ errors.username }}</p>
+          </div>
 
-        <div class="col-span-4">
-          <label class="block text-sm mb-1">{{ t("register.password") }}</label>
-          <input
-            v-model="form.password"
-            type="password"
-            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
-          />
-          <p v-if="errors.password" class="text-red-600 text-xs">
-            {{ errors.password }}
-          </p>
-        </div>
+          <!-- Email Input -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.email") }}</label>
+            <input
+              v-model="form.email"
+              type="email"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-purple-500 focus:bg-purple-50 transition bg-gray-50"
+              placeholder="recruiter@company.com"
+              required
+            />
+            <p v-if="errors.email" class="text-red-600 text-xs mt-2">{{ errors.email }}</p>
+          </div>
 
-        <div class="col-span-4">
-          <label class="block text-sm mb-1">{{ t("register.companyName") }}</label>
-          <input
-            v-model="form.company_name"
-            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
-          />
-          <p v-if="errors.company_name" class="text-red-600 text-xs">
-            {{ errors.company_name }}
-          </p>
-        </div>
+          <!-- Password Input -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.password") }}</label>
+            <input
+              v-model="form.password"
+              type="password"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-purple-500 focus:bg-purple-50 transition bg-gray-50"
+              placeholder="••••••••"
+              required
+            />
+            <p v-if="errors.password" class="text-red-600 text-xs mt-2">{{ errors.password }}</p>
+          </div>
 
-        <div class="col-span-2">
-          <label class="block text-sm mb-1">{{ t("register.contactPerson") }}</label>
-          <input
-            v-model="form.contact_name"
-            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
-          />
-          <p v-if="errors.contact_name" class="text-red-600 text-xs">
-            {{ errors.contact_name }}
-          </p>
-        </div>
+          <!-- Company Name Input -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.companyName") }}</label>
+            <input
+              v-model="form.company_name"
+              type="text"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-purple-500 focus:bg-purple-50 transition bg-gray-50"
+              placeholder="Your Company Ltd."
+              required
+            />
+            <p v-if="errors.company_name" class="text-red-600 text-xs mt-2">{{ errors.company_name }}</p>
+          </div>
 
-        <div class="col-span-2">
-          <label class="block text-sm mb-1">{{ t("register.contactNumber") }}</label>
-          <input
-            v-model="form.contact_phone"
-            class="w-full bg-gray-100 shadow-sm px-3 py-2 rounded-md"
-          />
-          <p v-if="errors.contact_phone" class="text-red-600 text-xs">
-            {{ errors.contact_phone }}
-          </p>
-        </div>
+          <!-- Contact Person Input -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.contactPerson") }}</label>
+            <input
+              v-model="form.contact_name"
+              type="text"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-purple-500 focus:bg-purple-50 transition bg-gray-50"
+              placeholder="John Manager"
+              required
+            />
+            <p v-if="errors.contact_name" class="text-red-600 text-xs mt-2">{{ errors.contact_name }}</p>
+          </div>
 
-        <p v-if="state.serverError" class="text-red-600 text-sm">
-          {{ state.serverError }}
-        </p>
+          <!-- Contact Phone Input -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.contactNumber") }}</label>
+            <input
+              v-model="form.contact_phone"
+              type="text"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-purple-500 focus:bg-purple-50 transition bg-gray-50"
+              placeholder="+998 (XX) XXX-XX-XX"
+              required
+            />
+            <p v-if="errors.contact_phone" class="text-red-600 text-xs mt-2">{{ errors.contact_phone }}</p>
+          </div>
 
-        <button
-          type="submit"
-          :disabled="state.loading"
-          class="w-full bg-blue-600 text-white py-2 col-span-4 rounded-t-full rounded-b-full hover:bg-blue-700 disabled:opacity-50"
-        >
-          {{ state.loading ? t("register.loading") : t("register.signUp") }}
-        </button>
+          <!-- Error Message -->
+          <div v-if="state.serverError" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+            <p class="text-red-700 text-sm">{{ state.serverError }}</p>
+          </div>
 
-        <p class="text-sm text-center col-span-4">
-          {{ t("register.haveAccount") }}
-          <span
-            class="text-blue-600 cursor-pointer"
-            @click="router.push('/login')"
+          <!-- Sign Up Button -->
+          <button
+            type="submit"
+            :disabled="state.loading"
+            class="w-full bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
-            {{ t("register.signIn") }}
-          </span>
-        </p>
+            {{ state.loading ? t("register.loading") : t("register.signUp") }}
+          </button>
 
-      </form>
+          <!-- Divider -->
+          <div class="flex items-center my-4">
+            <div class="grow border-t border-gray-300"></div>
+            <span class="px-3 text-gray-500 text-sm">OR</span>
+            <div class="grow border-t border-gray-300"></div>
+          </div>
+
+          <!-- Sign In Link -->
+          <p class="text-center text-sm text-gray-600">
+            Already have an account?
+            <button
+              type="button"
+              @click="router.push('/recruiter-login')"
+              class="text-purple-600 font-semibold hover:text-purple-700"
+            >
+              Sign in here
+            </button>
+          </p>
+        </form>
+      </div>
+
+      <!-- Footer Text -->
+      <p class="text-center text-xs text-gray-500 mt-6">
+        By creating an account, you agree to our
+        <router-link to="/terms-of-service" class="text-purple-600 hover:underline">Terms of Service</router-link>
+        and
+        <router-link to="/privacy-policy" class="text-purple-600 hover:underline">Privacy Policy</router-link>
+      </p>
     </div>
   </div>
 </template>
+
+<style scoped>
+header {
+  display: none;
+}
+footer {
+  display: none;
+}
+</style>

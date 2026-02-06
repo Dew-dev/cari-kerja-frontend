@@ -111,6 +111,10 @@
     "subtitle": "Ish izlovchilar va ish beruvchilar uchun tez-tez so'raladigan savollarga javoblar.",
     "searchPlaceholder": "Yordam maqolalarini qidiring, masalan: 'qanday murojaat qilish', 'vakansiyani joylash'",
     "searchButton": "Qidirish",
+    "resultSingular": "natija",
+    "resultPlural": "natija",
+    "resultsFoundFor": "so‘rov bo‘yicha topildi",
+    "noResults": "\"{query}\" bo‘yicha natija topilmadi — boshqa kalit so‘zlarni sinab ko‘ring",
     "categoriesHeading": "Mashhur bo'limlar",
     "popularHeading": "Foydali maqolalar",
     "categories": {
@@ -447,5 +451,997 @@
     "failedToRemoveSavedJob": "Saqlangan ishni o'chirish muvaffaq bo'lmadi",
     "selectFile": "Iltimos, faylni tanlang",
     "maxFileSize2MB": "Maksimal fayl o'lcham 2MB"
+  },
+  "about": {
+    "pageTitle": "Biz haqida",
+    "title": "Jobs.uz haqida",
+    "heroDescription": "Jobs.uz — O'zbekistondagi iqtidorli mutaxassislarni şirkalar bilan bog'laydigan zamonaviy ish bozoridir. Biz shaffof va samarali platformani yaratishga fo'kus qilmoqdamiz, bu erda ham ishchi qidirayotganlar, ham ish beruvchilar o'zlariga kerakli kişini topishi mumkin.",
+    "ourMission": "Bizning missiyamiz",
+    "history": "Tarix",
+    "missionTitle": "Bizning missiyamiz",
+    "missionDescription": "Biz har bir iqtidorli mutaxassis ma'naviy ishga erishlash imkoniyatiga ega bo'lishi kerak, har bir şirkat o'z jamoasiga to'g'ri odamlarni topish huquqiga ega deb hisoblaymiz. Bizning platforma ish qidiruv jarayonini barcha ishtirokchilar uchun oddiy, tez va samarali qilish uchun ishlab chiqilgan.",
+    "missionDetails": "Biz shaffoflik orqali ishonch o'rnatish, ajoyib xizmat ko'rsatish va platforma-ni doimiy takomillashtirashga kirashgan bo'lamiz. Siz keyingi karera harakati qidirayotganingiz yoki alohida talentlarni qidirayotganingiz bo'lsin-yu, Jobs.uz sizga muvaffaqiyat olishga yordam berishga tayyormiz. Bizning o'sib borayotgan jamiyatiga turli sohalardagi ishchi qidirayotganlar va O'zbekiston iqtisodiyotini shakllantirgan progressiv şirkatlar kiradi.",
+    "ourStory": "Bizning tarixiy",
+    "launched": "Ishga tushirildi",
+    "launchedDescription": "Jobs.uz oddiy tasavvur bilan asos solingan: ishchi qidirayotganlar va ish beruvchilar osonlikcha muloqot qila oladigan ishonchli platformani yaratish. Asosiy xususiyatlar va buyuk jamoa bilan boshlab, biz Uzbek ish bozorini xizmat qilish uchun platformamizni ishga tushirdik.",
+    "expansion": "Kuchlanish",
+    "expansionDescription": "2025 yil davomida biz xususiyatlarimizni kengaytirish, foydalanuvchi tajribasini yaxshilash va jamiyatimizni rivojlantirishga e'tibor qaratdik. Biz qidiruv filtrlari, ish tafsiyalari va profil boshqarish vositalarini yaxshiladik, bu esa foydalanuvchilerimizga yaxshi xizmat ko'rsatishda yordam beradi.",
+    "future": "Kelajak",
+    "futureDescription": "2026 yil va undan keyingi vaqtni rejalashtirgancha, biz doimiy innovatsiyalarga sadoqatli bo'lamiz. Biz xizmatlarimizni kengaytirishni, texnologiyaviy infratuzilmamizni yaxshilashtirish va ishchi qidirayotganlar va ish beruvchilar uchun yanada to'liq platforma yaratishni rejalayapmiz.",
+    "getInTouch": "Biz bilan bog'lanish",
+    "contactDescription": "Hamkorlik, savol-javob yoki bizning o'sib borayotgan jamoamizga qo'shilishni xohlaysiz, biz sizdan eshitishdan xursand bo'lamiz:",
+    "headOffice": "Asosiy ofdis",
+    "location": "Toshkent, O'zbekiston",
+    "email": "Email",
+    "careers": "Karera",
+    "careersDescription": "Biz bilan ishlashni xohlaydigan bo'lsangiz, CV-ingizni yuboring ",
+    "ctaTitle": "Talent izlayapsiz yoki keyingi ishingizni izlayapsiz?",
+    "searchJobs": "Ishlarni qidiring",
+    "forEmployers": "Ish beruvchilar uchun"
+  },
+  "help": {
+    "common": {
+      "quickNav": "Tez navigatsiya"
+    },
+    "cv": {
+      "pageTitle": "Rezyumeni qanday yaxshilash kerak - Jobs.uz Yordam",
+      "heroTitle": "Rezyumeni qanday yaxshilash kerak",
+      "heroSubtitle": "Yaxshi tuzilgan rezyume suhbatga chaqirish uchun zarur. Rezyumengizni ajratib ko'rsatish uchun maslahat va eng yaxshi amaliyotlarni o'rganing.",
+      "toc": {
+        "format": {
+          "title": "To'g'ri formatni tanlang",
+          "desc": "Formatlash standartlari haqida bilib oling"
+        },
+        "summary": {
+          "title": "Kuchli xulosani yozing",
+          "desc": "Birinchi bo'limda e'tiborni jalb qiling"
+        },
+        "achievements": {
+          "title": "Yutuqlarni ta'kidlang",
+          "desc": "Faqat mas'uliyatlar emas, natijalarni ko'rsating"
+        },
+        "education": {
+          "title": "Ta'lim va sertifikatlar",
+          "desc": "Malakalarni samarali ro'yxatlang"
+        },
+        "ats": {
+          "title": "ATS uchun optimallashtirish",
+          "desc": "Tizimlar rezyumengizni o'qishi mumkinligiga ishonch hosil qiling"
+        },
+        "upload": {
+          "title": "Rezyumeni yuklang",
+          "desc": "Ish beruvchilar e'tiborini jalb qiling"
+        }
+      },
+      "sections": {
+        "format": {
+          "title": "To'g'ri formatni tanlang",
+          "bullets": [
+            "Toza, professional tartibni mos shriftlar bilan ishlating (masalan, Arial, Calibri).",
+            "Qisqa bo'lsin: ko'pchilik lavozimlar uchun 1-2 sahifa.",
+            "Agar ijodiy sohada ishlamasangiz, bezakli grafiklardan saqlaning.",
+            "O'qishni yaxshilash uchun belgilar va sarlavhalardan foydalaning."
+          ],
+          "note": "Oddiy, tuzilgan rezyume rekruterlar asosiy ma'lumotni tez topishiga yordam beradi."
+        },
+        "summary": {
+          "title": "Kuchli xulosani yozing",
+          "bullets": [
+            "Tajribangiz va maqsadlaringiz haqida 2-3 ta jumla bilan boshlang.",
+            "Asosiy ko'nikmalaringizni va lavozimga nima keltirganingizni eslatib o'ting.",
+            "Har bir ish uchun xulosangizni moslashtiring."
+          ],
+          "example": "Misol: 'Backend ishlab chiqishda 5+ yillik tajribaga ega tajribali dasturiy ta'minot muhandisi, Python va bulut infratuzilmasida ixtisoslashgan. Innovatsion loyihalarni boshqarish uchun yuqori lavozimni qidirmoqda.'"
+        },
+        "achievements": {
+          "title": "Yutuqlarni ta'kidlang",
+          "bullets": [
+            "Raqamlar va ko'rsatkichlardan foydalaning: 'Savdoni 20% oshirdim' o'rniga 'Savdo uchun javobgar edim'.",
+            "Vazifalar emas, ta'sir va natijalarga e'tibor qarating.",
+            "Muammolarni hal qilish va tashabbuskorlikni ko'rsating."
+          ]
+        },
+        "education": {
+          "title": "Ta'lim va sertifikatlar",
+          "bullets": [
+            "Avval eng yuqori darajangizni universitet nomi va bitiruv yili bilan ko'rsating.",
+            "Tegishli sertifikatlarni qo'shing (masalan, PMP, AWS, Google Analytics).",
+            "Agar kerak bo'lsa, mukofot yoki sharaflarni eslatib o'ting."
+          ]
+        },
+        "ats": {
+          "title": "Nomzodlarni kuzatish tizimlari (ATS) uchun optimallashtirish",
+          "bullets": [
+            "Standart bo'lim sarlavhalaridan foydalaning: Ish tajribasi, Ta'lim, Ko'nikmalar.",
+            "Ish tavsifidagi kalit so'zlarni qo'shing.",
+            "ATS tahlil qila olmaydigan rasmlar, jadvallar va murakkab formatlashdan saqlaning."
+          ]
+        },
+        "upload": {
+          "title": "Rezyumeni Jobs.uz ga yuklang",
+          "bullets": [
+            "Profilingizga o'ting va rezyumengizning PDF versiyasini yuklang.",
+            "So'nggi tajriba va ko'nikmalaringiz bilan yangilab turing.",
+            "Ish beruvchilar ish uchun ariza topshirganingizda yoki ma'lumotlar bazasida qidirganda rezyumengizni ko'rishlari mumkin."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Rezyumengizni yangilashga tayyormisiz?",
+        "subtitle": "Boshlash uchun profilingizda rezyumeni yuklang yoki tahrirlang.",
+        "button": "Profilga o'tish"
+      }
+    },
+    "applications": {
+      "pageTitle": "Ish arizalarini kuzatish - Jobs.uz Yordam",
+      "heroTitle": "Ish arizalarini kuzatish",
+      "heroSubtitle": "Tartibli bo'ling va barcha arizalaringizni samarali kuzatib boring.",
+      "toc": {
+        "track": {
+          "title": "Arizalarni qanday kuzatish kerak",
+          "desc": "Barcha yuborilgan arizalaringizni ko'ring"
+        },
+        "status": {
+          "title": "Ariza holati",
+          "desc": "Har bir holat nimani anglatishini tushunib oling"
+        },
+        "notes": {
+          "title": "Eslatmalar qoldiring",
+          "desc": "Ariza jarayoningizni hujjatlang"
+        },
+        "followUp": {
+          "title": "Davom ettirish",
+          "desc": "Davom ettirish uchun eng yaxshi amaliyotlar"
+        },
+        "keepApplying": {
+          "title": "Ariza topshirishda davom eting",
+          "desc": "Bitta javobni kutmang"
+        }
+      },
+      "sections": {
+        "track": {
+          "title": "Arizalarni qanday kuzatish kerak",
+          "body": "Jobs.uz da ish uchun ariza topshirganingizdan keyin, profilingizda 'Yuborilgan arizalar' bo'limida barcha arizalaringizni ko'rishingiz mumkin. Har bir yozuv lavozim nomi, kompaniya, ariza topshirilgan sana va joriy holatni ko'rsatadi."
+        },
+        "status": {
+          "title": "Ariza holati",
+          "bullets": [
+            "Kutilmoqda: Arizangiz yuborildi va ko'rib chiqilishini kutmoqda.",
+            "Ko'rib chiqildi: Rekruter arizangizni ko'rib chiqdi.",
+            "Suhbat: Siz suhbat uchun qisqa ro'yxatga kirganingiz.",
+            "Rad etildi: Afsuski, siz bu lavozim uchun tanlanmadingiz.",
+            "Qabul qilindi: Tabriklaymiz! Sizga lavozim taklif qilindi."
+          ]
+        },
+        "notes": {
+          "title": "Eslatmalar qoldiring",
+          "body": "Har bir ariza uchun o'z eslatmalaringizni yuritishni o'ylab ko'ring: ariza topshirilgan sana, ish tafsilotlari, rekruter kontakti, suhbat sanalari va davom ettirish eslatmalari. Bu sizga tartibli va professional bo'lishga yordam beradi."
+        },
+        "followUp": {
+          "title": "Davom ettirish",
+          "tips": [
+            "Ariza topshirgandan keyin kamida 1-2 hafta kuting.",
+            "Rekruterga qiziqishingizni takrorlovchi muloyim xat yuboring.",
+            "Qisqa va professional bo'ling.",
+            "Agar 2 marta davom ettirgandan keyin javob olmagan bo'lsangiz, o'tishga vaqt keldi."
+          ]
+        },
+        "keepApplying": {
+          "title": "Ariza topshirishda davom eting",
+          "body": "Barcha umidlaringizni bitta arizaga qo'ymang. Kutayotganingizda boshqa lavozimlarni qidirishda va ariza topshirishda davom eting. Qancha ko'p ariza yuborgan bo'lsangiz, suhbatga chaqirilish imkoniyatingiz shuncha yuqori."
+        }
+      },
+      "cta": {
+        "title": "Arizalaringizni tekshiring",
+        "subtitle": "Ariza topshirgan barcha ishlaringizni ko'ring va jarayoningizni kuzatib boring.",
+        "button": "Arizalarimni ko'rish"
+      }
+    },
+    "searchResumes": {
+      "pageTitle": "Rezyumeni qanday qidirish kerak - Jobs.uz Yordam",
+      "heroTitle": "Rezyumeni qanday qidirish kerak",
+      "heroSubtitle": "Rezyume qidiruv vositalarimiz yordamida to'g'ri nomzodlarni tez toping.",
+      "toc": {
+        "filters": {
+          "title": "Filtrlardan foydalaning",
+          "desc": "Ko'nikmalar, joylashuv, tajriba bo'yicha toraytiring"
+        },
+        "keywords": {
+          "title": "Kalit so'z qidirish",
+          "desc": "Maxsus tajribaga ega nomzodlarni toping"
+        },
+        "review": {
+          "title": "Profillarni ko'rib chiqing",
+          "desc": "Rezyume, tajriba va ko'nikmalarni tekshiring"
+        },
+        "shortlist": {
+          "title": "Nomzodlarni qisqa ro'yxatga oling",
+          "desc": "Istiqbolli profillarni keyinchalik saqlab qo'ying"
+        },
+        "contact": {
+          "title": "Nomzodlar bilan bog'laning",
+          "desc": "Bevosita murojaat qiling yoki ariza topshirishga taklif qiling"
+        }
+      },
+      "sections": {
+        "filters": {
+          "title": "Filtrlardan foydalaning",
+          "body": "Bizning rezyume qidiruvimiz sizga joylashuv, ko'nikmalar, lavozim nomi, ta'lim darajasi va tajriba yillari bo'yicha filtrlash imkonini beradi. Talablaringizga mos keladigan nomzodlarni topish uchun bir necha filtr qo'llang."
+        },
+        "keywords": {
+          "title": "Kalit so'z qidirish",
+          "body": "Sizga kerakli ko'nikmalar, vositalar yoki texnologiyalar bilan bog'liq kalit so'zlarni kiriting. Masalan, 'Python Django' qidiruvi bu sohalarda tajribaga ega nomzodlarni ko'rsatadi.",
+          "bullets": [
+            "'Java', 'React', 'Loyiha boshqaruvi' yoki 'Savdo' kabi maxsus ko'nikmalarni qidiring.",
+            "Ko'proq maqsadli natijalar uchun bir necha kalit so'zdan foydalaning: 'Full Stack Dasturchi', 'Python Django Dasturchi'.",
+            "Kalit so'zlar bo'yicha qidiruvni filtrlar bilan birlashtiring, nomzodlarni yanada toraytiradigan."
+          ]
+        },
+        "review": {
+          "title": "Profillarni ko'rib chiqing",
+          "body": "Potentsial nomzodlarni topadingiz bilan, ularning profillarini sinchiklik bilan ko'rib chiqishga vaqt ajrating. Ularning ish tajribasini, ko'nikmalarini, ta'limini va tavsiyalarini tekshiring. Ularning rezyumesini yuklab oling yoki ko'ring, ularning malakasini yaxshiroq tushunish va lavozimga mos kelishini bilish uchun.",
+          "bullets": [
+            "Nomzodning ish tajribasi va yutuqlarini tekshiring.",
+            "Ularning ta'limi va sertifikatlarini ko'rib chiqing.",
+            "Ularning ko'nikmalari va tavsiyalariga qarang.",
+            "Batafsil ma'lumot olish uchun yuklangan rezyumesini yuklab oling yoki ko'ring."
+          ]
+        },
+        "shortlist": {
+          "title": "Nomzodlarni qisqa ro'yxatga oling",
+          "body": "Istiqbolli nomzodlarni qisqa ro'yxatga saqlang, shunda ularning profillariga keyinchalik osongina qaytishingiz mumkin. Shuningdek, nima uchun ular ajralib chiqqanini eslab qolish uchun eslatmalar qo'shishingiz mumkin."
+        },
+        "contact": {
+          "title": "Nomzodlar bilan bog'laning",
+          "body": "Nomzodlarga ular taqdim etgan kontakt ma'lumotlari orqali bevosita murojaat qiling yoki ochiq lavozimlaringizdan biriga ariza topshirishga taklif qiling. Lavozim va nima uchun ular yaxshi mos kelishini o'ylashingiz haqida aniq bo'ling."
+        }
+      },
+      "cta": {
+        "title": "Talentlarni qidirishni boshlang",
+        "subtitle": "Bugun ochiq lavozimlaringiz uchun malakali nomzodlarni toping.",
+        "button": "Rezyumeni qidirish"
+      }
+    },
+    "pricing": {
+      "pageTitle": "Narxlar va rejalar - Jobs.uz Yordam",
+      "heroTitle": "Narxlar va rejalar",
+      "heroSubtitle": "Narxlash variantlarimiz haqida bilib oling va ishga olish ehtiyojlaringiz uchun eng yaxshi rejani tanlang.",
+      "toc": {
+        "plans": {
+          "title": "Bizning rejalarimiz",
+          "desc": "Bepul va premium variantlar"
+        },
+        "credits": {
+          "title": "Ish joylashtirish kreditlari",
+          "desc": "Kreditlar qanday ishlaydi"
+        },
+        "team": {
+          "title": "Jamoa hisoblari",
+          "desc": "Bir necha rekruterni boshqarish"
+        },
+        "billing": {
+          "title": "To'lov",
+          "desc": "To'lov usullari va hisob-fakturalar"
+        },
+        "trials": {
+          "title": "Bepul sinov versiyalari",
+          "desc": "Premium xususiyatlarni xavf-xatarsiz sinab ko'ring"
+        },
+        "custom": {
+          "title": "Maxsus rejalar",
+          "desc": "Katta tashkilotlar uchun"
+        }
+      },
+      "sections": {
+        "plans": {
+          "title": "Bizning rejalarimiz",
+          "bullets": [
+            "Bepul reja: Oyiga 3 tagacha ish joylashing, asosiy nomzodlar qidiruvi.",
+            "Boshlang'ich: Oyiga 10 ta ish joylash, ilg'or qidiruv filtrlari, birinchi ro'yxat.",
+            "Professional: Oyiga 50 ta ish joylash, rezyume ma'lumotlar bazasiga kirish, maxsus qo'llab-quvvatlash.",
+            "Korporativ: Cheksiz joylashtirish, maxsus brending, API kirishii, hisob menejeri."
+          ],
+          "note": "Narxlar bizning Narxlar sahifamizda ko'rsatilgan. Barcha rejalar ariza kuzatish va email bildirishnomalari kabi asosiy xususiyatlarni o'z ichiga oladi."
+        },
+        "credits": {
+          "title": "Ish joylashtirish kreditlari",
+          "body": "Har bir reja oylik ma'lum miqdorda ish joylash kreditlarini o'z ichiga oladi. Agar ko'proq kerak bo'lsa, qo'shimcha kreditlar sotib olishingiz mumkin. Kreditlar 3 oygacha o'tkaziladi."
+        },
+        "team": {
+          "title": "Jamoa hisoblari",
+          "body": "Professional va Korporativ rejalar bir necha jamoa a'zolarini qo'shishga imkon beradi. Har bir a'zo ish joylashtirish, arizalarni ko'rib chiqish va nomzodlar bilan muloqot qilishni boshqarishi mumkin."
+        },
+        "billing": {
+          "title": "To'lov",
+          "bullets": [
+            "Biz kredit kartalari, PayPal va bank o'tkazmalarini qabul qilamiz.",
+            "Obunalar har oy yoki yil avtomatik ravishda yangilanadi.",
+            "Hisob-fakturalar email orqali yuboriladi va hisobingizda mavjud.",
+            "Siz istalgan vaqtda jarimalarsiz bekor qilishingiz mumkin."
+          ]
+        },
+        "trials": {
+          "title": "Bepul sinov versiyalari",
+          "body": "Yangi foydalanuvchilar premium xususiyatlarni 14 kun davomida bepul sinab ko'rishlari mumkin. Kredit karta talab qilinmaydi. Sinov muddatidan keyin, siz yangilashni yoki bepul reja bilan davom etishni tanlashingiz mumkin."
+        },
+        "custom": {
+          "title": "Maxsus rejalar",
+          "body": "Agar sizda noyob ehtiyojlar bo'lsa yoki standart rejalarimizga kiritilmagan xususiyatlar kerak bo'lsa, maxsus yechimni muhokama qilish uchun savdo jamoamiz bilan bog'laning. Biz katta korxonalar va ishga olish agentliklari bilan maxsus paketlar yaratish uchun ishlaymiz."
+        }
+      },
+      "cta": {
+        "title": "Yangilashga tayyormisiz?",
+        "subtitle": "Ishga olish ehtiyojlaringizga mos keladigan rejani tanlang.",
+        "button": "Narxlarni ko'rish"
+      }
+    },
+    "register": {
+      "pageTitle": "Qanday ro'yxatdan o'tish kerak - Jobs.uz Yordam",
+      "heroTitle": "Qanday ro'yxatdan o'tish kerak",
+      "heroSubtitle": "Hisobingizni yarating va ish uchun ariza topshirishni yoki ish e'lonlarini joylashtirishni boshlang.",
+      "toc": {
+        "type": {
+          "title": "Hisob turini tanlang",
+          "desc": "Ish qidiruvchi yoki rekruter hisobi"
+        },
+        "registration": {
+          "title": "Ro'yxatdan o'tish bosqichlari",
+          "desc": "Formani to'ldiring va yuboring"
+        },
+        "verify": {
+          "title": "Emailingizni tasdiqlang",
+          "desc": "Tasdiqlash havolasi uchun pochta qutingizni tekshiring"
+        },
+        "profile": {
+          "title": "Profilingizni to'ldiring",
+          "desc": "Boshlash uchun tafsilotlarni qo'shing"
+        },
+        "security": {
+          "title": "Xavfsizlik maslahatlari",
+          "desc": "Hisobingizni xavfsiz saqlang"
+        }
+      },
+      "sections": {
+        "type": {
+          "title": "Hisob turini tanlang",
+          "body": "Jobs.uz da ro'yxatdan o'tishda, siz ikki hisob turi o'rtasida tanlashingiz kerak: Ish qidiruvchi yoki Rekruter/Ish beruvchi. Ish qidiruvchilar profil yaratishlari, rezyumelarini yuklashlari va ish uchun ariza topshirishlari mumkin. Rekruterlar va Ish beruvchilar ish joylashtira oladilar, rezyume qidirishlari va nomzodlarni boshqarishlari mumkin. Siz email manzili uchun faqat bitta hisob turiga ega bo'lishingiz mumkin, shuning uchun asosiy maqsadingizga asoslangan holda ehtiyotkorlik bilan tanlang.",
+          "bullets": [
+            "Ish qidiruvchi: Profil yarating, rezyumengizni yuklang va ish uchun ariza topshiring.",
+            "Rekruter/Ish beruvchi: Ish joylashtiring, rezyume qidiring va nomzodlarni boshqaring."
+          ],
+          "note": "Siz email manzili uchun faqat bitta hisob turiga ega bo'lishingiz mumkin. Asosiy maqsadingizga asoslangan holda ehtiyotkorlik bilan tanlang."
+        },
+        "registration": {
+          "title": "Ro'yxatdan o'tish bosqichlari",
+          "bullets": [
+            "Bosh sahifada 'Ro'yxatdan o'tish' yoki 'Ro'yxatdan o'tish' tugmasini bosing.",
+            "Hisob turingizni tanlang (Ish qidiruvchi yoki Rekruter).",
+            "Email manzilingizni kiriting, parol yarating va ismingizni to'ldiring."
+          ]
+        },
+        "verify": {
+          "title": "Emailingizni tasdiqlang",
+          "body": "Ro'yxatdan o'tgandan keyin, siz ko'rsatgan manzilga tasdiqlash emailini yuboramiz. Hisobingizni faollashtirish uchun emaildagi havolani bosing. Agar emailni ko'rmasangiz, spam papkangizni tekshiring yoki yangi tasdiqlash havolasini so'rang."
+        },
+        "profile": {
+          "title": "Profilingizni to'ldiring",
+          "body": "Emailingizni tasdiqlagandan so'ng, profilingizni to'ldirishga vaqt ajrating. Ish qidiruvchilar ish tajribalarini, ta'limlarini, ko'nikmalarini qo'shishlari va rezyumelarini yuklashlari kerak. Rekruterlar kompaniya tafsilotlarini, logotipni va kontakt ma'lumotlarini qo'shishlari kerak. To'liq profil ko'rinishingizni oshiradi va platformada yaxshiroq natijalar olishga yordam beradi.",
+          "bullets": [
+            "Ish qidiruvchilar: Ish tajribangiz, ta'limingiz, ko'nikmalaringizni qo'shing va rezyumengizni yuklang.",
+            "Rekruterlar: Kompaniya tafsilotlari, logotip va kontakt ma'lumotlarini qo'shing."
+          ],
+          "note": "To'liq profil ko'rinishingizni oshiradi va sizga yaxshiroq natijalar olishga yordam beradi."
+        },
+        "security": {
+          "title": "Xavfsizlik maslahatlari",
+          "body": "Ushbu eng yaxshi amaliyotlarga rioya qilish orqali hisobingizni xavfsiz saqlang: Boshqa veb-saytlarda ishlatmaydigan kuchli, noyob paroldan foydalaning. Qo'shimcha xavfsizlik qatlamini qo'shish uchun mavjud bo'lsa ikki faktorli autentifikatsiyani yoqing. Parolingizni hech kimga bermang va umumiy yoki ommaviy kompyuterlardan foydalanganda doimo tizimdan chiqing.",
+          "bullets": [
+            "Kuchli, noyob paroldan foydalaning.",
+            "Agar mavjud bo'lsa, ikki faktorli autentifikatsiyani yoqing.",
+            "Parolingizni hech kimga bermang.",
+            "Umumiy yoki ommaviy kompyuterlardan foydalanganda tizimdan chiqing."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Boshlashga tayyormisiz?",
+        "subtitle": "Hozir hisobingizni yarating va barcha xususiyatlarni oching.",
+        "button": "Hozir ro'yxatdan o'tish"
+      }
+    },
+    "resetPassword": {
+      "pageTitle": "Parolni qanday tiklash kerak - Jobs.uz Yordam",
+      "heroTitle": "Parolni qanday tiklash kerak",
+      "heroSubtitle": "Parolingizni unutdingizmi? Hisobingizga kirishni tiklash uchun ushbu qadamlarni bajaring.",
+      "toc": {
+        "start": {
+          "title": "Tiklash jarayonini boshlang",
+          "desc": "Kirish sahifasida 'Parolni unutdim' tugmasini bosing"
+        },
+        "email": {
+          "title": "Emailingizni tekshiring",
+          "desc": "Tiklash havolasini qidiring"
+        },
+        "password": {
+          "title": "Yangi parol o'rnating",
+          "desc": "Kuchli, noyob parolni tanlang"
+        },
+        "issues": {
+          "title": "Muammolarni hal qilish",
+          "desc": "Agar ishlamasa nima qilish kerak"
+        },
+        "security": {
+          "title": "Eng yaxshi xavfsizlik amaliyotlari",
+          "desc": "Hisobingizni xavfsiz saqlang"
+        }
+      },
+      "sections": {
+        "start": {
+          "title": "Tiklash jarayonini boshlang",
+          "body": "Agar parolingizni unutgan bo'lsangiz, ushbu qadamlarni bajarib uni osongina tiklashingiz mumkin: Kirish sahifasiga o'ting, 'Parolni unutdim' yoki 'Parolni tiklash' havolasini bosing, hisobingiz bilan bog'langan email manzilini kiriting va 'Tiklash havolasini yuborish' tugmasini bosing. Yangi parol yaratish bo'yicha ko'rsatmalari bilan email olasiz.",
+          "steps": [
+            "Kirish sahifasiga o'ting.",
+            "'Parolni unutdim' yoki 'Parolni tiklash' havolasini bosing.",
+            "Hisobingiz bilan bog'langan email manzilini kiriting.",
+            "'Tiklash havolasini yuborish' tugmasini bosing."
+          ]
+        },
+        "email": {
+          "title": "Emailingizni tekshiring",
+          "body": "Biz sizning email manzilingizga parolni tiklash havolasini yuboramiz. Bu havola 1 soat davomida amal qiladi. Agar bir necha daqiqa ichida emailni olmagan bo'lsangiz, spam papkangizni tekshiring yoki yangi havolani so'rashga harakat qiling."
+        },
+        "password": {
+          "title": "Yangi parol o'rnating",
+          "bullets": [
+            "Tiklash sahifasini ochish uchun emaildagi havolani bosing.",
+            "Yangi parolingizni kiriting (kamida 8 ta belgi, harflar va raqamlarni o'z ichiga oladi).",
+            "Yangi parolingizni yana kiritib tasdiqlang.",
+            "'Parolni yangilash' tugmasini bosing."
+          ],
+          "note": "Yangi parolingiz oldingi parolingizdan farq qilishi kerak."
+        },
+        "issues": {
+          "title": "Muammolarni hal qilish",
+          "body": "Agar parolni tiklashda muammolarga duch kelayotgan bo'lsangiz, mana ba'zi keng tarqalgan muammolar va yechimlar: Agar email kelmagan bo'lsa spam papkangizni tekshiring, oldingi havola muddati o'tgan bo'lsa yangi havolani so'rang, hisobingiz bilan bog'langan to'g'ri email manzilidan foydalanayotganingizni tekshiring va muammolar davom etsa qo'llab-quvvatlash jamoamiz bilan bog'laning.",
+          "bullets": [
+            "Email kelmayaptimi? Spamni tekshiring yoki yana so'rashdan oldin bir necha daqiqa kuting.",
+            "Havola muddati o'tdimi? Yangi tiklash havolasini so'rang.",
+            "Email manzili tan olinmadimi? Hisobingiz bilan bog'langan to'g'ri emaildan foydalanayotganingizga ishonch hosil qiling.",
+            "Hali ham muammo bormi? Qo'llab-quvvatlash jamoamiz bilan bog'laning."
+          ]
+        },
+        "security": {
+          "title": "Eng yaxshi xavfsizlik amaliyotlari",
+          "body": "Ushbu eng yaxshi amaliyotlarga amal qilish orqali hisobingizni xavfsiz saqlang: Boshqa veb-saytlarda ishlatmaydigan noyob, kuchli paroldan foydalaning, murakkab parollarni yaratish va saqlash uchun parol menejeridan foydalanishni ko'rib chiqing, parolingizni muntazam ravishda yangilang (har 3-6 oyda bir marta), va agar hisobingizga ruxsatsiz kirishdan shubhalansangiz, parolingizni darhol tiklang va hisob faoliyatingizni ko'rib chiqing.",
+          "bullets": [
+            "Jobs.uz uchun noyob parol ishlating (boshqa saytlardan parollarni qayta ishlatmang).",
+            "Parol menejeridan foydalanishni ko'rib chiqing.",
+            "Parolingizni muntazam ravishda yangilang.",
+            "Agar ruxsatsiz kirishdan shubhalansangiz, parolingizni darhol tiklang."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Qo'shimcha yordam kerakmi?",
+        "subtitle": "Agar parolingizni tiklay olmasangiz, qo'llab-quvvatlash jamoamiz bilan bog'laning.",
+        "button": "Qo'llab-quvvatlash bilan bog'lanish"
+      }
+    },
+    "reportIssue": {
+      "pageTitle": "Muammoni qanday xabar qilish kerak - Jobs.uz Yordam",
+      "heroTitle": "Muammoni qanday xabar qilish kerak",
+      "heroSubtitle": "Xato yoki texnik muammoga duch keldingizmi? Bizga xabar qiling, biz tuzatamiz.",
+      "toc": {
+        "describe": {
+          "title": "Muammoni tasvirlang",
+          "desc": "Nima noto'g'ri ketganini tushuntiring"
+        },
+        "steps": {
+          "title": "Takrorlash uchun qadamlar",
+          "desc": "Qanday sodir bo'lganini tushunishga yordam bering"
+        },
+        "screenshots": {
+          "title": "Skrinshotlarni qo'shing",
+          "desc": "Vizual dalillar yordam beradi"
+        },
+        "device": {
+          "title": "Qurilma va brauzer ma'lumotlari",
+          "desc": "Sozlamalaringiz haqida bizga xabar bering"
+        },
+        "response": {
+          "title": "Keyin nima bo'ladi",
+          "desc": "Bizning qo'llab-quvvatlash jarayonimiz"
+        }
+      },
+      "sections": {
+        "describe": {
+          "title": "Muammoni tasvirlang",
+          "body": "Muammoning aniq tavsifini bering. Siz nima qilmoqchi bo'ldingiz? O'rniga nima bo'ldi? Qanchalik ko'p tafsilot bersangiz, muammoni tezroq aniqlash va tuzatishimiz mumkin.",
+          "example": "Misol: 'Men rezyumemni PDF formatida yuklashga urinib ko'rdim, lekin fayl turi qo'llab-quvvatlanmaydi degan xato xabari oldim, garchi bu to'g'ri PDF bo'lsa ham.'"
+        },
+        "steps": {
+          "title": "Takrorlash uchun qadamlar",
+          "body": "Muammoga olib kelgan aniq qadamlarni ro'yxatlang:",
+          "bullets": [
+            "Qaysi sahifada edingiz?",
+            "Qanday harakatlarni bajardingiz (tugmani bosdingiz, formani to'ldirdingiz va h.k.)?",
+            "Qanday xato xabari yoki kutilmagan xatti-harakat yuz berdi?"
+          ]
+        },
+        "screenshots": {
+          "title": "Skrinshotlarni qo'shing",
+          "body": "Agar mumkin bo'lsa, muammoni ko'rsatadigan skrinshotlar yoki ekran yozuvlarini biriktiring. Bu bizning jamoamizga siz nimani boshdan kechirayotganingizni aniq ko'rishga yordam beradi."
+        },
+        "device": {
+          "title": "Qurilma va brauzer ma'lumotlari",
+          "body": "Bizga ayting:",
+          "bullets": [
+            "Qanday qurilmadan foydalanmoqdasiz (ish stoli, mobil, planshet)?",
+            "Qaysi brauzer va versiya (Chrome, Firefox, Safari va h.k.)?",
+            "Qaysi operatsion tizim (Windows, macOS, iOS, Android)?"
+          ]
+        },
+        "response": {
+          "title": "Keyin nima bo'ladi",
+          "body": "Bizning qo'llab-quvvatlash jamoamiz hisobotingizni 1-2 ish kuni ichida ko'rib chiqadi. Agar bizga qo'shimcha ma'lumot kerak bo'lsa, email orqali sizga murojaat qilamiz. Muammo hal qilingandan keyin, sizga xabar beramiz. Jobs.uz ni yaxshilashda yordam berganingiz uchun rahmat!"
+        }
+      },
+      "cta": {
+        "title": "Xabar qilishga tayyormisiz?",
+        "subtitle": "Bizning aloqa formamizdan foydalaning yoki support@jobs.uz ga email yuboring.",
+        "button": "Qo'llab-quvvatlash bilan bog'lanish"
+      }
+    },
+    "supportedBrowsers": {
+      "pageTitle": "Qo'llab-quvvatlanadigan brauzerlar - Jobs.uz Yordam",
+      "heroTitle": "Qo'llab-quvvatlanadigan brauzerlar",
+      "heroSubtitle": "Zamonaviy, yangilangan brauzerdan foydalanib eng yaxshi tajribani ta'minlang.",
+      "toc": {
+        "browsers": {
+          "title": "Tavsiya etilgan brauzerlar",
+          "desc": "Qaysi brauzerlarni qo'llab-quvvatlaymiz"
+        },
+        "requirements": {
+          "title": "Minimal talablar",
+          "desc": "Versiyalar va sozlamalar"
+        },
+        "cookies": {
+          "title": "Cookie-larni yoqing",
+          "desc": "Kirish va xususiyatlar uchun talab qilinadi"
+        },
+        "cache": {
+          "title": "Keshni tozalang",
+          "desc": "Yuklash muammolarini hal qiling"
+        },
+        "mobile": {
+          "title": "Mobil brauzerlar",
+          "desc": "Telefoningizda Jobs.uz dan foydalanish"
+        }
+      },
+      "sections": {
+        "browsers": {
+          "title": "Tavsiya etilgan brauzerlar",
+          "body": "Jobs.uz eng so'nggi versiyalarda eng yaxshi ishlaydi:",
+          "bullets": [
+            "Google Chrome",
+            "Mozilla Firefox",
+            "Microsoft Edge",
+            "Safari (macOS va iOS)",
+            "Opera"
+          ],
+          "note": "Biz xavfsizlik va muvofiqlikni ta'minlash uchun brauzeringizni yangilab turishni qat'iy tavsiya qilamiz."
+        },
+        "requirements": {
+          "title": "Minimal talablar",
+          "bullets": [
+            "Chrome 90+",
+            "Firefox 88+",
+            "Edge 90+",
+            "Safari 14+",
+            "Opera 76+"
+          ],
+          "body": "Eski versiyalar ishlashi mumkin, lekin ko'rsatish yoki funktsionallik muammolari bo'lishi mumkin."
+        },
+        "cookies": {
+          "title": "Cookie-larni yoqing",
+          "body": "Jobs.uz sizning sessiyangizni saqlash va afzalliklaringizni eslab qolish uchun cookie-larni talab qiladi. Brauzer sozlamalaringizda cookie-lar yoqilganligiga ishonch hosil qiling. Cookie-larsiz tizimga kira olmaysiz yoki ma'lum xususiyatlardan foydalana olmaysiz."
+        },
+        "cache": {
+          "title": "Keshni tozalang",
+          "body": "Agar yuklash muammolariga duch kelsangiz yoki eski kontentni ko'rsangiz, brauzer keshini tozalashga harakat qiling:",
+          "bullets": [
+            "Chrome: Sozlamalar > Maxfiylik va xavfsizlik > Brauzer ma'lumotlarini tozalash",
+            "Firefox: Sozlamalar > Maxfiylik va xavfsizlik > Cookie va sayt ma'lumotlari > Ma'lumotlarni tozalash",
+            "Safari: Sozlamalar > Maxfiylik > Veb-sayt ma'lumotlarini boshqarish > Hammasini o'chirish",
+            "Edge: Sozlamalar > Maxfiylik, qidiruv va xizmatlar > Brauzer ma'lumotlarini tozalash"
+          ]
+        },
+        "mobile": {
+          "title": "Mobil brauzerlar",
+          "body": "Jobs.uz to'liq moslashuvchan va mobil qurilmalarda ishlaydi. Biz foydalanishni tavsiya qilamiz:",
+          "bullets": [
+            "iOS da Safari",
+            "Android da Chrome",
+            "Android da Firefox"
+          ],
+          "note": "Eng yaxshi mobil tajriba uchun brauzeringiz yangilanganligiga va barqaror internet aloqangiz borligiga ishonch hosil qiling."
+        }
+      },
+      "cta": {
+        "title": "Hali ham muammolar bormi?",
+        "subtitle": "Agar brauzeringiz bilan muammolarga duch kelsangiz, qo'llab-quvvatlash jamoamiz bilan bog'laning.",
+        "button": "Qo'llab-quvvatlash bilan bog'lanish"
+      }
+    },
+    "apply": {
+      "pageTitle": "Ish uchun qanday ariza topshirish kerak - Jobs.uz Yordam",
+      "heroTitle": "Ish uchun qanday ariza topshirish kerak",
+      "heroSubtitle": "Jobs.uz da ish uchun ariza topshirish va suhbatlarga chaqirilish bo'yicha to'liq qo'llanma.",
+      "toc": {
+        "profile": {
+          "title": "Profilingizni to'ldiring",
+          "desc": "Avval hisobingizni sozlang"
+        },
+        "resume": {
+          "title": "Rezyumengizni tayyorlang",
+          "desc": "Rezyumengizni yuklang va optimallashtiring"
+        },
+        "search": {
+          "title": "Ish qidiring",
+          "desc": "To'g'ri imkoniyatlarni toping"
+        },
+        "apply": {
+          "title": "Arizangizni yuboring",
+          "desc": "Ishonch bilan ariza topshiring"
+        },
+        "followUp": {
+          "title": "Davom ettirish",
+          "desc": "Ariza topshirgandan keyin nima qilish kerak"
+        },
+        "mistakes": {
+          "title": "Keng tarqalgan xatolar",
+          "desc": "Ushbu xatolardan saqlaning"
+        },
+        "interview": {
+          "title": "Suhbatlarga tayyorlaning",
+          "desc": "Taassurot qoldirish uchun tayyor bo'ling"
+        }
+      },
+      "sections": {
+        "profile": {
+          "title": "Profilingizni to'ldiring",
+          "cardTitle": "Profil asosiyalari",
+          "bullets": [
+            "To'liq ismingiz, kontakt ma'lumotlaringiz va joylashuvingizni qo'shing.",
+            "Professional foto yuklang.",
+            "Ishonchli profil xulosasini yozing (tajribangiz va maqsadlaringiz haqida 2-3 jumla).",
+            "Ko'nikmalaringiz, ish tajribangiz va ta'limingizni ro'yxatlang.",
+            "Yangi ko'nikmalar yoki tajriba olganingizda profilingizni yangilab turing.",
+            "Barcha ma'lumotlar to'g'ri va yangilangan ekanligiga ishonch hosil qiling."
+          ],
+          "note": "Maslahat: Ish beruvchilar siz bilan bog'lanishdan oldin ko'pincha profilingizni ko'rib chiqadilar. To'liq, professional profil siz e'tiborga olinish imkoniyatingizni oshiradi."
+        },
+        "resume": {
+          "title": "Rezyumengizni tayyorlang",
+          "cardTitle": "Rezyume eng yaxshi amaliyoti",
+          "bullets": [
+            "Aniq, professional formatdan foydalaning (agar ijodiy sohada ishlamasangiz, bezakli grafiklardan saqlaning).",
+            "Qisqa bo'lsin: ko'pchilik lavozimlar uchun 1-2 sahifa.",
+            "Har bir ish uchun rezyumengizni moslashtiring, tegishli tajriba va ko'nikmalarni ta'kidlab.",
+            "Belgilar va miqdoriy yutuqlardan foydalaning (masalan, 'Savdoni 25% oshirdim').",
+            "Imlo va grammatika xatolari uchun diqqat bilan tekshiring.",
+            "Formatni saqlash uchun rezyumengizni PDF sifatida saqlang.",
+            "Kontakt ma'lumotlaringizni va professional havolalarni qo'shing (LinkedIn, portfel va boshqalar)."
+          ],
+          "tipLabel": "Professional maslahat",
+          "tipBody": "Bir necha ishlarga tez ariza topshirish uchun har safar qayta yuklash kerakmas qilib, rezyumengizni Jobs.uz profilingizga yuklang."
+        },
+        "search": {
+          "title": "Ish qidiring",
+          "cardTitle": "Ish qidirish maslahatlari",
+          "bullets": [
+            "Lavozim nomi, ko'nikmalar yoki sohaga oid kalit so'zlarni kiriting.",
+            "Joylashuv, ish haqi diapazoni, ish turi (to'liq vaqt, yarim vaqt, masofaviy) va boshqalar bo'yicha filtrlang.",
+            "Yangi mos ishlar e'lon qilinganda email bildirishnomalari olish uchun ish ogohlantirishlarini sozlang.",
+            "Keyinchalik ko'rib chiqish uchun qiziqarli ishlarni 'Saqlangan ishlar' ro'yxatingizga saqlang.",
+            "Qidiruv natijalarini yaxshilash uchun ish tavsifidan aniq kalit so'zlardan foydalaning.",
+            "Saqlangan ishlarni muntazam tekshiring va qidiruv mezonlarini yangilang."
+          ],
+          "note": "Professional maslahat: Erta ariza topshiring. Ko'pchilik ish beruvchilar arizalarni kelgan sari ko'rib chiqadilar, shuning uchun ish e'lon qilingandan tez orada ariza topshirish sizga ustunlik berishi mumkin."
+        },
+        "apply": {
+          "title": "Arizangizni yuboring",
+          "cardTitle": "Ariza topshirish bosqichlari",
+          "bullets": [
+            "Ish e'lonida 'Ariza topshirish' tugmasini bosing.",
+            "Yubormoqchi bo'lgan rezyumengizni tanlang (yoki yangisini yuklang).",
+            "Agar talab qilinsa, qopqoq xatini yozing. Uni maxsus ish va kompaniyaga moslashtiring.",
+            "Ish beruvchi qo'shgan har qanday qo'shimcha savollarga javob bering (masalan, mavjudlik, ish haqi kutishlari).",
+            "Hamma narsa to'g'ri ekanligiga ishonch hosil qilish uchun arizangizni ko'rib chiqing.",
+            "'Ariza topshirish' tugmasini bosing.",
+            "Muvaffaqiyatli yuborganidan keyin tasdiq xatini olasiz."
+          ],
+          "templateTitle": "Namuna qopqoq xati",
+          "templateBody": "Hurmatli [Direktor Ismı],\n\n[Kompaniya Nomi] da [Lavozim Nomi] lavozimiga o'z kuchli qiziqishimni bildirish uchun yozmoqdaman. [Tegishli soha] da [X yillik] tajriba va [asosiy yutuq] ning isbotlangan rekordiga ega bo'lib, men sizning jamoangizga muhim hissa qo'shishim mumkinligiga ishonchim komil.\n\nKo'taradigan asosiy kuchlarim:\n- [Tegishli ko'nikma/yutuq #1]\n- [Tegishli ko'nikma/yutuq #2]\n- [Tegishli ko'nikma/yutuq #3]\n\n[Kompaniya Nomi] ga hissa qo'shish imkoniyati bilan xursand bo'lib, mening tarixim sizning ehtiyojlaringizga qanday to'g'ri keladigan vaqtin haqida munozara qilish uchun sabiri kutaman.\n\nRezyumeni ko'rib chiqayotganingiz uchun tashakkur.\nHurmat bilan,\n[Sizning Ismingiz]"
+        },
+        "followUp": {
+          "title": "Davom ettirish",
+          "cardTitle": "Ariza topshirgandan keyin davom ettirish",
+          "bullets": [
+            "Arizangiz holati uchun profilingizda 'Topshirgan Arizalar' qismida kuzatish olib boring.",
+            "Ish beruvchi bilan aloqaga kirmasdan avval 30-40 kun kutib turing.",
+            "Agar reksyuterning kontakt ma'lumotlari bo'lsa, qiziqishingizni qayta ta'kidlab va muddati haqida so'rab, muloyim xat yuboring.",
+            "Kutayotganingizda boshqa ishlarni qidirish va ariza topshirishni davom ettiring. Barcha umidingizni bitta arizaga bog'lamang.",
+            "Barcha aloqalarda professional va hamjamiyatli bo'ling.",
+            "Davom ettirish sanalarini va javoblarni yozuvlarida dokumentlashtiring."
+          ],
+          "tipLabel": "Davom ettirish maslahat",
+          "tipBody": "Agar 2-3 hafta ichida javob olmasangiz, yana bir marta davom ettirishingiz mumkin. Shundan keyin boshqa imkoniyatlarga e'tibor berishning vaqti keldi."
+        },
+        "mistakes": {
+          "title": "Keng tarqalgan xatolar, ulardan saqlaning",
+          "items": [
+            {
+              "title": "Umumiy Arizalar",
+              "body": "Rezyumengiz yoki qopqoq xatingizni ishga moslamay ariza topshirish. Har bir ariza nima uchun sizning bu maxsus rol uchun yaxshi nomzod ekaningizni tushuntirib berishi kerak."
+            },
+            {
+              "title": "Beparva Xatolar",
+              "body": "Imlo xatolari, formatlash xatolari yoki eskirgan ma'lumot bilan arizalar yuboring. Yuborganingizdan oldin hamma narsani tekshiring."
+            },
+            {
+              "title": "Ko'rsatmalarni E'tiborsizlik",
+              "body": "Ariza topshirish ko'rsatmalariga amal qilmaslik (masalan, majburiy savollarga javob berish, muayyan fayl formatlaridan foydalanish). Ish beruvchilar siz ko'rsatmalarga amal qilmasligini sezadi."
+            },
+            {
+              "title": "O'tmaydigan yoki Yetmaydigan Malaka",
+              "body": "Ish saviyangizdan ancha yuqori yoki pastroq bo'lgan lavozimlar uchun ariza topshirish. Sahnasida hech bo'lmaganda 70% talablar uchun mos keladigan lavozimlarni tanlang."
+            },
+            {
+              "title": "Davom Strategiyasi Yo'q",
+              "body": "Arizalaringizni davom ettirish yoki kuzatish xatolarni qoldiring. Qaysi vaqtda davom ettirish kerakligi, topshirgan har bir ish uchun tartibli qaydlar saqlab turing."
+            }
+          ]
+        },
+        "interview": {
+          "title": "Suhbatlarga tayyorlaning",
+          "cardTitle": "Suhbat tayyorlash qo'llanmasi",
+          "bullets": [
+            "Kompaniyani tadqiq qiling: Ularning mahsulotlari, xizmatlar, madaniyati va yangi yangiliklar haqida bilib oling.",
+            "Ish tavsifini ko'rib chiqing va ish tajribangiz talablarni qanday qolayotganiga doir misollarni tayyorlab qo'ying.",
+            "Umumiy suhbat savollariga javob berishni mashq qiling (masalan, 'O'zingiz haqida gapiring', 'Nima uchun bu ishni xohlaysiz?').",
+            "Suhbatchi uchun savollar tayyorlang (masalan, 'Bu rolyda muvaffaqiyat qanday ko'rinadi?').",
+            "Professional kiyinib, vaqtida keliblar (yoki kiriting).",
+            "Suhbatdan 24 soat ichida tashakkur xati yuboring.",
+            "Ishonchli, haqiqiy va rol hamda kompaniyaga chin qiziqish ko'rsating."
+          ]
+        },
+        "followUp": {
+          "title": "Davom ettirish",
+          "cardTitle": "Ariza topshirgandan keyin davom ettirish",
+          "bullets": [
+            "Profilingizda 'Yuborilgan arizalar' bo'limida ariza holatingizni kuzatib boring.",
+            "Ish beruvchi bilan aloqaga kirmasdan avval 30-40 kun kutib turing.",
+            "Agar reksyuterning kontakt ma'lumotlari bo'lsa, qiziqishingizni qayta ta'kidlab va muddati haqida so'rab, muloyim xat yuboring.",
+            "Kutayotganingizda boshqa ishlarni qidirish va ariza topshirishni davom ettiring. Barcha umidingizni bitta arizaga bog'lamang.",
+            "Barcha aloqalarda professional va hamjamiyatli bo'ling.",
+            "Davom ettirish sanalarini va javoblarni yozuvlarida dokumentlashtiring."
+          ],
+          "tipLabel": "Davom ettirish maslahat",
+          "tipBody": "Agar 2-3 hafta ichida javob olmasangiz, yana bir marta davom ettirishingiz mumkin. Shundan keyin boshqa imkoniyatlarga e'tibor berishning vaqti keldi."
+        },
+        "mistakes": {
+          "title": "Qochilishi kerak bo'lgan keng tarqalgan xatolar",
+          "items": [
+            {
+              "title": "Umumiy Arizalar",
+              "body": "Rezyumengiz yoki qopqoq xatingizni ishga moslamay ariza topshirish. Har bir ariza nima uchun sizning bu maxsus rol uchun yaxshi nomzod ekaningizni tushuntirib berishi kerak."
+            },
+            {
+              "title": "Beparva Xatolar",
+              "body": "Imlo xatolari, formatlash xatolari yoki eskirgan ma'lumot bilan arizalar yuboring. Yuborganingizdan oldin hamma narsani tekshiring."
+            },
+            {
+              "title": "Ko'rsatmalarni E'tiborsizlik",
+              "body": "Ariza topshirish ko'rsatmalariga amal qilmaslik (masalan, majburiy savollarga javob berish, muayyan fayl formatlaridan foydalanish). Ish beruvchilar siz ko'rsatmalarga amal qilmasligini sezadi."
+            },
+            {
+              "title": "O'tmaydigan yoki Yetmaydigan Malaka",
+              "body": "Ish saviyangizdan ancha yuqori yoki pastroq bo'lgan lavozimlar uchun ariza topshirish. Sahnasida hech bo'lmaganda 70% talablar uchun mos keladigan lavozimlarni tanlang."
+            },
+            {
+              "title": "Davom Strategiyasi Yo'q",
+              "body": "Arizalaringizni davom ettirish yoki kuzatish xatolarni qoldiring. Qaysi vaqtda davom ettirish kerakligi, topshirgan har bir ish uchun tartibli qaydlar saqlab turing."
+            }
+          ]
+        },
+        "interview": {
+          "title": "Suhbatlarga tayyorlaning",
+          "cardTitle": "Suhbat tayyorlash qo'llanmasi",
+          "bullets": [
+            "Kompaniyani o'rganing: Ularning mahsulotlari, xizmatlari, madaniyati va so'nggi yangiliklarini bilib oling.",
+            "Ish tavsifini ko'rib chiqing va tajribangiz talablarga qanday mos kelishining misollarini tayyorlang.",
+            "Umumiy suhbat savollariga javob berishni mashq qiling (masalan, 'O'zingiz haqingizda gapiring', 'Nima uchun bu ishni xohlaysiz?').",
+            "Intervyuerga beradigan savollarni tayyorlang (masalan, 'Bu lavozimda muvaffaqiyat qanday ko'rinadi?').",
+            "Professional kiyining va o'z vaqtida yeting (yoki tizimga kiring).",
+            "Suhbatdan keyin 24 soat ichida minnatdorchilik emailini yuboring.",
+            "Ishonchli, haqiqiy va rol hamda kompaniyaga chin qiziqish ko'rsating."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Ariza topshirishni boshlashga tayyormisiz?",
+        "subtitle": "Bugun ishlarni qidiring va birinchi arizangizni yuboring.",
+        "button": "Ishlarni qidirish"
+      }
+    },
+    "postJob": {
+      "pageTitle": "Ish e'lonini qanday joylashtirish kerak - Jobs.uz Yordam",
+      "heroTitle": "Ish e'lonini qanday joylashtirish kerak",
+      "heroSubtitle": "Jobs.uz da samarali ish e'lonlarini joylashtirish uchun ish beruvchilar va rekruterlar uchun to'liq qo'llanma.",
+      "toc": {
+        "start": {
+          "title": "Boshlash",
+          "desc": "Hisob sozlamalari va talablar"
+        },
+        "description": {
+          "title": "Ish tavsifini yozing",
+          "desc": "Ishonchli e'lon yarating"
+        },
+        "details": {
+          "title": "Ish tafsilotlarini qo'shing",
+          "desc": "Joylashuv, ish haqi, ish turi"
+        },
+        "skills": {
+          "title": "Talab qilinadigan ko'nikmalar",
+          "desc": "Malakalar va tajribani ro'yxatlang"
+        },
+        "attract": {
+          "title": "Nomzodlarni jalb qiling",
+          "desc": "Ishingizni ajratib ko'rsating"
+        },
+        "manage": {
+          "title": "Arizalarni boshqaring",
+          "desc": "Nomzodlarni ko'rib chiqing va javob bering"
+        },
+        "mistakes": {
+          "title": "Keng tarqalgan xatolar",
+          "desc": "Bu tuzoqlardan saqlaning"
+        },
+        "optimize": {
+          "title": "E'loningizni optimallashtiring",
+          "desc": "Ko'proq malakali arizachilarni oling"
+        },
+        "after": {
+          "title": "Joylashtirgandan keyin",
+          "desc": "Keyingi qadamlar va eng yaxshi amaliyotlar"
+        }
+      },
+      "sections": {
+        "start": {
+          "title": "Boshlash",
+          "cardTitle": "Birinchi ishingizni joylashtirish qadamlari",
+          "body": "Jobs.uz da ish joylashtirish uchun sizga rekruter yoki ish beruvchi hisobi kerak:",
+          "bullets": [
+            "Agar hali ro'yxatdan o'tmagan bo'lsangiz, rekruter/ish beruvchi sifatida ro'yxatdan o'ting.",
+            "Kompaniya profilini to'ldiring (logotip, tavsif, veb-sayt va h.k. qo'shing).",
+            "Emailingizni va kompaniya ma'lumotlaringizni tasdiqlang.",
+            "Narx rejasini tanlang yoki bepul ish joylashtirish kreditlaringizdan foydalaning.",
+            "Boshqaruv panelingizdan 'Ish joylashtirish' tugmasini bosing."
+          ],
+          "tipLabel": "Muhim eslatma",
+          "tipBody": "Ish e'lonini nashr qilish uchun sizda faol hisob va mavjud ish joylashtirish kreditlari bo'lishi kerak."
+        },
+        "description": {
+          "title": "Ish tavsifini yozing",
+          "body": "Aniq, batafsil ish tavsifi to'g'ri nomzodlarni jalb qiladi va vaqtingizni tejaydi:",
+          "bullets": [
+            "Qisqacha xulosadan boshlang: Bu qanday lavozim va nima uchun muhim?",
+            "Asosiy mas'uliyatlarni ro'yxatlang: Odam har kuni nima qiladi?",
+            "Talab qilinadigan malakalarni ko'rsating: Ta'lim, tajriba, ko'nikmalar, sertifikatlar.",
+            "Afzal qilinadigan malakalarni eslatib o'ting: Istakli ko'nikmalar yoki tajriba.",
+            "Kompaniya madaniyati va qadriyatlaringizni tasvirlab bering.",
+            "Imtiyozlar va afzalliklarni qo'shing (ish haqi diapazoni, tibbiy sug'urta, masofaviy ish va h.k.)."
+          ],
+          "template": "Shablon misoli:",
+          "templateContent": "Lavozim nomi: Katta dasturiy ta'minot muhandisi\n\nBiz haqimizda: [Kompaniya nomi] [sohada] ixtisoslashgan tez o'sayotgan texnologiya kompaniyasi. Biz jamoamizga qo'shilish uchun iqtidorli muhandis qidirmoqdamiz.\n\nMas'uliyatlar:\n- Kengaytirilishi mumkin bo'lgan veb-ilovalarni loyihalashtirish va ishlab chiqish\n- Mahsulot va dizayn jamoalari bilan hamkorlik qilish\n- Toza, parvarish qilinadigan kod yozish\n\nMalakalar:\n- Dasturiy ta'minot ishlab chiqishda 5+ yillik tajriba\n- Python, JavaScript va SQL da malaka\n- Bulut platformalari bilan tajriba (AWS, Azure yoki GCP)\n\nBiz nima taklif qilamiz:\n- Raqobatbardosh ish haqi\n- Tibbiy sug'urta\n- Moslashuvchan ish vaqti\n- Kasbiy rivojlanish imkoniyatlari"
+        },
+        "details": {
+          "title": "Ish tafsilotlarini qo'shing",
+          "cardTitle": "Asosiy ish tafsilotlari",
+          "body": "Nomzodlarga lavozimni tushunishga yordam berish uchun aniq tafsilotlarni bering:",
+          "bullets": [
+            "Lavozim nomi: Aniq, standart nomdan foydalaning (masalan, 'Marketing Menejeri' o'rniga 'Marketing Ninja').",
+            "Joylashuv: Shaharni belgilang yoki ish masofaviy ekanini ko'rsating.",
+            "Ish turi: To'liq vaqt, yarim vaqt, shartnoma yoki amaliyot.",
+            "Ish haqi diapazoni: Kompensatsiya haqida shaffof bo'ling. Agar aniq raqamlarni bo'lisha olmasangiz, diapazon bering.",
+            "Kategoriya: Eng tegishli ish kategoriyasini tanlang.",
+            "Muddati: Agar kerak bo'lsa, ariza topshirish muddatini belgilang."
+          ],
+          "tipLabel": "Professional maslahat",
+          "tipBody": "Ish haqi ma'lumoti bo'lgan ishlar o'rtacha 30% ko'proq ariza oladi."
+        },
+        "skills": {
+          "title": "Talab qilinadigan ko'nikmalar",
+          "body": "Lavozim uchun kerakli texnik va yumshoq ko'nikmalarni ro'yxatlang. Aniq bo'ling:",
+          "examples": [
+            "Dasturiy ta'minot ishlab chiqaruvchisi: Python, Django, REST APIs, Git, Docker",
+            "Marketing menejeri: SEO, Google Analytics, Kontent strategiyasi, Ijtimoiy media marketing",
+            "Grafik dizayner: Adobe Photoshop, Illustrator, Figma, UI/UX dizayn",
+            "Savdo vakili: CRM dasturi, Muzokaralar, Sovuq qo'ng'iroqlar, Lead generatsiyasi"
+          ],
+          "note": "Eslatma: Juda ko'p ko'nikmalarni ro'yxatlamang. Nomzodlarni ortiqcha yuklamaslik uchun eng muhim 5-10 tasiga e'tibor bering."
+        },
+        "attract": {
+          "title": "Eng yaxshi nomzodlarni jalb qiling",
+          "body": "Ish e'loningizni ajratib ko'rsating:",
+          "bullets": [
+            "Aniq, qiziqarli tildan foydalaning (jargondan saqlaning).",
+            "Kompaniyangizni nima noyob qilishini ta'kidlang (madaniyat, missiya, o'sish imkoniyatlari).",
+            "Imtiyozlar va afzalliklarni ta'kidlang.",
+            "Agar mumkin bo'lsa, ofis yoki jamoangizning fotosuratlari yoki videolarini qo'shing.",
+            "Professionallikni ko'rsatish uchun arizachilarga tez javob bering."
+          ],
+          "tip": "Maslahat: Nomzodlar kompaniyangizning missiyasi va qadriyatlari bilan bog'liqlikni his qilsalar, ariza topshirish ehtimoli yuqori."
+        },
+        "manage": {
+          "title": "Arizalarni boshqaring",
+          "body": "Ishingiz jonli bo'lgach, arizalar kela boshlaydi:",
+          "steps": [
+            "Boshqaruv panelingizda 'Nomzodlar' bo'limida arizalarni ko'rib chiqing.",
+            "Nomzodlarni holat, ko'nikmalar yoki tajriba bo'yicha saralang va filtrlang.",
+            "Rezyume, qopqoq xatlari va siz bergan har qanday qo'shimcha savollarni ko'ring.",
+            "Nomzod holatini o'zgartiring (Kutilmoqda, Ko'rib chiqildi, Suhbat, Rad etildi, Qabul qilindi).",
+            "Nomzodlar bilan email yoki telefon orqali bevosita bog'laning.",
+            "Tartibli qolish uchun har bir nomzod haqida eslatmalar qoldiring.",
+            "Suhbat takliflarini yoki rad etish xatlarini tez yuboring."
+          ],
+          "tip": "Maslahat: Barcha arizachilarga javob bering, hatto bu tez rad etish xati bo'lsa ham. Bu kompaniyangizni yaxshi ko'rsatadi va nomzod tajribasini yaxshilaydi."
+        },
+        "mistakes": {
+          "title": "Qochilishi kerak bo'lgan keng tarqalgan xatolar",
+          "bullets": [
+            "Lavozimni aniq tushuntirmaydigan noaniq lavozim nomlari yoki tavsiflar.",
+            "Ish haqi ma'lumotini qo'shmaslik (bu malakali nomzodlarni qaytarishi mumkin).",
+            "Juda ko'p talablarni ro'yxatlash (bu odamlarni ariza topshirishdan to'xtatishi mumkin).",
+            "Tekshirmaslik (opechalar va xatolar kompaniyangizni noprofessional ko'rsatadi).",
+            "Arizachilarga o'z vaqtida javob bermaslik.",
+            "Takroriy ishlarni joylashtirish (bu nomzodlarni chalkashtirib, kreditlaringizni isrof qiladi)."
+          ]
+        },
+        "optimize": {
+          "title": "E'loningizni optimallashtiring",
+          "body": "Ko'proq malakali arizachilarni olish uchun ish e'loningizni yaxshilang:",
+          "tips": [
+            "Nomzodlar qidirishlari mumkin bo'lgan tegishli kalit so'zlardan foydalaning.",
+            "Lavozim va talablar haqida aniq bo'ling.",
+            "Tavsifni qisqa, lekin ma'lumotli saqlang (300-600 so'zga intiling).",
+            "Aniq harakatga chaqiruvni qo'shing (masalan, 'Hozir rezyume va qopqoq xatingiz bilan ariza topshiring').",
+            "Agar to'g'ri nomzodlarni olmayotgan bo'lsangiz, e'loningizni yangilang.",
+            "Ishingizni ijtimoiy tarmoqlarda yoki veb-saytingizda targ'ib qiling.",
+            "Tanlangan e'lonlar yoki ish ko'tarilishi kabi premium xususiyatlardan foydalanishni o'ylab ko'ring.",
+            "Ishingizning ishlashini (ko'rishlar, arizalar) kuzatib boring va kerak bo'lganda sozlang."
+          ]
+        },
+        "after": {
+          "title": "Joylashtirgandan keyin",
+          "body": "Ishingiz jonli bo'lgach nima qilish kerak:",
+          "steps": [
+            "Arizalarni har kuni kuzatib boring va tez javob bering.",
+            "Qancha odam ko'rayotgani va ariza topshirayotganini ko'rish uchun ish e'loningizning analitikasini ko'rib chiqing.",
+            "Kerak bo'lsa e'loningizni tahrirlang (istalgan vaqtda tafsilotlarni yangilashingiz mumkin).",
+            "To'g'ri nomzodni topganingizdan keyin ishni yoping.",
+            "Agar so'rashsa, nomzodlarga fikr qoldiring.",
+            "Boshqaruv panelingizni tartibli saqlash uchun eski ish e'lonlarini arxivlang.",
+            "Oldindan rejalashtiring: Agar doimiy ishga olish ehtiyojlaringiz bo'lsa, bir necha joylashtirish uchun obuna rejasini o'ylab ko'ring."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Birinchi ishingizni joylashtirishga tayyormisiz?",
+        "subtitle": "Bugun eng yaxshi talentlarni jalb qilishni boshlang.",
+        "button": "Ish joylashtirish"
+      }
+    }
   }
 }

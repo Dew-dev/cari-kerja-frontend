@@ -34,3 +34,15 @@ export function registerRecruiter(payload) {
     },
   });
 }
+
+export function logout() {
+  return api.post(
+    "/users/logout",
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+  );
+}

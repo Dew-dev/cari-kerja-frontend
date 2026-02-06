@@ -53,7 +53,7 @@ function setLang(lang) {
         <div class="flex items-center gap-3 flex-wrap">
           <!-- Employers -->
           <router-link
-            to="/regcruiter"
+            to="/register-recruiter"
             v-if="!auth.isLoggedIn"
             class="border border-blue-500 text-blue-500 px-4 py-1 rounded"
           >
@@ -67,6 +67,8 @@ function setLang(lang) {
         <a href="/contact" class="hover:underline">{{ t("footer.contact") }}</a>
         <a href="/about" class="hover:underline">{{ t("footer.about") }}</a>
         <a href="/faq" class="hover:underline">{{ t("footer.faq") }}</a>
+        <a href="/terms-of-service" class="hover:underline">Terms of Service</a>
+        <a href="/privacy-policy" class="hover:underline">Privacy Policy</a>
       </div>
 
       <!-- COPYRIGHT -->

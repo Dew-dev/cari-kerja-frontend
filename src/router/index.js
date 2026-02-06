@@ -43,10 +43,76 @@ const routes = [
     component: () => import("../pages/FAQ.vue"),
   },
   {
+    path: "/terms-of-service",
+    name: "terms-of-service",
+    component: () => import("../pages/TermsOfService.vue"),
+  },
+  {
+    path: "/privacy-policy",
+    name: "privacy-policy",
+    component: () => import("../pages/PrivacyPolicy.vue"),
+  },
+  {
+    path: "/help/apply",
+    name: "help-apply",
+    component: () => import("../pages/help/ApplyJob.vue"),
+  },
+  {
+    path: "/help/post-job",
+    name: "help-post-job",
+    component: () => import("../pages/help/PostJob.vue"),
+  },
+  {
+    path: "/help/cv",
+    name: "help-cv",
+    component: () => import("../pages/help/HelpCv.vue"),
+  },
+  {
+    path: "/help/applications",
+    name: "help-applications",
+    component: () => import("../pages/help/HelpApplications.vue"),
+  },
+  {
+    path: "/help/search-resumes",
+    name: "help-search-resumes",
+    component: () => import("../pages/help/HelpSearchResumes.vue"),
+  },
+  {
+    path: "/help/pricing",
+    name: "help-pricing",
+    component: () => import("../pages/help/HelpPricing.vue"),
+  },
+  {
+    path: "/help/register",
+    name: "help-register",
+    component: () => import("../pages/help/HelpRegister.vue"),
+  },
+  {
+    path: "/help/reset-password",
+    name: "help-reset-password",
+    component: () => import("../pages/help/HelpResetPassword.vue"),
+  },
+  {
+    path: "/help/report-issue",
+    name: "help-report-issue",
+    component: () => import("../pages/help/HelpReportIssue.vue"),
+  },
+  {
+    path: "/help/supported-browsers",
+    name: "help-supported-browsers",
+    component: () => import("../pages/help/HelpSupportedBrowsers.vue"),
+  },
+  {
     path: "/login",
     name: "login",
     meta: { guestOnly: true },
     component: () => import("../pages/auth/login.vue"),
+  },
+  {
+    path: "/recruiter-login",
+    name: "recruiter-login",
+    meta: { blockRole: "recruiter" },
+    component: () => import("../pages/auth/RecruiterLogin.vue"),
   },
   {
     path: "/jobposts",
@@ -71,8 +137,8 @@ const routes = [
     component: () => import("../pages/auth/Register.vue"),
   },
   {
-    path: "/regcruiter",
-    meta: { guestOnly: true },
+    path: "/register-recruiter",
+    meta: { blockRole: "recruiter" },
     component: () => import("../pages/auth/RegisterRecruiter.vue"),
   },
   {
@@ -104,7 +170,7 @@ const routes = [
   },
   {
     path: "/recruiter",
-    meta: { requiresAuth: true, role: "recruiter" },
+    meta: { requiresAuth: true, role: "recruiter" , blockRole: "user"},
     children: [
       {
         path: "",
@@ -167,7 +233,13 @@ router.beforeEach((to) => {
     return auth.role === "recruiter" ? "/recruiter/jobs" : "/jobposts";
   }
 
-  // 🔒 PROTECTED ROUTE
+  // 🚫 BLOCK SPECIFIC ROLE - Logout and redirect
+  if (to.meta.blockRole && auth.role === to.meta.blockRole) {
+    auth.logout();
+    return "/login";
+  }
+
+  // �� PROTECTED ROUTE
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
     return "/login";
   }
