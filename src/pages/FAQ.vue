@@ -40,12 +40,22 @@
                 ✕
               </button>
             </div>
-            <p v-if="query && searchResultsCount !== null" class="text-sm text-gray-600 mt-2">
+            <p
+              v-if="query && searchResultsCount !== null"
+              class="text-sm text-gray-600 mt-2"
+            >
               {{ searchResultsCount }}
-              {{ searchResultsCount === 1 ? t("faq.resultSingular") : t("faq.resultPlural") }}
+              {{
+                searchResultsCount === 1
+                  ? t("faq.resultSingular")
+                  : t("faq.resultPlural")
+              }}
               {{ t("faq.resultsFoundFor") }} "{{ query }}"
             </p>
-            <p v-else-if="query && searchResultsCount === 0" class="text-sm text-red-600 mt-2">
+            <p
+              v-else-if="query && searchResultsCount === 0"
+              class="text-sm text-red-600 mt-2"
+            >
               {{ t("faq.noResults", { query }) }}
             </p>
           </div>
