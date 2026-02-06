@@ -32,7 +32,7 @@
             </div>
             <div class="flex items-center text-sm text-gray-600">
               <span class="pi pi-dollar text-green-600 mr-2"></span>
-              {{ job.salary_from ? `${job.salary_from} - ${job.salary_to}` : 'Negotiable' }}
+              {{ job.salary_min ? `${job.salary_min} - ${job.salary_max} ${job.currency || ''}` : 'Negotiable' }}
             </div>
           </div>
 
