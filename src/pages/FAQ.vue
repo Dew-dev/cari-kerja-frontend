@@ -171,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
@@ -180,7 +180,8 @@ const { t } = useI18n();
 const query = ref("");
 const openIndex = ref(null);
 
-const categories = [
+// Make categories, faqs and popular computed so they re-evaluate when locale changes
+const categories = computed(() => [
   {
     id: "seekers",
     title: t("faq.categories.seekers.title"),
@@ -240,9 +241,9 @@ const categories = [
       { label: t("faq.categories.technical.links.browsers"), to: "/" },
     ],
   },
-];
+]);
 
-const faqs = [
+const faqs = computed(() => [
   {
     q: t("faq.faqs.0.q"),
     a: t("faq.faqs.0.a"),
@@ -263,9 +264,9 @@ const faqs = [
     a: t("faq.faqs.3.a"),
     tag: t("faq.faqs.3.tag"),
   },
-];
+]);
 
-const popular = [
+const popular = computed(() => [
   {
     title: t("faq.popular.0.title"),
     excerpt: t("faq.popular.0.excerpt"),
@@ -276,7 +277,7 @@ const popular = [
     excerpt: t("faq.popular.1.excerpt"),
     to: "/help/post-job",
   },
-];
+]);
 
 function toggle(i) {
   openIndex.value = openIndex.value === i ? null : i;
@@ -286,7 +287,7 @@ function onSearch() {
   // Lightweight placeholder: in a full implementation we'd query the backend
   if (!query.value) return;
   // scroll to FAQ section and open first matching item
-  const first = faqs.findIndex((f) =>
+  const first = faqs.value.findIndex((f) =>
     f.q.toLowerCase().includes(query.value.toLowerCase()),
   );
   if (first >= 0) {
@@ -324,9 +325,14 @@ function callSupport() {
   window.location.href = "tel:+998901234567";
 }
 
-onMounted(() => {
-  document.title = t("faq.title");
-});
+// Keep document title in sync with locale changes
+watch(
+  () => t("faq.title"),
+  (val) => {
+    document.title = val;
+  },
+  { immediate: true },
+);
 </script>
 
 <style scoped>

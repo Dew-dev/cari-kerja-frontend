@@ -18,7 +18,8 @@
     "searchJobs": "Search jobs",
     "postResume": "Post resume",
     "forEmployers": "For employers",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "language": "Language"
   },
   "home": {
     "title": "Uzbekistan's #1 job service",
@@ -111,6 +112,8 @@
     "subtitle": "Answers to common questions for job seekers and employers.",
     "searchPlaceholder": "Search help articles, e.g. 'how to apply', 'post a job'",
     "searchButton": "Search",
+    "categoriesHeading": "Popular categories",
+    "popularHeading": "Popular help articles",
     "categories": {
       "seekers": {
         "title": "For job seekers",
