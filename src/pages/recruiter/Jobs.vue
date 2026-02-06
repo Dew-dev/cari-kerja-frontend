@@ -109,6 +109,7 @@
                     <!-- VIEW -->
                     <button
                       title="View job"
+                      @click="$router.push(`/jobposts/${job.id}`)"
                       class="action-btn text-blue-600 hover:bg-blue-200 border border-blue-600 shadow-sm rounded-full p-1"
                     >
                       <i class="pi pi-eye"></i>
@@ -191,6 +192,15 @@
                       class="action-btn text-purple-600 hover:bg-purple-200 border rounded-full p-1"
                     >
                       <i class="pi pi-copy"></i>
+                    </button>
+
+                    <!-- DELETE -->
+                    <button
+                      title="Delete job"
+                      @click="openActionModal(job, 'delete')"
+                      class="action-btn text-red-600 hover:bg-red-200 border rounded-full p-1"
+                    >
+                      <i class="pi pi-trash"></i>
                     </button>
                   </template>
                 </div>
@@ -335,6 +345,7 @@
         <span v-if="actionType === 'archive'">Archive job?</span>
         <span v-else-if="actionType === 'restore'">Restore job?</span>
         <span v-else-if="actionType === 'duplicate'">Duplicate job?</span>
+        <span v-else-if="actionType === 'delete'">Delete job?</span>
       </h3>
 
       <p class="mt-2 text-sm text-gray-600">
@@ -346,6 +357,9 @@
         </span>
         <span v-else-if="actionType === 'duplicate'">
           A copy of this job will be created as a draft.
+        </span>
+        <span v-else-if="actionType === 'delete'">
+          This job will be permanently deleted. This action cannot be undone.
         </span>
       </p>
 
@@ -366,6 +380,8 @@
               ? 'bg-gray-700 hover:bg-gray-800'
               : actionType === 'restore'
               ? 'bg-green-600 hover:bg-green-700'
+              : actionType === 'delete'
+              ? 'bg-red-600 hover:bg-red-700'
               : 'bg-purple-600 hover:bg-purple-700'
           "
           :disabled="actionLoading"
@@ -488,10 +504,19 @@ async function confirmAction() {
       return;
     }
 
-    archivedJobs(); // refresh archived
-    fetchJobs(); // refresh table
+    if (actionType.value === "delete") {
+      await api.delete(`/job-posts/${selectedJob.value.id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      push.success("Job deleted successfully");
+    }
+
     closeActionModal();
     countit.value = !countit.value;
+    fetchJobs(); // refresh table
+    archivedJobs(); // refresh archived
     page.value = 1; // reset to first page
   } catch (err) {
     console.error("Action failed", err);

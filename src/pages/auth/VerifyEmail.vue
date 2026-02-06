@@ -1,27 +1,32 @@
 <script setup>
-import { ref, onMounted } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import api from "@/services/api"
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import api from "@/services/api";
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 
-const loading = ref(true)
-const success = ref(false)
-const error = ref("")
+const loading = ref(true);
+const success = ref(false);
+const error = ref("");
 
 onMounted(async () => {
   try {
-    const token = route.query.token
-    await api.get("/auth/verify-email", { params: { token } })
-    success.value = true
-    setTimeout(() => router.push("/login"), 2000)
+    const token = route.query.token;
+    const result = await api.get("/auth/verify-email", { params: { token } });
+    if (!result.err) {
+      if (result.data.role === "recruiter") {
+        setTimeout(() => router.push("/recruiter-login"), 2000);
+      } else {
+        setTimeout(() => router.push("/login"), 2000);
+      }
+    }
   } catch (e) {
-    error.value = "Invalid or expired verification link"
+    error.value = "Invalid or expired verification link";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-})
+});
 </script>
 
 <template>
