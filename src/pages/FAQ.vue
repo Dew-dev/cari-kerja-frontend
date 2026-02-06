@@ -40,12 +40,22 @@
                 ✕
               </button>
             </div>
-            <p v-if="query && searchResultsCount !== null" class="text-sm text-gray-600 mt-2">
+            <p
+              v-if="query && searchResultsCount !== null"
+              class="text-sm text-gray-600 mt-2"
+            >
               {{ searchResultsCount }}
-              {{ searchResultsCount === 1 ? t("faq.resultSingular") : t("faq.resultPlural") }}
+              {{
+                searchResultsCount === 1
+                  ? t("faq.resultSingular")
+                  : t("faq.resultPlural")
+              }}
               {{ t("faq.resultsFoundFor") }} "{{ query }}"
             </p>
-            <p v-else-if="query && searchResultsCount === 0" class="text-sm text-red-600 mt-2">
+            <p
+              v-else-if="query && searchResultsCount === 0"
+              class="text-sm text-red-600 mt-2"
+            >
               {{ t("faq.noResults", { query }) }}
             </p>
           </div>
@@ -185,11 +195,7 @@
 </template>
 
 <script setup>
-<<<<<<< HEAD
-import { ref, computed, watch } from "vue";
-=======
 import { ref, onMounted, computed, watch } from "vue";
->>>>>>> 944e0b2f0b5b91f281df8c6bc7af40bf85de1341
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
@@ -198,10 +204,6 @@ const { t, locale } = useI18n();
 const query = ref("");
 const openIndex = ref(null);
 
-<<<<<<< HEAD
-// Make categories, faqs and popular computed so they re-evaluate when locale changes
-=======
->>>>>>> 944e0b2f0b5b91f281df8c6bc7af40bf85de1341
 const categories = computed(() => [
   {
     id: "seekers",
@@ -267,11 +269,7 @@ const categories = computed(() => [
   },
 ]);
 
-<<<<<<< HEAD
-const faqs = computed(() => [
-=======
 const allFaqs = computed(() => [
->>>>>>> 944e0b2f0b5b91f281df8c6bc7af40bf85de1341
   {
     q: t("faq.faqs.0.q"),
     a: t("faq.faqs.0.a"),
@@ -294,8 +292,6 @@ const allFaqs = computed(() => [
   },
 ]);
 
-<<<<<<< HEAD
-=======
 const faqs = computed(() => {
   if (!query.value.trim()) {
     return allFaqs.value;
@@ -321,7 +317,6 @@ const searchResultsCount = computed(() => {
   return faqs.value.length;
 });
 
->>>>>>> 944e0b2f0b5b91f281df8c6bc7af40bf85de1341
 const popular = computed(() => [
   {
     title: t("faq.popular.0.title"),
@@ -340,17 +335,6 @@ function toggle(i) {
 }
 
 function onSearch() {
-<<<<<<< HEAD
-  // Lightweight placeholder: in a full implementation we'd query the backend
-  if (!query.value) return;
-  // scroll to FAQ section and open first matching item
-  const first = faqs.value.findIndex((f) =>
-    f.q.toLowerCase().includes(query.value.toLowerCase()),
-  );
-  if (first >= 0) {
-    openIndex.value = first;
-    // smooth scroll to the matched item
-=======
   if (!query.value.trim()) return;
 
   // Close any open accordion and open first result
@@ -359,7 +343,6 @@ function onSearch() {
     openIndex.value = firstIndex;
 
     // Smooth scroll to the matched item
->>>>>>> 944e0b2f0b5b91f281df8c6bc7af40bf85de1341
     setTimeout(() => {
       const sections = document.querySelectorAll(".bg-gray-50 .space-y-3");
       if (sections[0]) {
@@ -395,16 +378,6 @@ function callSupport() {
   window.location.href = "tel:+998901234567";
 }
 
-<<<<<<< HEAD
-// Keep document title in sync with locale changes
-watch(
-  () => t("faq.title"),
-  (val) => {
-    document.title = val;
-  },
-  { immediate: true },
-);
-=======
 onMounted(() => {
   document.title = t("faq.title");
 });
@@ -412,7 +385,6 @@ onMounted(() => {
 watch(locale, () => {
   document.title = t("faq.title");
 });
->>>>>>> 944e0b2f0b5b91f281df8c6bc7af40bf85de1341
 </script>
 
 <style scoped>
