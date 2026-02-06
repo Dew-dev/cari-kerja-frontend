@@ -195,9 +195,9 @@ async function saveProfile() {
     auth.user = { ...auth.user, name: form.name, email: form.email };
     localStorage.setItem("user", JSON.stringify(auth.user));
 
-    push.success($t('profile.profileUpdatedSuccessfully'));
+     push.success(t('profile.profileUpdatedSuccessfully'));
   } catch (err) {
-    push.error(err?.response?.data?.message || $t('profile.failedToUpdateProfile'));
+     push.error(err?.response?.data?.message || t('profile.failedToUpdateProfile'));
   } finally {
     savingProfile.value = false;
   }
@@ -207,22 +207,22 @@ async function saveProfile() {
 async function addResume(file, title, isDefault) {
   try {
     if (!/application\/pdf/i.test(file.type)) {
-      push.error($t('profile.onlyPDFAllowed'));
+        push.error(t('profile.onlyPDFAllowed'));
       return;
     }
 
     if (file.size > CV_MAX_MB * 1024 * 1024) {
-      push.error($t('profile.maxSizeMB', { size: CV_MAX_MB }));
+        push.error(t('profile.maxSizeMB', { size: CV_MAX_MB }));
       return;
     }
 
     if (!title.trim()) {
-      push.error($t('profile.titleRequired'));
+        push.error(t('profile.titleRequired'));
       return;
     }
 
     if (resumes.value.length >= RESUME_LIMIT) {
-      push.error($t('profile.maxResumes', { limit: RESUME_LIMIT }));
+        push.error(t('profile.maxResumes', { limit: RESUME_LIMIT }));
       return;
     }
 
@@ -248,9 +248,9 @@ async function addResume(file, title, isDefault) {
       }));
     }
 
-    push.success($t('profile.resumeAddedSuccessfully'));
+       push.success(t('profile.resumeAddedSuccessfully'));
   } catch (err) {
-    push.error($t('profile.failedToUploadResume'));
+       push.error(t('profile.failedToUploadResume'));
   }
 }
 
@@ -266,9 +266,9 @@ async function removeResume(id) {
       await setPrimaryResume(resumes.value[0].id);
     }
 
-    push.success($t('profile.resumeRemoved'));
+       push.success(t('profile.resumeRemoved'));
   } catch (err) {
-    push.error($t('profile.failedToDeleteResume'));
+       push.error(t('profile.failedToDeleteResume'));
   }
 }
 
@@ -294,9 +294,9 @@ async function setPrimaryResume(id) {
       is_default: r.id === id,
     }));
 
-    push.success($t('profile.resumeSetAsPrimary'));
+       push.success(t('profile.resumeSetAsPrimary'));
   } catch (err) {
-    push.error($t('profile.failedToSetPrimaryResume'));
+       push.error(t('profile.failedToSetPrimaryResume'));
   }
 }
 
@@ -311,7 +311,7 @@ async function addWorkExp() {
         start_date: new Date().toISOString().split("T")[0],
         end_date: null,
         is_current: false,
-        description: "",
+        description: null,
       },
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -320,7 +320,7 @@ async function addWorkExp() {
 
     workExperiences.value.unshift(res.data.data);
   } catch (err) {
-    push.error($t('profile.failedToAddWorkExperience'));
+     push.error(t('profile.failedToAddWorkExperience'));
   }
 }
 
@@ -332,9 +332,9 @@ async function saveWorkExp(item) {
     await api.put(`/workers/work-exp/${item.id}`, item, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    push.success($t('profile.workExperienceAdded'));
+     push.success(t('profile.workExperienceAdded'));
   } catch (err) {
-    push.error($t('profile.failedToUpdateWorkExperience'));
+     push.error(t('profile.failedToUpdateWorkExperience'));
   }
 }
 
@@ -345,9 +345,9 @@ async function deleteWorkExp(id) {
     });
 
     workExperiences.value = workExperiences.value.filter((w) => w.id !== id);
-    push.success($t('profile.workExperienceRemoved'));
+     push.success(t('profile.workExperienceRemoved'));
   } catch (err) {
-    push.error($t('profile.failedToDeleteWorkExperience'));
+     push.error(t('profile.failedToDeleteWorkExperience'));
   }
 }
 
@@ -372,7 +372,7 @@ async function addEducation() {
 
     educations.value.unshift(res.data.data);
   } catch (err) {
-    push.error($t('profile.failedToAddEducation'));
+     push.error(t('profile.failedToAddEducation'));
   }
 }
 
@@ -384,9 +384,9 @@ async function saveEducation(item) {
     await api.put(`/workers/educations/${item.id}`, item, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    push.success($t('profile.educationAdded'));
+     push.success(t('profile.educationAdded'));
   } catch (err) {
-    push.error($t('profile.failedToUpdateEducation'));
+     push.error(t('profile.failedToUpdateEducation'));
   }
 }
 
@@ -397,9 +397,9 @@ async function deleteEducation(id) {
     });
 
     educations.value = educations.value.filter((e) => e.id !== id);
-    push.success($t('profile.educationRemoved'));
+     push.success(t('profile.educationRemoved'));
   } catch (err) {
-    push.error($t('profile.failedToDeleteEducation'));
+     push.error(t('profile.failedToDeleteEducation'));
   }
 }
 
@@ -430,7 +430,7 @@ async function addCertification() {
     //   isSaved: true,
     });
   } catch (err) {
-    push.error($t('profile.failedToAddCertification'));
+     push.error(t('profile.failedToAddCertification'));
   }
 }
 
@@ -443,9 +443,9 @@ async function saveCertification(item) {
     await api.put(`/workers/cert/${item.id}`, item, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    push.success($t('profile.certificationAdded'));
+      push.success(t('profile.certificationAdded'));
   } catch (err) {
-    push.error($t('profile.failedToUpdateCertification'));
+      push.error(t('profile.failedToUpdateCertification'));
   } finally {
     item.isSaved = false;
 }
@@ -458,9 +458,9 @@ async function deleteCertification(id) {
     });
 
     certifications.value = certifications.value.filter((c) => c.id !== id);
-    push.success($t('profile.certificationRemoved'));
+     push.success(t('profile.certificationRemoved'));
   } catch (err) {
-    push.error($t('profile.failedToDeleteCertification'));
+     push.error(t('profile.failedToDeleteCertification'));
   }
 }
 
@@ -512,7 +512,7 @@ async function handleSkillSearch(e) {
 async function addSkillFromSuggestion(skill) {
   // Check if already added
   if (skills.value.some(s => s.skill_id === skill.id || s.id === skill.id)) {
-    push.warning($t('profile.skillAlreadyAdded'));
+     push.warning(t('profile.skillAlreadyAdded'));
     return;
   }
 
@@ -528,11 +528,11 @@ async function addSkillFromSuggestion(skill) {
     );
 
     skills.value.push(res.data.data);
-    push.success($t('profile.skillAdded'));
+     push.success(t('profile.skillAdded'));
     skillSearchQuery.value = "";
     skillSuggestions.value = [];
   } catch (err) {
-    push.error(err?.response?.data?.message || $t('profile.failedToAddSkill'));
+     push.error(err?.response?.data?.message || t('profile.failedToAddSkill'));
   }
 }
 
@@ -563,11 +563,11 @@ async function createAndAddSkill(skillName) {
 
     skills.value.push({id:newSkill.id, skill_id: newSkill.id, skill_name: newSkill.skill_name});
     console.log("New skill created and added:", newSkill);
-    push.success($t('profile.skillCreatedAndAdded'));
+     push.success(t('profile.skillCreatedAndAdded'));
     skillSearchQuery.value = "";
     skillSuggestions.value = [];
   } catch (err) {
-    push.error(err?.response?.data?.message || $t('profile.failedToCreateSkill'));
+     push.error(err?.response?.data?.message || t('profile.failedToCreateSkill'));
   }
 }
 
@@ -593,9 +593,9 @@ async function deleteSkill(skill) {
     });
 
     skills.value = skills.value.filter((s) => s.id !== skillId);
-    push.success($t('profile.skillRemoved'));
+     push.success(t('profile.skillRemoved'));
   } catch (err) {
-    push.error($t('profile.failedToDeleteSkill'));
+     push.error(t('profile.failedToDeleteSkill'));
   }
 }
 
@@ -604,7 +604,7 @@ function onAvatarChange(e) {
   if (!file) return;
 
   if (file.size > 2 * 1024 * 1024) {
-    push.warning($t('profile.maxFileSize2MB'));
+     push.warning(t('profile.maxFileSize2MB'));
     return;
   }
 
@@ -673,9 +673,9 @@ async function handleRemoveSaved(job) {
       const itemId = itemJob?.id || itemJob?.job_id || itemJob?.job_post_id;
       return itemId !== jobId;
     });
-    push.success($t('profile.removedFromSavedJobs'));
+       push.success(t('profile.removedFromSavedJobs'));
   } catch (err) {
-    push.error(err?.response?.data?.message || $t('profile.failedToRemoveSavedJob'));
+       push.error(err?.response?.data?.message || t('profile.failedToRemoveSavedJob'));
   }
 }
 
@@ -916,13 +916,13 @@ watch(activeTab, (newTab) => {
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >Full Name <span class="text-red-500">*</span></label
+                >{{ $t('profile.fullNameLabel') }} <span class="text-red-500">*</span></label
               >
               <input
                 v-model="form.name"
                 type="text"
                 class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-                placeholder="Your name"
+                :placeholder="$t('profile.yourNamePlaceholder')"
                 required
               />
             </div>
@@ -1061,40 +1061,37 @@ watch(activeTab, (newTab) => {
 
           <!-- Skills Section -->
           <div class="border-t pt-6">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-              <h2 class="text-base md:text-lg font-semibold">{{ $t('profile.skills') }}</h2>
-              <button
-                type="button"
-                @click="openSkillModal"
-                class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 whitespace-nowrap"
-              >
-                + {{ $t('profile.addSkill') }}
-              </button>
-            </div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              {{ $t('profile.skills') }}
+              <span class="ml-2 text-xs text-gray-400">Optional</span>
+            </label>
 
+            <!-- SELECTED SKILLS -->
             <div
               v-if="skills.length === 0"
-              class="text-xs md:text-sm text-gray-500 py-4"
+              class="text-xs md:text-sm text-gray-500 py-2"
             >
               {{ $t('profile.noSkillsAdded') }}
             </div>
-            <div v-else class="flex flex-wrap gap-2">
+            <div v-else class="flex gap-2 flex-wrap mt-2">
               <span
                 v-for="skill in skills"
                 :key="skill.id || skill.skill_id"
-                class="inline-flex items-center gap-1.5 px-2 md:px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs md:text-sm border border-blue-200"
+                @click="deleteSkill(skill)"
+                class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm cursor-pointer hover:bg-green-200"
               >
-                <span>{{ skill.skill_name || skill.name }}</span>
-                <button
-                  type="button"
-                  @click="deleteSkill(skill)"
-                  class="text-blue-700 hover:text-red-600 hover:bg-blue-100 rounded-full w-4 h-4 flex items-center justify-center text-lg leading-none"
-                  title="Remove skill"
-                >
-                  ×
-                </button>
+                {{ skill.skill_name || skill.name }} ×
               </span>
             </div>
+
+            <!-- ADD SKILLS BUTTON -->
+            <button
+              type="button"
+              @click="openSkillModal"
+              class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm"
+            >
+              + {{ $t('profile.addSkillsButton') }}
+            </button>
           </div>
 
           <div class="flex justify-end gap-2 pt-4 border-t flex-col-reverse sm:flex-row">
@@ -1103,7 +1100,7 @@ watch(activeTab, (newTab) => {
               class="rounded-lg md:rounded-xl bg-blue-600 px-4 md:px-6 py-2.5 text-xs md:text-sm font-semibold text-white hover:bg-blue-700 transition min-h-10"
               :disabled="savingProfile"
             >
-              {{ savingProfile ? "Saving..." : "Save Changes" }}
+              {{ savingProfile ? $t('profile.saving') : $t('profile.saveChanges') }}
             </button>
           </div>
         </form>
@@ -1181,7 +1178,7 @@ watch(activeTab, (newTab) => {
                   v-if="resume.is_default"
                   class="ml-2 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-[10px]"
                 >
-                  Primary
+                  {{ $t('profile.primaryButton') }}
                 </span>
               </p>
             </div>
@@ -1191,20 +1188,20 @@ watch(activeTab, (newTab) => {
                 target="_blank"
                 class="text-xs md:text-sm text-blue-600 hover:underline flex-1 sm:flex-none text-center sm:text-left"
               >
-                View
+                {{ $t('profile.view') }}
               </a>
               <button
                 v-if="!resume.is_default"
                 @click="setPrimaryResume(resume.id)"
                 class="text-xs md:text-sm text-green-600 hover:underline flex-1 sm:flex-none text-center sm:text-left"
               >
-                Primary
+                {{ $t('profile.primaryButton') }}
               </button>
               <button
                 @click="removeResume(resume.id)"
                 class="text-xs md:text-sm text-red-600 hover:underline flex-1 sm:flex-none text-center sm:text-left"
               >
-                Remove
+                {{ $t('profile.remove') }}
               </button>
             </div>
           </div>
@@ -1268,7 +1265,7 @@ watch(activeTab, (newTab) => {
             </label>
             <textarea
               v-model="work.description"
-              placeholder="Description"
+              :placeholder="$t('profile.descriptionPlaceholder')"
               rows="3"
               class="w-full rounded-lg border px-3 py-2 text-xs md:text-sm mb-3 min-h-10"
             />
@@ -1277,13 +1274,13 @@ watch(activeTab, (newTab) => {
                 @click="saveWorkExp(work)"
                 class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 flex-1 sm:flex-none"
               >
-                Save
+                {{ $t('profile.save') }}
               </button>
               <button
                 @click="deleteWorkExp(work.id)"
                 class="px-3 md:px-4 py-2 text-xs md:text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 min-h-10 flex-1 sm:flex-none"
               >
-                Delete
+                {{ $t('profile.delete') }}
               </button>
             </div>
           </div>
@@ -1352,7 +1349,7 @@ watch(activeTab, (newTab) => {
             </label>
             <textarea
               v-model="edu.description"
-              placeholder="Description"
+              :placeholder="$t('profile.descriptionPlaceholder')"
               rows="2"
               class="w-full rounded-lg border px-3 py-2 text-xs md:text-sm mb-3 min-h-10"
             />
@@ -1361,13 +1358,13 @@ watch(activeTab, (newTab) => {
                 @click="saveEducation(edu)"
                 class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 flex-1 sm:flex-none"
               >
-                Save
+                {{ $t('profile.save') }}
               </button>
               <button
                 @click="deleteEducation(edu.id)"
                 class="px-3 md:px-4 py-2 text-xs md:text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 min-h-10 flex-1 sm:flex-none"
               >
-                Delete
+                {{ $t('profile.delete') }}
               </button>
             </div>
           </div>
@@ -1453,13 +1450,13 @@ watch(activeTab, (newTab) => {
                 class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 flex-1 sm:flex-none"
                 :class="{ 'opacity-50': cert.isSaved }"
               >
-                {{ cert.isSaved ? 'Saved' : 'Save' }}
+                {{ cert.isSaved ? $t('profile.saved') : $t('profile.save') }}
               </button>
               <button
                 @click="deleteCertification(cert.id)"
                 class="px-3 md:px-4 py-2 text-xs md:text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 min-h-10 flex-1 sm:flex-none"
               >
-                Delete
+                {{ $t('profile.delete') }}
               </button>
             </div>
           </div>
@@ -1777,55 +1774,70 @@ watch(activeTab, (newTab) => {
       </div>
     </div>
 
-    <!-- Skill Modal -->
+    <!-- Skills Modal -->
     <div
       v-if="showSkillModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
       @click.self="closeSkillModal"
     >
-      <div class="bg-white rounded-2xl shadow-xl max-w-md w-full">
-        <div class="flex items-center justify-between p-6 border-b">
-          <h3 class="text-lg font-semibold">{{ $t('profile.addSkill') }}</h3>
+      <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold">{{ $t('profile.addSkillsButton') }}</h3>
           <button
             @click="closeSkillModal"
-            class="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+            class="text-gray-400 hover:text-gray-600 text-xl"
           >
             ×
           </button>
         </div>
 
-        <div class="p-6">
-          <div class="relative">
-            <input
-              type="text"
-              v-model="skillSearchQuery"
-              @input="handleSkillSearch"
-              @keydown.enter.prevent="handleSkillEnter"
-              :placeholder="$t('profile.searchOrAddYourSkills')"
-              class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              autofocus
-            />
-            
-            <!-- Suggestions Dropdown -->
-            <div
-              v-if="skillSuggestions.length > 0"
-              class="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border bg-white shadow-lg"
-            >
-              <button
-                v-for="skill in skillSuggestions"
-                :key="skill.id"
-                @click="addSkillFromSuggestion(skill)"
-                class="block w-full px-3 py-2 text-left text-sm hover:bg-blue-50 transition"
-              >
-                {{ skill.name }}
-              </button>
-            </div>
-          </div>
+        <!-- Search Input -->
+        <input
+          v-model="skillSearchQuery"
+          @input="handleSkillSearch"
+          @keydown.enter.prevent="handleSkillEnter"
+          type="text"
+          :placeholder="$t('profile.searchOrCreateSkill')"
+          class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+        />
 
-          <p class="text-xs text-gray-500 mt-2">
-            {{ $t('profile.typeToSearchOrPressEnter') }}
-          </p>
+        <!-- Suggestions -->
+        <div
+          v-if="skillSuggestions.length"
+          class="space-y-2 mb-4 max-h-48 overflow-y-auto"
+        >
+          <div
+            v-for="skill in skillSuggestions"
+            :key="skill.id"
+            @click="addSkillFromSuggestion(skill)"
+            class="p-2 border border-gray-200 rounded cursor-pointer hover:bg-blue-50 text-sm"
+          >
+            {{ skill.name }}
+          </div>
         </div>
+
+        <!-- Create New Skill -->
+        <div v-if="skillSearchQuery && !skillSuggestions.length" class="mb-3">
+          <button
+            @click="createAndAddSkill(skillSearchQuery)"
+            class="w-full p-2 border-2 border-dashed border-green-300 rounded text-sm text-green-700 hover:bg-green-50"
+          >
+            + {{ $t('profile.createSkill') }} "{{ skillSearchQuery }}"
+          </button>
+        </div>
+
+        <!-- Loading -->
+        <p v-if="loadingSkills" class="text-xs text-gray-500 text-center">
+          {{ $t('profile.loadingSkills') }}
+        </p>
+
+        <!-- Close Button -->
+        <button
+          @click="closeSkillModal"
+          class="w-full mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
+        >
+          {{ $t('profile.done') }}
+        </button>
       </div>
     </div>
   </div>

@@ -15,6 +15,7 @@ onMounted(async () => {
     const token = route.query.token;
     const result = await api.get("/auth/verify-email", { params: { token } });
     if (!result.err) {
+      success.value = true;
       if (result.data.role === "recruiter") {
         setTimeout(() => router.push("/recruiter-login"), 2000);
       } else {
