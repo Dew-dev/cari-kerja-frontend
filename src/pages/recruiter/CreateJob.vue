@@ -82,6 +82,126 @@ async function addTag() {
 }
 
 /* ======================
+   SKILLS STATE
+====================== */
+const skills = ref([]);
+const showSkillModal = ref(false);
+const skillSearchQuery = ref("");
+const skillSuggestions = ref([]);
+const loadingSkills = ref(false);
+
+async function fetchSkills(search = "") {
+  if (!search.trim()) {
+    skillSuggestions.value = [];
+    return [];
+  }
+
+  try {
+    loadingSkills.value = true;
+    const query = `?page=1&limit=10&search=${encodeURIComponent(search)}`;
+    const res = await api.get(`/skills${query}`, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    });
+    const data = res.data?.data || [];
+    skillSuggestions.value = data.filter((s) =>
+      s.name.toLowerCase().includes(search.toLowerCase()),
+    );
+    return data;
+  } catch (err) {
+    console.error("Failed to fetch skills:", err);
+    return [];
+  } finally {
+    loadingSkills.value = false;
+  }
+}
+
+function openSkillModal() {
+  showSkillModal.value = true;
+  skillSearchQuery.value = "";
+  skillSuggestions.value = [];
+}
+
+function closeSkillModal() {
+  showSkillModal.value = false;
+  skillSearchQuery.value = "";
+  skillSuggestions.value = [];
+}
+
+async function handleSkillSearch(e) {
+  skillSearchQuery.value = e.target.value;
+  await fetchSkills(e.target.value);
+}
+
+async function addSkillFromSuggestion(skill) {
+  if (skills.value.some((s) => s.skill_id === skill.id || s.id === skill.id)) {
+    return;
+  }
+
+  try {
+    skills.value.push({
+      id: skill.id,
+      skill_id: skill.id,
+      name: skill.name,
+      skill_name: skill.name,
+    });
+    skillSearchQuery.value = "";
+    skillSuggestions.value = [];
+  } catch (err) {
+    console.error("Failed to add skill", err);
+  }
+}
+
+async function createAndAddSkill(skillName) {
+  if (!skillName.trim()) return;
+
+  try {
+    loadingSkills.value = true;
+
+    const createRes = await api.post(
+      "/skills",
+      { skill_name: skillName.trim() },
+      {
+        headers: { Authorization: `Bearer ${auth.token}` },
+      },
+    );
+
+    const newSkill = createRes.data?.data;
+    if (!newSkill) throw new Error("Skill creation failed");
+
+    skills.value.push({
+      id: newSkill.id,
+      skill_id: newSkill.id,
+      name: newSkill.skill_name,
+      skill_name: newSkill.skill_name,
+    });
+
+    skillSearchQuery.value = "";
+    skillSuggestions.value = [];
+  } catch (err) {
+    console.error("Failed to create skill", err);
+  } finally {
+    loadingSkills.value = false;
+  }
+}
+
+function handleSkillEnter() {
+  if (!skillSearchQuery.value.trim()) return;
+
+  if (skillSuggestions.value.length > 0) {
+    addSkillFromSuggestion(skillSuggestions.value[0]);
+    return;
+  }
+
+  createAndAddSkill(skillSearchQuery.value.trim());
+}
+
+function deleteSkill(skillId) {
+  skills.value = skills.value.filter((s) => s.id !== skillId);
+}
+
+/* ======================
    FORM STATE
 ====================== */
 const form = reactive({
@@ -355,6 +475,7 @@ async function submit() {
     benefits: form.benefits,
     responsibilities: form.responsibilities,
     job_post_questions: buildQuestionsPayload(),
+    skills: skills.value,
   };
 
   // console.log("CREATE JOB PAYLOAD:", payload);
@@ -382,10 +503,9 @@ async function submit() {
     });
 
     if (!resTags?.success) return;
-    router.push("/recruiter/jobs")
+    router.push("/recruiter/jobs");
   });
-
-}     
+}
 </script>
 
 <template>
@@ -395,7 +515,7 @@ async function submit() {
       <h1 class="text-xl font-semibold">
         {{ t("createjob") }}
       </h1>
-      <p class="text-sm text-gray-500 my-2"> 
+      <p class="text-sm text-gray-500 my-2">
         Fill in the details to publish a new job vacancy
       </p>
 
@@ -543,7 +663,9 @@ async function submit() {
             <label>
               {{ t("job_type") }}
               <span class="text-red-500 ml-1">*</span>
-              <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
+              <span class="ml-2 text-xs text-gray-400">{{
+                t("required")
+              }}</span>
             </label>
             <select
               v-model="form.employment_type_id"
@@ -562,7 +684,9 @@ async function submit() {
             <label>
               {{ t("job_level") }}
               <span class="text-red-500 ml-1">*</span>
-              <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
+              <span class="ml-2 text-xs text-gray-400">{{
+                t("required")
+              }}</span>
             </label>
             <select
               v-model="form.experience_level_id"
@@ -580,7 +704,9 @@ async function submit() {
             <label>
               {{ t("deadline") }}
               <span class="text-red-500 ml-1">*</span>
-              <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
+              <span class="ml-2 text-xs text-gray-400">{{
+                t("required")
+              }}</span>
             </label>
             <input
               v-model="form.deadline"
@@ -593,7 +719,9 @@ async function submit() {
             <label class="block text-sm font-medium text-gray-700">
               {{ t("category") }}
               <span class="text-red-500 ml-1">*</span>
-              <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
+              <span class="ml-2 text-xs text-gray-400">{{
+                t("required")
+              }}</span>
             </label>
 
             <input
@@ -645,6 +773,35 @@ async function submit() {
           </div>
         </div>
 
+        <!-- SKILLS -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            Skills Required
+            <span class="ml-2 text-xs text-gray-400">{{ t("optional") }}</span>
+          </label>
+
+          <!-- SELECTED SKILLS -->
+          <div class="flex gap-2 flex-wrap mt-2">
+            <span
+              v-for="skill in skills"
+              :key="skill.id"
+              @click="deleteSkill(skill.id)"
+              class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm cursor-pointer hover:bg-green-200"
+            >
+              {{ skill.name || skill.skill_name }} ×
+            </span>
+          </div>
+
+          <!-- ADD SKILLS BUTTON -->
+          <button
+            type="button"
+            @click="openSkillModal"
+            class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm"
+          >
+            + Add Skills
+          </button>
+        </div>
+
         <!-- REQUIREMENTS -->
         <div>
           <label class="block text-sm font-medium text-gray-700">
@@ -657,7 +814,9 @@ async function submit() {
               :key="index"
               class="flex items-center gap-2"
             >
-              <span class="text-sm text-gray-700 flex-1">{{ index + 1 }}. {{ req.requirement }}</span>
+              <span class="text-sm text-gray-700 flex-1"
+                >{{ index + 1 }}. {{ req.requirement }}</span
+              >
               <button
                 type="button"
                 @click="removeRequirement(index)"
@@ -696,7 +855,9 @@ async function submit() {
               :key="index"
               class="flex items-center gap-2"
             >
-              <span class="text-sm text-gray-700 flex-1">{{ index + 1 }}. {{ resp.responsibility }}</span>
+              <span class="text-sm text-gray-700 flex-1"
+                >{{ index + 1 }}. {{ resp.responsibility }}</span
+              >
               <button
                 type="button"
                 @click="removeResponsibility(index)"
@@ -735,7 +896,9 @@ async function submit() {
               :key="index"
               class="flex items-center gap-2"
             >
-              <span class="text-sm text-gray-700 flex-1">{{ index + 1 }}. {{ ben.benefit }}</span>
+              <span class="text-sm text-gray-700 flex-1"
+                >{{ index + 1 }}. {{ ben.benefit }}</span
+              >
               <button
                 type="button"
                 @click="removeBenefit(index)"
@@ -767,7 +930,9 @@ async function submit() {
           <div class="flex items-center justify-between">
             <label class="block text-sm font-medium text-gray-700">
               {{ t("questions") }}
-              <span class="ml-2 text-xs text-gray-400">{{ t("optional") }}</span>
+              <span class="ml-2 text-xs text-gray-400">{{
+                t("optional")
+              }}</span>
             </label>
             <button
               type="button"
@@ -778,7 +943,10 @@ async function submit() {
             </button>
           </div>
 
-          <div v-if="form.job_post_questions && form.job_post_questions.length" class="mt-3 space-y-4">
+          <div
+            v-if="form.job_post_questions && form.job_post_questions.length"
+            class="mt-3 space-y-4"
+          >
             <div
               v-for="(q, index) in form.job_post_questions"
               :key="index"
@@ -828,7 +996,7 @@ async function submit() {
                             ? "type_multiple_choice"
                             : type.id === 4
                             ? "type_boolean"
-                            : "type_options"
+                            : "type_options",
                         )
                       }}
                     </option>
@@ -871,7 +1039,7 @@ async function submit() {
         </div>
 
         <!-- SUBMIT -->
-        <div class="pt-1  flex justify-end">
+        <div class="pt-1 flex justify-end">
           <button
             type="submit"
             class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-6 py-2.5 rounded-md"
@@ -880,6 +1048,73 @@ async function submit() {
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Skills Modal -->
+  <div
+    v-if="showSkillModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    @click.self="closeSkillModal"
+  >
+    <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold">Add Skills</h3>
+        <button
+          @click="closeSkillModal"
+          class="text-gray-400 hover:text-gray-600 text-xl"
+        >
+          ×
+        </button>
+      </div>
+
+      <!-- Search Input -->
+      <input
+        v-model="skillSearchQuery"
+        @input="handleSkillSearch"
+        @keydown.enter.prevent="handleSkillEnter"
+        type="text"
+        placeholder="Search or create skill..."
+        class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+      />
+
+      <!-- Suggestions -->
+      <div
+        v-if="skillSuggestions.length"
+        class="space-y-2 mb-4 max-h-48 overflow-y-auto"
+      >
+        <div
+          v-for="skill in skillSuggestions"
+          :key="skill.id"
+          @click="addSkillFromSuggestion(skill)"
+          class="p-2 border border-gray-200 rounded cursor-pointer hover:bg-blue-50 text-sm"
+        >
+          {{ skill.name }}
+        </div>
+      </div>
+
+      <!-- Create New Skill -->
+      <div v-if="skillSearchQuery && !skillSuggestions.length" class="mb-3">
+        <button
+          @click="createAndAddSkill(skillSearchQuery)"
+          class="w-full p-2 border-2 border-dashed border-green-300 rounded text-sm text-green-700 hover:bg-green-50"
+        >
+          + Create "{{ skillSearchQuery }}"
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <p v-if="loadingSkills" class="text-xs text-gray-500 text-center">
+        Loading skills...
+      </p>
+
+      <!-- Close Button -->
+      <button
+        @click="closeSkillModal"
+        class="w-full mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
+      >
+        Done
+      </button>
     </div>
   </div>
 </template>
