@@ -363,7 +363,7 @@
     "yourAddress": "Sizning manzilingiz",
     "profileSummary": "Profil xulosasi",
     "profileSummaryPlaceholder": "O'zingiz, tajribangiz va qidirish haqida bize ma'lumot bering...",
-   
+
     "saveChanges": "O'zgarishlarni saqlash",
     "manageResumes": "Rezyumelni boshqarish",
     "uploadPDF": "PDF yuklash",
@@ -1190,58 +1190,6 @@
           "title": "Davom ettirish",
           "cardTitle": "Ariza topshirgandan keyin davom ettirish",
           "bullets": [
-            "Arizangiz holati uchun profilingizda 'Topshirgan Arizalar' qismida kuzatish olib boring.",
-            "Ish beruvchi bilan aloqaga kirmasdan avval 30-40 kun kutib turing.",
-            "Agar reksyuterning kontakt ma'lumotlari bo'lsa, qiziqishingizni qayta ta'kidlab va muddati haqida so'rab, muloyim xat yuboring.",
-            "Kutayotganingizda boshqa ishlarni qidirish va ariza topshirishni davom ettiring. Barcha umidingizni bitta arizaga bog'lamang.",
-            "Barcha aloqalarda professional va hamjamiyatli bo'ling.",
-            "Davom ettirish sanalarini va javoblarni yozuvlarida dokumentlashtiring."
-          ],
-          "tipLabel": "Davom ettirish maslahat",
-          "tipBody": "Agar 2-3 hafta ichida javob olmasangiz, yana bir marta davom ettirishingiz mumkin. Shundan keyin boshqa imkoniyatlarga e'tibor berishning vaqti keldi."
-        },
-        "mistakes": {
-          "title": "Keng tarqalgan xatolar, ulardan saqlaning",
-          "items": [
-            {
-              "title": "Umumiy Arizalar",
-              "body": "Rezyumengiz yoki qopqoq xatingizni ishga moslamay ariza topshirish. Har bir ariza nima uchun sizning bu maxsus rol uchun yaxshi nomzod ekaningizni tushuntirib berishi kerak."
-            },
-            {
-              "title": "Beparva Xatolar",
-              "body": "Imlo xatolari, formatlash xatolari yoki eskirgan ma'lumot bilan arizalar yuboring. Yuborganingizdan oldin hamma narsani tekshiring."
-            },
-            {
-              "title": "Ko'rsatmalarni E'tiborsizlik",
-              "body": "Ariza topshirish ko'rsatmalariga amal qilmaslik (masalan, majburiy savollarga javob berish, muayyan fayl formatlaridan foydalanish). Ish beruvchilar siz ko'rsatmalarga amal qilmasligini sezadi."
-            },
-            {
-              "title": "O'tmaydigan yoki Yetmaydigan Malaka",
-              "body": "Ish saviyangizdan ancha yuqori yoki pastroq bo'lgan lavozimlar uchun ariza topshirish. Sahnasida hech bo'lmaganda 70% talablar uchun mos keladigan lavozimlarni tanlang."
-            },
-            {
-              "title": "Davom Strategiyasi Yo'q",
-              "body": "Arizalaringizni davom ettirish yoki kuzatish xatolarni qoldiring. Qaysi vaqtda davom ettirish kerakligi, topshirgan har bir ish uchun tartibli qaydlar saqlab turing."
-            }
-          ]
-        },
-        "interview": {
-          "title": "Suhbatlarga tayyorlaning",
-          "cardTitle": "Suhbat tayyorlash qo'llanmasi",
-          "bullets": [
-            "Kompaniyani tadqiq qiling: Ularning mahsulotlari, xizmatlar, madaniyati va yangi yangiliklar haqida bilib oling.",
-            "Ish tavsifini ko'rib chiqing va ish tajribangiz talablarni qanday qolayotganiga doir misollarni tayyorlab qo'ying.",
-            "Umumiy suhbat savollariga javob berishni mashq qiling (masalan, 'O'zingiz haqida gapiring', 'Nima uchun bu ishni xohlaysiz?').",
-            "Suhbatchi uchun savollar tayyorlang (masalan, 'Bu rolyda muvaffaqiyat qanday ko'rinadi?').",
-            "Professional kiyinib, vaqtida keliblar (yoki kiriting).",
-            "Suhbatdan 24 soat ichida tashakkur xati yuboring.",
-            "Ishonchli, haqiqiy va rol hamda kompaniyaga chin qiziqish ko'rsating."
-          ]
-        },
-        "followUp": {
-          "title": "Davom ettirish",
-          "cardTitle": "Ariza topshirgandan keyin davom ettirish",
-          "bullets": [
             "Profilingizda 'Yuborilgan arizalar' bo'limida ariza holatingizni kuzatib boring.",
             "Ish beruvchi bilan aloqaga kirmasdan avval 30-40 kun kutib turing.",
             "Agar reksyuterning kontakt ma'lumotlari bo'lsa, qiziqishingizni qayta ta'kidlab va muddati haqida so'rab, muloyim xat yuboring.",
@@ -1463,7 +1411,242 @@
         "title": "Birinchi ishingizni joylashtirishga tayyormisiz?",
         "subtitle": "Bugun eng yaxshi talentlarni jalb qilishni boshlang.",
         "button": "Ish joylashtirish"
+      },
+      "userprofile": {
+        "changePassword": {
+          "title": "Parolni o'zgartirish",
+          "currentPassword": "Joriy parol",
+          "newPassword": "Yangi parol",
+          "confirmPassword": "Yangi parolni tasdiqlang",
+          "submit": "Parolni o'zgartirish",
+          "saving": "Saqlanmoqda...",
+          "success": "Parol o'zgartirildi. Iltimos, qayta tizimga kiring.",
+          "mismatch": "Parol tasdiqlashi mos emas",
+          "failed": "Parolni o'zgartirish muvaffaqiyatsiz tugadi"
+        }
+      },
+      "termsOfService": {
+        "title": "Xizmat ko'rsatish shartlari",
+        "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
+        "agreement": {
+          "title": "1. Shartlarga rozilik",
+          "content": "Jobs.uz saytiga kirish va undan foydalanish orqali siz ushbu Xizmat ko'rsatish shartlariga rozi ekanligingizni tasdiqlaysiz. Agar rozilik bermasangiz, iltimos xizmatdan foydalanmang."
+        },
+        "useLicense": {
+          "title": "2. Foydalanish litsenziyasi",
+          "content": "Jobs.uz-dagi materiallarni shaxsiy, notijorat maqsadlarida vaqtincha yuklab olishga ruxsat beriladi. Bu egallikni o‘tkazish emas, litsenziya hisoblanadi.",
+          "prohibitions": [
+            "Materiallarni o'zgartirish yoki nusxalash",
+            "Materiallarni tijorat maqsadlarida yoki ommaviy ko'rsatish uchun ishlatish",
+            "Jobs.uzdagi dasturiy ta'minotni dekompilyatsiya qilish yoki qayta tahlil qilishga harakat qilish",
+            "Avtorsk huquq yoki boshqa egalik belgilanishlarini olib tashlash",
+            "Materiallarni boshqa shaxsga o'tkazish yoki boshqa serverda aks ettirish"
+          ]
+        },
+        "disclaimer": {
+          "title": "3. Majburiyatdan voz kechish",
+          "content": "Jobs.uzdagi materiallar \"boshqacha ko‘rsatilmaguncha\" holatda taqdim etiladi. Jobs.uz hech qanday kafolat bermaydi va barcha mumkin bo‘lgan kafolatlardan voz kechadi."
+        },
+        "limitations": {
+          "title": "4. Majburiyatlarning cheklanishi",
+          "content": "Hech qanday holatda Jobs.uz yoki uning yetkazib beruvchilari sayt materiallaridan foydalanish yoki foydalanib bo'lmasligidan kelib chiqadigan zarar uchun javobgar bo'lmaydi."
+        },
+        "accuracy": {
+          "title": "5. Materiallarning to'g'riligi",
+          "content": "Jobs.uzdagi materiallarda texnik yoki boshqa xatolar bo‘lishi mumkin. Jobs.uz ularning aniqligi, to‘liqligi yoki dolzarbligini kafolatlamaydi va o‘zgartirish huquqini o‘zida saqlaydi."
+        },
+        "links": {
+          "title": "6. Havolalar",
+          "content": "Jobs.uz tashqi saytlarning mazmuni uchun javobgar emas. Havola mavjudligi sayt tomonidan ma'qullashni anglatmaydi. Tashqi saytlardan foydalanish sizning mas'uliyatingizda."
+        },
+        "modifications": {
+          "title": "7. O'zgartirishlar",
+          "content": "Jobs.uz ushbu Shartlarni istalgan vaqtda o'zgartirishi mumkin. Saytdan foydalanish orqali siz amaldagi Shartlarga rozi bo'lasiz."
+        },
+        "governingLaw": {
+          "title": "8. Tatbiq etiluvchi qonun",
+          "content": "Ushbu Shartlar O'zbekiston qonunlariga muvofiq tartibga solinadi; nizolar Toshkent sudlarining yurisdiktsiyasiga bo'ysunadi."
+        },
+        "userAccounts": {
+          "title": "9. Foydalanuvchi akkauntlari",
+          "content": "Agar siz akkaunt yaratsangiz, kirish ma'lumotlarini maxfiy saqlash va akkaunt ostida yuz berayotgan barcha faoliyat uchun javobgar bo'lasiz. Ruxsatsiz foydalanishni darhol xabar qiling."
+        },
+        "prohibitedConduct": {
+          "title": "10. Ta'qiqlangan xatti-harakatlar",
+          "content": "Siz quyidagilardan voz kechasiz:",
+          "items": [
+            "Yolg'on yoki adashtiruvchi ma'lumotlar joylashtirish",
+            "Amaldagi qonunlarni yoki qoidalarni buzish",
+            "Boshqa foydalanuvchilarni tahdid qilish, haqoratlash yoki bezovta qilish",
+            "Bizning tizimlarga ruxsatsiz kirishga harakat qilish",
+            "Spam yoki istalmagan reklama yuborish"
+          ]
+        },
+        "termination": {
+          "title": "11. Bekor qilish",
+          "content": "Biz akkauntingiz va platformaga kirishingizni har qanday sabab bilan darhol va oldindan xabar bermasdan to'xtatib yoki bekor qilamiz, shu jumladan Shartlar buzilganda."
+        },
+        "contact": {
+          "title": "12. Biz bilan bog'laning",
+          "content": "Agar Ushbu Xizmat ko'rsatish shartlari bo'yicha savollaringiz bo'lsa, biz bilan bog'laning:",
+          "emailLabel": "Email",
+          "email": "legal@jobs.uz"
+        }
       }
+    }
+  },
+  "privacyPolicy": {
+    "title": "Maxfiylik siyosati",
+    "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
+    "introduction": {
+      "title": "1. Kirish",
+      "content": "Jobs.uz (\"biz\" yoki \"bizni\") saytini boshqaradi. Ushbu sahifada xizmatdan foydalanishingiz davomida shaxsiy ma'lumotlarni qanday to'plashimiz, foydalanishimiz va oshkor qilishimiz hamda bu ma'lumotlarga nisbatan huquqlaringiz haqida batafsil ma'lumot berilgan."
+    },
+    "informationCollection": {
+      "title": "2. Ma'lumotlarni yig'ish va foydalanish",
+      "intro": "Xizmatni taqdim etish va uni takomillashtirish uchun turli maqsadlarda bir nechta turdagi ma'lumotlarni to'playmiz:",
+      "items": {
+        "accountTitle": "Hisob ma'lumotlari:",
+        "account": "ism, elektron pochta manzili, telefon raqami va parol",
+        "profileTitle": "Profil ma'lumotlari:",
+        "profile": "rezyume, ish tajribasi, ta'lim, ko'nikmalar va malakalar",
+        "applicationTitle": "Ariza ma'lumotlari:",
+        "application": "vakansiyalarga yuborilgan arizalar, motivaion xatlar va ariza tarixi",
+        "technicalTitle": "Texnik ma'lumotlar:",
+        "technical": "IP-manzil, brauzer turi, tashrif buyurilgan sahifalar va saytda o'tkazilgan vaqt",
+        "communicationTitle": "Kommunikatsiya ma'lumotlari:",
+        "communication": "ishtirokchilar (nomzodlar va ish beruvchilar) o'rtasidagi xabarlar"
+      }
+    },
+    "useOfData": {
+      "title": "3. Ma'lumotlardan foydalanish",
+      "content": "Biz toʻplangan maʼlumotlardan quyidagi maqsadlarda foydalanamiz: xizmatni taqdim etish va qoʻllab-quvvatlash, sizni oʻzgartirishlar haqida xabardor qilish, mijozlarga yordam koʻrsatish, tahlil va xizmatni yaxshilash, foydalanishni monitoring qilish va texnik muammolarni aniqlash hamda bartaraf etish.",
+      "items": {
+        "provide": "Xizmatni taqdim etish va qoʻllab-quvvatlash uchun",
+        "notify": "Xizmatdagi oʻzgarishlar haqida sizni xabardor qilish uchun",
+        "support": "Foydalanuvchilarga yordam koʻrsatish uchun",
+        "analysis": "Tahlil va xizmatni yaxshilash uchun",
+        "monitor": "Xizmat foydalanishini monitoring qilish uchun",
+        "technical": "Texnik muammolarni aniqlash, oldini olish va hal etish uchun",
+        "marketing": "Reklama xabarlari yuborish uchun (sizning roziligingiz bilan)"
+      }
+    },
+    "security": {
+      "title": "4. Ma'lumotlarni xavfsizligi",
+      "content": "Sizning ma'lumotlaringiz xavfsizligi biz uchun muhim. Shaxsiy ma'lumotlarni himoya qilish uchun oqilona texnik va tashkiliy choralarni ko'ramiz, lekin internet orqali uzatish yoki elektron saqlash usullari mutlaqo xavfsiz emasligini hisobga olishingiz kerak."
+    },
+    "cookies": {
+      "title": "5. Cookies",
+      "content": "Biz xizmatni yaxshilash uchun cookieslardan foydalanamiz. Brauzeringizni cookiesni rad etish yoki u haqida ogohlantirish olish uchun sozlashingiz mumkin. Cookies o‘chirib qo‘yilganda ayrim funksiyalar ishlamasligi mumkin."
+    },
+    "thirdPartyAccess": {
+      "title": "6. Uchinchi tomonlarga kirish",
+      "content": "Biz ma'lumotlaringizni ushbu siyosatda ko'rsatilgan holatlar doirasida uchinchi tomonlarga uzatishimiz mumkin. Biz shaxsiy ma'lumotlaringizni sotmaymiz yoki tijorat maqsadlarda ijaraga bermaymiz. Agregatsiyalangan va anonimlashtirilgan ma'lumotlar hamkorlarga tadqiqot yoki marketing maqsadlarida berilishi mumkin."
+    },
+    "disclosure": {
+      "title": "7. Ma'lumotlarni oshkor qilish",
+      "intro": "Biz quyidagi holatlarda shaxsiy ma'lumotlaringizni oshkor qilishimiz mumkin:",
+      "items": {
+        "byLaw": "Qonun talablariga yoki sud jarayoniga binoan",
+        "protect": "Kompaniyamizning huquqlari, maxfiyligi, xavfsizligi yoki mulkini himoya qilish uchun",
+        "merger": "Birlashish, sotib olish yoki aktivlarni sotish holatlarida",
+        "consent": "Sizning aniq roziligingiz mavjud bo'lsa boshqa maqsadlar uchun"
+      }
+    },
+    "retention": {
+      "title": "8. Ma'lumotlarni saqlash muddatlari",
+      "content": "Biz shaxsiy ma'lumotlarni faqat ushbu siyosatda ko'rsatilgan maqsadlar uchun zarur boʻlgan muddatgacha yoki qonuniy talablar doirasida saqlaymiz. Hisobingiz va ma'lumotlaringizni oʻchirib yuborishni xohlasangiz, soʻrov yuborishingiz mumkin."
+    },
+    "rights": {
+      "title": "9. Sizning ma'lumotlarga oid huquqlaringiz",
+      "intro": "Sizning shaxsiy ma'lumotlaringizga oid quyidagi huquqlaringiz mavjud:",
+      "items": {
+        "access": "Shaxsiy ma'lumotlaringizga kirish huquqi",
+        "correct": "Noaniq ma'lumotlarni tuzatish huquqi",
+        "delete": "Ma'lumotlarni oʻchirib tashlashni talab qilish huquqi",
+        "optOut": "Marketing xabarlardan voz kechish huquqi",
+        "portable": "Ma'lumotlaringizni ko'chirish (portable) formatda olish huquqi"
+      }
+    },
+    "changes": {
+      "title": "10. Siyosatdagi oʻzgarishlar",
+      "content": "Biz ushbu siyosatni vaqti‑vaqti bilan yangilab borishimiz mumkin. Muhim oʻzgarishlar haqida sizni xabardor qilish uchun siyosatning yangilangan versiyasini ushbu sahifada joylashtiramiz va \"Oxirgi yangilanish\" sanasini yangilaymiz."
+    },
+    "contact": {
+      "title": "11. Biz bilan bog'laning",
+      "intro": "Agar ushbu maxfiylik siyosati haqida savollaringiz bo'lsa, iltimos, quyidagi manzil orqali biz bilan bog'laning:",
+      "emailLabel": "Elektron pochta",
+      "email": "privacy@jobs.uz",
+      "addressLabel": "Manzil",
+      "address": "Toshkent, Oʻzbekiston"
+    }
+  },
+  "termsOfService": {
+    "title": "Foydalanish shartlari",
+    "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
+    "agreement": {
+      "title": "1. Shartlarga rozi bo'lish",
+      "content": "Jobs.uz veb-saytiga va platformasiga kirish va foydalanish orqali siz ushbu Foydalanish shartlariga rioya qilishga rozilik bildirgan hisoblanasiz. Agar rozi bo‘lmasangiz, iltimos xizmatdan foydalanmang."
+    },
+    "useLicense": {
+      "title": "2. Foydalanish litsenziyasi",
+      "content": "Jobs.uz saytidagi materiallardan shaxsiy, notijorat va vaqtinchalik ko‘rish uchun bittadan nusxa yuklab olishga ruxsat beriladi. Bu mulk huquqini o‘tkazish emas, balki litsenziya berishdir.",
+      "prohibitions": [
+        "Materiallarni o'zgartirish yoki nusxa ko'chirish",
+        "Materiallardan tijorat maqsadlarda yoki ommaviy ko'rsatish uchun foydalanish",
+        "Jobs.uz dasturiy ta'minotini dekompilyatsiya qilish yoki teskari injiniring qilishga urinish",
+        "Mualliflik huquqi yoki mulkchilik belgilari olib tashlash",
+        "Materiallarni boshqa serverga ko'chirish yoki ko'rsatish"
+      ]
+    },
+    "disclaimer": {
+      "title": "3. Mas'uliyatdan voz kechish",
+      "content": "Jobs.uz dagi materiallar “qanday bo‘lsa shunday” asosida taqdim etiladi. Jobs.uz hech qanday aniq yoki bilinib turadigan kafolatlarni bermaydi va boshqa barcha kafolatlardan voz kechadi."
+    },
+    "limitations": {
+      "title": "4. Majburiyatlar cheklovlari",
+      "content": "Hech bir holatda Jobs.uz yoki uning yetkazib beruvchilari saytdan foydalanish yoki foydalanib bo‘lmaslik natijasida kelib chiqqan zarar uchun javobgar bo‘lmaydi."
+    },
+    "accuracy": {
+      "title": "5. Materiallarning aniqligi",
+      "content": "Jobs.uzdagi materiallarda xatoliklar yoki yetishmovchiliklar bo'lishi mumkin. Jobs.uz materiallar to'g'ri, to'liq yoki dolzarb ekanligini kafolatlamaydi va ularni ogohlantirishsiz o'zgartirishi mumkin."
+    },
+    "links": {
+      "title": "6. Havolalar",
+      "content": "Jobs.uz bog'langan saytlarning mazmuni uchun javobgar emas. Har qanday havolaning kiritilishi ma'qullashni anglatmaydi. Bog'langan saytlardan foydalanish sizning xavfingizda."
+    },
+    "modifications": {
+      "title": "7. O'zgartirishlar",
+      "content": "Jobs.uz ushbu Shartlarni istalgan vaqtda qayta ko'rib chiqishi mumkin. Saytdan foydalanish orqali siz amaldagi Shartlarga bo'ysunishingizni qabul qilasiz."
+    },
+    "governingLaw": {
+      "title": "8. Tatbiq etiluvchi qonun",
+      "content": "Ushbu Shartlar O'zbekiston qonunlariga muvofiq tartibga solinadi va nizolar Toshkent sudlarida ko'rib chiqiladi."
+    },
+    "userAccounts": {
+      "title": "9. Foydalanuvchi akkauntlari",
+      "content": "Agar siz akkaunt yaratgan bo'lsangiz, hisob ma'lumotlaringiz xususiyligini saqlash va akkauntingiz ostidagi barcha faoliyat uchun mas'ulsiz. Ruxsatsiz foydalanishni darhol xabar qiling."
+    },
+    "prohibitedConduct": {
+      "title": "10. Taqiqlangan xatti-harakatlar",
+      "content": "Siz quyidagilarga yo'l qo'ymasligingizni qabul qilasiz:",
+      "items": [
+        "Yolg'on, noto'g'ri yoki adashtiruvchi ma'lumotlarni joylashtirmang",
+        "Amal qiluvchi qonun yoki qoidalarga zid harakat qilmang",
+        "Boshqalarni bezovta qilish, haqoratlash yoki tahdid qilish",
+        "Tizimlarimizga ruxsatsiz kirishga urinish",
+        "Spam yuborish yoki ruxsatsiz reklama joylashtirish"
+      ]
+    },
+    "termination": {
+      "title": "11. Tugatish",
+      "content": "Biz sizning akkauntingizni va kirishni oldindan ogohlantirmasdan darhol to‘xtatish yoki bekor qilish huquqiga egamiz, shu jumladan ushbu Shartlarni buzish holatlarida."
+    },
+    "contact": {
+      "title": "12. Bog'lanish",
+      "content": "Agar ushbu Foydalanish shartlari haqida savollaringiz bo'lsa, biz bilan bog'laning:",
+      "emailLabel": "Email",
+      "email": "legal@jobs.uz"
     }
   }
 }
