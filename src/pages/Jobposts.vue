@@ -3,8 +3,8 @@
     <HeroSearch v-model="searchQuery" @search="handleSearch" />
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 py-6">
-      <div class="flex gap-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col lg:flex-row gap-6">
         <!-- Sidebar - Categories & Filters -->
         <aside class="hidden lg:block w-64 shrink-0">
           <div class="bg-white rounded-lg shadow p-4 sticky top-6">
@@ -41,7 +41,7 @@
                       : 'text-gray-700',
                   ]"
                 >
-                  <span>{{ category.name }}</span>
+                  <span class="truncate">{{ category.name }}</span>
                   <span class="text-sm text-gray-500">{{
                     category.job_count
                   }}</span>
@@ -109,7 +109,7 @@
                     :value="type.name"
                     class="rounded"
                   />
-                  <span>{{ type.name }}</span>
+                  <span class="truncate">{{ type.name }}</span>
                 </label>
               </div>
             </div>
@@ -119,7 +119,7 @@
         <!-- Job Listings -->
         <main class="flex-1">
           <!-- Mobile Filter Button -->
-          <div class="lg:hidden mb-4">
+          <div class="lg:hidden mb-4 flex items-center justify-between">
             <button
               @click="showFilters = !showFilters"
               class="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow text-gray-700"
@@ -139,10 +139,16 @@
               </svg>
               <span>{{ $t("filter") }}</span>
             </button>
+
+            <div class="flex items-center gap-2">
+              <div class="text-sm text-gray-600">
+                {{ totalData }} {{ $t("vacancies") }}
+              </div>
+            </div>
           </div>
 
           <!-- Results Header -->
-          <div class="bg-white rounded-lg shadow p-4 mb-4">
+          <div class="bg-white rounded-lg shadow p-4 mb-4 hidden lg:block">
             <div class="flex items-center justify-between">
               <h2 class="text-xl font-semibold text-gray-900">
                 {{ $t("found") }} {{ totalData }} {{ $t("vacancies") }}
@@ -158,13 +164,12 @@
                 <option value="highest-salary">
                   {{ $t("highestSalary") }}
                 </option>
-                <!-- <option value="relevant">Paling Relevan</option> -->
               </select>
             </div>
           </div>
 
           <!-- Job Cards -->
-          <div class="space-y-4">
+          <div class="flex flex-col">
             <!-- Loading State -->
             <div
               v-if="loading"
@@ -177,215 +182,196 @@
             </div>
 
             <!-- Job List -->
-            <div
-              v-else
-              v-for="job in jobs"
-              :key="job.id"
-              class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-5 cursor-pointer"
-              @click="viewJobDetail(job.id)"
-            >
-              <div class="flex gap-4">
-                <div class="shrink-0">
-                  <img
-                    :src="
-                      'http://localhost:5000' + job.avatar_url ||
-                      '/company-default-image.png'
-                    "
-                    @error="
-                      (e) => (e.target.src = '/company-default-image.png')
-                    "
-                    :alt="job.company_name"
-                    class="w-16 h-16 rounded shadow-sm"
-                  />
-                </div>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
-                    <h3
-                      class="text-lg font-semibold text-gray-900 hover:text-blue-600"
-                    >
-                      {{ job.title }}
-                    </h3>
-                    <span
-                      v-if="job.applied"
-                      class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full"
-                    >
-                      <svg
-                        class="w-3 h-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      {{ $t("applied") }}
-                    </span>
-                    <span
-                      v-if="job.saved"
-                      class="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full"
-                    >
-                      <svg
-                        class="w-3 h-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      {{ $t("saved") }}
-                    </span>
-                  </div>
-                  <div
-                    class="flex items-center gap-4 text-sm text-gray-600 mb-2"
-                  >
-                    <div class="flex items-center gap-1">
-                      <svg
-                        class="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                        />
-                      </svg>
-                      <span>{{ job.company_name }}</span>
-                    </div>
-                    <div class="flex items-center gap-1">
-                      <svg
-                        class="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                      <span>{{ job.location }}</span>
-                    </div>
-                  </div>
-                  <div class="flex items-center gap-4 text-sm mb-3">
+            <div v-else>
+              <div
+                v-for="job in jobs"
+                :key="job.id"
+                class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-4 sm:p-5 md:p-6 cursor-pointer mb-6 last:mb-0"
+                @click="viewJobDetail(job.id)"
+              >
+                <!-- Mobile-first card: image on top, content below -->
+                <div class="flex flex-col gap-3">
+                  <div class="w-full sm:w-28 sm:flex-shrink-0">
                     <div
-                      class="flex items-center gap-1 text-green-600 font-semibold"
+                      class="w-full h-40 sm:h-20 overflow-hidden rounded shadow-sm bg-gray-50 flex items-center justify-center"
                     >
-                      <span
-                        >{{ formatNumber(job.salary_min) }}
-                        {{ job.currency }}</span
-                      >
-                      -
-                      <span
-                        >{{ formatNumber(job.salary_max) }}
-                        {{ job.currency }}</span
-                      >
-                    </div>
-                    <div class="flex items-center gap-1 text-gray-500">
-                      <svg
-                        class="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                        />
-                      </svg>
-                      <span>{{ job.employment_type }}</span>
-                    </div>
-                    <div class="flex items-center gap-1 text-gray-500">
-                      <svg
-                        class="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                      <span>{{ timeAgo(job.created_at) }}</span>
+                      <img
+                        :src="
+                          job.avatar_url
+                            ? 'http://localhost:5000' + job.avatar_url
+                            : '/company-default-image.png'
+                        "
+                        @error="
+                          (e) => (e.target.src = '/company-default-image.png')
+                        "
+                        :alt="job.company_name"
+                        class="max-w-full max-h-full object-contain"
+                      />
                     </div>
                   </div>
-                  <p class="text-sm text-gray-600 line-clamp-2">
+
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-lg font-semibold text-gray-900 truncate">
+                        {{ job.title }}
+                      </h3>
+
+                      <div
+                        class="flex items-center gap-3 text-sm text-gray-600 mt-1 flex-wrap"
+                      >
+                        <div class="flex items-center gap-1 truncate">
+                          <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"
+                            />
+                          </svg>
+                          <span class="truncate">{{ job.company_name }}</span>
+                        </div>
+                        <div
+                          class="flex items-center gap-1 text-gray-500 truncate"
+                        >
+                          <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            />
+                          </svg>
+                          <span class="truncate">{{ job.location }}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="flex-shrink-0 text-right">
+                      <div class="text-green-600 font-semibold text-sm">
+                        {{ formatNumber(job.salary_min) }} -
+                        {{ formatNumber(job.salary_max) }}
+                      </div>
+                      <div class="text-gray-500 text-xs mt-1">
+                        <div class="whitespace-nowrap">{{ job.currency }}</div>
+                        <div class="mt-1">
+                          {{ job.employment_type }} ·
+                          {{ timeAgo(job.created_at) }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="text-sm text-gray-600 mt-1 line-clamp-2">
                     {{ job.description }}
                   </p>
-                </div>
-                <div class="flex items-center">
-                  <svg
-                    class="w-5 h-5 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+
+                  <!-- arrow for larger screens -->
+                  <div class="hidden sm:flex items-center justify-end">
+                    <svg
+                      class="w-5 h-5 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Pagination -->
-          <div class="mt-6 flex justify-center gap-2">
-            <button
-              @click="prevPage"
-              :disabled="currentPage === 1"
-              class="px-4 py-2 border border-gray-300 shadow-sm rounded hover:bg-gray-50 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          <nav aria-label="Pagination" class="mt-6">
+            <div
+              class="flex items-center justify-center gap-3 flex-nowrap overflow-x-auto px-2"
             >
-              Previous
-            </button>
-            <button
-              v-for="page in displayPages"
-              :key="page"
-              @click="goToPage(page)"
-              :class="[
-                'px-4 py-2 shadow-sm rounded',
-                currentPage === page
-                  ? 'bg-blue-600 text-white'
-                  : 'border border-gray-300 hover:bg-gray-50 text-gray-700',
-              ]"
-            >
-              {{ page }}
-            </button>
-            <button
-              @click="nextPage"
-              :disabled="currentPage === totalPages"
-              class="px-4 py-2 border border-gray-300 shadow-sm rounded hover:bg-gray-50 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Next
-            </button>
-          </div>
+              <!-- Previous -->
+              <button
+                @click="prevPage"
+                :disabled="currentPage === 1"
+                :aria-disabled="currentPage === 1"
+                title="Previous"
+                class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm whitespace-nowrap"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  ></path>
+                </svg>
+                <span class="sr-only">Previous</span>
+                <span class="ml-1">{{ $t("previous") || "Previous" }}</span>
+              </button>
+
+              <!-- Page buttons (single row) -->
+              <div class="flex items-center gap-2 flex-nowrap">
+                <button
+                  v-for="page in displayPages"
+                  :key="page"
+                  @click="goToPage(page)"
+                  :aria-current="currentPage === page ? 'page' : false"
+                  :class="[
+                    'px-3 py-2 rounded-md text-sm shadow-sm whitespace-nowrap',
+                    currentPage === page
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50',
+                  ]"
+                  :title="`Go to page ${page}`"
+                >
+                  {{ page }}
+                </button>
+              </div>
+
+              <!-- Next -->
+              <button
+                @click="nextPage"
+                :disabled="currentPage === totalPages"
+                :aria-disabled="currentPage === totalPages"
+                title="Next"
+                class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm whitespace-nowrap"
+              >
+                <span class="mr-1">{{ $t("next") || "Next" }}</span>
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </nav>
         </main>
       </div>
     </div>
@@ -641,7 +627,6 @@ const goToPage = (page) => {
 };
 
 const handleFilterChange = () => {
-  
   searchQuery.value = ""; // Reset search saat filter diubah
   router.push({
     query: {

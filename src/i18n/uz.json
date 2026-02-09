@@ -366,7 +366,7 @@
     "yourAddress": "Sizning manzilingiz",
     "profileSummary": "Profil xulosasi",
     "profileSummaryPlaceholder": "O'zingiz, tajribangiz va qidirish haqida bize ma'lumot bering...",
-   
+
     "saveChanges": "O'zgarishlarni saqlash",
     "manageResumes": "Rezyumelni boshqarish",
     "uploadPDF": "PDF yuklash",
@@ -1195,58 +1195,6 @@
           "title": "Davom ettirish",
           "cardTitle": "Ariza topshirgandan keyin davom ettirish",
           "bullets": [
-            "Arizangiz holati uchun profilingizda 'Topshirgan Arizalar' qismida kuzatish olib boring.",
-            "Ish beruvchi bilan aloqaga kirmasdan avval 30-40 kun kutib turing.",
-            "Agar reksyuterning kontakt ma'lumotlari bo'lsa, qiziqishingizni qayta ta'kidlab va muddati haqida so'rab, muloyim xat yuboring.",
-            "Kutayotganingizda boshqa ishlarni qidirish va ariza topshirishni davom ettiring. Barcha umidingizni bitta arizaga bog'lamang.",
-            "Barcha aloqalarda professional va hamjamiyatli bo'ling.",
-            "Davom ettirish sanalarini va javoblarni yozuvlarida dokumentlashtiring."
-          ],
-          "tipLabel": "Davom ettirish maslahat",
-          "tipBody": "Agar 2-3 hafta ichida javob olmasangiz, yana bir marta davom ettirishingiz mumkin. Shundan keyin boshqa imkoniyatlarga e'tibor berishning vaqti keldi."
-        },
-        "mistakes": {
-          "title": "Keng tarqalgan xatolar, ulardan saqlaning",
-          "items": [
-            {
-              "title": "Umumiy Arizalar",
-              "body": "Rezyumengiz yoki qopqoq xatingizni ishga moslamay ariza topshirish. Har bir ariza nima uchun sizning bu maxsus rol uchun yaxshi nomzod ekaningizni tushuntirib berishi kerak."
-            },
-            {
-              "title": "Beparva Xatolar",
-              "body": "Imlo xatolari, formatlash xatolari yoki eskirgan ma'lumot bilan arizalar yuboring. Yuborganingizdan oldin hamma narsani tekshiring."
-            },
-            {
-              "title": "Ko'rsatmalarni E'tiborsizlik",
-              "body": "Ariza topshirish ko'rsatmalariga amal qilmaslik (masalan, majburiy savollarga javob berish, muayyan fayl formatlaridan foydalanish). Ish beruvchilar siz ko'rsatmalarga amal qilmasligini sezadi."
-            },
-            {
-              "title": "O'tmaydigan yoki Yetmaydigan Malaka",
-              "body": "Ish saviyangizdan ancha yuqori yoki pastroq bo'lgan lavozimlar uchun ariza topshirish. Sahnasida hech bo'lmaganda 70% talablar uchun mos keladigan lavozimlarni tanlang."
-            },
-            {
-              "title": "Davom Strategiyasi Yo'q",
-              "body": "Arizalaringizni davom ettirish yoki kuzatish xatolarni qoldiring. Qaysi vaqtda davom ettirish kerakligi, topshirgan har bir ish uchun tartibli qaydlar saqlab turing."
-            }
-          ]
-        },
-        "interview": {
-          "title": "Suhbatlarga tayyorlaning",
-          "cardTitle": "Suhbat tayyorlash qo'llanmasi",
-          "bullets": [
-            "Kompaniyani tadqiq qiling: Ularning mahsulotlari, xizmatlar, madaniyati va yangi yangiliklar haqida bilib oling.",
-            "Ish tavsifini ko'rib chiqing va ish tajribangiz talablarni qanday qolayotganiga doir misollarni tayyorlab qo'ying.",
-            "Umumiy suhbat savollariga javob berishni mashq qiling (masalan, 'O'zingiz haqida gapiring', 'Nima uchun bu ishni xohlaysiz?').",
-            "Suhbatchi uchun savollar tayyorlang (masalan, 'Bu rolyda muvaffaqiyat qanday ko'rinadi?').",
-            "Professional kiyinib, vaqtida keliblar (yoki kiriting).",
-            "Suhbatdan 24 soat ichida tashakkur xati yuboring.",
-            "Ishonchli, haqiqiy va rol hamda kompaniyaga chin qiziqish ko'rsating."
-          ]
-        },
-        "followUp": {
-          "title": "Davom ettirish",
-          "cardTitle": "Ariza topshirgandan keyin davom ettirish",
-          "bullets": [
             "Profilingizda 'Yuborilgan arizalar' bo'limida ariza holatingizni kuzatib boring.",
             "Ish beruvchi bilan aloqaga kirmasdan avval 30-40 kun kutib turing.",
             "Agar reksyuterning kontakt ma'lumotlari bo'lsa, qiziqishingizni qayta ta'kidlab va muddati haqida so'rab, muloyim xat yuboring.",
@@ -1468,6 +1416,87 @@
         "title": "Birinchi ishingizni joylashtirishga tayyormisiz?",
         "subtitle": "Bugun eng yaxshi talentlarni jalb qilishni boshlang.",
         "button": "Ish joylashtirish"
+      },
+      "userprofile": {
+        "changePassword": {
+          "title": "Parolni o'zgartirish",
+          "currentPassword": "Joriy parol",
+          "newPassword": "Yangi parol",
+          "confirmPassword": "Yangi parolni tasdiqlang",
+          "submit": "Parolni o'zgartirish",
+          "saving": "Saqlanmoqda...",
+          "success": "Parol o'zgartirildi. Iltimos, qayta tizimga kiring.",
+          "mismatch": "Parol tasdiqlashi mos emas",
+          "failed": "Parolni o'zgartirish muvaffaqiyatsiz tugadi"
+        }
+      },
+      "termsOfService": {
+        "title": "Xizmat ko'rsatish shartlari",
+        "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
+        "agreement": {
+          "title": "1. Shartlarga rozilik",
+          "content": "Jobs.uz saytiga kirish va undan foydalanish orqali siz ushbu Xizmat ko'rsatish shartlariga rozi ekanligingizni tasdiqlaysiz. Agar rozilik bermasangiz, iltimos xizmatdan foydalanmang."
+        },
+        "useLicense": {
+          "title": "2. Foydalanish litsenziyasi",
+          "content": "Jobs.uz-dagi materiallarni shaxsiy, notijorat maqsadlarida vaqtincha yuklab olishga ruxsat beriladi. Bu egallikni o‘tkazish emas, litsenziya hisoblanadi.",
+          "prohibitions": [
+            "Materiallarni o'zgartirish yoki nusxalash",
+            "Materiallarni tijorat maqsadlarida yoki ommaviy ko'rsatish uchun ishlatish",
+            "Jobs.uzdagi dasturiy ta'minotni dekompilyatsiya qilish yoki qayta tahlil qilishga harakat qilish",
+            "Avtorsk huquq yoki boshqa egalik belgilanishlarini olib tashlash",
+            "Materiallarni boshqa shaxsga o'tkazish yoki boshqa serverda aks ettirish"
+          ]
+        },
+        "disclaimer": {
+          "title": "3. Majburiyatdan voz kechish",
+          "content": "Jobs.uzdagi materiallar \"boshqacha ko‘rsatilmaguncha\" holatda taqdim etiladi. Jobs.uz hech qanday kafolat bermaydi va barcha mumkin bo‘lgan kafolatlardan voz kechadi."
+        },
+        "limitations": {
+          "title": "4. Majburiyatlarning cheklanishi",
+          "content": "Hech qanday holatda Jobs.uz yoki uning yetkazib beruvchilari sayt materiallaridan foydalanish yoki foydalanib bo'lmasligidan kelib chiqadigan zarar uchun javobgar bo'lmaydi."
+        },
+        "accuracy": {
+          "title": "5. Materiallarning to'g'riligi",
+          "content": "Jobs.uzdagi materiallarda texnik yoki boshqa xatolar bo‘lishi mumkin. Jobs.uz ularning aniqligi, to‘liqligi yoki dolzarbligini kafolatlamaydi va o‘zgartirish huquqini o‘zida saqlaydi."
+        },
+        "links": {
+          "title": "6. Havolalar",
+          "content": "Jobs.uz tashqi saytlarning mazmuni uchun javobgar emas. Havola mavjudligi sayt tomonidan ma'qullashni anglatmaydi. Tashqi saytlardan foydalanish sizning mas'uliyatingizda."
+        },
+        "modifications": {
+          "title": "7. O'zgartirishlar",
+          "content": "Jobs.uz ushbu Shartlarni istalgan vaqtda o'zgartirishi mumkin. Saytdan foydalanish orqali siz amaldagi Shartlarga rozi bo'lasiz."
+        },
+        "governingLaw": {
+          "title": "8. Tatbiq etiluvchi qonun",
+          "content": "Ushbu Shartlar O'zbekiston qonunlariga muvofiq tartibga solinadi; nizolar Toshkent sudlarining yurisdiktsiyasiga bo'ysunadi."
+        },
+        "userAccounts": {
+          "title": "9. Foydalanuvchi akkauntlari",
+          "content": "Agar siz akkaunt yaratsangiz, kirish ma'lumotlarini maxfiy saqlash va akkaunt ostida yuz berayotgan barcha faoliyat uchun javobgar bo'lasiz. Ruxsatsiz foydalanishni darhol xabar qiling."
+        },
+        "prohibitedConduct": {
+          "title": "10. Ta'qiqlangan xatti-harakatlar",
+          "content": "Siz quyidagilardan voz kechasiz:",
+          "items": [
+            "Yolg'on yoki adashtiruvchi ma'lumotlar joylashtirish",
+            "Amaldagi qonunlarni yoki qoidalarni buzish",
+            "Boshqa foydalanuvchilarni tahdid qilish, haqoratlash yoki bezovta qilish",
+            "Bizning tizimlarga ruxsatsiz kirishga harakat qilish",
+            "Spam yoki istalmagan reklama yuborish"
+          ]
+        },
+        "termination": {
+          "title": "11. Bekor qilish",
+          "content": "Biz akkauntingiz va platformaga kirishingizni har qanday sabab bilan darhol va oldindan xabar bermasdan to'xtatib yoki bekor qilamiz, shu jumladan Shartlar buzilganda."
+        },
+        "contact": {
+          "title": "12. Biz bilan bog'laning",
+          "content": "Agar Ushbu Xizmat ko'rsatish shartlari bo'yicha savollaringiz bo'lsa, biz bilan bog'laning:",
+          "emailLabel": "Email",
+          "email": "legal@jobs.uz"
+        }
       }
     }
   },

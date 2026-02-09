@@ -2,7 +2,7 @@
   <div class="bg-white">
     <!-- Hero -->
     <section class="py-12 bg-linear-to-r from-blue-50 to-white">
-      <div class="max-w-290 mx-auto px-4">
+      <div class="max-w-290 mx-auto px-4 sm:px-6">
         <div class="max-w-3xl">
           <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $t("termsPage.heroTitle") }}</h1>
           <p class="text-gray-600">{{ $t("termsPage.lastUpdated") }}</p>
@@ -11,8 +11,8 @@
     </section>
 
     <!-- Content -->
-    <section class="py-12">
-      <div class="max-w-290 mx-auto px-4">
+    <article class="py-12">
+      <div class="max-w-290 mx-auto px-4 sm:px-6">
         <div class="max-w-3xl prose prose-lg">
           <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">{{ $t("termsPage.sections.agreement.title") }}</h2>
           <p class="text-gray-700 mb-6">
@@ -90,7 +90,7 @@
           </p>
         </div>
       </div>
-    </section>
+    </article>
   </div>
 </template>
 
