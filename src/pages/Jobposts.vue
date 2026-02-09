@@ -151,8 +151,8 @@
                 v-model="sortBy"
                 @change="handleFilterChange"
                 class="px-4 py-2 border border-gray-300 shadow-sm rounded text-sm text-gray-700"
-                :placeholder="$t('sortBy')"
               >
+                <option value="" disabled selected>{{ $t("sortBy") }}</option>
                 <option value="latest">{{ $t("latest") }}</option>
                 <option value="oldest">{{ $t("oldest") }}</option>
                 <option value="highest-salary">

@@ -67,8 +67,8 @@ function setLang(lang) {
         <a href="/contact" class="hover:underline">{{ t("footer.contact") }}</a>
         <a href="/about" class="hover:underline">{{ t("footer.about") }}</a>
         <a href="/faq" class="hover:underline">{{ t("footer.faq") }}</a>
-        <a href="/terms-of-service" class="hover:underline">Terms of Service</a>
-        <a href="/privacy-policy" class="hover:underline">Privacy Policy</a>
+        <a href="/terms-of-service" class="hover:underline">{{ t("footer.termsOfService") }}</a>
+        <a href="/privacy-policy" class="hover:underline">{{ t("footer.privacyPolicy") }}</a>
       </div>
 
       <!-- COPYRIGHT -->

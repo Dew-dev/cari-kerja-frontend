@@ -2,19 +2,19 @@
   <div class="max-w-290 mx-auto px-4 py-12">
     <!-- Hero -->
     <section class="text-center mb-10">
-      <h1 class="text-4xl font-extrabold mb-3">Contact Us</h1>
+      <h1 class="text-4xl font-extrabold mb-3">{{ $t("contactPage.title") }}</h1>
       <p class="text-gray-600 max-w-2xl mx-auto">
-        Have a question or need help? Reach out to our team — we are here to
-        help employers and job seekers alike.
+        {{ $t("contactPage.subtitle") }}
       </p>
     </section>
 
     <div class="grid md:grid-cols-3 gap-8 mb-12">
       <!-- Contact info -->
       <div class="md:col-span-1 bg-white p-6 rounded shadow-sm">
-        <h2 class="font-bold text-lg mb-4">Main office</h2>
+        <h2 class="font-bold text-lg mb-4">{{ $t("contactPage.mainOffice") }}</h2>
         <p class="text-gray-700">
-          123 Jobs Street<br />Cityname, Country 10001
+          {{ $t("contactPage.officeAddressLine1") }}<br />
+          {{ $t("contactPage.officeAddressLine2") }}
         </p>
 
         <div class="mt-4">
@@ -58,28 +58,28 @@
         </div>
 
         <div class="mt-6 text-sm text-gray-600">
-          <div class="font-semibold">Working hours</div>
-          <div>Mon — Fri: 9:00 — 18:00</div>
-          <div>Sat: 10:00 — 14:00</div>
+          <div class="font-semibold">{{ $t("contactPage.workingHours") }}</div>
+          <div>{{ $t("contactPage.workingHoursWeekdays") }}</div>
+          <div>{{ $t("contactPage.workingHoursSat") }}</div>
         </div>
       </div>
 
       <!-- Departments -->
       <div class="md:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="bg-white p-6 rounded shadow-sm">
-          <h3 class="font-semibold mb-2">Support</h3>
+          <h3 class="font-semibold mb-2">{{ $t("contactPage.support") }}</h3>
           <p class="text-sm text-gray-600">
-            For general enquiries and technical support.
+            {{ $t("contactPage.supportDesc") }}
           </p>
           <div class="mt-4 text-sm">
             <div>
-              Email:
+              {{ $t("contactPage.emailLabel") }}
               <a class="text-blue-600" href="mailto:support@jobs.uz"
                 >support@jobs.uz</a
               >
             </div>
             <div>
-              Phone:
+              {{ $t("contactPage.phoneLabel") }}
               <a class="text-blue-600" href="tel:+1234567891"
                 >+1 (234) 567-891</a
               >
@@ -88,19 +88,19 @@
         </div>
 
         <div class="bg-white p-6 rounded shadow-sm">
-          <h3 class="font-semibold mb-2">Recruiters</h3>
+          <h3 class="font-semibold mb-2">{{ $t("contactPage.recruiters") }}</h3>
           <p class="text-sm text-gray-600">
-            Questions about posting jobs, packages and HR services.
+            {{ $t("contactPage.recruitersDesc") }}
           </p>
           <div class="mt-4 text-sm">
             <div>
-              Email:
+              {{ $t("contactPage.emailLabel") }}
               <a class="text-blue-600" href="mailto:recruiters@jobs.uz"
                 >recruiters@jobs.uz</a
               >
             </div>
             <div>
-              Phone:
+              {{ $t("contactPage.phoneLabel") }}
               <a class="text-blue-600" href="tel:+1234567892"
                 >+1 (234) 567-892</a
               >
@@ -109,26 +109,26 @@
         </div>
 
         <div class="bg-white p-6 rounded shadow-sm">
-          <h3 class="font-semibold mb-2">Advertising</h3>
+          <h3 class="font-semibold mb-2">{{ $t("contactPage.advertising") }}</h3>
           <p class="text-sm text-gray-600">
-            Partnership and advertising opportunities.
+            {{ $t("contactPage.advertisingDesc") }}
           </p>
           <div class="mt-4 text-sm">
             <div>
-              Email:
+              {{ $t("contactPage.emailLabel") }}
               <a class="text-blue-600" href="mailto:ads@jobs.uz">ads@jobs.uz</a>
             </div>
           </div>
         </div>
 
         <div class="bg-white p-6 rounded shadow-sm">
-          <h3 class="font-semibold mb-2">Press</h3>
+          <h3 class="font-semibold mb-2">{{ $t("contactPage.press") }}</h3>
           <p class="text-sm text-gray-600">
-            Media enquiries and press releases.
+            {{ $t("contactPage.pressDesc") }}
           </p>
           <div class="mt-4 text-sm">
             <div>
-              Email:
+              {{ $t("contactPage.emailLabel") }}
               <a class="text-blue-600" href="mailto:press@jobs.uz"
                 >press@jobs.uz</a
               >
@@ -141,44 +141,44 @@
     <!-- Contact form + Map -->
     <div class="grid lg:grid-cols-2 gap-8">
       <div class="bg-white p-6 rounded shadow-sm">
-        <h2 class="font-bold text-lg mb-4">Send us a message</h2>
+        <h2 class="font-bold text-lg mb-4">{{ $t("contactPage.sendMessage") }}</h2>
         <form @submit.prevent="onSubmit" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium mb-1">Your name</label>
+            <label class="block text-sm font-medium mb-1">{{ $t("contactPage.yourName") }}</label>
             <input
               v-model="form.name"
               type="text"
               class="w-full border rounded px-3 py-2"
-              placeholder="Full name"
+              :placeholder="$t('contactPage.fullNamePlaceholder')"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Email</label>
+            <label class="block text-sm font-medium mb-1">{{ $t("contactPage.email") }}</label>
             <input
               v-model="form.email"
               type="email"
               class="w-full border rounded px-3 py-2"
-              placeholder="you@example.com"
+              :placeholder="$t('contactPage.emailPlaceholder')"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Subject</label>
+            <label class="block text-sm font-medium mb-1">{{ $t("contactPage.subject") }}</label>
             <input
               v-model="form.subject"
               type="text"
               class="w-full border rounded px-3 py-2"
-              placeholder="Subject"
+              :placeholder="$t('contactPage.subjectPlaceholder')"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Message</label>
+            <label class="block text-sm font-medium mb-1">{{ $t("contactPage.message") }}</label>
             <textarea
               v-model="form.message"
               class="w-full border rounded px-3 py-2 h-28"
-              placeholder="Write your message"
+              :placeholder="$t('contactPage.messagePlaceholder')"
             ></textarea>
           </div>
 
@@ -188,10 +188,10 @@
               :disabled="loading"
               class="bg-blue-500 text-white px-4 py-2 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {{ loading ? "Sending..." : "Send message" }}
+              {{ loading ? $t("contactPage.sending") : $t("contactPage.sendMessageButton") }}
             </button>
             <div v-if="sent" class="text-green-600 font-medium">
-              Your message was sent successfully.
+              {{ $t("contactPage.messageSent") }}
             </div>
             <div v-if="error" class="text-red-600 font-medium">
               {{ error }}
@@ -201,22 +201,22 @@
       </div>
 
       <div class="bg-white p-6 rounded shadow-sm">
-        <h2 class="font-bold text-lg mb-4">Our location</h2>
+        <h2 class="font-bold text-lg mb-4">{{ $t("contactPage.ourLocation") }}</h2>
         <div
           class="w-full h-72 bg-gray-100 flex items-center justify-center rounded overflow-hidden"
         >
           <!-- Map placeholder: replace with iframe or map component if available -->
           <div class="text-center text-gray-500">
-            Map placeholder
+            {{ $t("contactPage.mapPlaceholderTitle") }}
             <div class="text-xs mt-2">
-              Add Google Maps iframe or a static map here
+              {{ $t("contactPage.mapPlaceholderSubtitle") }}
             </div>
           </div>
         </div>
 
         <div class="mt-4 text-sm text-gray-600">
-          <div class="font-semibold">Postal address</div>
-          <div>123 Jobs Street, Cityname, Country</div>
+          <div class="font-semibold">{{ $t("contactPage.postalAddress") }}</div>
+          <div>{{ $t("contactPage.postalAddressLine") }}</div>
         </div>
       </div>
     </div>
@@ -224,10 +224,9 @@
     <!-- Footer note -->
     <div class="mt-12 text-sm text-gray-600">
       <p>
-        For urgent inquiries call
+        {{ $t("contactPage.urgentPrefix") }}
         <a href="tel:+1234567890" class="text-blue-600">+1 (234) 567-890</a>.
-        For other matters use the form above or email one of our departments
-        directly.
+        {{ $t("contactPage.urgentSuffix") }}
       </p>
     </div>
   </div>
@@ -235,8 +234,10 @@
 
 <script setup>
 import { reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import axios from "axios";
 
+const { t } = useI18n();
 const form = reactive({ name: "", email: "", subject: "", message: "" });
 const sent = ref(false);
 const loading = ref(false);
@@ -264,14 +265,14 @@ async function onSubmit() {
       sent.value = false;
     }, 1600);
   } catch (err) {
-    error.value = err.response?.data?.message || "Failed to send message. Please try again.";
+    error.value = err.response?.data?.message || t("contactPage.sendFailed");
   } finally {
     loading.value = false;
   }
 }
 
 function mounted() {
-  document.title = "Job Portal - Contact";
+  document.title = t("contactPage.pageTitle");
 }
 mounted();
 </script>
