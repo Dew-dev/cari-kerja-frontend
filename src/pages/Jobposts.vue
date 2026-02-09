@@ -224,6 +224,25 @@
                       </svg>
                       {{ $t("applied") }}
                     </span>
+                    <span
+                      v-if="job.saved"
+                      class="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full"
+                    >
+                      <svg
+                        class="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      {{ $t("saved") }}
+                    </span>
                   </div>
                   <div
                     class="flex items-center gap-4 text-sm text-gray-600 mb-2"

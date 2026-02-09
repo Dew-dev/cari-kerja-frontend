@@ -14,6 +14,9 @@
   "dontHaveAccount": "Hisobingiz yo'qmi?",
   "signing": "Kirish amalga oshirilmoqda...",
   "signingUp": "Ro'yxatdan o'tish amalga oshirilmoqda...",
+  "FAQ": "Tez-tez so'raladigan savollar",
+  "termsOfService": "Foydalanish shartlari",
+  "privacyPolicy": "Maxfiylik siyosati",
   "nav": {
     "searchJobs": "Ish qidirish",
     "postResume": "Rezyume joylash",
@@ -374,6 +377,8 @@
     "default": "Asosiy",
     "addResume": "Rezyume qo'shish",
     "noResumesUploaded": "Rezyumeler hali yuklanmagan",
+    "resumesCount": "Rezyumeler: {current}/{limit}",
+    "maxResumesReached": "{limit} ta rezyumegacha ruxsat beriladi",
     "primary": "Asosiy",
     "workExperience": "Ish tajribasi",
     "addExperience": "Tajriba qo'shish",

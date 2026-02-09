@@ -14,6 +14,9 @@
   "signup": "Зарегистрироваться",
   "signing": "Вход...",
   "signingUp": "Регистрация...",
+  "FAQ": "Часто задаваемые вопросы",
+  "termsOfService": "Условия использования",
+  "privacyPolicy": "Политика конфиденциальности",
   "nav": {
     "searchJobs": "Поиск вакансий",
     "postResume": "Разместить резюме",
@@ -377,6 +380,8 @@
     "default": "По умолчанию",
     "addResume": "Добавить резюме",
     "noResumesUploaded": "Резюме еще не загружены",
+    "resumesCount": "Резюме: {current}/{limit}",
+    "maxResumesReached": "Максимум {limit} резюме разрешено",
     "primary": "Основное",
     "workExperience": "Опыт работы",
     "addExperience": "Добавить опыт",
