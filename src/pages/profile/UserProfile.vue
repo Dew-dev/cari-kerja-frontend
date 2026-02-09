@@ -527,7 +527,12 @@ async function addSkillFromSuggestion(skill) {
       },
     );
 
-    skills.value.push(res.data.data);
+    const addedSkill = res.data.data;
+    skills.value.push({
+      id: skill.id,
+      skill_id: addedSkill.skill_id,
+      skill_name: skill.name
+    });
      push.success(t('profile.skillAdded'));
     skillSearchQuery.value = "";
     skillSuggestions.value = [];
@@ -702,9 +707,10 @@ function handleAddResume() {
 }
 
 function goToJobDetail(job) {
-  const jobId = job?.job_post_id;
+  const jobId = job?.job_post_id || job?.id;
+//   console.log("Navigating to job ID:", jobId);/s
   if (!jobId) return;
-  router.push({ name: "JobDetail", params: { id: jobId } });
+  router.push(`/jobposts/${jobId}`);
 }
 
 function formatDate(date) {
@@ -1113,9 +1119,17 @@ watch(activeTab, (newTab) => {
       >
         <h2 class="text-base md:text-lg font-semibold mb-4">{{ $t('profile.manageResumes') }}</h2>
 
+        <!-- Resume Counter -->
+        <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p class="text-xs md:text-sm text-blue-800">
+            {{ $t('profile.resumesCount', { current: resumes.length, limit: RESUME_LIMIT }) || `Resumes: ${resumes.length}/${RESUME_LIMIT}` }}
+          </p>
+        </div>
+
         <!-- Upload Resume Form -->
         <div
           class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 rounded-lg md:rounded-xl border p-3 md:p-4 mb-6"
+          :class="{ 'opacity-50 pointer-events-none': resumes.length >= RESUME_LIMIT }"
         >
           <div>
             <label class="mb-1 block text-xs md:text-sm font-medium"
@@ -1126,6 +1140,7 @@ watch(activeTab, (newTab) => {
               accept="application/pdf"
               ref="resumeFileInput"
               class="w-full text-xs md:text-sm rounded-lg border px-3 py-2 min-h-10"
+              :disabled="resumes.length >= RESUME_LIMIT"
             />
             <span class="text-[10px] md:text-xs text-gray-500">{{ $t('profile.maxSize5MB') }}</span>
           </div>
@@ -1139,20 +1154,22 @@ watch(activeTab, (newTab) => {
               ref="resumeTitleInput"
               class="w-full rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
               :placeholder="$t('profile.professionalResume')"
+              :disabled="resumes.length >= RESUME_LIMIT"
             />
           </div>
 
           <div class="flex flex-col justify-end gap-2">
             <label class="flex items-center gap-2 text-xs md:text-sm font-medium">
-              <input type="checkbox" ref="resumeDefaultInput" class="rounded" />
+              <input type="checkbox" ref="resumeDefaultInput" class="rounded" :disabled="resumes.length >= RESUME_LIMIT" />
               <span class="hidden sm:inline">{{ $t('profile.setAsDefault') }}</span>
               <span class="sm:hidden">{{ $t('profile.default') }}</span>
             </label>
             <button
               @click="handleAddResume"
-              class="w-full rounded-lg md:rounded-xl bg-blue-600 px-3 md:px-4 py-2 text-xs md:text-sm font-semibold text-white hover:bg-blue-700 min-h-10"
+              :disabled="resumes.length >= RESUME_LIMIT"
+              class="w-full rounded-lg md:rounded-xl bg-blue-600 px-3 md:px-4 py-2 text-xs md:text-sm font-semibold text-white hover:bg-blue-700 min-h-10 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
             >
-              {{ $t('profile.addResume') }}
+              {{ resumes.length >= RESUME_LIMIT ? $t('profile.maxResumesReached', { limit: RESUME_LIMIT }) : $t('profile.addResume') }}
             </button>
           </div>
         </div>
@@ -1481,7 +1498,7 @@ watch(activeTab, (newTab) => {
             v-for="item in appliedJobs"
             :key="item.id || item.application_id || item.job_id"
             class="bg-white rounded-lg md:rounded-lg shadow hover:shadow-lg transition-shadow p-3 md:p-5 cursor-pointer"
-            @click="goToJobDetail(item.job || item)"
+            @click="goToJobDetail(item)"
           >
             <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
               <div class="shrink-0 self-start">
