@@ -109,21 +109,50 @@
               <!-- Nationality -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('searchWorkers.nationality') }}</label>
-                <select
-                  v-model="filters.nationality"
-                  class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  :disabled="nationalitiesLoading"
-                >
-                  <option value="">{{ $t('searchWorkers.allNationalities') || 'All Nationalities' }}</option>
-                  <option
-                    v-for="nat in nationalities"
-                    :key="nat.id"
-                    :value="nat.country_name"
+                <div class="relative nationality-dropdown-container">
+                  <div class="flex items-center gap-2">
+                    <input
+                      v-model="nationalitySearchQuery"
+                      type="text"
+                      placeholder="Search nationality..."
+                      class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      @focus=" toggleNationalityDropdown"
+                      @input="handleNationalitySearch"
+                    />
+                    <button
+                      v-if="filters.nationality"
+                      @click.stop="clearNationality"
+                      class="text-gray-400 hover:text-gray-600"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  
+                  <!-- Dropdown -->
+                  <div
+                    v-if="showNationalityDropdown && filteredNationalities.length > 0"
+                    class="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-48 overflow-y-auto"
                   >
-                    {{ nat.country_name }} ({{ nat.iso_alpha3 }})
-                  </option>
-                </select>
-                <p v-if="nationalitiesLoading" class="text-xs text-gray-500 mt-1">Loading...</p>
+                    <div
+                      v-for="nat in filteredNationalities"
+                      :key="nat.id"
+                      @click="selectNationality(nat)"
+                      class="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer flex items-center justify-between"
+                    >
+                      <span>{{ nat.country_name }} ({{ nat.iso_alpha3 }})</span>
+                      <svg
+                        v-if="filters.nationality === nat.country_name"
+                        class="w-4 h-4 text-blue-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  <p v-if="nationalitiesLoading" class="text-xs text-gray-500 mt-1">Loading...</p>
+                </div>
               </div>
 
               <!-- Experience Years -->
@@ -439,6 +468,9 @@ const skillsLoading = ref(false)
 
 const nationalities = ref([])
 const nationalitiesLoading = ref(false)
+const nationalitySearchQuery = ref('')
+const showNationalityDropdown = ref(false)
+let nationalitySearchTimeout = null
 
 const filters = ref({
   search: '',
@@ -467,6 +499,8 @@ const visiblePages = computed(() => {
   return pages
 })
 
+const filteredNationalities = computed(() => nationalities.value)
+
 // Methods
 const fetchSkills = async (search = '') => {
   try {
@@ -485,10 +519,11 @@ const fetchSkills = async (search = '') => {
   }
 }
 
-const fetchNationalities = async () => {
+const fetchNationalities = async (search = '') => {
   try {
     nationalitiesLoading.value = true
-    const res = await api.get('/nationalities', {
+    const query = search ? `?search=${encodeURIComponent(search)}` : ''
+    const res = await api.get(`/nationalities${query}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
@@ -504,6 +539,12 @@ const fetchNationalities = async () => {
 const handleSkillSearch = (e) => {
   skillSearchQuery.value = e.target.value
   fetchSkills(e.target.value)
+}
+
+const handleNationalitySearch = (e) => {
+  nationalitySearchQuery.value = e.target.value
+  showNationalityDropdown.value = true
+  fetchNationalities(e.target.value)
 }
 
 const toggleSkill = (skill) => {
@@ -538,10 +579,32 @@ const toggleSkillsDropdown = () => {
   }
 }
 
+const toggleNationalityDropdown = () => {
+  showNationalityDropdown.value = !showNationalityDropdown.value
+}
+
+const selectNationality = (nationality) => {
+  filters.value.nationality = nationality.country_name
+  nationalitySearchQuery.value = nationality.country_name
+  showNationalityDropdown.value = false
+}
+
+const clearNationality = () => {
+  filters.value.nationality = ''
+  nationalitySearchQuery.value = ''
+  showNationalityDropdown.value = false
+}
+
 const handleClickOutside = (event) => {
-  const dropdown = document.querySelector('.skills-dropdown-container')
-  if (dropdown && !dropdown.contains(event.target)) {
+  const skillsDropdown = document.querySelector('.skills-dropdown-container')
+  const nationalityDropdown = document.querySelector('.nationality-dropdown-container')
+  
+  if (skillsDropdown && !skillsDropdown.contains(event.target)) {
     showSkillsDropdown.value = false
+  }
+  
+  if (nationalityDropdown && !nationalityDropdown.contains(event.target)) {
+    showNationalityDropdown.value = false
   }
 }
 
@@ -605,6 +668,7 @@ const resetFilters = () => {
   skillsInput.value = ''
   selectedSkills.value = []
   skillSearchQuery.value = ''
+  nationalitySearchQuery.value = ''
   currentPage.value = 1
   
   // Reload with fresh filters
