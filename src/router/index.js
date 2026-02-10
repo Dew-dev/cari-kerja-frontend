@@ -174,8 +174,14 @@ const routes = [
     component: () => import("@/pages/auth/VerifyEmail.vue"),
   },
   {
+    path: "/search-workers",
+    name: "search-workers",
+    component: () => import("../pages/recruiter/SearchWorkers.vue"),
+    // meta: { requiresAuth: true, role: "recruiter" },
+  },
+  {
     path: "/recruiter",
-    meta: { requiresAuth: true, role: "recruiter" , blockRole: "user"},
+    meta: { requiresAuth: true, role: "recruiter", blockRole: "user" },
     children: [
       {
         path: "",
@@ -212,12 +218,6 @@ const routes = [
         path: "jobs/archived",
         name: "recruiter-jobs-archived",
         component: () => import("@/pages/recruiter/Jobs.vue"),
-        meta: { requiresAuth: true, role: "recruiter" },
-      },
-      {
-        path: "search-workers",
-        name: "search-workers",
-        component: () => import("../pages/recruiter/SearchWorkers.vue"),
         meta: { requiresAuth: true, role: "recruiter" },
       },
     ],

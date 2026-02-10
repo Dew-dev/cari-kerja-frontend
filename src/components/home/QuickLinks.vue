@@ -51,6 +51,6 @@ const goToAllJobs = () => {
 };
 
 const goToSearchWorkers = () => {
-  router.push("/recruiter/search-workers");
+  router.push("/search-workers");
 };
 </script>
