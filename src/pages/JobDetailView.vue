@@ -118,26 +118,26 @@
 
             <!-- Job Key Info -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div class="border border-gray-200 rounded-lg p-4">
-                <div class="text-xs text-gray-500 mb-1">{{ $t("salary") }}</div>
-                <div class="text-lg font-semibold text-green-600">
-                  {{ formatNumber(job.salary_min) }} -
-                  {{ formatNumber(job.salary_max) }} {{ job.currency_code }}
+              <div class="bg-linear-to-br from-green-50 to-green-100 border-l-4 border-green-500 rounded-lg p-4">
+                <div class="text-xs text-gray-600 font-semibold mb-2">{{ $t("salary") }}</div>
+                <div class="text-lg font-bold text-green-700">
+                  {{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }}
                 </div>
+                <div class="text-xs text-gray-600 mt-1">{{ job.currency_code }}</div>
               </div>
-              <div class="border border-gray-200 rounded-lg p-4">
-                <div class="text-xs text-gray-500 mb-1">
+              <div class="bg-linear-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500 rounded-lg p-4">
+                <div class="text-xs text-gray-600 font-semibold mb-2">
                   {{ $t("employmentType") }}
                 </div>
-                <div class="text-lg font-semibold text-gray-900">
+                <div class="text-lg font-bold text-blue-700">
                   {{ job.employment_type }}
                 </div>
               </div>
-              <div class="border border-gray-200 rounded-lg p-4">
-                <div class="text-xs text-gray-500 mb-1">
+              <div class="bg-linear-to-br from-purple-50 to-purple-100 border-l-4 border-purple-500 rounded-lg p-4">
+                <div class="text-xs text-gray-600 font-semibold mb-2">
                   {{ $t("category") }}
                 </div>
-                <div class="text-lg font-semibold text-gray-900">
+                <div class="text-lg font-bold text-purple-700">
                   {{ job.category_name }}
                 </div>
               </div>
@@ -149,21 +149,15 @@
                 v-if="!auth.isLoggedIn || auth.role === 'user'"
                 @click="handleApply"
                 :disabled="isApplying || hasApplied"
-                class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-2"
+                class="flex-1 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
               >
                 <svg
                   v-if="hasApplied"
                   class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
+                  fill="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  />
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
                 </svg>
                 <span>{{
                   hasApplied
@@ -180,10 +174,10 @@
                 @click="handleSaveJob"
                 :disabled="isSavingJob"
                 :class="[
-                  'px-6 py-3 rounded-lg font-semibold transition duration-200 flex items-center justify-center gap-2',
+                  'px-6 py-3 rounded-lg font-semibold transition duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg',
                   isSaved
-                    ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
+                    ? 'bg-linear-to-r from-yellow-400 to-yellow-500 text-white hover:from-yellow-500 hover:to-yellow-600'
+                    : 'bg-white text-gray-900 border-2 border-gray-300 hover:border-blue-600 hover:bg-blue-50',
                   isSavingJob && 'opacity-50 cursor-not-allowed'
                 ]"
               >
@@ -207,10 +201,13 @@
 
           <!-- Job Description -->
           <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               {{ $t("jobDescription") }}
             </h2>
-            <div class="prose max-w-none text-gray-700 whitespace-pre-line">
+            <div class="prose max-w-none text-gray-700 whitespace-pre-line leading-relaxed">
               {{ job.description }}
             </div>
           </div>
@@ -220,12 +217,17 @@
             v-if="job.requirements"
             class="bg-white rounded-lg shadow-md p-6"
           >
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Requirements</h2>
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Requirements
+            </h2>
             <ul
               v-for="requirement in job.requirements"
-              class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line"
+              class="list-disc list-inside space-y-2 text-gray-700"
             >
-              <li>{{ requirement.requirement }}</li>
+              <li class="ml-2">{{ requirement.requirement }}</li>
             </ul>
           </div>
 
@@ -234,26 +236,59 @@
             v-if="job.responsibilities"
             class="bg-white rounded-lg shadow-md p-6"
           >
-            <h2 class="text-xl font-bold text-gray-900 mb-4">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2 1m2-1l-2-1m2 1v2.5" />
+              </svg>
               Responsibilities
             </h2>
             <ul
               v-for="responsibility in job.responsibilities"
-              class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line"
+              class="list-disc list-inside space-y-2 text-gray-700"
             >
-              <li>{{ responsibility.responsibility }}</li>
+              <li class="ml-2">{{ responsibility.responsibility }}</li>
             </ul>
           </div>
 
           <!-- Benefits -->
           <div v-if="job.benefits" class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Benefits</h2>
-            <ul
-              v-for="benefit in job.benefits"
-              class="list-disc list-inside prose max-w-none text-gray-700 whitespace-pre-line"
-            >
-              <li>{{ benefit.benefit }}</li>
-            </ul>
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5c.75 0 1.498-.037 2.237-.111a6.009 6.009 0 00-11.066 0c.738.074 1.487.111 2.237.111h6.592z" />
+              </svg>
+              Benefits
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div
+                v-for="benefit in job.benefits"
+                :key="benefit.id"
+                class="flex gap-3 p-4 rounded-lg bg-green-50 border border-green-200"
+              >
+                <svg class="w-5 h-5 text-green-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-gray-900 text-sm">{{ benefit.benefit }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div v-if="skills.length > 0" class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5h.01" />
+              </svg>
+              Required Skills
+            </h2>
+            <div class="flex flex-wrap gap-3">
+              <div
+                v-for="skill in skills"
+                :key="skill.id"
+                class="px-4 py-2 rounded-full bg-indigo-50 border border-indigo-300 text-indigo-700 font-medium text-sm hover:bg-indigo-100 transition cursor-default"
+              >
+                {{ skill.skill || skill.skill_name }}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -675,6 +710,7 @@ import {
   getJobPostResponsibilities,
   getJobPosts,
 } from "../services/jobposts.api";
+// import api from "../services/api";
 import { saveJob, removeSavedJob } from "../services/saved-jobs.api";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
@@ -697,6 +733,7 @@ const showApplicationModal = ref(false);
 const isSubmitting = ref(false);
 const resumes = ref([]);
 const jobQuestions = ref([]);
+const skills = ref([]);
 
 // Application Form
 const applicationForm = ref({
@@ -841,6 +878,16 @@ const jobDetailService = {
     }
   },
 
+  // async fetchJobPostSkills(id) {
+  //   try {
+  //     const response = await api.get(`/job-posts/${id}/skills`);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Error fetching jobPostSkills:", error);
+  //     throw error;
+  //   }
+  // },
+
   async fetchSimilarJobs(jobId, category) {
     try {
       // PLACEHOLDER - Ganti dengan endpoint backend Anda
@@ -923,12 +970,15 @@ const loadJobDetail = async () => {
       );
       hasApplied.value = statusResponse.has_applied || job.value.applied;
     }
+    skills.value = job.value.skills || [];
+    console.log("Job skills loaded:", skills.value);
 
     // Load similar jobs
     await loadSimilarJobs();
     await loadJobPostRequirements();
     await loadJobPostResponsibilities();
     await loadJobPostBenefits();
+    // await loadJobPostSkills();
     await loadJobQuestions();
   } catch (error) {
     console.error("Error loading job detail:", error);
@@ -969,6 +1019,17 @@ const loadJobPostBenefits = async () => {
     console.error("Error loading benefits: ", error);
   }
 };
+
+// const loadJobPostSkills = async () => {
+//   try {
+//     if (!job.value) return;
+//     const response = await jobDetailService.fetchJobPostSkills(jobId.value);
+//     skills.value = response.data || [];
+//   } catch (error) {
+//     console.error("Error loading skills: ", error);
+//     skills.value = [];
+//   }
+// };
 
 const loadJobQuestions = async () => {
   try {
@@ -1155,7 +1216,7 @@ const checkIfSaved = async () => {
 
 const viewCompanyProfile = () => {
   // Navigate to company profile page
-  router.push(`/recruiters/${job.value.recruiter_id}`);
+  router.push(`/rec/${job.value.company.id}`);
   // console.log("Navigate to company profile");
 };
 

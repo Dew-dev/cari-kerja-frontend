@@ -934,7 +934,7 @@ watch(activeTab, (newTab) => {
             </div>
 
             <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.email') }}</label>
+              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.email') }} <span class="text-red-500">*</span></label>
               <input
                 v-model="form.email"
                 type="email"
@@ -945,7 +945,7 @@ watch(activeTab, (newTab) => {
             </div>
 
             <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.phone') }}</label>
+              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.phone') }} <span class="text-red-500">*</span></label>
               <input
                 v-model="form.telephone"
                 type="text"
@@ -956,7 +956,7 @@ watch(activeTab, (newTab) => {
 
             <div>
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.dateOfBirth') }}</label
+                >{{ $t('profile.dateOfBirth') }} <span class="text-red-500">*</span></label
               >
               <input
                 v-model="form.date_of_birth"
@@ -966,7 +966,7 @@ watch(activeTab, (newTab) => {
             </div>
 
             <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.gender') }}</label>
+              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.gender') }} <span class="text-red-500">*</span></label>
               <select
                 v-model="form.gender_id"
                 class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 md:py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
@@ -1043,7 +1043,7 @@ watch(activeTab, (newTab) => {
             </div>
 
             <div class="col-span-2">
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.address') }}</label>
+              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.address') }} <span class="text-red-500">*</span></label>
               <textarea
                 v-model="form.address"
                 rows="2"
