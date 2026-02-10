@@ -22,12 +22,12 @@
         </div>
 
         <div 
-          @click="goToLatestJobs"
-          class="bg-linear-to-br from-green-50 to-green-100 p-8 shadow-md rounded-xl hover:shadow-xl hover:from-green-100 hover:to-green-200 transition duration-300 ease-in-out cursor-pointer border border-green-200"
+          @click="goToSearchWorkers"
+          class="bg-linear-to-br from-purple-50 to-purple-100 p-8 shadow-md rounded-xl hover:shadow-xl hover:from-purple-100 hover:to-purple-200 transition duration-300 ease-in-out cursor-pointer border border-purple-200"
         >
-          <div class="text-green-600 text-4xl mb-4"><span class="pi pi-clock"></span></div>
-          <div class="font-bold text-xl text-gray-800">{{ $t("latestJobs") }}</div>
-          <p class="text-gray-600 text-sm mt-2">{{ $t('newListings') || 'Recently posted jobs' }}</p>
+          <div class="text-purple-600 text-4xl mb-4"><span class="pi pi-users"></span></div>
+          <div class="font-bold text-xl text-gray-800">{{ $t("findWorkers") }}</div>
+          <p class="text-gray-600 text-sm mt-2">{{ $t('searchTalentedProfessionals') || 'Discover talented professionals' }}</p>
         </div>
 
       </div>
@@ -50,10 +50,7 @@ const goToAllJobs = () => {
   router.push("/jobposts");
 };
 
-const goToLatestJobs = () => {
-  router.push({
-    path: "/jobposts",
-    query: { sort_by: "latest" }
-  });
+const goToSearchWorkers = () => {
+  router.push("/recruiter/search-workers");
 };
 </script>

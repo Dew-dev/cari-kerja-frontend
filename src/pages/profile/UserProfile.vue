@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, onMounted, watch } from "vue";
+import { ref, reactive, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
@@ -36,6 +36,8 @@ const form = reactive({
   profile_summary: "",
   current_salary: "",
   expected_salary: "",
+  current_salary_currency_id: "",
+  expected_salary_currency_id: "",
 });
 
 const avatarFile = ref(null);
@@ -70,6 +72,18 @@ const maritalStatuses = ref([
   { id: "3", status: "Divorced" },
   { id: "4", status: "Widowed" },
 ]);
+const currencies = ref([]);
+
+const currentCurrencyInput = ref("");
+const expectedCurrencyInput = ref("");
+const currencyOptions = ref([]);
+const currencyLoading = ref(false);
+const isSelectingCurrentCurrency = ref(false);
+const isSelectingExpectedCurrency = ref(false);
+const showCurrentCurrencyDropdown = ref(false);
+const showExpectedCurrencyDropdown = ref(false);
+let currentCurrencyTimeout = null;
+let expectedCurrencyTimeout = null;
 
 const appliedJobs = ref([]);
 const savedJobs = ref([]);
@@ -135,6 +149,16 @@ async function loadProfile() {
     form.profile_summary = data.profile_summary ?? "";
     form.current_salary = data.current_salary ?? "";
     form.expected_salary = data.expected_salary ?? "";
+    form.current_salary_currency_id = String(data.current_salary_currency_id ?? "");
+    form.expected_salary_currency_id = String(data.expected_salary_currency_id ?? "");
+
+    // Load currency display names
+    if (data.current_salary_currency) {
+      currentCurrencyInput.value = `${data.current_salary_currency.name} (${data.current_salary_currency.code})`;
+    }
+    if (data.expected_salary_currency) {
+      expectedCurrencyInput.value = `${data.expected_salary_currency.name} (${data.expected_salary_currency.code})`;
+    }
 
     avatarFromBackend.value = data.avatar_url ?? null;
     resumes.value = data.resumes ?? [];
@@ -180,6 +204,8 @@ async function saveProfile() {
     formData.append("profile_summary", form.profile_summary);
     formData.append("current_salary", form.current_salary);
     formData.append("expected_salary", form.expected_salary);
+    formData.append("current_salary_currency_id", form.current_salary_currency_id);
+    formData.append("expected_salary_currency_id", form.expected_salary_currency_id);
 
     if (avatarFile.value) {
       formData.append("avatar", avatarFile.value);
@@ -726,6 +752,113 @@ function formatNumber(num) {
   return new Intl.NumberFormat("en-US").format(num);
 }
 
+async function fetchCurrencies(keyword = "_") {
+  try {
+    currencyLoading.value = true;
+    const res = await api.get(`/currencies/${keyword}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    const data = res?.data?.data || [];
+    currencyOptions.value = data.map((item) => ({
+      id: item.id,
+      name: item.name,
+      code: item.code,
+      symbol: item.symbol,
+    }));
+  } catch (err) {
+    console.error("Failed to fetch currencies:", err);
+    currencyOptions.value = [];
+  } finally {
+    currencyLoading.value = false;
+  }
+}
+
+function selectCurrentCurrency(currency) {
+  isSelectingCurrentCurrency.value = true;
+  form.current_salary_currency_id = String(currency.id);
+  currentCurrencyInput.value = `${currency.name} (${currency.code})`;
+  currencyOptions.value = [];
+  showCurrentCurrencyDropdown.value = false;
+  setTimeout(() => {
+    isSelectingCurrentCurrency.value = false;
+  }, 0);
+}
+
+function selectExpectedCurrency(currency) {
+  isSelectingExpectedCurrency.value = true;
+  form.expected_salary_currency_id = String(currency.id);
+  expectedCurrencyInput.value = `${currency.name} (${currency.code})`;
+  currencyOptions.value = [];
+  showExpectedCurrencyDropdown.value = false;
+  setTimeout(() => {
+    isSelectingExpectedCurrency.value = false;
+  }, 0);
+}
+
+watch(currentCurrencyInput, (val) => {
+  if (isSelectingCurrentCurrency.value) return;
+
+  if (!val || val.trim() === "") {
+    currencyOptions.value = [];
+    return;
+  }
+
+  // Only search if dropdown is open
+  if (showCurrentCurrencyDropdown.value) {
+    clearTimeout(currentCurrencyTimeout);
+    currentCurrencyTimeout = setTimeout(() => {
+      fetchCurrencies(val);
+    }, 300);
+  }
+});
+
+watch(expectedCurrencyInput, (val) => {
+  if (isSelectingExpectedCurrency.value) return;
+
+  if (!val || val.trim() === "") {
+    currencyOptions.value = [];
+    return;
+  }
+
+  // Only search if dropdown is open
+  if (showExpectedCurrencyDropdown.value) {
+    clearTimeout(expectedCurrencyTimeout);
+    expectedCurrencyTimeout = setTimeout(() => {
+      fetchCurrencies(val);
+    }, 300);
+  }
+});
+
+function toggleCurrentCurrencyDropdown() {
+  showCurrentCurrencyDropdown.value = !showCurrentCurrencyDropdown.value;
+  if (showCurrentCurrencyDropdown.value && !currencyOptions.value.length) {
+    fetchCurrencies(currentCurrencyInput.value || "_");
+  }
+}
+
+function toggleExpectedCurrencyDropdown() {
+  showExpectedCurrencyDropdown.value = !showExpectedCurrencyDropdown.value;
+  if (showExpectedCurrencyDropdown.value && !currencyOptions.value.length) {
+    fetchCurrencies(expectedCurrencyInput.value || "_");
+  }
+}
+
+function handleClickOutside(event) {
+  const currentDropdown = document.querySelector('.currency-dropdown-current');
+  const expectedDropdown = document.querySelector('.currency-dropdown-expected');
+  
+  if (currentDropdown && !currentDropdown.contains(event.target)) {
+    showCurrentCurrencyDropdown.value = false;
+  }
+  
+  if (expectedDropdown && !expectedDropdown.contains(event.target)) {
+    showExpectedCurrencyDropdown.value = false;
+  }
+}
+
 async function fetchNationalities(keyword = "") {
   try {
     const query = keyword ? `?search=${encodeURIComponent(keyword)}` : "";
@@ -756,10 +889,19 @@ function handleNationalitySearch(value) {
 }
 
 onMounted(() => {
+  fetchCurrencies();
   fetchNationalities();
   loadProfile();
   loadAppliedJobs();
   loadSavedJobs();
+  
+  // Add click outside listener
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  // Clean up event listener
+  document.removeEventListener('click', handleClickOutside);
 });
 
 watch(activeTab, (newTab) => {
@@ -1019,27 +1161,82 @@ watch(activeTab, (newTab) => {
               </select>
             </div>
 
-            <div>
+            <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
                 >{{ $t('profile.currentSalary') }}</label
               >
-              <input
-                v-model="form.current_salary"
-                type="text"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-                :placeholder="$t('profile.salaryExample')"
-              />
+              <div class="grid grid-cols-2 gap-2">
+                <input
+                  v-model="form.current_salary"
+                  type="number"
+                  class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
+                  :placeholder="$t('profile.salaryExample')"
+                />
+                <div class="relative currency-dropdown-current">
+                  <input
+                    v-model="currentCurrencyInput"
+                    type="text"
+                    class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10 cursor-pointer"
+                    :placeholder="$t('profile.selectCurrency') || 'Select Currency'"
+                    @click="toggleCurrentCurrencyDropdown"
+                  />
+                  <div
+                    v-if="showCurrentCurrencyDropdown && currencyOptions.length"
+                    class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-gray-200 rounded-md"
+                  >
+                    <div
+                      v-for="currency in currencyOptions"
+                      :key="currency.id"
+                      @click="selectCurrentCurrency(currency)"
+                      class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
+                        >
+                        {{ currency.name }} ({{ currency.code }})
+                    </div>
+                  </div>
+                  <p v-if="currencyLoading" class="text-xs text-gray-500 mt-1">
+                    {{ $t('profile.loadingCurrencies') || 'Loading...' }}
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div>
+            <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
                 >{{ $t('profile.expectedSalary') }}</label
               >
-              <input
-                v-model="form.expected_salary"
-                type="text"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-              />
+              <div class="grid grid-cols-2 gap-2">
+                <input
+                  v-model="form.expected_salary"
+                  type="number"
+                  class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
+                  :placeholder="$t('profile.salaryExample')"
+                />
+                <div class="relative currency-dropdown-expected">
+                  <input
+                    v-model="expectedCurrencyInput"
+                    type="text"
+                    class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10 cursor-pointer"
+                    :placeholder="$t('profile.selectCurrency') || 'Select Currency'"
+                    @click="toggleExpectedCurrencyDropdown"
+                  />
+                  <div
+                    v-if="showExpectedCurrencyDropdown && currencyOptions.length"
+                    class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-gray-200 rounded-md"
+                  >
+                    <div
+                      v-for="currency in currencyOptions"
+                      :key="currency.id"
+                      @click="selectExpectedCurrency(currency)"
+                      class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
+                    >
+                      {{ currency.name }} ({{ currency.code }})
+                    </div>
+                  </div>
+                  <p v-if="currencyLoading" class="text-xs text-gray-500 mt-1">
+                    {{ $t('profile.loadingCurrencies') || 'Loading...' }}
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div class="col-span-2">

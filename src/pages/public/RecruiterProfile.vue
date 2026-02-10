@@ -57,10 +57,10 @@ onMounted(fetchRecruiter)
     <!-- Content -->
     <div v-else-if="recruiter" class="max-w-6xl mx-auto px-4 py-8">
       <!-- HERO SECTION -->
-      <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl shadow-xl p-8 mb-8 text-white">
+      <div class="bg-linear-to-r from-blue-600 to-blue-800 rounded-2xl shadow-xl p-8 mb-8 text-white">
         <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
           <!-- Company Logo -->
-          <div class="h-24 w-24 md:h-32 md:w-32 rounded-2xl overflow-hidden shadow-lg bg-white flex-shrink-0">
+          <div class="h-24 w-24 md:h-32 md:w-32 rounded-2xl overflow-hidden shadow-lg bg-white shrink-0">
             <img
               v-if="recruiter.avatar_url"
               :src="`http://localhost:5000${recruiter.avatar_url}`"
@@ -262,6 +262,7 @@ onMounted(fetchRecruiter)
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
