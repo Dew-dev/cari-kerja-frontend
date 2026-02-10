@@ -335,11 +335,11 @@
                   />
                 </svg>
                 <a
-                  :href="job.company_website"
+                  :href="`https://${job.company_website}`"
                   target="_blank"
                   class="text-blue-600 hover:underline break-all"
                 >
-                  {{ job.company_website }}
+                  {{ t("visitWebsite") }}
                 </a>
               </div>
 
@@ -1216,7 +1216,7 @@ const checkIfSaved = async () => {
 
 const viewCompanyProfile = () => {
   // Navigate to company profile page
-  router.push(`/rec/${job.value.company.id}`);
+  router.push(`/recruiters/${job.value.recruiter_id}`);
   // console.log("Navigate to company profile");
 };
 

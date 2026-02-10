@@ -64,6 +64,11 @@
     "signUp": "Sign Up",
     "noAccount": "Don't have an account?"
   },
+  "contactActions": {
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "call": "Call"
+  },
   "job_description": "Job Description",
   "job_title": "Job Title",
   "add_tag": "Add tag",
@@ -195,6 +200,22 @@
     }
   },
   "recruiterProfile": "Recruiter Profile",
+  "recruiterPublic": {
+    "visitWebsite": "Visit Website",
+    "openPositions": "Open Positions",
+    "aboutCompany": "About Company",
+    "noDescriptionProvided": "No description provided.",
+    "contactInformation": "Contact Information",
+    "contactPerson": "Contact Person",
+    "phone": "Phone",
+    "address": "Address",
+    "openPositionsCount": "Open Positions ({count})",
+    "noActiveJobs": "No active job postings",
+    "checkBackLater": "Check back later for new opportunities",
+    "posted": "Posted",
+    "deadline": "Deadline",
+    "failedToLoad": "Failed to load recruiter profile"
+  },
   "visibleToCandidates": "This information will be visible to candidates",
   "fileTypeAndSize": "JPG or PNG, max 2MB",
   "companyWebsite": "Company Website",

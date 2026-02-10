@@ -64,6 +64,11 @@
     "signUp": "Зарегистрироваться",
     "noAccount": "Нет аккаунта?"
   },
+  "contactActions": {
+    "email": "Эл. почта",
+    "whatsapp": "WhatsApp",
+    "call": "Позвонить"
+  },
 
   "job_description": "Описание работы",
   "job_title": "Название вакансии",
@@ -198,6 +203,22 @@
     }
   },
   "recruiterProfile": "Профиль рекрутера",
+  "recruiterPublic": {
+    "visitWebsite": "Перейти на сайт",
+    "openPositions": "Открытые вакансии",
+    "aboutCompany": "О компании",
+    "noDescriptionProvided": "Описание не предоставлено.",
+    "contactInformation": "Контактная информация",
+    "contactPerson": "Контактное лицо",
+    "phone": "Телефон",
+    "address": "Адрес",
+    "openPositionsCount": "Открытые вакансии ({count})",
+    "noActiveJobs": "Нет активных вакансий",
+    "checkBackLater": "Загляните позже за новыми возможностями",
+    "posted": "Опубликовано",
+    "deadline": "Срок",
+    "failedToLoad": "Не удалось загрузить профиль рекрутера"
+  },
   "visibleToCandidates": "Эта информация будет видна кандидатам",
   "fileTypeAndSize": "JPG или PNG, макс. 2MB",
   "companyWebsite": "Веб-сайт компании",

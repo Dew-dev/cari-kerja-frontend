@@ -93,7 +93,7 @@ onMounted(fetchRecruiter)
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                 </svg>
-                <span class="underline">Visit Website</span>
+                <span class="underline">{{ $t('recruiterPublic.visitWebsite') }}</span>
               </a>
             </div>
 
@@ -101,7 +101,7 @@ onMounted(fetchRecruiter)
             <div class="flex flex-wrap gap-6">
               <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
                 <div class="text-2xl font-bold">{{ openJobs.length }}</div>
-                <div class="text-sm text-blue-100">Open Positions</div>
+                <div class="text-sm text-blue-100">{{ $t('recruiterPublic.openPositions') }}</div>
               </div>
             </div>
           </div>
@@ -117,10 +117,10 @@ onMounted(fetchRecruiter)
               <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              About Company
+              {{ $t('recruiterPublic.aboutCompany') }}
             </h2>
             <p class="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
-              {{ recruiter.description || "No description provided." }}
+              {{ recruiter.description || $t('recruiterPublic.noDescriptionProvided') }}
             </p>
           </div>
 
@@ -130,7 +130,7 @@ onMounted(fetchRecruiter)
               <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              Contact Information
+              {{ $t('recruiterPublic.contactInformation') }}
             </h2>
             <div class="space-y-3">
               <div v-if="recruiter.contact_name" class="flex items-start gap-3">
@@ -138,7 +138,7 @@ onMounted(fetchRecruiter)
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
                 <div>
-                  <div class="text-xs text-gray-500">Contact Person</div>
+                  <div class="text-xs text-gray-500">{{ $t('recruiterPublic.contactPerson') }}</div>
                   <div class="text-sm font-medium text-gray-900">{{ recruiter.contact_name }}</div>
                 </div>
               </div>
@@ -147,7 +147,7 @@ onMounted(fetchRecruiter)
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
                 <div>
-                  <div class="text-xs text-gray-500">Phone</div>
+                  <div class="text-xs text-gray-500">{{ $t('recruiterPublic.phone') }}</div>
                   <div class="text-sm font-medium text-gray-900">{{ recruiter.contact_phone }}</div>
                 </div>
               </div>
@@ -157,7 +157,7 @@ onMounted(fetchRecruiter)
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <div>
-                  <div class="text-xs text-gray-500">Address</div>
+                  <div class="text-xs text-gray-500">{{ $t('recruiterPublic.address') }}</div>
                   <div class="text-sm text-gray-900">{{ recruiter.address }}</div>
                 </div>
               </div>
@@ -172,7 +172,7 @@ onMounted(fetchRecruiter)
               <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              Open Positions ({{ openJobs.length }})
+              {{ $t('recruiterPublic.openPositionsCount', { count: openJobs.length }) }}
             </h2>
 
             <!-- No Jobs State -->
@@ -180,8 +180,8 @@ onMounted(fetchRecruiter)
               <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <p class="text-gray-500 font-medium">No active job postings</p>
-              <p class="text-sm text-gray-400 mt-1">Check back later for new opportunities</p>
+              <p class="text-gray-500 font-medium">{{ $t('recruiterPublic.noActiveJobs') }}</p>
+              <p class="text-sm text-gray-400 mt-1">{{ $t('recruiterPublic.checkBackLater') }}</p>
             </div>
 
             <!-- Job Cards -->
@@ -234,13 +234,13 @@ onMounted(fetchRecruiter)
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      Posted: {{ formatDate(job.published_at) }}
+                      {{ $t('recruiterPublic.posted') }}: {{ formatDate(job.published_at) }}
                     </div>
                     <div class="flex items-center gap-1">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      Deadline: {{ formatDate(job.deadline) }}
+                      {{ $t('recruiterPublic.deadline') }}: {{ formatDate(job.deadline) }}
                     </div>
                   </div>
                 </div>
@@ -253,7 +253,7 @@ onMounted(fetchRecruiter)
 
     <!-- Error State -->
     <div v-else class="max-w-6xl mx-auto px-4 py-12 text-center">
-      <p class="text-gray-500">Failed to load recruiter profile</p>
+      <p class="text-gray-500">{{ $t('recruiterPublic.failedToLoad') }}</p>
     </div>
   </div>
 </template>

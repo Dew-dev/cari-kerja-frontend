@@ -64,6 +64,11 @@
     "signUp": "Ro'yxatdan o'tish",
     "noAccount": "Hisobingiz yo'qmi?"
   },
+  "contactActions": {
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "call": "Qo'ng'iroq"
+  },
   "job_description": "Ish tavsifi",
   "job_title": "Ish nomi",
   "add_tag": "Teg qo'shish",
@@ -196,6 +201,22 @@
     }
   },
   "recruiterProfile": "Ishga yollash profili",
+  "recruiterPublic": {
+    "visitWebsite": "Saytga o'tish",
+    "openPositions": "Ochiq vakansiyalar",
+    "aboutCompany": "Kompaniya haqida",
+    "noDescriptionProvided": "Tavsif kiritilmagan.",
+    "contactInformation": "Aloqa ma'lumotlari",
+    "contactPerson": "Aloqa shaxsi",
+    "phone": "Telefon",
+    "address": "Manzil",
+    "openPositionsCount": "Ochiq vakansiyalar ({count})",
+    "noActiveJobs": "Faol ish e'lonlari yo'q",
+    "checkBackLater": "Yangi imkoniyatlar uchun keyinroq qaytib keling",
+    "posted": "E'lon qilingan",
+    "deadline": "Muddat",
+    "failedToLoad": "Rekruter profilini yuklab bo'lmadi"
+  },
   "visibleToCandidates": "Bu ma'lumot nomzodlarga ko'rinadi",
   "fileTypeAndSize": "JPG yoki PNG, maks. 2MB",
   "companyWebsite": "Kompaniya veb-sayti",
