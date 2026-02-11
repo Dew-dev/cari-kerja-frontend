@@ -180,6 +180,12 @@ const routes = [
     // meta: { requiresAuth: true, role: "recruiter" },
   },
   {
+    path: "/cv-reader-demo",
+    name: "cv-reader-demo",
+    component: () => import("../pages/CvReaderDemo.vue"),
+    meta: { public: true },
+  },
+  {
     path: "/recruiter",
     meta: { requiresAuth: true, role: "recruiter", blockRole: "user" },
     children: [

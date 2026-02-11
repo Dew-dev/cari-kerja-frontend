@@ -40,7 +40,7 @@
 
           <div class="flex gap-2 flex-wrap">
             <span v-for="(skill, idx) in (job.skills || []).slice(0, 2)" :key="idx" class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
-              {{ skill }}
+              {{ skill.skill_name }}
             </span>
             <span v-if="(job.skills || []).length > 2" class="text-gray-500 text-xs px-2 py-1">+{{ (job.skills || []).length - 2 }}</span>
           </div>

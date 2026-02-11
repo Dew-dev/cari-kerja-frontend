@@ -14,9 +14,9 @@ const auth = useAuthStore()
 // computed
 
 const menu = computed(() => [
-  { label: t("your") + " " + t("Profile"), path: `/recruiters/${auth.user?.id}` },
-  { label: t("your") + " " + t("jobs"), path: "/recruiter/jobs" },
-  { label: t("findWorkers"), path: "/recruiter/search-workers" },
+  { label: t("Profile"), path: `/recruiters/${auth.user?.id}` },
+  { label: t("vacancies"), path: "/recruiter/jobs" },
+  { label: t("find"), path: "/search-workers" },
   // { label: t("applicants"), path: "/recruiter/applicants" },
 ])
 

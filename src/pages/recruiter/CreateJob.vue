@@ -5,8 +5,10 @@ import { useAuthStore } from "../../stores/authstore";
 
 const { t } = useI18n();
 const auth = useAuthStore();
+import { push } from "notivue";
 import api from "@/services/api"; // axios instance
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 /* ======================
    TAG SEARCH STATE
 ====================== */
@@ -456,6 +458,12 @@ function selectCategory(category) {
    SUBMIT
 ====================== */
 async function submit() {
+  const authHeaders = {
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
+  };
+
   const payload = {
     recruiter_id: auth.user?.recruiter_id,
     title: form.title,
@@ -478,33 +486,30 @@ async function submit() {
     skills: skills.value,
   };
 
-  // console.log("CREATE JOB PAYLOAD:", payload);
-  // TODO: POST /jobs
-  const res = await api.post("/job-posts", payload, {
-    headers: {
-      Authorization: `Bearer ${auth.token}`,
-    },
-  });
+  try {
+    const res = await api.post("/job-posts", payload, authHeaders);
+    const { code, message, data } = res?.data || {};
+    const jobId = data?.id || data?.data?.id;
+    console.log("CREATE JOB POST RES:", res.data);
+    if (res.data.code !== 201 || !jobId) {
+      push.error(err.response?.data?.message || "Failed to create job post3");
+      return;
+    }
 
-  console.log(res);
-  if (res?.status !== 201) {
-    return;
-  }
-
-  const { tags } = payload;
-  console.log("TAGS TO ADD:", tags);
-  tags.map(async (t) => {
-    console.log("ADDING TAG:", t);
-    // console.log("JOB POST ID:", res?.data);
-    const resTags = await api.post(`/tags/${res?.data.data.id}`, t, {
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-      },
-    });
-
-    if (!resTags?.success) return;
+    const tags = payload.tags || [];
+    if (tags.length) {
+      await Promise.all(
+        tags.map((tag) =>
+          api.post(`/tags/${jobId}`, tag, authHeaders).catch(() => null),
+        ),
+      );
+    }
+    console.log("Job post created successfully with ID:", jobId);
+    console.log("Redirecting to recruiter jobs page...");
     router.push("/recruiter/jobs");
-  });
+  } catch (err) {
+    push.error(err.response?.data?.message || "Failed to create job post");
+  }
 }
 </script>
 
