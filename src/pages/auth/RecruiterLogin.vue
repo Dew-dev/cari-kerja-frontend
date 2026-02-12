@@ -67,15 +67,15 @@ async function resendVerification() {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">Recruiter Login</h1>
-          <p class="text-gray-600">Access your recruiting dashboard</p>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ t("login") }}</h1>
+          <p class="text-gray-600">{{ t("auth.recruiterSubtitle") }}</p>
         </div>
 
         <!-- Form -->
         <form @submit.prevent="submit" class="space-y-5">
           <!-- Email Input -->
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("auth.usernameLabel") }}</label>
             <input
               v-model="form.email"
               type="text"
@@ -87,7 +87,7 @@ async function resendVerification() {
 
           <!-- Password Input -->
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("auth.passwordLabel") }}</label>
             <input
               v-model="form.password"
               type="password"
@@ -104,7 +104,7 @@ async function resendVerification() {
               @click="router.push('/forgot-password')"
               class="text-sm text-purple-600 hover:text-purple-700 font-medium"
             >
-              Forgot password?
+              {{ t("auth.forgotPassword") }}
             </button>
           </div>
 
@@ -115,14 +115,14 @@ async function resendVerification() {
 
           <div v-if="auth.needVerifyEmail" class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg">
             <p class="text-yellow-700 text-sm">
-              Your email is not verified.
+              {{ t("auth.messages.emailNotVerified") }}
               <button
                 type="button"
                 @click="resendVerification"
                 :disabled="loading"
                 class="underline font-semibold hover:text-yellow-800 disabled:opacity-50"
               >
-                Resend verification email
+                {{ t("auth.buttons.resendVerification") }}
               </button>
             </p>
           </div>
@@ -133,7 +133,7 @@ async function resendVerification() {
             :disabled="auth.loading"
             class="w-full bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
-            {{ auth.loading ? "Signing in..." : "Sign In as Recruiter" }}
+            {{ auth.loading ? t("auth.buttons.signingIn") : t("auth.signInAsRecruiter") }}
           </button>
 
           <!-- Divider -->
@@ -146,23 +146,23 @@ async function resendVerification() {
           <!-- Sign Up & Job Seeker Links -->
           <div class="space-y-3">
             <p class="text-center text-sm text-gray-600">
-              Don't have a recruiter account?
+              {{ t("auth.dontHaveRecruiterAccount") }}
               <button
                 type="button"
                 @click="router.push('/register-recruiter')"
                 class="text-purple-600 font-semibold hover:text-purple-700"
               >
-                Register here
+                {{ t("auth.registerHere") }}
               </button>
             </p>
             <p class="text-center text-sm text-gray-600">
-              Looking for a job?
+              {{ t("auth.lookingForJob") }}
               <button
                 type="button"
                 @click="router.push('/login')"
                 class="text-blue-600 font-semibold hover:text-blue-700"
               >
-                Job seeker login
+                {{ t("auth.jobSeekerLogin") }}
               </button>
             </p>
           </div>
@@ -171,10 +171,10 @@ async function resendVerification() {
 
       <!-- Footer Text -->
       <p class="text-center text-xs text-gray-500 mt-6">
-        By signing in, you agree to our
-        <router-link to="/terms-of-service" class="text-purple-600 hover:underline">Terms of Service</router-link>
+        {{ t("auth.termsAndPrivacy") }}
+        <router-link to="/terms-of-service" class="text-purple-600 hover:underline">{{ t("footer.termsOfService") }}</router-link>
         and
-        <router-link to="/privacy-policy" class="text-purple-600 hover:underline">Privacy Policy</router-link>
+        <router-link to="/privacy-policy" class="text-purple-600 hover:underline">{{ t("footer.privacyPolicy") }}</router-link>
       </p>
     </div>
   </div>

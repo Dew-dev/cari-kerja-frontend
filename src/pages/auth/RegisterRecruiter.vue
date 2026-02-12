@@ -103,7 +103,7 @@ async function submit() {
             </svg>
           </div>
           <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ t("register.titleRecruiter") }}</h1>
-          <p class="text-gray-600">Start posting jobs and finding talent</p>
+          <p class="text-gray-600">{{ t("auth.startPosting") }}</p>
         </div>
 
         <!-- Form -->
@@ -209,13 +209,13 @@ async function submit() {
 
           <!-- Sign In Link -->
           <p class="text-center text-sm text-gray-600">
-            Already have an account?
+            {{ t("auth.alreadyHaveAccount") }}
             <button
               type="button"
               @click="router.push('/recruiter-login')"
               class="text-purple-600 font-semibold hover:text-purple-700"
             >
-              Sign in here
+              {{ t("auth.signInHere") }}
             </button>
           </p>
         </form>
@@ -223,10 +223,10 @@ async function submit() {
 
       <!-- Footer Text -->
       <p class="text-center text-xs text-gray-500 mt-6">
-        By creating an account, you agree to our
-        <router-link to="/terms-of-service" class="text-purple-600 hover:underline">Terms of Service</router-link>
+        {{ t("auth.termsAndPrivacyRegister") }}
+        <router-link to="/terms-of-service" class="text-purple-600 hover:underline">{{ t("footer.termsOfService") }}</router-link>
         and
-        <router-link to="/privacy-policy" class="text-purple-600 hover:underline">Privacy Policy</router-link>
+        <router-link to="/privacy-policy" class="text-purple-600 hover:underline">{{ t("footer.privacyPolicy") }}</router-link>
       </p>
     </div>
   </div>

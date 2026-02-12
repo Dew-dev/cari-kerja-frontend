@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from "vue"
+import { useI18n } from "vue-i18n"
 import api from "@/services/api"
 
+const { t } = useI18n()
 const email = ref("")
 const loading = ref(false)
 const sent = ref(false)
@@ -23,7 +25,7 @@ async function submit() {
     sent.value = true
     startCooldown()
   } catch (e) {
-    error.value = "Something went wrong"
+    error.value = t("auth.messages.failedReset")
   } finally {
     loading.value = false
   }
@@ -47,11 +49,11 @@ function startCooldown() {
     <div class="w-full max-w-sm bg-white shadow-lg p-6 rounded-2xl">
 
       <h1 class="text-xl font-semibold mb-2">
-        Forgot password
+        {{ t("auth.forgotPassword") }}
       </h1>
 
       <p class="text-sm text-gray-500 mb-4">
-        Enter your email and we’ll send you a reset link.
+        {{ t("auth.sendResetLinkSubtitle") }}
       </p>
 
       <form @submit.prevent="submit" class="space-y-4">
@@ -72,7 +74,7 @@ function startCooldown() {
           v-if="sent"
           class="text-sm text-green-600"
         >
-          If the email exists, a reset link has been sent.
+          {{ t("auth.ifEmailExists") }}
         </p>
 
         <button
@@ -81,10 +83,10 @@ function startCooldown() {
           class="w-full bg-blue-600 text-white py-2 rounded-full hover:bg-blue-700 disabled:opacity-50"
         >
           <span v-if="cooldown > 0">
-            Resend in {{ cooldown }}s
+            {{ t("auth.resendIn") }} {{ cooldown }}s
           </span>
           <span v-else>
-            {{ loading ? "Sending..." : "Send reset link" }}
+            {{ loading ? t("auth.buttons.sending") : t("auth.buttons.sendResetLink") }}
           </span>
         </button>
 

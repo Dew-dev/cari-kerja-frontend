@@ -666,7 +666,7 @@ async function submit() {
 
           <div class="col-span-2">
             <label>
-              {{ t("job_type") }}
+              {{ t("employmentType") }}
               <span class="text-red-500 ml-1">*</span>
               <span class="ml-2 text-xs text-gray-400">{{
                 t("required")

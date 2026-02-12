@@ -103,7 +103,7 @@ async function submit() {
             </svg>
           </div>
           <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ t("register.title") }}</h1>
-          <p class="text-gray-600">Join our community and find your next opportunity</p>
+          <p class="text-gray-600">{{ t("auth.joinCommunity") }}</p>
         </div>
 
         <!-- Form -->
@@ -157,7 +157,7 @@ async function submit() {
               placeholder="••••••••"
               required
             />
-            <p class="text-xs text-gray-500 mt-2">Min 8 chars, uppercase, lowercase, number & symbol</p>
+            <p class="text-xs text-gray-500 mt-2">{{ t("auth.passwordRequirements") }}</p>
             <p v-if="errors.password" class="text-red-600 text-xs mt-2">{{ errors.password }}</p>
           </div>
 
@@ -184,13 +184,13 @@ async function submit() {
 
           <!-- Sign In Link -->
           <p class="text-center text-sm text-gray-600">
-            Already have an account?
+            {{ t("auth.alreadyHaveAccount") }}
             <button
               type="button"
               @click="router.push('/login')"
               class="text-blue-600 font-semibold hover:text-blue-700"
             >
-              Sign in here
+              {{ t("auth.signInHere") }}
             </button>
           </p>
         </form>
@@ -198,10 +198,10 @@ async function submit() {
 
       <!-- Footer Text -->
       <p class="text-center text-xs text-gray-500 mt-6">
-        By creating an account, you agree to our
-        <router-link to="/terms-of-service" class="text-blue-600 hover:underline">Terms of Service</router-link>
+        {{ t("auth.termsAndPrivacyRegister") }}
+        <router-link to="/terms-of-service" class="text-blue-600 hover:underline">{{ t("footer.termsOfService") }}</router-link>
         and
-        <router-link to="/privacy-policy" class="text-blue-600 hover:underline">Privacy Policy</router-link>
+        <router-link to="/privacy-policy" class="text-blue-600 hover:underline">{{ t("footer.privacyPolicy") }}</router-link>
       </p>
     </div>
   </div>

@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import api from "@/services/api";
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -23,7 +25,7 @@ onMounted(async () => {
       }
     }
   } catch (e) {
-    error.value = "Invalid or expired verification link";
+    error.value = t("auth.messages.invalidToken");
   } finally {
     loading.value = false;
   }
@@ -33,9 +35,9 @@ onMounted(async () => {
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50">
     <div class="bg-white p-6 rounded-2xl shadow max-w-sm w-full text-center">
-      <p v-if="loading">Verifying...</p>
+      <p v-if="loading">{{ t("auth.buttons.verify") }}</p>
       <p v-else-if="success" class="text-green-600">
-        Email verified. Redirecting to login…
+        {{ t("auth.messages.verificationSuccess") }}
       </p>
       <p v-else class="text-red-600">
         {{ error }}

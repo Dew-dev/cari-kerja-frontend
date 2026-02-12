@@ -67,14 +67,14 @@ async function resendVerification() {
             </svg>
           </div>
           <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ t("login") }}</h1>
-          <p class="text-gray-600">Sign in to your job seeker account</p>
+          <p class="text-gray-600">{{ t("auth.jobSeekerSubtitle") }}</p>
         </div>
 
         <!-- Form -->
         <form @submit.prevent="submit" class="space-y-5">
           <!-- Email Input -->
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("auth.emailLabel") }}</label>
             <input
               v-model="form.email"
               type="email"
@@ -86,7 +86,7 @@ async function resendVerification() {
 
           <!-- Password Input -->
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("auth.passwordLabel") }}</label>
             <input
               v-model="form.password"
               type="password"
@@ -103,7 +103,7 @@ async function resendVerification() {
               @click="router.push('/forgot-password')"
               class="text-sm text-blue-600 hover:text-blue-700 font-medium"
             >
-              Forgot password?
+              {{ t("auth.forgotPassword") }}
             </button>
           </div>
 
@@ -114,14 +114,14 @@ async function resendVerification() {
 
           <div v-if="auth.needVerifyEmail" class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg">
             <p class="text-yellow-700 text-sm">
-              Your email is not verified.
+              {{ t("auth.messages.emailNotVerified") }}
               <button
                 type="button"
                 @click="resendVerification"
                 :disabled="loading"
                 class="underline font-semibold hover:text-yellow-800 disabled:opacity-50"
               >
-                Resend verification email
+                {{ t("auth.buttons.resendVerification") }}
               </button>
             </p>
           </div>
@@ -132,7 +132,7 @@ async function resendVerification() {
             :disabled="auth.loading"
             class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
-            {{ auth.loading ? "Signing in..." : "Sign In" }}
+            {{ auth.loading ? t("auth.buttons.signingIn") : t("auth.buttons.signIn") }}
           </button>
 
           <!-- Divider -->
@@ -145,23 +145,23 @@ async function resendVerification() {
           <!-- Sign Up & Recruiter Links -->
           <div class="space-y-3">
             <p class="text-center text-sm text-gray-600">
-              Don't have an account?
+              {{ t("auth.dontHaveAccount") }}
               <button
                 type="button"
                 @click="router.push('/register')"
                 class="text-blue-600 font-semibold hover:text-blue-700"
               >
-                Create account
+                {{ t("auth.createAccount") }}
               </button>
             </p>
             <p class="text-center text-sm text-gray-600">
-              Are you a recruiter?
+              {{ t("auth.areYouRecruiter") }}
               <button
                 type="button"
                 @click="router.push('/recruiter-login')"
                 class="text-indigo-600 font-semibold hover:text-indigo-700"
               >
-                Sign in here
+                {{ t("auth.signInHere") }}
               </button>
             </p>
           </div>
@@ -170,10 +170,10 @@ async function resendVerification() {
 
       <!-- Footer Text -->
       <p class="text-center text-xs text-gray-500 mt-6">
-        By signing in, you agree to our
-        <router-link to="/terms-of-service" class="text-blue-600 hover:underline">Terms of Service</router-link>
+        {{ t("auth.termsAndPrivacy") }}
+        <router-link to="/terms-of-service" class="text-blue-600 hover:underline">{{ t("footer.termsOfService") }}</router-link>
         and
-        <router-link to="/privacy-policy" class="text-blue-600 hover:underline">Privacy Policy</router-link>
+        <router-link to="/privacy-policy" class="text-blue-600 hover:underline">{{ t("footer.privacyPolicy") }}</router-link>
       </p>
     </div>
   </div>
