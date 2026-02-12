@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-white ">
+  <section class="bg-white px-4 py-12">
     <div class="max-w-290 mx-auto">
       <div class="mb-12">
         <h2 class="text-3xl font-bold text-gray-800 mb-2">{{ $t('featuredJobs') || 'Featured Jobs' }}</h2>

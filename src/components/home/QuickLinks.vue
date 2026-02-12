@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-white py-12">
+  <section class="bg-white py-12 px-4">
     <div class="max-w-290 mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
