@@ -1455,8 +1455,96 @@
           "mismatch": "Parol tasdiqlashi mos emas",
           "failed": "Parolni o'zgartirish muvaffaqiyatsiz tugadi"
         }
-      },
-      "termsOfService": {
+      }
+    }
+  },
+  "privacyPolicy": {
+    "title": "Maxfiylik siyosati",
+    "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
+    "introduction": {
+      "title": "1. Kirish",
+      "content": "Jobs.uz (\"biz\" yoki \"bizning\") Jobs.uz veb-saytini boshqaradi. Ushbu sahifa siz xizmatdan foydalanganingizda shaxsiy ma'lumotlarni yig'ish, foydalanish va oshkor qilish bo'yicha bizning siyosatini va ularni qanday boshqarish haqida tushuntirib beradi."
+    },
+    "informationCollection": {
+      "title": "2. Ma'lumot yig'ish va foydalanish",
+      "intro": "Biz xizmatni yaxshilash va ko'rsatish uchun turli turdagi ma'lumotlarni yig'aymiz:",
+      "items": {
+        "accountTitle": "Hisob ma'lumotlari:",
+        "account": "ism, elektron pochta, telefon raqami va parol",
+        "profileTitle": "Profil ma'lumotlari:",
+        "profile": "rezyume, ish tajribasi, ta'lim, ko'nikma va malakasi",
+        "applicationTitle": "Ariza ma'lumotlari:",
+        "application": "vakansiyalarga ariza, qo'shimcha xatlar va arizalar tarixi",
+        "technicalTitle": "Texnik ma'lumotlar:",
+        "technical": "IP manzil, brauzer turi, tashrif buyurgan sahifalar va vaqt",
+        "communicationTitle": "Aloqa ma'lumotlari:",
+        "communication": "ish qidiruvchi va ish beruvchilar orasidagi xabarlar"
+      }
+    },
+    "useOfData": {
+      "title": "3. Ma'lumotlarni foydalanish",
+      "content": "Biz yig'ilgan ma'lumotlarni xizmatni ko'rsatish, o'zgarishlar haqida bildirishlash, qo'llab-quvvatlash, xizmatni tahlil qilish va yaxshilash, foydalanish kuzatish, va texnik muammolarni hal qilish uchun ishlatamiz.",
+      "items": {
+        "provide": "Xizmatni ko'rsatish va ta'minlash uchun",
+        "notify": "Xizmatdagi o'zgarishlar haqida bildirishni yuboring",
+        "support": "Foydalanuvchi qo'llab-quvvatlashini ko'rsatish uchun",
+        "analysis": "Xizmatni yaxshilash uchun tahlil va qimmatli ma'lumot yig'ish",
+        "monitor": "Xizmatdan foydalanishni kuzatish uchun",
+        "technical": "Texnik muammolarni aniqlash, oldini olish va hal qilish",
+        "marketing": "Reklama xabarlarini yuborish (sizning roziligingiz bilan)"
+      }
+    },
+    "security": {
+      "title": "4. Ma'lumotlarning xavfsizligi",
+      "content": "Sizning ma'lumotlaringizning xavfsizligi biz uchun muhimdir. Ko'plab tijorat bo'yicha qabul qilingan usullardan foydalansak ham, Internet orqali uzatilshni yoki elektron saqlash to'liq xavfsiz emas."
+    },
+    "cookies": {
+      "title": "5. Cookie-lar",
+      "content": "Biz saytdagi tajribangizni yaxshilash uchun cookie-lardan foydalanaymiz. Brauzeringizni barcha cookie-larni rad etish uchun ko'rsatishlari mumkin. Cookie-larni qabul qilmasangiz, ba'zi xizmatlar ishlamay qolishi mumkin."
+    },
+    "thirdPartyAccess": {
+      "title": "6. Uchinchi tomon kirishiga ruxsat",
+      "content": "Biz sizning ma'lumotlaringizni faqat ushbu siyosatda tasvirlanagan yo'llar bilan uchinchi tomonlarga beramiz. Biz shaxsiy ma'lumotlaringizni uchinchi tomonlarga sotmaymiz. Birlashtirilgan va anonimiy ma'lumotlar hamkorlar bilan bo'linishi mumkin."
+    },
+    "disclosure": {
+      "title": "7. Ma'lumotlarni oshkor qilish",
+      "intro": "Biz sizning shaxsiy ma'lumotlaringizni quyidagi sharoitlarda oshkor qilishimiz mumkin:",
+      "items": {
+        "byLaw": "Qonun qoidasi bo'yicha yoki yuridik jarayonda talab qilinganda",
+        "protect": "Bizning kompaniyamizning huquqi, maxfiylik, xavfsizlik yoki mulkini himoya qilish uchun",
+        "merger": "Birlashma, sotib olish yoki aktivlarni sotish holatida",
+        "consent": "Sizning aniq roziligingiz bilan boshqa maqsadlarda"
+      }
+    },
+    "retention": {
+      "title": "8. Ma'lumotlarni saqlash",
+      "content": "Biz shaxsiy ma'lumotlaringizni faqat xizmat ko'rsatish va ushbu siyosatda belgilangan maqsadlarni bajarishni davom ettiradigan vaqt uchun saqlaymiz. Siz istalgan vaqt hisobingizni va unga bog'liq ma'lumotlarni o'chirib tashlanishini so'rashingiz mumkin."
+    },
+    "rights": {
+      "title": "9. Sizning ma'lumot huquqlari",
+      "intro": "Sizning shaxsiy ma'lumotlaringiz bo'yicha quyidagi huquqlarga egasiz:",
+      "items": {
+        "access": "Sizning shaxsiy ma'lumotlaringizga kirish huquqi",
+        "correct": "Noto'g'ri ma'lumotlarni tuzatish huquqi",
+        "delete": "Ma'lumotlarni o'chirilishini so'rash huquqi",
+        "optOut": "Marketing xabarlaridan voz kechish huquqi",
+        "portable": "Ma'lumotlaringizning nusxasini ko'chma formatda olish huquqi"
+      }
+    },
+    "changes": {
+      "title": "10. Ushbu siyosatdagi o'zgartirishlar",
+      "content": "Biz ushbu siyosatni vaqt-vaqti bilan yangilay olamiz. Sezilarli o'zgartirishlar haqida biz bu sahifada yangi siyosatni nashr etish va \"Oxirgi yangilanish\" sanasini o'zgartirib bildiramiz."
+    },
+    "contact": {
+      "title": "11. Biz bilan bog'lanish",
+      "intro": "Ushbu maxfiylik siyosati haqida savollar bo'lsa, iltimos biz bilan bog'lanish:",
+      "emailLabel": "Elektron pochta",
+      "email": "privacy@jobs.uz",
+      "addressLabel": "Manzil",
+      "address": "Toshkent, O'zbekiston"
+    }
+  },
+  "termsOfService": {
         "title": "Xizmat ko'rsatish shartlari",
         "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
         "agreement": {
@@ -1523,9 +1611,7 @@
           "emailLabel": "Email",
           "email": "legal@jobs.uz"
         }
-      }
-    }
-  },
+      },
   "contactPage": {
     "pageTitle": "Job Portal - Aloqa",
     "title": "Biz bilan bog'laning",
