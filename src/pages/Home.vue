@@ -14,12 +14,15 @@ import CompanyLogos from "../components/home/CompanyLogos.vue";
 
 const router = useRouter();
 
-function handleSearch(value) {
-  const keyword = value?.trim();
+function handleSearch(keyword, location) {
   const query = { page: 1 };
 
-  if (keyword) {
-    query.search = keyword;
+  if (keyword && keyword.trim()) {
+    query.search = keyword.trim();
+  }
+
+  if (location) {
+    query.province_name = location.name;
   }
 
   router.push({ path: "/jobposts", query });

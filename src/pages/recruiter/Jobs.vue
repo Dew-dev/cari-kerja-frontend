@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-gray-50 min-h-full py-10">
+  <div class="bg-gray-50 min-h-full py-10" @click="closeMenu">
     <div class="max-w-6xl mx-auto px-4">
       <!-- HEADER -->
-      <div class="flex items-center justify-between mb-8">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
           <h1 class="text-3xl font-bold text-gray-900">
             {{ t("jobs") }}
@@ -12,7 +12,7 @@
 
         <router-link
           to="/recruiter/jobs/create"
-          class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2"
+          class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2 w-full sm:w-auto"
         >
           <i class="pi pi-plus"></i>
           <span>{{ t("createjob") }}</span>
@@ -20,7 +20,7 @@
       </div>
       <!-- TABS -->
       <div class="mb-6 border-b border-gray-200">
-        <div class="flex gap-8 text-sm font-semibold">
+        <div class="flex flex-wrap gap-4 text-sm font-semibold">
           <button
             @click="setActiveTab('active')"
             :class="
@@ -50,8 +50,177 @@
           </button>
         </div>
       </div>
+      <!-- MOBILE LIST -->
+      <div class="lg:hidden space-y-4">
+        <div v-if="jobs.length > 0 && !loading" class="space-y-4">
+          <div
+            v-for="job in jobs"
+            :key="job.id"
+            class="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <div class="font-semibold text-gray-900 truncate">
+                  {{ job.title }}
+                </div>
+                <div class="text-xs text-gray-500 mt-1">
+                  Created {{ formatDate(job.created_at) }}
+                </div>
+              </div>
+              <span
+                class="inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full"
+                :class="statusClass(job.status)"
+              >
+                {{ job.status }}
+              </span>
+            </div>
+
+            <div class="mt-3 grid grid-cols-1 gap-2 text-sm">
+              <div class="flex items-center gap-2 text-gray-700">
+                <i class="pi pi-map-marker text-gray-400 text-sm"></i>
+                <span class="truncate">{{ job.location }}</span>
+              </div>
+              <div class="text-gray-900 font-medium">
+                {{ formatSalary(job) }}
+              </div>
+              <div class="text-gray-600 text-xs">
+                {{ job.employment_type }} · {{ job.experience_level }}
+              </div>
+              <div class="text-gray-600 text-xs">
+                <i class="pi pi-users text-gray-400"></i>
+                {{ job.applications }}
+              </div>
+            </div>
+
+            <div class="mt-4 flex flex-wrap items-center gap-2">
+              <button
+                title="View job"
+                @click="$router.push(`/jobposts/${job.id}`)"
+                class="px-3 py-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all duration-150"
+              >
+                <i class="pi pi-eye text-base"></i>
+              </button>
+
+              <router-link
+                v-if="activeTab === 'active'"
+                :to="`/recruiter/jobs/${job.id}/edit`"
+                title="Edit job"
+                class="px-3 py-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all duration-150"
+              >
+                <i class="pi pi-pencil text-base"></i>
+              </router-link>
+
+              <button
+                v-if="activeTab === 'active'"
+                title="View applicants"
+                @click="$router.push(`/recruiter/jobs/${job.id}/applicants`)"
+                class="px-3 py-2 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-all duration-150"
+              >
+                <i class="pi pi-users text-base"></i>
+              </button>
+
+              <button
+                v-if="activeTab === 'archived'"
+                title="Restore job"
+                @click="openActionModal(job, 'restore')"
+                class="px-3 py-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-all duration-150"
+              >
+                <i class="pi pi-undo text-base"></i>
+              </button>
+
+              <button
+                v-if="activeTab === 'archived'"
+                title="Duplicate job"
+                @click="openActionModal(job, 'duplicate')"
+                class="px-3 py-2 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-all duration-150"
+              >
+                <i class="pi pi-copy text-base"></i>
+              </button>
+
+              <button
+                v-if="activeTab === 'archived'"
+                title="Delete job"
+                @click="openActionModal(job, 'delete')"
+                class="px-3 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-150"
+              >
+                <i class="pi pi-trash text-base"></i>
+              </button>
+
+              <div class="relative">
+                <button
+                  class="px-3 py-2 text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-150"
+                  title="More actions"
+                  @click.stop="toggleMenu(job.id)"
+                >
+                  <i class="pi pi-ellipsis-v text-base"></i>
+                </button>
+
+                <div
+                  v-if="openMenuId === job.id"
+                  class="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50"
+                  @click.stop
+                >
+                  <button
+                    v-if="activeTab === 'active'"
+                    @click="openActionModal(job, 'duplicate'); closeMenu()"
+                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 flex items-center gap-2 transition-colors"
+                  >
+                    <i class="pi pi-copy"></i>
+                    <span>Duplicate job</span>
+                  </button>
+
+                  <button
+                    v-if="activeTab === 'active'"
+                    @click="openActionModal(job, 'archive'); closeMenu()"
+                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 flex items-center gap-2 transition-colors"
+                  >
+                    <i class="pi pi-folder"></i>
+                    <span>Archive job</span>
+                  </button>
+
+                  <button
+                    v-if="activeTab === 'active' && job.status_id === 3"
+                    @click="openConfirmModal(job, 1); closeMenu()"
+                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 flex items-center gap-2 transition-colors"
+                  >
+                    <i class="pi pi-upload"></i>
+                    <span>Publish job</span>
+                  </button>
+
+                  <button
+                    v-if="activeTab === 'active' && job.status_id === 1"
+                    @click="openConfirmModal(job, 2); closeMenu()"
+                    class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-red-50 hover:text-red-700 flex items-center gap-2 transition-colors border-t border-gray-100"
+                  >
+                    <i class="pi pi-times-circle"></i>
+                    <span>Close job</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else-if="loading" class="bg-white rounded-xl border border-gray-100 shadow-sm p-8 text-center">
+          <i class="pi pi-spinner pi-spin text-3xl text-blue-500 mb-3"></i>
+          <p class="text-gray-600 font-medium">{{ t("loadingJobs") }}</p>
+        </div>
+
+        <div v-else class="bg-white rounded-xl border border-gray-100 shadow-sm p-8 text-center">
+          <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="pi pi-inbox text-3xl text-gray-400"></i>
+          </div>
+          <p class="text-gray-600 font-medium mb-2">
+            {{ activeTab == 'archived' ? $t('noArchivedJobs') : $t('noActiveJobs') }}
+          </p>
+          <p v-if="activeTab !== 'archived'" class="text-sm text-gray-500">
+            Create your first job posting to get started
+          </p>
+        </div>
+      </div>
+
       <!-- TABLE CARD -->
-      <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100">
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100 hidden lg:block">
         <!-- TABLE -->
         <table class="w-full text-sm">
           <thead class="bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 border-b border-gray-200">
@@ -150,19 +319,24 @@
                     </button>
 
                     <!-- MORE ACTIONS DROPDOWN BUTTON -->
-                    <div class="relative group">
+                    <div class="relative">
                       <button
                         class="p-2 text-gray-600 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-150"
                         title="More actions"
+                        @click.stop="toggleMenu(job.id)"
                       >
                         <i class="pi pi-ellipsis-v text-base"></i>
                       </button>
                       
                       <!-- DROPDOWN MENU -->
-                      <div class="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-10">
+                      <div
+                        v-if="openMenuId === job.id"
+                        class="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50"
+                        @click.stop
+                      >
                         <!-- DUPLICATE -->
                         <button
-                          @click="openActionModal(job, 'duplicate')"
+                          @click="openActionModal(job, 'duplicate'); closeMenu()"
                           class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 flex items-center gap-2 transition-colors"
                         >
                           <i class="pi pi-copy"></i>
@@ -171,7 +345,7 @@
 
                         <!-- ARCHIVE -->
                         <button
-                          @click="openActionModal(job, 'archive')"
+                          @click="openActionModal(job, 'archive'); closeMenu()"
                           class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 flex items-center gap-2 transition-colors"
                         >
                           <i class="pi pi-folder"></i>
@@ -181,7 +355,7 @@
                         <!-- PUBLISH -->
                         <button
                           v-if="job.status_id === 3"
-                          @click="openConfirmModal(job, 1)"
+                          @click="openConfirmModal(job, 1); closeMenu()"
                           class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 flex items-center gap-2 transition-colors"
                         >
                           <i class="pi pi-upload"></i>
@@ -191,7 +365,7 @@
                         <!-- CLOSE -->
                         <button
                           v-if="job.status_id === 1"
-                          @click="openConfirmModal(job, 2)"
+                          @click="openConfirmModal(job, 2); closeMenu()"
                           class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-red-50 hover:text-red-700 flex items-center gap-2 transition-colors border-t border-gray-100"
                         >
                           <i class="pi pi-times-circle"></i>
@@ -266,11 +440,11 @@
       <!-- PAGINATION -->
       <div
         v-if="totalPages"
-        class="flex items-center justify-between mt-8"
+        class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mt-8"
       >
         <p class="text-sm text-gray-600 font-medium">Page {{ page }} of {{ totalPages }}</p>
 
-        <div class="flex gap-2">
+        <div class="flex flex-wrap justify-center sm:justify-end gap-2">
           <!-- PREV -->
           <button
             @click="changePage(page - 1)"
@@ -477,6 +651,15 @@ const countit = ref(false);
 const page = ref(1);
 const limit = ref(5);
 const totalPages = ref(1);
+const openMenuId = ref(null);
+
+function toggleMenu(jobId) {
+  openMenuId.value = openMenuId.value === jobId ? null : jobId;
+}
+
+function closeMenu() {
+  openMenuId.value = null;
+}
 
 function statusClass(status) {
   switch (status) {
@@ -543,6 +726,8 @@ async function confirmAction() {
           },
         },
       );
+      fetchJobs(); // refresh table
+      archivedJobs(); // refresh archived
     }
     
     if (actionType.value === "restore") {
@@ -555,6 +740,8 @@ async function confirmAction() {
           },
         },
       );
+      fetchJobs(); // refresh table
+      archivedJobs(); // refresh archived
     }
 
     if (actionType.value === "duplicate") {
@@ -562,6 +749,8 @@ async function confirmAction() {
       const newId = res.data?.data?.id;
       router.push(`/recruiter/jobs/${newId}/edit`);
       closeActionModal();
+      fetchJobs(); // refresh table
+      archivedJobs(); // refresh archived
       return;
     }
 
@@ -571,6 +760,8 @@ async function confirmAction() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+      fetchJobs(); // refresh table
+      archivedJobs(); // refresh archived
       push.success("Job deleted successfully");
     }
 

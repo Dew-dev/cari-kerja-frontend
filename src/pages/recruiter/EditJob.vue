@@ -221,8 +221,8 @@ const form = reactive({
   experience_level_id: "",
   deadline: "",
   category_id: "",
-  // country: "",
-  // city: "",
+  province: "",
+  city: "",
   description: "",
   requirements: [],
   benefits: [],
@@ -364,8 +364,10 @@ async function fetchJob() {
     form.tags = resTags.data?.data || []
     form.employment_type_id = job.employment_type_id
     form.experience_level_id = job.experience_level_id
-    form.country = res.data?.data?.location?.split(", ")[1] || ""
+    form.province = res.data?.data?.location?.split(", ")[1] || ""
     form.city = res.data?.data?.location?.split(", ")[0] || ""
+    provinceInput.value = form.province
+    cityInput.value = form.city
     form.requirements = res.data?.data?.requirements || []
     form.benefits = res.data?.data?.benefits || []
     form.responsibilities = res.data?.data?.responsibilities || []
@@ -532,6 +534,164 @@ function selectCategory(category) {
 }
 
 /* ======================
+   LOCATION SEARCH STATE
+====================== */
+const provinceInput = ref("");
+const provinceOptions = ref([]);
+const provinceLoading = ref(false);
+const isSelectingProvince = ref(false);
+const selectedProvinceId = ref(null);
+const isProvinceActive = ref(false);
+let provinceTimeout = null;
+
+const cityInput = ref("");
+const cityOptions = ref([]);
+const cityLoading = ref(false);
+const isSelectingCity = ref(false);
+const isCityActive = ref(false);
+let cityTimeout = null;
+
+async function fetchProvinces(search = "_") {
+  if (!search.trim()) {
+    provinceOptions.value = [];
+    return;
+  }
+
+  try {
+    provinceLoading.value = true;
+    const res = await api.get("/locations/search", {
+      params: {
+        search,
+        type: "provinces",
+      },
+    });
+    provinceOptions.value = res.data?.data?.provinces || [];
+  } catch (err) {
+    console.error("Failed to fetch provinces:", err);
+    provinceOptions.value = [];
+  } finally {
+    provinceLoading.value = false;
+  }
+}
+
+async function fetchCities(search = "_") {
+  if (!selectedProvinceId.value || !search.trim()) {
+    cityOptions.value = [];
+    return;
+  }
+
+  try {
+    cityLoading.value = true;
+    const res = await api.get("/locations/search", {
+      params: {
+        search,
+        type: "cities",
+        province_id: selectedProvinceId.value,
+      },
+    });
+    cityOptions.value = res.data?.data?.cities || [];
+  } catch (err) {
+    console.error("Failed to fetch cities:", err);
+    cityOptions.value = [];
+  } finally {
+    cityLoading.value = false;
+  }
+}
+
+async function resolveProvinceIdByName(name) {
+  if (!name.trim()) return;
+
+  const res = await api.get("/locations/search", {
+    params: {
+      search: name,
+      type: "provinces",
+    },
+  });
+  const provinces = res.data?.data?.provinces || [];
+  const match = provinces.find((p) => p.name === name) || provinces[0];
+  if (match) {
+    selectedProvinceId.value = match.id;
+  }
+}
+
+watch(provinceInput, (val) => {
+  if (isSelectingProvince.value) return;
+  form.province = val;
+
+  if (!val) {
+    provinceOptions.value = [];
+    selectedProvinceId.value = null;
+    form.city = "";
+    cityInput.value = "";
+    cityOptions.value = [];
+    return;
+  }
+
+  if (!isProvinceActive.value) return;
+
+  clearTimeout(provinceTimeout);
+  provinceTimeout = setTimeout(() => {
+    fetchProvinces(val);
+  }, 300);
+});
+
+watch(cityInput, (val) => {
+  if (isSelectingCity.value) return;
+  form.city = val;
+
+  if (!val) {
+    cityOptions.value = [];
+    return;
+  }
+
+  if (!isCityActive.value || !selectedProvinceId.value) return;
+
+  clearTimeout(cityTimeout);
+  cityTimeout = setTimeout(() => {
+    fetchCities(val);
+  }, 300);
+});
+
+async function handleProvinceFocus() {
+  isProvinceActive.value = true;
+  await fetchProvinces(provinceInput.value || "_");
+}
+
+async function handleCityFocus() {
+  isCityActive.value = true;
+  if (!selectedProvinceId.value && provinceInput.value.trim()) {
+    await resolveProvinceIdByName(provinceInput.value.trim());
+  }
+  await fetchCities(cityInput.value || "_");
+}
+
+function selectProvince(province) {
+  isSelectingProvince.value = true;
+  selectedProvinceId.value = province.id;
+  form.province = province.name;
+  provinceInput.value = province.name;
+  provinceOptions.value = [];
+  form.city = "";
+  cityInput.value = "";
+  cityOptions.value = [];
+
+  setTimeout(() => {
+    isSelectingProvince.value = false;
+  }, 0);
+}
+
+function selectCity(city) {
+  isSelectingCity.value = true;
+  form.city = city.name;
+  cityInput.value = city.name;
+  cityOptions.value = [];
+
+  setTimeout(() => {
+    isSelectingCity.value = false;
+  }, 0);
+}
+
+/* ======================
    SUBMIT
 ====================== */
 async function submit() {
@@ -544,7 +704,7 @@ async function submit() {
     experience_level_id: form.experience_level_id,
     salary_type_id: form.salary_type_id || 1,
     job_post_status_id: 1,
-    location: `${form.city}, ${form.country}`,
+    location: `${form.city}, ${form.province}`,
     salary_min: form.salary_min,
     salary_max: form.salary_max,
     currency_id: form.currency_id,
@@ -556,6 +716,8 @@ async function submit() {
     responsibilities: form.responsibilities,
     job_post_questions: buildQuestionsPayload(),
     skills: skills.value,
+    province: form.province,
+    city: form.city,
   };
 
   // console.log("CREATE JOB PAYLOAD:", payload);
@@ -577,10 +739,10 @@ async function submit() {
     <div class="max-w-4xl mx-auto px-4">
       <!-- PAGE TITLE -->
       <h1 class="text-xl font-semibold">
-        {{ t("createjob") }}
+        {{ t("editjob") }}
       </h1>
       <p class="text-sm text-gray-500 my-2">
-        Fill in the details to publish a new job vacancy
+        {{ t("editJobSubtitle") }}
       </p>
 
       <form @submit.prevent="submit" class="space-y-6">
@@ -816,16 +978,58 @@ async function submit() {
           </label>
 
           <div class="grid md:grid-cols-2 gap-4 mt-1">
-            <input
-              v-model="form.country"
-              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :placeholder="t('country')"
-            />
-            <input
-              v-model="form.city"
-              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              :placeholder="t('city')"
-            />
+            <div class="relative">
+              <input
+                v-model="provinceInput"
+                @focus="handleProvinceFocus"
+                @click="handleProvinceFocus"
+                class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :placeholder="t('province')"
+              />
+              <div
+                v-if="provinceOptions.length"
+                class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto"
+              >
+                <div
+                  v-for="province in provinceOptions"
+                  :key="province.id"
+                  @click="selectProvince(province)"
+                  class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
+                >
+                  {{ province.name }}
+                </div>
+              </div>
+              <p v-if="provinceLoading" class="text-xs text-gray-500 mt-1">
+                Loading provinces...
+              </p>
+            </div>
+
+            <div class="relative">
+              <input
+                v-model="cityInput"
+                @focus="handleCityFocus"
+                @click="handleCityFocus"
+                :disabled="!selectedProvinceId"
+                class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                :placeholder="t('city')"
+              />
+              <div
+                v-if="cityOptions.length"
+                class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto"
+              >
+                <div
+                  v-for="city in cityOptions"
+                  :key="city.id"
+                  @click="selectCity(city)"
+                  class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
+                >
+                  {{ city.name }}
+                </div>
+              </div>
+              <p v-if="cityLoading" class="text-xs text-gray-500 mt-1">
+                Loading cities...
+              </p>
+            </div>
           </div>
         </div>
 

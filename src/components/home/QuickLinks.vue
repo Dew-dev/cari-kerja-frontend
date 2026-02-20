@@ -22,12 +22,17 @@
         </div>
 
         <div 
-          @click="goToSearchWorkers"
-          class="bg-linear-to-br from-purple-50 to-purple-100 p-8 shadow-md rounded-xl hover:shadow-xl hover:from-purple-100 hover:to-purple-200 transition duration-300 ease-in-out cursor-pointer border border-purple-200"
+          @click="goToJobsByCity"
+          class="bg-linear-to-br from-green-50 to-green-100 p-8 shadow-md rounded-xl hover:shadow-xl hover:from-green-100 hover:to-green-200 transition duration-300 ease-in-out cursor-pointer border border-green-200"
         >
-          <div class="text-purple-600 text-4xl mb-4"><span class="pi pi-users"></span></div>
-          <div class="font-bold text-xl text-gray-800">{{ $t("findWorkers") }}</div>
-          <p class="text-gray-600 text-sm mt-2">{{ $t('searchTalentedProfessionals') || 'Discover talented professionals' }}</p>
+          <div class="text-green-600 text-4xl mb-4">
+            <svg class="w-10 h-10 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <div class="font-bold text-xl text-gray-800">{{ $t("jobsByCity") }}</div>
+          <p class="text-gray-600 text-sm mt-2">{{ $t('exploreJobsByLocation') || 'Find jobs in your city' }}</p>
         </div>
 
       </div>
@@ -50,7 +55,7 @@ const goToAllJobs = () => {
   router.push("/jobposts");
 };
 
-const goToSearchWorkers = () => {
-  router.push("/search-workers");
+const goToJobsByCity = () => {
+  router.push("/cities");
 };
 </script>

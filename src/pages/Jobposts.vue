@@ -12,13 +12,27 @@
               {{ $t("categories") }}
             </h3>
             <ul class="space-y-2">
-              <!-- All -->
-              <li>
+              <!-- Recommended For You (Only if logged in) -->
+              <li v-if="auth.isLoggedIn">
                 <button
-                  @click="resetCategory"
+                  @click="enableRecommendations()"
                   :class="[
                     'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
-                    selectedCategory === ''
+                    selectedCategory === '' && recommendations
+                      ? 'bg-blue-50 text-blue-600'
+                      : 'text-gray-700',
+                  ]"
+                >
+                  <span>{{ $t("recommendedForYou") }}</span>
+                </button>
+              </li>
+              <!-- All Categories -->
+              <li>
+                <button
+                  @click="disableRecommendations()"
+                  :class="[
+                    'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
+                    selectedCategory === '' && !recommendations
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700',
                   ]"
@@ -90,7 +104,67 @@
                 {{ $t("resetFilters") }}
               </button>
             </div>
+<!-- 
+            <div class="mt-6 pt-6 border-t">
+              <h4 class="font-semibold text-sm mb-3 text-gray-900">
+                {{ $t("location") }}
+              </h4>
 
+              <div class="space-y-2">
+                <div class="relative">
+                  <input
+                    v-model="provinceInput"
+                    @focus="handleProvinceFocus"
+                    @click="handleProvinceFocus"
+                    class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    :placeholder="$t('province')"
+                  />
+                  <div
+                    v-if="provinceOptions.length"
+                    class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto"
+                  >
+                    <div
+                      v-for="province in provinceOptions"
+                      :key="province.id"
+                      @click="selectProvince(province)"
+                      class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
+                    >
+                      {{ province.name }}
+                    </div>
+                  </div>
+                  <p v-if="provinceLoading" class="text-xs text-gray-500 mt-1">
+                    Loading provinces...
+                  </p>
+                </div>
+
+                <div class="relative">
+                  <input
+                    v-model="cityInput"
+                    :disabled="!selectedProvinceId"
+                    @focus="handleCityFocus"
+                    @click="handleCityFocus"
+                    class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                    :placeholder="$t('city')"
+                  />
+                  <div
+                    v-if="cityOptions.length"
+                    class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto"
+                  >
+                    <div
+                      v-for="city in cityOptions"
+                      :key="city.id"
+                      @click="selectCity(city)"
+                      class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
+                    >
+                      {{ city.name }}
+                    </div>
+                  </div>
+                  <p v-if="cityLoading" class="text-xs text-gray-500 mt-1">
+                    Loading cities...
+                  </p>
+                </div>
+              </div>
+            </div> -->
             <div class="mt-6 pt-6 border-t">
               <h4 class="font-semibold text-sm mb-3 text-gray-900">
                 {{ $t("employmentTypes") }}
@@ -113,6 +187,30 @@
                 </label>
               </div>
             </div>
+
+
+            <!-- <div class="mt-6 pt-6 border-t">
+              <h4 class="font-semibold text-sm mb-3 text-gray-900">
+                {{ $t("otherFilters") || "Other Filters" }}
+              </h4>
+
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    v-model="showRecommendations"
+                    @change="handleRecommendationsToggle"
+                    class="rounded"
+                  />
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                    {{ $t("showRecommendations") || "Show Recommendations" }}
+                  </span>
+                </label>
+              </div>
+            </div> -->
           </div>
         </aside>
 
@@ -140,9 +238,37 @@
               <span>{{ $t("filter") }}</span>
             </button>
 
-            <div class="flex items-center gap-2">
+            <div v-if="auth.isLoggedIn" class="flex items-center gap-2">
+              <div class="flex items-center gap-2">
+                <span v-if="recommendations" class="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg>
+                  <span>{{ $t("recommended") || "Recommended" }}</span>
+                </span>
+                <div class="text-sm text-gray-600">
+                  {{ totalData }} {{ $t("vacancies") }}
+                </div>
+              </div>
+            </div>
+            <div v-else class="flex items-center gap-2">
               <div class="text-sm text-gray-600">
                 {{ totalData }} {{ $t("vacancies") }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommendations Banner (Only if logged in) -->
+          <div v-if="auth.isLoggedIn && recommendations" class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow p-4 mb-4">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold text-gray-900">{{ $t("recommendedForYou") || "Recommended for you" }}</h3>
+                <p class="text-sm text-gray-600">{{ $t("recommendedJobsDesc") || "Jobs matched based on your profile and preferences" }}</p>
               </div>
             </div>
           </div>
@@ -151,12 +277,14 @@
           <div class="bg-white rounded-lg shadow p-4 mb-4 hidden lg:block">
             <div class="flex items-center justify-between">
               <h2 class="text-xl font-semibold text-gray-900">
-                {{ $t("found") }} {{ totalData }} {{ $t("vacancies") }}
+                <span v-if="!recommendations">{{ $t("found") }} {{ totalData }} {{ $t("vacancies") }}</span>
+                <span v-else>{{ totalData }} {{ $t("recommendedVacancies") || "recommended vacancies" }}</span>
               </h2>
               <select
                 v-model="sortBy"
                 @change="handleFilterChange"
                 class="px-4 py-2 border border-gray-300 shadow-sm rounded text-sm text-gray-700"
+                :disabled="recommendations"
               >
                 <option value="" disabled selected>{{ $t("sortBy") }}</option>
                 <option value="latest">{{ $t("latest") }}</option>
@@ -381,13 +509,16 @@
 <script setup>
 import { ref, onMounted, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useAuthStore } from "../stores/authStore";
 import HeroSearch from "../components/home/HeroSearch.vue";
 import { getJobPosts } from "../services/jobposts.api";
 import { getCategoriesWithJobcount } from "../services/categories.api";
+import api from "../services/api";
 import { useRoute, useRouter } from "vue-router";
 import { getEmploymentTypes } from "../services/employment_types.api";
 
 const { t } = useI18n();
+const auth = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -406,6 +537,20 @@ const CATEGORY_LIMIT = 6;
 const showAllCategories = ref(false);
 const employmentTypes = ref([]);
 const selectedEmploymentTypes = ref([]);
+const recommendations = ref(false);
+const provinceInput = ref("");
+const cityInput = ref("");
+const selectedProvince = ref("");
+const selectedCity = ref("");
+const provinceOptions = ref([]);
+const cityOptions = ref([]);
+const provinceLoading = ref(false);
+const cityLoading = ref(false);
+const selectedProvinceId = ref(null);
+const isProvinceActive = ref(false);
+const isCityActive = ref(false);
+let provinceTimeout = null;
+let cityTimeout = null;
 
 // Computed
 const displayPages = computed(() => {
@@ -452,6 +597,133 @@ function timeAgo(dateString) {
   return "posted just now";
 }
 
+async function fetchProvinces(search = "") {
+  if (!search.trim()) {
+    provinceOptions.value = [];
+    return;
+  }
+
+  try {
+    provinceLoading.value = true;
+    const res = await api.get("/locations/search", {
+      params: {
+        search,
+        type: "provinces",
+      },
+    });
+    provinceOptions.value = res.data?.data?.provinces || [];
+  } catch (err) {
+    console.error("Failed to fetch provinces:", err);
+    provinceOptions.value = [];
+  } finally {
+    provinceLoading.value = false;
+  }
+}
+
+async function fetchCities(search = "") {
+  if (!selectedProvinceId.value || !search.trim()) {
+    cityOptions.value = [];
+    return;
+  }
+
+  try {
+    cityLoading.value = true;
+    const res = await api.get("/locations/search", {
+      params: {
+        search,
+        type: "cities",
+        province_id: selectedProvinceId.value,
+      },
+    });
+    cityOptions.value = res.data?.data?.cities || [];
+  } catch (err) {
+    console.error("Failed to fetch cities:", err);
+    cityOptions.value = [];
+  } finally {
+    cityLoading.value = false;
+  }
+}
+
+async function resolveProvinceIdByName(name) {
+  if (!name.trim()) return;
+
+  const res = await api.get("/locations/search", {
+    params: {
+      search: name,
+      type: "provinces",
+    },
+  });
+  const provinces = res.data?.data?.provinces || [];
+  const match = provinces.find((p) => p.name === name) || provinces[0];
+  if (match) {
+    selectedProvinceId.value = match.id;
+  }
+}
+
+watch(provinceInput, (val) => {
+  if (!isProvinceActive.value) return;
+
+  selectedProvince.value = "";
+  selectedCity.value = "";
+
+  if (!val) {
+    provinceOptions.value = [];
+    selectedProvinceId.value = null;
+    cityInput.value = "";
+    cityOptions.value = [];
+    return;
+  }
+
+  clearTimeout(provinceTimeout);
+  provinceTimeout = setTimeout(() => {
+    fetchProvinces(val);
+  }, 300);
+});
+
+watch(cityInput, (val) => {
+  if (!isCityActive.value) return;
+
+  selectedCity.value = "";
+
+  if (!val) {
+    cityOptions.value = [];
+    return;
+  }
+
+  clearTimeout(cityTimeout);
+  cityTimeout = setTimeout(() => {
+    fetchCities(val);
+  }, 300);
+});
+
+function selectProvince(province) {
+  selectedProvinceId.value = province.id;
+  selectedProvince.value = province.name;
+  provinceInput.value = province.name;
+  provinceOptions.value = [];
+  selectedCity.value = "";
+  cityInput.value = "";
+  cityOptions.value = [];
+  handleFilterChange();
+}
+
+function selectCity(city) {
+  selectedCity.value = city.name;
+  cityInput.value = city.name;
+  cityOptions.value = [];
+  handleFilterChange();
+}
+
+async function handleProvinceFocus() {
+  isProvinceActive.value = true;
+  await fetchProvinces(provinceInput.value || "_");
+}
+
+async function handleCityFocus() {
+  isCityActive.value = true;
+  await fetchCities(cityInput.value || "_");
+}
+
 // API Service menggunakan Axios
 const jobService = {
   async fetchJobs(filters = {}) {
@@ -462,23 +734,42 @@ const jobService = {
         // category: filters.category,
         // jobTypes: filters.jobTypes,
         // sortBy: filters.sortBy,
+        recommendations:filters.recommendations,
         page: filters.page,
         limit: filters.limit,
       };
 
+      // Check if any filter is active
+      let hasActiveFilters = false;
+      // recommendations.value = false;
+
       if (filters.search && filters.search.trim() !== "") {
         params.search = filters.search.trim();
+        hasActiveFilters = true;
       }
 
       if (filters.category !== "") {
         params.category = filters.category;
+        hasActiveFilters = true;
       }
 
       if (filters.employmentTypes?.length) {
         params.employment_type = filters.employmentTypes.join(",");
+        hasActiveFilters = true;
       }
 
-      if (filters.sortBy !== "") {
+      if (filters.province_name) {
+        params.province_name = filters.province_name;
+        hasActiveFilters = true;
+      }
+
+      if (filters.cities_name) {
+        params.cities_name = filters.cities_name;
+        hasActiveFilters = true;
+      }
+
+      if (filters.sortBy && filters.sortBy !== "" && filters.sortBy !== "created_at") {
+        hasActiveFilters = true;
         if (filters.sortBy === "latest") {
           params.sort_by = "created_at";
           params.sort_order = "desc";
@@ -488,10 +779,13 @@ const jobService = {
         } else if (filters.sortBy === "highest-salary") {
           params.sort_by = "salary_max";
           params.sort_order = "desc";
-        } else {
-          params.sort_by = "created_at";
-          params.sort_order = "desc";
         }
+      }
+      // params.recommendations = filters.recommendations;
+      // If no filters are active OR showRecommendations is checked, add recommendations parameter
+      if (!hasActiveFilters || filters.recommendations) {
+        params.recommendations = filters.recommendations;
+        // recommendations.value = true;
       }
 
       const response = await getJobPosts(params);
@@ -532,8 +826,11 @@ const loadJobs = async () => {
       // location: locationFilter.value,
       category: selectedCategory.value,
       employmentTypes: selectedEmploymentTypes.value,
+      province_name: selectedProvince.value,
+      cities_name: selectedCity.value,
       sortBy: sortBy.value,
       page: currentPage.value,
+      recommendations: recommendations.value,
       limit: 5,
     });
     jobs.value = data.data;
@@ -587,12 +884,15 @@ const handleSearchFromHero = (value) => {
   router.push({ query: newQuery });
 };
 
-function handleSearch(value) {
-  const keyword = value?.trim();
-  const query = { page: 1 };
+function handleSearch(keyword, location) {
+  const query = { page: 1, recommendations: "false" };
 
-  if (keyword) {
-    query.search = keyword;
+  if (keyword && keyword.trim()) {
+    query.search = keyword.trim();
+  }
+
+  if (location) {
+    query.province_name = location.name;
   }
 
   router.push({ path: "/jobposts", query });
@@ -628,15 +928,18 @@ const goToPage = (page) => {
 
 const handleFilterChange = () => {
   searchQuery.value = ""; // Reset search saat filter diubah
+  recommendations.value = false; // Disable recommendations when any filter changes
   router.push({
     query: {
-      ...route.query,
-      sort_by: sortBy.value,
+      sort_by: sortBy.value || undefined,
       category: selectedCategory.value || undefined,
       search: undefined, // Hapus search dari query
       employment_types: selectedEmploymentTypes.value.length
         ? selectedEmploymentTypes.value.join(",")
         : undefined,
+      province_name: selectedProvince.value || undefined,
+      cities_name: selectedCity.value || undefined,
+      recommendations: "false",
       page: 1, // Reset ke 1 hanya saat fungsi ini dipanggil
     },
   });
@@ -646,7 +949,14 @@ const resetFilters = () => {
   searchQuery.value = "";
   selectedCategory.value = "";
   selectedEmploymentTypes.value = [];
-  sortBy.value = "created_at";
+  selectedProvince.value = "";
+  selectedCity.value = "";
+  selectedProvinceId.value = null;
+  provinceInput.value = "";
+  cityInput.value = "";
+  provinceOptions.value = [];
+  cityOptions.value = [];
+  sortBy.value = "";
   currentPage.value = 1;
 
   router.push({ query: {} });
@@ -657,15 +967,57 @@ const resetCategory = () => {
 
   // Buat copy dari query saat ini
   const query = { ...route.query };
-
-  // Hapus key category dari object query
+  
+  // Hapus key category dan recommendations dari object query
   delete query.category;
+  delete query.recommendations;
 
   // Reset ke halaman 1 saat ganti kategori
   query.page = 1;
-
+  
   // Navigasi dengan query yang sudah bersih
   router.push({ query });
+};
+
+const enableRecommendations = () => {
+  recommendations.value = true;
+  selectedCategory.value = "";
+  selectedEmploymentTypes.value = [];
+  selectedProvince.value = "";
+  selectedCity.value = "";
+  selectedProvinceId.value = null;
+  provinceInput.value = "";
+  cityInput.value = "";
+  sortBy.value = "";
+  searchQuery.value = "";
+  
+  router.push({
+    query: {
+      recommendations: "true",
+      page: 1,
+    },
+  });
+};
+
+const disableRecommendations = () => {
+  recommendations.value = false;
+  
+  router.push({
+    query: {
+      recommendations: "false",
+      page: 1,
+    },
+  });
+};
+
+const handleRecommendationsToggle = () => {
+  router.push({
+    query: {
+      ...route.query,
+      recommendations: recommendations.value ? "true" : "false",
+      page: 1,
+    },
+  });
 };
 
 // Watchers
@@ -675,11 +1027,40 @@ watch(
   (q) => {
     searchQuery.value = q.search || "";
     selectedCategory.value = q.category || "";
-    sortBy.value = q.sort_by || "created_at";
+    sortBy.value = q.sort_by || "";
     selectedEmploymentTypes.value = q.employment_types
       ? q.employment_types.split(",")
       : [];
     currentPage.value = Number(q.page || 1);
+    selectedProvince.value = q.province_name || "";
+    selectedCity.value = q.cities_name || "";
+    if (q.province_name) {
+      provinceInput.value = q.province_name;
+      resolveProvinceIdByName(q.province_name).catch(() => null);
+    } else {
+      provinceInput.value = "";
+      selectedProvinceId.value = null;
+    }
+    cityInput.value = q.cities_name || "";
+    
+    // Determine if we should show recommendations
+    const hasActiveFilters = !!(
+      q.search ||
+      q.category ||
+      (q.employment_types && q.employment_types.length > 0) ||
+      (q.sort_by && q.sort_by !== "" && q.sort_by !== "created_at") ||
+      q.province_name ||
+      q.cities_name
+    );
+    
+    // If logged in and no filters, default to recommendations. Otherwise, check query params
+    if (auth.isLoggedIn && !hasActiveFilters && q.recommendations === undefined) {
+      recommendations.value = true;
+    } else if (q.recommendations === "true") {
+      recommendations.value = true;
+    } else {
+      recommendations.value = false;
+    }
 
     loadJobs();
   },
@@ -690,6 +1071,7 @@ watch(
 onMounted(() => {
   loadCategories();
   loadEmploymentTypes();
+  // recommendations.value = true;
 });
 </script>
 

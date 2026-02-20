@@ -137,6 +137,18 @@ const routes = [
     meta: { public: true },
   },
   {
+    path: "/cities",
+    name: "cities",
+    component: () => import("../pages/JobsByCity.vue"),
+    meta: { public: true },
+  },
+  {
+    path: "/resume-generator",
+    name: "resume-generator",
+    component: () => import("../pages/ResumeGenerator.vue"),
+    meta: { public: true },
+  },
+  {
     path: "/register",
     meta: { guestOnly: true },
     component: () => import("../pages/auth/Register.vue"),
