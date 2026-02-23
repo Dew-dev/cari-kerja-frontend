@@ -1,6 +1,29 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import { push } from "notivue";
 import { useAuthStore } from "../stores/authStore";
+import { i18n } from "../i18n";
+
+let hasShownSessionExpiredToastOnGuard = false;
+
+function isJwtExpired(token) {
+  if (!token) return true;
+
+  try {
+    const payloadBase64 = token.split(".")[1];
+    if (!payloadBase64) return true;
+
+    const normalizedPayload = payloadBase64.replace(/-/g, "+").replace(/_/g, "/");
+    const paddedPayload = normalizedPayload.padEnd(Math.ceil(normalizedPayload.length / 4) * 4, "=");
+    const payload = JSON.parse(atob(paddedPayload));
+    if (!payload?.exp) return false;
+
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+    return payload.exp <= nowInSeconds;
+  } catch {
+    return true;
+  }
+}
 // router.beforeEach((to) => {
 //   const auth = useAuthStore();
 
@@ -111,7 +134,7 @@ const routes = [
     path: "/login",
     name: "login",
     meta: { guestOnly: true },
-    component: () => import("../pages/auth/login.vue"),
+    component: () => import("../pages/auth/Login.vue"),
   },
   {
     path: "/recruiter-login",
@@ -140,6 +163,12 @@ const routes = [
     path: "/cities",
     name: "cities",
     component: () => import("../pages/JobsByCity.vue"),
+    meta: { public: true },
+  },
+  {
+    path: "/companies",
+    name: "companies",
+    component: () => import("../pages/JobsByCompany.vue"),
     meta: { public: true },
   },
   {
@@ -257,6 +286,15 @@ const router = createRouter({
 router.beforeEach((to) => {
   const auth = useAuthStore();
 
+  if (auth.token && isJwtExpired(auth.token)) {
+    auth.logout();
+    if (to.path !== "/login" && !hasShownSessionExpiredToastOnGuard) {
+      push.warning(i18n.global.t("notifications.sessionExpired"));
+      hasShownSessionExpiredToastOnGuard = true;
+    }
+    return { path: "/login", replace: true };
+  }
+
   // 🚫 GUEST ONLY (login/register)
   if (to.meta.guestOnly && auth.isLoggedIn) {
     return auth.role === "recruiter" ? "/recruiter/jobs" : "/jobposts";
@@ -268,7 +306,7 @@ router.beforeEach((to) => {
     return "/login";
   }
 
-  // �� PROTECTED ROUTE
+  // 🔐 PROTECTED ROUTE
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
     return "/login";
   }
@@ -276,6 +314,11 @@ router.beforeEach((to) => {
   // 🧭 ROLE CHECK
   if (to.meta.role && auth.role !== to.meta.role) {
     return "/";
+  }
+
+  // Reset toast flag on successful login pages
+  if ((to.name === "login" || to.name === "recruiter-login" || to.name === "register" || to.name === "register-recruiter") && auth.isLoggedIn) {
+    hasShownSessionExpiredToastOnGuard = false;
   }
 
   return true;

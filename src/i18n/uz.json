@@ -1914,5 +1914,24 @@
     "enterNewPassword": "Quyida yangi parolingizni kiriting.",
     "ifEmailExists": "Agar elektron pochta manzili mavjud bo'lsa, qayta o'rnatish havolasi yuboriladi.",
     "resendIn": "Qayta yuboring"
+  },
+  "notifications": {
+    "sessionExpired": "Sessiya muddati tugadi, iltimos qayta kiring",
+    "jobDeletedSuccessfully": "Ish muvaffaqiyatli o'chirildi",
+    "actionFailed": "Amal muvaffaqiyatsiz tugadi. Iltimos qayta urinib ko'ring.",
+    "failedToUpdateJobStatus": "Ish holatini yangilash muvaffaq bo'lmadi",
+    "failedToDuplicateJob": "Ishni nusxalash muvaffaq bo'lmadi",
+    "verificationEmailSent": "Tasdiqlash xati yuborildi",
+    "failedToSendVerificationEmail": "Tasdiqlash xatini yuborish muvaffaq bo'lmadi",
+    "failedToCreateJobPost": "Ish e'lonini yaratish muvaffaq bo'lmadi",
+    "jobUpdatedSuccessfully": "Ish muvaffaqiyatli yangilandi!",
+    "recruitersCannotSaveJobs": "Rekruterlar ishlarni saqlay olmaydi",
+    "jobRemovedFromSaved": "Ish saqlanganlard an o'chirildi",
+    "jobSavedSuccessfully": "Ish muvaffaqiyatli saqlandi",
+    "errorSavingJob": "Ishni saqlashda xatolik",
+    "profileUpdated": "Profil yangilandi",
+    "failedToUpdateProfile": "Profilni yangilash muvaffaq bo'lmadi",
+    "maxFileSize2MB": "Maksimal fayl hajmi 2MB",
+    "pleaseSelectFile": "Iltimos faylni tanlang"
   }
 }

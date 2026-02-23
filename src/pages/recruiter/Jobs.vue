@@ -762,7 +762,7 @@ async function confirmAction() {
       });
       fetchJobs(); // refresh table
       archivedJobs(); // refresh archived
-      push.success("Job deleted successfully");
+      push.success(t("notifications.jobDeletedSuccessfully"));
     }
 
     closeActionModal();
@@ -772,7 +772,7 @@ async function confirmAction() {
     page.value = 1; // reset to first page
   } catch (err) {
     console.error("Action failed", err);
-    push.error("Action failed. Please try again.");
+    push.error(t("notifications.actionFailed"));
   } finally {
     actionLoading.value = false;
   }
@@ -883,7 +883,7 @@ async function confirmUpdateStatus() {
     selectedJob.value.status = arr[nextStatus.value - 1];
   } catch (err) {
     console.error("Failed to update job status", err);
-    push.error("Failed to update job status");
+    push.error(t("notifications.failedToUpdateJobStatus"));
   } finally {
     showConfirmModal.value = false;
     selectedJob.value = null;
@@ -901,7 +901,7 @@ async function duplicateJob(jobId) {
     router.push(`/recruiter/jobs/${newId}/edit`);
   } catch (err) {
     console.error("Duplicate failed", err);
-    push.error("Failed to duplicate job");
+    push.error(t("notifications.failedToDuplicateJob"));
   }
 }
 </script>

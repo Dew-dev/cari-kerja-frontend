@@ -617,7 +617,7 @@ async function submit() {
     const jobId = data?.id || data?.data?.id;
     console.log("CREATE JOB POST RES:", res.data);
     if (res.data.code !== 201 || !jobId) {
-      push.error(err.response?.data?.message || "Failed to create job post3");
+      push.error(err.response?.data?.message || t("notifications.failedToCreateJobPost"));
       return;
     }
 
@@ -633,7 +633,7 @@ async function submit() {
     console.log("Redirecting to recruiter jobs page...");
     router.push("/recruiter/jobs");
   } catch (err) {
-    push.error(err.response?.data?.message || "Failed to create job post");
+    push.error(err.response?.data?.message || t("notifications.failedToCreateJobPost"));
   }
 }
 </script>

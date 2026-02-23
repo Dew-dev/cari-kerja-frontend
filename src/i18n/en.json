@@ -1913,5 +1913,24 @@
     "enterNewPassword": "Enter your new password below.",
     "ifEmailExists": "If the email exists, a reset link has been sent.",
     "resendIn": "Resend in"
+  },
+  "notifications": {
+    "sessionExpired": "Session expired, please login again",
+    "jobDeletedSuccessfully": "Job deleted successfully",
+    "actionFailed": "Action failed. Please try again.",
+    "failedToUpdateJobStatus": "Failed to update job status",
+    "failedToDuplicateJob": "Failed to duplicate job",
+    "verificationEmailSent": "Verification email sent",
+    "failedToSendVerificationEmail": "Failed to send verification email",
+    "failedToCreateJobPost": "Failed to create job post",
+    "jobUpdatedSuccessfully": "Job updated successfully!",
+    "recruitersCannotSaveJobs": "Recruiters cannot save jobs",
+    "jobRemovedFromSaved": "Job removed from saved",
+    "jobSavedSuccessfully": "Job saved successfully",
+    "errorSavingJob": "Error saving job",
+    "profileUpdated": "Profile updated",
+    "failedToUpdateProfile": "Failed to update profile",
+    "maxFileSize2MB": "Max file size 2MB",
+    "pleaseSelectFile": "Please select a file"
   }
 }

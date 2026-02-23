@@ -45,7 +45,7 @@ const onLogoChange = (e) => {
 
   // validasi size 2MB
   if (file.size > 2 * 1024 * 1024) {
-    push.warning("Max file size 2MB");
+    push.warning(t("notifications.maxFileSize2MB"));
     return;
   }
 
@@ -132,10 +132,10 @@ async function saveProfile() {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    push.success("Profile updated");
+    push.success(t("notifications.profileUpdated"));
   } catch (err) {
     console.error("Save failed", err);
-    push.error("Failed to update profile");
+    push.error(t("notifications.failedToUpdateProfile"));
   }
 }
 

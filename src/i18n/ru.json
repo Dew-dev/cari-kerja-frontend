@@ -1916,5 +1916,24 @@
     "enterNewPassword": "Введите новый пароль ниже.",
     "ifEmailExists": "Если адрес электронной почты существует, ссылка сброса будет отправлена.",
     "resendIn": "Повторно отправить через"
+  },
+  "notifications": {
+    "sessionExpired": "Сеанс истек, пожалуйста, войдите снова",
+    "jobDeletedSuccessfully": "Вакансия успешно удалена",
+    "actionFailed": "Действие не выполнено. Пожалуйста, попробуйте еще раз.",
+    "failedToUpdateJobStatus": "Не удалось обновить статус вакансии",
+    "failedToDuplicateJob": "Не удалось дублировать вакансию",
+    "verificationEmailSent": "Письмо с подтверждением отправлено",
+    "failedToSendVerificationEmail": "Не удалось отправить письмо с подтверждением",
+    "failedToCreateJobPost": "Не удалось создать вакансию",
+    "jobUpdatedSuccessfully": "Вакансия успешно обновлена!",
+    "recruitersCannotSaveJobs": "Рекрутеры не могут сохранять вакансии",
+    "jobRemovedFromSaved": "Вакансия удалена из сохраненных",
+    "jobSavedSuccessfully": "Вакансия успешно сохранена",
+    "errorSavingJob": "Ошибка сохранения вакансии",
+    "profileUpdated": "Профиль обновлен",
+    "failedToUpdateProfile": "Не удалось обновить профиль",
+    "maxFileSize2MB": "Максимальный размер файла 2МБ",
+    "pleaseSelectFile": "Пожалуйста, выберите файл"
   }
 }

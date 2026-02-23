@@ -79,7 +79,7 @@ const handleSaveJob = async () => {
   }
 
   if (auth.role === "recruiter") {
-    push.warning("Recruiters cannot save jobs")
+    push.warning(t("notifications.recruitersCannotSaveJobs"))
     return
   }
 
@@ -89,15 +89,15 @@ const handleSaveJob = async () => {
     if (isSaved.value) {
       await removeSavedJob(props.job.id)
       isSaved.value = false
-      push.success("Job removed from saved")
+      push.success(t("notifications.jobRemovedFromSaved"))
     } else {
       await saveJob(props.job.id)
       isSaved.value = true
-      push.success("Job saved successfully")
+      push.success(t("notifications.jobSavedSuccessfully"))
     }
   } catch (error) {
     console.error("Error saving job:", error)
-    push.error(error.response?.data?.message || "Error saving job")
+    push.error(error.response?.data?.message || t("notifications.errorSavingJob"))
   } finally {
     isSavingJob.value = false
   }

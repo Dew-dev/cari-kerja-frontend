@@ -720,7 +720,7 @@ function handleAddResume() {
   const isDefault = resumeDefaultInput.value?.checked || false;
 
   if (!file) {
-    push.error("Please select a file");
+    push.error(t("notifications.pleaseSelectFile"));
     return;
   }
 

@@ -729,7 +729,7 @@ async function submit() {
     return;
   }
   buttonLoading.value = false;
-  push.success("Job updated successfully!");
+  push.success(t("notifications.jobUpdatedSuccessfully"));
   // router.push("/recruiter/jobs")
 }
 </script>

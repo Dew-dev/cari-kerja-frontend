@@ -41,13 +41,13 @@ async function submit() {
 async function resendVerification() {
   try {
     await api.post("/auth/verify-email/resend", form);
-    push.success("Verification email sent");
+    push.success(t("notifications.verificationEmailSent"));
     loading.value = true;
   } catch (e) {
     if (e?.response?.status === 429) {
       push.warning(e.response.data.message);
     } else {
-      push.error("Failed to send verification email");
+      push.error(t("notifications.failedToSendVerificationEmail"));
     }
   } finally{
     loading.value = false;

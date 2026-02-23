@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Header -->
-    <section class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+    <section class="bg-linear-to-r from-blue-600 to-indigo-600 text-white">
       <div class="max-w-7xl mx-auto py-12 px-4">
         <h1 class="text-4xl font-bold mb-3">
           {{ $t("resumeGenerator") }}
