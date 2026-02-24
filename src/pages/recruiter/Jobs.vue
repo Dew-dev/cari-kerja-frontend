@@ -54,7 +54,7 @@
       <div class="lg:hidden space-y-4">
         <div v-if="jobs.length > 0 && !loading" class="space-y-4">
           <div
-            v-for="job in jobs"
+            v-for="(job, index) in jobs"
             :key="job.id"
             class="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
           >
@@ -157,7 +157,10 @@
 
                 <div
                   v-if="openMenuId === job.id"
-                  class="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50"
+                  :class="[
+                    'absolute right-0 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50',
+                    index === jobs.length - 1 ? 'bottom-full mb-1' : 'mt-1'
+                  ]"
                   @click.stop
                 >
                   <button
@@ -223,7 +226,7 @@
       <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100 hidden lg:block">
         <!-- TABLE -->
         <table class="w-full text-sm">
-          <thead class="bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 border-b border-gray-200">
+          <thead class="bg-linear-to-r from-gray-50 to-gray-100 text-gray-700 border-b border-gray-200">
             <tr>
               <th class="px-6 py-4 text-left font-semibold uppercase text-xs tracking-wider">{{ t("job_title") }}</th>
               <th class="px-6 py-4 text-left font-semibold uppercase text-xs tracking-wider">{{ t("location") }}</th>
@@ -235,7 +238,7 @@
           </thead>
           <tbody v-if="jobs.length > 0 && !loading">
             <tr
-              v-for="job in jobs"
+              v-for="(job, index) in jobs"
               :key="job.id"
               class="border-b border-gray-100 hover:bg-blue-50/50 transition-all duration-150"
             >
@@ -331,7 +334,10 @@
                       <!-- DROPDOWN MENU -->
                       <div
                         v-if="openMenuId === job.id"
-                        class="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50"
+                        :class="[
+                          'absolute right-0 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50',
+                          index === jobs.length - 1 ? 'bottom-full mb-1' : 'mt-1'
+                        ]"
                         @click.stop
                       >
                         <!-- DUPLICATE -->
@@ -466,7 +472,7 @@
             v-for="p in totalPages"
             :key="p"
             @click="changePage(p)"
-            class="min-w-[40px] px-4 py-2 border rounded-lg font-medium text-sm transition-all duration-150"
+            class="min-w-10 px-4 py-2 border rounded-lg font-medium text-sm transition-all duration-150"
             :class="[
               p === page
                 ? 'bg-blue-600 text-white border-blue-600 shadow-md'

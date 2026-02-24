@@ -1931,6 +1931,7 @@
     "profileUpdated": "Profile updated",
     "failedToUpdateProfile": "Failed to update profile",
     "maxFileSize2MB": "Max file size 2MB",
-    "pleaseSelectFile": "Please select a file"
+    "pleaseSelectFile": "Please select a file",
+    "statusUpdatedSuccessfully": "Status updated successfully"  
   }
 }

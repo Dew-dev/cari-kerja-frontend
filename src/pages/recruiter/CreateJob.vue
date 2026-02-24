@@ -223,6 +223,7 @@ const form = reactive({
   benefits: [],
   responsibilities: [],
   job_post_questions: [],
+  is_remote: false,
 });
 
 const QUESTION_TYPES = [
@@ -595,7 +596,7 @@ async function submit() {
     experience_level_id: form.experience_level_id,
     salary_type_id: form.salary_type_id || 1,
     job_post_status_id: 1,
-    location: `${form.city}, ${form.province}`,
+    location: form.is_remote ? "Remote" : `${form.city}, ${form.province}`,
     salary_min: form.salary_min,
     salary_max: form.salary_max,
     currency_id: form.currency_id,
@@ -607,8 +608,9 @@ async function submit() {
     responsibilities: form.responsibilities,
     job_post_questions: buildQuestionsPayload(),
     skills: skills.value,
-    province: form.province,
-    city: form.city,
+    province: form.is_remote ? null : form.province,
+    city: form.is_remote ? null : form.city,
+    is_remote: form.is_remote,
   };
 
   try {
@@ -894,7 +896,8 @@ async function submit() {
               <input
                 v-model="provinceInput"
                 @click="fetchProvinces(provinceInput || '_')"
-                class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :disabled="form.is_remote"
+                class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                 :placeholder="t('province')"
               />
               <div
@@ -919,7 +922,7 @@ async function submit() {
               <input
                 v-model="cityInput"
                 @click="fetchCities(cityInput || '_')"
-                :disabled="!selectedProvinceId"
+                :disabled="form.is_remote || !selectedProvinceId || provinceInput.toLowerCase() === 'other countries'"
                 class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                 :placeholder="t('city')"
               />
@@ -940,6 +943,18 @@ async function submit() {
                 Loading cities...
               </p>
             </div>
+          </div>
+
+          <!-- REMOTE WORK CHECKBOX -->
+          <div class="mt-2">
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input
+                v-model="form.is_remote"
+                type="checkbox"
+                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <span class="text-sm text-gray-700">Remote Work</span>
+            </label>
           </div>
         </div>
 

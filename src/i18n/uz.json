@@ -1932,6 +1932,7 @@
     "profileUpdated": "Profil yangilandi",
     "failedToUpdateProfile": "Profilni yangilash muvaffaq bo'lmadi",
     "maxFileSize2MB": "Maksimal fayl hajmi 2MB",
-    "pleaseSelectFile": "Iltimos faylni tanlang"
+    "pleaseSelectFile": "Iltimos faylni tanlang",
+    "statusUpdatedSuccessfully": "Holat muvaffaqiyatli yangilandi"
   }
 }

@@ -1934,6 +1934,8 @@
     "profileUpdated": "Профиль обновлен",
     "failedToUpdateProfile": "Не удалось обновить профиль",
     "maxFileSize2MB": "Максимальный размер файла 2МБ",
-    "pleaseSelectFile": "Пожалуйста, выберите файл"
+    "pleaseSelectFile": "Пожалуйста, выберите файл",
+    "statusUpdatedSuccessfully": "Статус успешно обновлен",
+    "failedToUpdateStatus": "Не удалось обновить статус"
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-10">
+    <div class="bg-linear-to-r from-blue-600 to-indigo-700 text-white py-10">
       <div class="max-w-6xl mx-auto px-6">
         <h1 class="text-3xl font-bold">CV Reader Demo (Tesseract)</h1>
         <p class="text-blue-100 mt-2">Upload a CV image and extract work experience, skills, and education.</p>
