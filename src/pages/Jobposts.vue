@@ -13,7 +13,7 @@
             </h3>
             <ul class="space-y-2">
               <!-- Recommended For You (Only if logged in) -->
-              <li v-if="auth.isLoggedIn">
+              <li v-if="canUseRecommendations">
                 <button
                   @click="enableRecommendations()"
                   :class="[
@@ -238,7 +238,7 @@
               <span>{{ $t("filter") }}</span>
             </button>
 
-            <div v-if="auth.isLoggedIn" class="flex items-center gap-2">
+            <div v-if="canUseRecommendations" class="flex items-center gap-2">
               <div class="flex items-center gap-2">
                 <span v-if="recommendations" class="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,7 +259,7 @@
           </div>
 
           <!-- Recommendations Banner (Only if logged in) -->
-          <div v-if="auth.isLoggedIn && recommendations" class="bg-linear-to-r from-blue-50 to-indigo-50 rounded-lg shadow p-4 mb-4">
+          <div v-if="canUseRecommendations && recommendations" class="bg-linear-to-r from-blue-50 to-indigo-50 rounded-lg shadow p-4 mb-4">
             <div class="flex items-center gap-3">
               <div class="shrink-0">
                 <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -568,6 +568,10 @@ const visibleCategories = computed(() => {
     ? categories.value
     : categories.value.slice(0, CATEGORY_LIMIT);
 });
+
+const canUseRecommendations = computed(
+  () => auth.isLoggedIn && auth.role !== "recruiter",
+);
 
 const formatNumber = (num) => new Intl.NumberFormat("en-US").format(num);
 
@@ -980,6 +984,8 @@ const resetCategory = () => {
 };
 
 const enableRecommendations = () => {
+  if (!canUseRecommendations.value) return;
+
   recommendations.value = true;
   selectedCategory.value = "";
   selectedEmploymentTypes.value = [];
@@ -1053,10 +1059,14 @@ watch(
       q.cities_name
     );
     
-    // If logged in and no filters, default to recommendations. Otherwise, check query params
-    if (auth.isLoggedIn && !hasActiveFilters && q.recommendations === undefined) {
+    // Recommendations only for non-recruiter logged-in users
+    if (
+      canUseRecommendations.value &&
+      !hasActiveFilters &&
+      q.recommendations === undefined
+    ) {
       recommendations.value = true;
-    } else if (q.recommendations === "true") {
+    } else if (canUseRecommendations.value && q.recommendations === "true") {
       recommendations.value = true;
     } else {
       recommendations.value = false;

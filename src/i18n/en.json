@@ -1,6 +1,13 @@
 {
   "jobs": "Jobs",
   "companies": "Companies",
+  "jobsByCompany": "Jobs by Company",
+  "browseByCompanySubtitle": "Explore companies grouped by industry",
+  "industry": "Industry",
+  "all": "All",
+  "searchCompany": "Search company",
+  "searchResultsFor": "Search results for",
+  "noCompaniesAvailable": "No companies available",
   "salary": "Salary",
   "dashboard": "Dashboard",
   "createjob": "Create Job",
@@ -259,6 +266,10 @@
     "openPositions": "Open Positions",
     "aboutCompany": "About Company",
     "noDescriptionProvided": "No description provided.",
+    "noAddressProvided": "Address not provided",
+    "noContactNameProvided": "Contact name not provided",
+    "noContactPhoneProvided": "Contact phone not provided",
+    "noWebsiteProvided": "Website not provided",
     "contactInformation": "Contact Information",
     "contactPerson": "Contact Person",
     "phone": "Phone",
@@ -1932,6 +1943,11 @@
     "failedToUpdateProfile": "Failed to update profile",
     "maxFileSize2MB": "Max file size 2MB",
     "pleaseSelectFile": "Please select a file",
-    "statusUpdatedSuccessfully": "Status updated successfully"  
-  }
+    "statusUpdatedSuccessfully": "Status updated successfully"
+  },
+  "noDescriptionProvided": "No description provided.",
+  "noAddressProvided": "Address not provided",
+  "noContactNameProvided": "Contact name not provided",
+  "noContactPhoneProvided": "Contact phone not provided",
+  "noWebsiteProvided": "Website not provided"
 }

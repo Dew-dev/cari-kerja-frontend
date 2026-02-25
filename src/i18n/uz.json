@@ -1,6 +1,13 @@
 {
   "jobs": "Ish o'rinlari",
   "companies": "Kompaniyalar",
+  "jobsByCompany": "Kompaniyalar bo'yicha ishlar",
+  "browseByCompanySubtitle": "Sohalar bo'yicha guruhlangan kompaniyalarni ko'ring",
+  "industry": "Sohalar",
+  "all": "Barchasi",
+  "searchCompany": "Kompaniyani qidiring",
+  "searchResultsFor": "Qidiruv natijalari",
+  "noCompaniesAvailable": "Kompaniyalar mavjud emas",
   "salary": "Maosh",
   "dashboard": "Boshqaruv paneli",
   "createjob": "Ish Yaratish",
@@ -18,6 +25,7 @@
   "signingUp": "Ro'yxatdan o'tish amalga oshirilmoqda...",
   "find": "Topish",
   "next": "Keyingi",
+  "previous": "Oldingi",
   "Previous": "Oldingi",
   "allLocations": "Barcha joylar",
   "searchLocation": "Joyni qidiring...",
@@ -260,6 +268,10 @@
     "openPositions": "Ochiq vakansiyalar",
     "aboutCompany": "Kompaniya haqida",
     "noDescriptionProvided": "Tavsif kiritilmagan.",
+    "noAddressProvided": "Manzil kiritilmagan",
+    "noContactNameProvided": "Kontakt ismi kiritilmagan",
+    "noContactPhoneProvided": "Kontakt telefoni kiritilmagan",
+    "noWebsiteProvided": "Veb-sayt kiritilmagan",
     "contactInformation": "Aloqa ma'lumotlari",
     "contactPerson": "Aloqa shaxsi",
     "phone": "Telefon",
@@ -1606,73 +1618,73 @@
     }
   },
   "termsOfService": {
-        "title": "Xizmat ko'rsatish shartlari",
-        "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
-        "agreement": {
-          "title": "1. Shartlarga rozilik",
-          "content": "Jobs.uz saytiga kirish va undan foydalanish orqali siz ushbu Xizmat ko'rsatish shartlariga rozi ekanligingizni tasdiqlaysiz. Agar rozilik bermasangiz, iltimos xizmatdan foydalanmang."
-        },
-        "useLicense": {
-          "title": "2. Foydalanish litsenziyasi",
-          "content": "Jobs.uz-dagi materiallarni shaxsiy, notijorat maqsadlarida vaqtincha yuklab olishga ruxsat beriladi. Bu egallikni o‘tkazish emas, litsenziya hisoblanadi.",
-          "prohibitions": [
-            "Materiallarni o'zgartirish yoki nusxalash",
-            "Materiallarni tijorat maqsadlarida yoki ommaviy ko'rsatish uchun ishlatish",
-            "Jobs.uzdagi dasturiy ta'minotni dekompilyatsiya qilish yoki qayta tahlil qilishga harakat qilish",
-            "Avtorsk huquq yoki boshqa egalik belgilanishlarini olib tashlash",
-            "Materiallarni boshqa shaxsga o'tkazish yoki boshqa serverda aks ettirish"
-          ]
-        },
-        "disclaimer": {
-          "title": "3. Majburiyatdan voz kechish",
-          "content": "Jobs.uzdagi materiallar \"boshqacha ko‘rsatilmaguncha\" holatda taqdim etiladi. Jobs.uz hech qanday kafolat bermaydi va barcha mumkin bo‘lgan kafolatlardan voz kechadi."
-        },
-        "limitations": {
-          "title": "4. Majburiyatlarning cheklanishi",
-          "content": "Hech qanday holatda Jobs.uz yoki uning yetkazib beruvchilari sayt materiallaridan foydalanish yoki foydalanib bo'lmasligidan kelib chiqadigan zarar uchun javobgar bo'lmaydi."
-        },
-        "accuracy": {
-          "title": "5. Materiallarning to'g'riligi",
-          "content": "Jobs.uzdagi materiallarda texnik yoki boshqa xatolar bo‘lishi mumkin. Jobs.uz ularning aniqligi, to‘liqligi yoki dolzarbligini kafolatlamaydi va o‘zgartirish huquqini o‘zida saqlaydi."
-        },
-        "links": {
-          "title": "6. Havolalar",
-          "content": "Jobs.uz tashqi saytlarning mazmuni uchun javobgar emas. Havola mavjudligi sayt tomonidan ma'qullashni anglatmaydi. Tashqi saytlardan foydalanish sizning mas'uliyatingizda."
-        },
-        "modifications": {
-          "title": "7. O'zgartirishlar",
-          "content": "Jobs.uz ushbu Shartlarni istalgan vaqtda o'zgartirishi mumkin. Saytdan foydalanish orqali siz amaldagi Shartlarga rozi bo'lasiz."
-        },
-        "governingLaw": {
-          "title": "8. Tatbiq etiluvchi qonun",
-          "content": "Ushbu Shartlar O'zbekiston qonunlariga muvofiq tartibga solinadi; nizolar Toshkent sudlarining yurisdiktsiyasiga bo'ysunadi."
-        },
-        "userAccounts": {
-          "title": "9. Foydalanuvchi akkauntlari",
-          "content": "Agar siz akkaunt yaratsangiz, kirish ma'lumotlarini maxfiy saqlash va akkaunt ostida yuz berayotgan barcha faoliyat uchun javobgar bo'lasiz. Ruxsatsiz foydalanishni darhol xabar qiling."
-        },
-        "prohibitedConduct": {
-          "title": "10. Ta'qiqlangan xatti-harakatlar",
-          "content": "Siz quyidagilardan voz kechasiz:",
-          "items": [
-            "Yolg'on yoki adashtiruvchi ma'lumotlar joylashtirish",
-            "Amaldagi qonunlarni yoki qoidalarni buzish",
-            "Boshqa foydalanuvchilarni tahdid qilish, haqoratlash yoki bezovta qilish",
-            "Bizning tizimlarga ruxsatsiz kirishga harakat qilish",
-            "Spam yoki istalmagan reklama yuborish"
-          ]
-        },
-        "termination": {
-          "title": "11. Bekor qilish",
-          "content": "Biz akkauntingiz va platformaga kirishingizni har qanday sabab bilan darhol va oldindan xabar bermasdan to'xtatib yoki bekor qilamiz, shu jumladan Shartlar buzilganda."
-        },
-        "contact": {
-          "title": "12. Biz bilan bog'laning",
-          "content": "Agar Ushbu Xizmat ko'rsatish shartlari bo'yicha savollaringiz bo'lsa, biz bilan bog'laning:",
-          "emailLabel": "Email",
-          "email": "legal@jobs.uz"
-        }
-      },
+    "title": "Xizmat ko'rsatish shartlari",
+    "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
+    "agreement": {
+      "title": "1. Shartlarga rozilik",
+      "content": "Jobs.uz saytiga kirish va undan foydalanish orqali siz ushbu Xizmat ko'rsatish shartlariga rozi ekanligingizni tasdiqlaysiz. Agar rozilik bermasangiz, iltimos xizmatdan foydalanmang."
+    },
+    "useLicense": {
+      "title": "2. Foydalanish litsenziyasi",
+      "content": "Jobs.uz-dagi materiallarni shaxsiy, notijorat maqsadlarida vaqtincha yuklab olishga ruxsat beriladi. Bu egallikni o‘tkazish emas, litsenziya hisoblanadi.",
+      "prohibitions": [
+        "Materiallarni o'zgartirish yoki nusxalash",
+        "Materiallarni tijorat maqsadlarida yoki ommaviy ko'rsatish uchun ishlatish",
+        "Jobs.uzdagi dasturiy ta'minotni dekompilyatsiya qilish yoki qayta tahlil qilishga harakat qilish",
+        "Avtorsk huquq yoki boshqa egalik belgilanishlarini olib tashlash",
+        "Materiallarni boshqa shaxsga o'tkazish yoki boshqa serverda aks ettirish"
+      ]
+    },
+    "disclaimer": {
+      "title": "3. Majburiyatdan voz kechish",
+      "content": "Jobs.uzdagi materiallar \"boshqacha ko‘rsatilmaguncha\" holatda taqdim etiladi. Jobs.uz hech qanday kafolat bermaydi va barcha mumkin bo‘lgan kafolatlardan voz kechadi."
+    },
+    "limitations": {
+      "title": "4. Majburiyatlarning cheklanishi",
+      "content": "Hech qanday holatda Jobs.uz yoki uning yetkazib beruvchilari sayt materiallaridan foydalanish yoki foydalanib bo'lmasligidan kelib chiqadigan zarar uchun javobgar bo'lmaydi."
+    },
+    "accuracy": {
+      "title": "5. Materiallarning to'g'riligi",
+      "content": "Jobs.uzdagi materiallarda texnik yoki boshqa xatolar bo‘lishi mumkin. Jobs.uz ularning aniqligi, to‘liqligi yoki dolzarbligini kafolatlamaydi va o‘zgartirish huquqini o‘zida saqlaydi."
+    },
+    "links": {
+      "title": "6. Havolalar",
+      "content": "Jobs.uz tashqi saytlarning mazmuni uchun javobgar emas. Havola mavjudligi sayt tomonidan ma'qullashni anglatmaydi. Tashqi saytlardan foydalanish sizning mas'uliyatingizda."
+    },
+    "modifications": {
+      "title": "7. O'zgartirishlar",
+      "content": "Jobs.uz ushbu Shartlarni istalgan vaqtda o'zgartirishi mumkin. Saytdan foydalanish orqali siz amaldagi Shartlarga rozi bo'lasiz."
+    },
+    "governingLaw": {
+      "title": "8. Tatbiq etiluvchi qonun",
+      "content": "Ushbu Shartlar O'zbekiston qonunlariga muvofiq tartibga solinadi; nizolar Toshkent sudlarining yurisdiktsiyasiga bo'ysunadi."
+    },
+    "userAccounts": {
+      "title": "9. Foydalanuvchi akkauntlari",
+      "content": "Agar siz akkaunt yaratsangiz, kirish ma'lumotlarini maxfiy saqlash va akkaunt ostida yuz berayotgan barcha faoliyat uchun javobgar bo'lasiz. Ruxsatsiz foydalanishni darhol xabar qiling."
+    },
+    "prohibitedConduct": {
+      "title": "10. Ta'qiqlangan xatti-harakatlar",
+      "content": "Siz quyidagilardan voz kechasiz:",
+      "items": [
+        "Yolg'on yoki adashtiruvchi ma'lumotlar joylashtirish",
+        "Amaldagi qonunlarni yoki qoidalarni buzish",
+        "Boshqa foydalanuvchilarni tahdid qilish, haqoratlash yoki bezovta qilish",
+        "Bizning tizimlarga ruxsatsiz kirishga harakat qilish",
+        "Spam yoki istalmagan reklama yuborish"
+      ]
+    },
+    "termination": {
+      "title": "11. Bekor qilish",
+      "content": "Biz akkauntingiz va platformaga kirishingizni har qanday sabab bilan darhol va oldindan xabar bermasdan to'xtatib yoki bekor qilamiz, shu jumladan Shartlar buzilganda."
+    },
+    "contact": {
+      "title": "12. Biz bilan bog'laning",
+      "content": "Agar Ushbu Xizmat ko'rsatish shartlari bo'yicha savollaringiz bo'lsa, biz bilan bog'laning:",
+      "emailLabel": "Email",
+      "email": "legal@jobs.uz"
+    }
+  },
   "contactPage": {
     "pageTitle": "Job Portal - Aloqa",
     "title": "Biz bilan bog'laning",
@@ -1934,5 +1946,11 @@
     "maxFileSize2MB": "Maksimal fayl hajmi 2MB",
     "pleaseSelectFile": "Iltimos faylni tanlang",
     "statusUpdatedSuccessfully": "Holat muvaffaqiyatli yangilandi"
-  }
+  },
+
+  "noDescriptionProvided": "Tavsif berilmagan.",
+  "noAddressProvided": "Manzil berilmagan",
+  "noContactNameProvided": "Aloqa shaxsi berilmagan",
+  "noContactPhoneProvided": "Aloqa raqami berilmagan",
+  "noWebsiteProvided": "Veb-sayt berilmagan"
 }

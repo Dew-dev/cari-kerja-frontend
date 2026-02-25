@@ -137,7 +137,7 @@
                 <div class="text-xs text-gray-600 font-semibold mb-2">
                   {{ $t("category") }}
                 </div>
-                <div class="text-lg font-bold text-purple-700">
+                <div class="text-sm font-bold text-purple-700">
                   {{ job.category_name }}
                 </div>
               </div>

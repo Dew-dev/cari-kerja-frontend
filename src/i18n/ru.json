@@ -1,6 +1,13 @@
 {
   "jobs": "Вакансии",
   "companies": "Компании",
+  "jobsByCompany": "Вакансии по компаниям",
+  "browseByCompanySubtitle": "Изучайте компании, сгруппированные по отраслям",
+  "industry": "Отрасль",
+  "all": "Все",
+  "searchCompany": "Поиск компании",
+  "searchResultsFor": "Результаты поиска для",
+  "noCompaniesAvailable": "Компании недоступны",
   "salary": "Зарплата",
   "dashboard": "Панель управления",
   "createjob": "Создать вакансию",
@@ -262,6 +269,10 @@
     "openPositions": "Открытые вакансии",
     "aboutCompany": "О компании",
     "noDescriptionProvided": "Описание не предоставлено.",
+    "noAddressProvided": "Адрес не предоставлен",
+    "noContactNameProvided": "Имя контактного лица не предоставлено",
+    "noContactPhoneProvided": "Телефон не предоставлен",
+    "noWebsiteProvided": "Веб-сайт не предоставлен",
     "contactInformation": "Контактная информация",
     "contactPerson": "Контактное лицо",
     "phone": "Телефон",
@@ -1937,5 +1948,11 @@
     "pleaseSelectFile": "Пожалуйста, выберите файл",
     "statusUpdatedSuccessfully": "Статус успешно обновлен",
     "failedToUpdateStatus": "Не удалось обновить статус"
-  }
+  },
+
+  "noDescriptionProvided": "Описание не предоставлено.",
+  "noAddressProvided": "Адрес не предоставлен",
+  "noContactNameProvided": "Контактное лицо не предоставлено",
+  "noContactPhoneProvided": "Контактный номер не предоставлен",
+  "noWebsiteProvided": "Вебсайт не предоставлен"
 }

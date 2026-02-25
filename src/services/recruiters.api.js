@@ -9,3 +9,13 @@ export const getRecruitersGroupedByIndustry = async (params = {}) => {
     throw error;
   }
 };
+
+export const getRecruiterCompanies = async (params = {}) => {
+  try {
+    const response = await api.get("/recruiters/companies", { params });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching recruiter companies:", error);
+    throw error;
+  }
+};
