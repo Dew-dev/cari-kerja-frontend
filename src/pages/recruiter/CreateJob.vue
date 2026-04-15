@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useAuthStore } from "../../stores/authstore";
+import { useAuthStore } from "@/stores/authstore";
 
 const { t } = useI18n();
 const auth = useAuthStore();

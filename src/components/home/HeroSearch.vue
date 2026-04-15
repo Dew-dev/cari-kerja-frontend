@@ -97,8 +97,8 @@
 import { useI18n } from "vue-i18n";
 import { ref, watch, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
-import { getJobPosts } from "../../services/jobposts.api";
-import api from "../../services/api";
+import { getJobPosts } from "@/services/jobposts.api";
+import api from "@/services/api";
 
 const { t } = useI18n();
 const router = useRouter();

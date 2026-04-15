@@ -1,11 +1,11 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useAuthStore } from "../../stores/authstore";
+import { useAuthStore } from "@/stores/authstore";
 
 import { push } from "notivue";
 import { useI18n } from "vue-i18n";
-import api from "../../services/api";
+import api from "@/services/api";
 const { locale, t } = useI18n();
 const loading = ref(false);
 const showPassword = ref(false);

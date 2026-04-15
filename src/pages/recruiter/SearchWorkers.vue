@@ -446,7 +446,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { searchWorkers } from '../../services/workers.api'
+import { searchWorkers } from '@/services/workers.api'
 import api from '@/services/api'
 
 const router = useRouter()

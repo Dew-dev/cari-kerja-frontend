@@ -56,7 +56,7 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { getRecruitersGroupedByIndustry } from "../../services/recruiters.api";
+import { getRecruitersGroupedByIndustry } from "@/services/recruiters.api";
 
 const router = useRouter();
 const loading = ref(false);

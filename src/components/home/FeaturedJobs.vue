@@ -72,7 +72,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { getJobPosts } from '../../services/jobposts.api';
+import { getJobPosts } from '@/services/jobposts.api';
 
 const router = useRouter();
 const jobs = ref([]);

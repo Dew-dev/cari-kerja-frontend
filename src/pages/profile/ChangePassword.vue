@@ -2,8 +2,8 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import api from "../../services/api";
-import { useAuthStore } from "../../stores/authstore";
+import api from "@/services/api";
+import { useAuthStore } from "@/stores/authstore";
 
 const router = useRouter();
 const auth = useAuthStore();

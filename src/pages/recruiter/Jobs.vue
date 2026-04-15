@@ -638,9 +638,9 @@
 import { ref, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
-import { getJobPostsSelf } from "../../services/jobposts.api";
+import { getJobPostsSelf } from "@/services/jobposts.api";
 import { useRouter } from "vue-router";
-import api from "../../services/api";
+import api from "@/services/api";
 
 const activeTab = ref("active"); // active | archived
 

@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router"
-import { useAuthStore } from "../../stores/authStore";
+import { useAuthStore } from "@/stores/authStore";
 
 const auth = useAuthStore();
 const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
