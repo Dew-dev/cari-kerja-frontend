@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useAuthStore } from "@/stores/authstore";
+import { useAuthStore } from "@/stores/authStore.js";
 
 import { push } from "notivue";
 import { useI18n } from "vue-i18n";

@@ -5,7 +5,7 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import api from "@/services/api";
 import { getSavedJobs, removeSavedJob } from "@/services/saved-jobs.api";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
 
 const router = useRouter();

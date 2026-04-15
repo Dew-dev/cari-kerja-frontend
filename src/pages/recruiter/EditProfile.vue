@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted, computed } from "vue";
 import api from "@/services/api";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/authStore.js";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";

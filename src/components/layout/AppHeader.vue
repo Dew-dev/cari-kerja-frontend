@@ -188,7 +188,7 @@ const open = ref(false);
 const mobileOpen = ref(false);
 
 import { useRoute, useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/authStore.js";
 
 const router = useRouter();
 const route = useRoute();

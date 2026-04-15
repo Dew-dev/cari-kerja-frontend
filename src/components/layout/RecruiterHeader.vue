@@ -5,7 +5,7 @@ import { useRouter } from "vue-router"
 
 import { useI18n } from "vue-i18n"
 import { computed } from "vue"
-import { useAuthStore } from "@/stores/authStore"
+import { useAuthStore } from "@/stores/authStore.js"
 // import ProfileAvatar from "@/components/common/ProfileAvatar.vue"
 const { locale,t } = useI18n()
 const router = useRouter()

@@ -51,7 +51,7 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
-import { useAuthStore } from "@/stores/authStore"
+import { useAuthStore } from "@/stores/authStore.js"
 import { saveJob, removeSavedJob } from "@/services/saved-jobs.api"
 import { push } from "notivue"
 
