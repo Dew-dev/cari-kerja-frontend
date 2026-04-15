@@ -32,8 +32,8 @@
                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8.5L12 13 3 8.5V17a2 2 0 002 2z"
               />
             </svg>
-            <a href="mailto:info@jobs.uz" class="text-blue-600 font-medium"
-              >info@jobs.uz</a
+            <a href="mailto:info@cari-kerja.id" class="text-blue-600 font-medium"
+              >info@cari-kerja.id</a
             >
           </div>
 
@@ -74,8 +74,8 @@
           <div class="mt-4 text-sm">
             <div>
               {{ $t("contactPage.emailLabel") }}
-              <a class="text-blue-600" href="mailto:support@jobs.uz"
-                >support@jobs.uz</a
+              <a class="text-blue-600" href="mailto:support@cari-kerja.id"
+                >support@cari-kerja.id</a
               >
             </div>
             <div>
@@ -95,8 +95,8 @@
           <div class="mt-4 text-sm">
             <div>
               {{ $t("contactPage.emailLabel") }}
-              <a class="text-blue-600" href="mailto:recruiters@jobs.uz"
-                >recruiters@jobs.uz</a
+              <a class="text-blue-600" href="mailto:recruiters@cari-kerja.id"
+                >recruiters@cari-kerja.id</a
               >
             </div>
             <div>
@@ -116,7 +116,7 @@
           <div class="mt-4 text-sm">
             <div>
               {{ $t("contactPage.emailLabel") }}
-              <a class="text-blue-600" href="mailto:ads@jobs.uz">ads@jobs.uz</a>
+              <a class="text-blue-600" href="mailto:ads@cari-kerja.id">ads@cari-kerja.id</a>
             </div>
           </div>
         </div>
@@ -129,8 +129,8 @@
           <div class="mt-4 text-sm">
             <div>
               {{ $t("contactPage.emailLabel") }}
-              <a class="text-blue-600" href="mailto:press@jobs.uz"
-                >press@jobs.uz</a
+              <a class="text-blue-600" href="mailto:press@cari-kerja.id"
+                >press@cari-kerja.id</a
               >
             </div>
           </div>
@@ -202,16 +202,16 @@
 
       <div class="bg-white p-6 rounded shadow-sm">
         <h2 class="font-bold text-lg mb-4">{{ $t("contactPage.ourLocation") }}</h2>
-        <div
-          class="w-full h-72 bg-gray-100 flex items-center justify-center rounded overflow-hidden"
-        >
-          <!-- Map placeholder: replace with iframe or map component if available -->
-          <div class="text-center text-gray-500">
-            {{ $t("contactPage.mapPlaceholderTitle") }}
-            <div class="text-xs mt-2">
-              {{ $t("contactPage.mapPlaceholderSubtitle") }}
-            </div>
-          </div>
+        <div class="w-full h-72 rounded overflow-hidden">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15864.26870054287!2d106.78179234035217!3d-6.254880647547309!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f165799752f3%3A0x4ad95e19454832f0!2sOscorp%20Building!5e0!3m2!1sen!2sid!4v1696846200955!5m2!1sen!2sid"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
         </div>
 
         <div class="mt-4 text-sm text-gray-600">

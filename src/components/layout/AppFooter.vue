@@ -73,7 +73,7 @@ function setLang(lang) {
 
       <!-- COPYRIGHT -->
       <div class="text-gray-500 text-xs">
-        © 2006–2026 Jobs.uz. Uzbekistan's #1 job service.
+        © 2026 Cari Kerja. All rights reserved.
       </div>
     </div>
   </footer>

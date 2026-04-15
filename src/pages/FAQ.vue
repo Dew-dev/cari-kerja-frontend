@@ -371,7 +371,7 @@ function navigate(to) {
 }
 
 function emailSupport() {
-  window.location.href = "mailto:support@jobs.uz";
+  window.location.href = "mailto:support@cari-kerja.id";
 }
 
 function callSupport() {

@@ -86,7 +86,7 @@
           <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">{{ $t("termsPage.sections.contact.title") }}</h2>
           <p class="text-gray-700">
             {{ $t("termsPage.sections.contact.bodyPrefix") }}
-            <a href="mailto:legal@jobs.uz" class="text-blue-600 hover:underline">legal@jobs.uz</a>
+            <a href="mailto:legal@cari-kerja.id" class="text-blue-600 hover:underline">legal@cari-kerja.id</a>
           </p>
         </div>
       </div>

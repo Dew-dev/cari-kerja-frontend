@@ -13,7 +13,7 @@
               ? 'text-red-500'
               : 'text-white hover:text-pink-500'
           "
-          >JOBS</span
+          >CARI </span
         >
         <span
           :class="
@@ -21,7 +21,7 @@
               ? 'text-white hover:text-pink-500'
               : 'text-red-500'
           "
-          >.UZ</span
+          >KERJA</span
         >
       </div>
 
@@ -203,8 +203,9 @@ function logout() {
 
 const languages = [
   { code: "en", label: "English" },
-  { code: "ru", label: "Русский" },
-  { code: "uz", label: "O‘zbekcha" },
+  { code: "id", label: "Indonesia" },
+  // { code: "ru", label: "Русский" },
+  // { code: "uz", label: "O'zbekcha" },
 ];
 
 function setLang(lang) {

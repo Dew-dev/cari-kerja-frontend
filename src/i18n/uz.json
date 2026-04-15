@@ -1,4 +1,4 @@
-{
+﻿{
   "jobs": "Ish o'rinlari",
   "companies": "Kompaniyalar",
   "jobsByCompany": "Kompaniyalar bo'yicha ishlar",
@@ -580,16 +580,16 @@
   },
   "about": {
     "pageTitle": "Biz haqida",
-    "title": "Jobs.uz haqida",
-    "heroDescription": "Jobs.uz — O'zbekistondagi iqtidorli mutaxassislarni şirkalar bilan bog'laydigan zamonaviy ish bozoridir. Biz shaffof va samarali platformani yaratishga fo'kus qilmoqdamiz, bu erda ham ishchi qidirayotganlar, ham ish beruvchilar o'zlariga kerakli kişini topishi mumkin.",
+    "title": "cari-kerja.id haqida",
+    "heroDescription": "cari-kerja.id — O'zbekistondagi iqtidorli mutaxassislarni şirkalar bilan bog'laydigan zamonaviy ish bozoridir. Biz shaffof va samarali platformani yaratishga fo'kus qilmoqdamiz, bu erda ham ishchi qidirayotganlar, ham ish beruvchilar o'zlariga kerakli kişini topishi mumkin.",
     "ourMission": "Bizning missiyamiz",
     "history": "Tarix",
     "missionTitle": "Bizning missiyamiz",
     "missionDescription": "Biz har bir iqtidorli mutaxassis ma'naviy ishga erishlash imkoniyatiga ega bo'lishi kerak, har bir şirkat o'z jamoasiga to'g'ri odamlarni topish huquqiga ega deb hisoblaymiz. Bizning platforma ish qidiruv jarayonini barcha ishtirokchilar uchun oddiy, tez va samarali qilish uchun ishlab chiqilgan.",
-    "missionDetails": "Biz shaffoflik orqali ishonch o'rnatish, ajoyib xizmat ko'rsatish va platforma-ni doimiy takomillashtirashga kirashgan bo'lamiz. Siz keyingi karera harakati qidirayotganingiz yoki alohida talentlarni qidirayotganingiz bo'lsin-yu, Jobs.uz sizga muvaffaqiyat olishga yordam berishga tayyormiz. Bizning o'sib borayotgan jamiyatiga turli sohalardagi ishchi qidirayotganlar va O'zbekiston iqtisodiyotini shakllantirgan progressiv şirkatlar kiradi.",
+    "missionDetails": "Biz shaffoflik orqali ishonch o'rnatish, ajoyib xizmat ko'rsatish va platforma-ni doimiy takomillashtirashga kirashgan bo'lamiz. Siz keyingi karera harakati qidirayotganingiz yoki alohida talentlarni qidirayotganingiz bo'lsin-yu, cari-kerja.id sizga muvaffaqiyat olishga yordam berishga tayyormiz. Bizning o'sib borayotgan jamiyatiga turli sohalardagi ishchi qidirayotganlar va O'zbekiston iqtisodiyotini shakllantirgan progressiv şirkatlar kiradi.",
     "ourStory": "Bizning tarixiy",
     "launched": "Ishga tushirildi",
-    "launchedDescription": "Jobs.uz oddiy tasavvur bilan asos solingan: ishchi qidirayotganlar va ish beruvchilar osonlikcha muloqot qila oladigan ishonchli platformani yaratish. Asosiy xususiyatlar va buyuk jamoa bilan boshlab, biz Uzbek ish bozorini xizmat qilish uchun platformamizni ishga tushirdik.",
+    "launchedDescription": "cari-kerja.id oddiy tasavvur bilan asos solingan: ishchi qidirayotganlar va ish beruvchilar osonlikcha muloqot qila oladigan ishonchli platformani yaratish. Asosiy xususiyatlar va buyuk jamoa bilan boshlab, biz Uzbek ish bozorini xizmat qilish uchun platformamizni ishga tushirdik.",
     "expansion": "Kuchlanish",
     "expansionDescription": "2025 yil davomida biz xususiyatlarimizni kengaytirish, foydalanuvchi tajribasini yaxshilash va jamiyatimizni rivojlantirishga e'tibor qaratdik. Biz qidiruv filtrlari, ish tafsiyalari va profil boshqarish vositalarini yaxshiladik, bu esa foydalanuvchilerimizga yaxshi xizmat ko'rsatishda yordam beradi.",
     "future": "Kelajak",
@@ -610,7 +610,7 @@
       "quickNav": "Tez navigatsiya"
     },
     "cv": {
-      "pageTitle": "Rezyumeni qanday yaxshilash kerak - Jobs.uz Yordam",
+      "pageTitle": "Rezyumeni qanday yaxshilash kerak - cari-kerja.id Yordam",
       "heroTitle": "Rezyumeni qanday yaxshilash kerak",
       "heroSubtitle": "Yaxshi tuzilgan rezyume suhbatga chaqirish uchun zarur. Rezyumengizni ajratib ko'rsatish uchun maslahat va eng yaxshi amaliyotlarni o'rganing.",
       "toc": {
@@ -684,7 +684,7 @@
           ]
         },
         "upload": {
-          "title": "Rezyumeni Jobs.uz ga yuklang",
+          "title": "Rezyumeni cari-kerja.id ga yuklang",
           "bullets": [
             "Profilingizga o'ting va rezyumengizning PDF versiyasini yuklang.",
             "So'nggi tajriba va ko'nikmalaringiz bilan yangilab turing.",
@@ -699,7 +699,7 @@
       }
     },
     "applications": {
-      "pageTitle": "Ish arizalarini kuzatish - Jobs.uz Yordam",
+      "pageTitle": "Ish arizalarini kuzatish - cari-kerja.id Yordam",
       "heroTitle": "Ish arizalarini kuzatish",
       "heroSubtitle": "Tartibli bo'ling va barcha arizalaringizni samarali kuzatib boring.",
       "toc": {
@@ -727,7 +727,7 @@
       "sections": {
         "track": {
           "title": "Arizalarni qanday kuzatish kerak",
-          "body": "Jobs.uz da ish uchun ariza topshirganingizdan keyin, profilingizda 'Yuborilgan arizalar' bo'limida barcha arizalaringizni ko'rishingiz mumkin. Har bir yozuv lavozim nomi, kompaniya, ariza topshirilgan sana va joriy holatni ko'rsatadi."
+          "body": "cari-kerja.id da ish uchun ariza topshirganingizdan keyin, profilingizda 'Yuborilgan arizalar' bo'limida barcha arizalaringizni ko'rishingiz mumkin. Har bir yozuv lavozim nomi, kompaniya, ariza topshirilgan sana va joriy holatni ko'rsatadi."
         },
         "status": {
           "title": "Ariza holati",
@@ -764,7 +764,7 @@
       }
     },
     "searchResumes": {
-      "pageTitle": "Rezyumeni qanday qidirish kerak - Jobs.uz Yordam",
+      "pageTitle": "Rezyumeni qanday qidirish kerak - cari-kerja.id Yordam",
       "heroTitle": "Rezyumeni qanday qidirish kerak",
       "heroSubtitle": "Rezyume qidiruv vositalarimiz yordamida to'g'ri nomzodlarni tez toping.",
       "toc": {
@@ -829,7 +829,7 @@
       }
     },
     "pricing": {
-      "pageTitle": "Narxlar va rejalar - Jobs.uz Yordam",
+      "pageTitle": "Narxlar va rejalar - cari-kerja.id Yordam",
       "heroTitle": "Narxlar va rejalar",
       "heroSubtitle": "Narxlash variantlarimiz haqida bilib oling va ishga olish ehtiyojlaringiz uchun eng yaxshi rejani tanlang.",
       "toc": {
@@ -902,7 +902,7 @@
       }
     },
     "register": {
-      "pageTitle": "Qanday ro'yxatdan o'tish kerak - Jobs.uz Yordam",
+      "pageTitle": "Qanday ro'yxatdan o'tish kerak - cari-kerja.id Yordam",
       "heroTitle": "Qanday ro'yxatdan o'tish kerak",
       "heroSubtitle": "Hisobingizni yarating va ish uchun ariza topshirishni yoki ish e'lonlarini joylashtirishni boshlang.",
       "toc": {
@@ -930,7 +930,7 @@
       "sections": {
         "type": {
           "title": "Hisob turini tanlang",
-          "body": "Jobs.uz da ro'yxatdan o'tishda, siz ikki hisob turi o'rtasida tanlashingiz kerak: Ish qidiruvchi yoki Rekruter/Ish beruvchi. Ish qidiruvchilar profil yaratishlari, rezyumelarini yuklashlari va ish uchun ariza topshirishlari mumkin. Rekruterlar va Ish beruvchilar ish joylashtira oladilar, rezyume qidirishlari va nomzodlarni boshqarishlari mumkin. Siz email manzili uchun faqat bitta hisob turiga ega bo'lishingiz mumkin, shuning uchun asosiy maqsadingizga asoslangan holda ehtiyotkorlik bilan tanlang.",
+          "body": "cari-kerja.id da ro'yxatdan o'tishda, siz ikki hisob turi o'rtasida tanlashingiz kerak: Ish qidiruvchi yoki Rekruter/Ish beruvchi. Ish qidiruvchilar profil yaratishlari, rezyumelarini yuklashlari va ish uchun ariza topshirishlari mumkin. Rekruterlar va Ish beruvchilar ish joylashtira oladilar, rezyume qidirishlari va nomzodlarni boshqarishlari mumkin. Siz email manzili uchun faqat bitta hisob turiga ega bo'lishingiz mumkin, shuning uchun asosiy maqsadingizga asoslangan holda ehtiyotkorlik bilan tanlang.",
           "bullets": [
             "Ish qidiruvchi: Profil yarating, rezyumengizni yuklang va ish uchun ariza topshiring.",
             "Rekruter/Ish beruvchi: Ish joylashtiring, rezyume qidiring va nomzodlarni boshqaring."
@@ -976,7 +976,7 @@
       }
     },
     "resetPassword": {
-      "pageTitle": "Parolni qanday tiklash kerak - Jobs.uz Yordam",
+      "pageTitle": "Parolni qanday tiklash kerak - cari-kerja.id Yordam",
       "heroTitle": "Parolni qanday tiklash kerak",
       "heroSubtitle": "Parolingizni unutdingizmi? Hisobingizga kirishni tiklash uchun ushbu qadamlarni bajaring.",
       "toc": {
@@ -1040,7 +1040,7 @@
           "title": "Eng yaxshi xavfsizlik amaliyotlari",
           "body": "Ushbu eng yaxshi amaliyotlarga amal qilish orqali hisobingizni xavfsiz saqlang: Boshqa veb-saytlarda ishlatmaydigan noyob, kuchli paroldan foydalaning, murakkab parollarni yaratish va saqlash uchun parol menejeridan foydalanishni ko'rib chiqing, parolingizni muntazam ravishda yangilang (har 3-6 oyda bir marta), va agar hisobingizga ruxsatsiz kirishdan shubhalansangiz, parolingizni darhol tiklang va hisob faoliyatingizni ko'rib chiqing.",
           "bullets": [
-            "Jobs.uz uchun noyob parol ishlating (boshqa saytlardan parollarni qayta ishlatmang).",
+            "cari-kerja.id uchun noyob parol ishlating (boshqa saytlardan parollarni qayta ishlatmang).",
             "Parol menejeridan foydalanishni ko'rib chiqing.",
             "Parolingizni muntazam ravishda yangilang.",
             "Agar ruxsatsiz kirishdan shubhalansangiz, parolingizni darhol tiklang."
@@ -1054,7 +1054,7 @@
       }
     },
     "reportIssue": {
-      "pageTitle": "Muammoni qanday xabar qilish kerak - Jobs.uz Yordam",
+      "pageTitle": "Muammoni qanday xabar qilish kerak - cari-kerja.id Yordam",
       "heroTitle": "Muammoni qanday xabar qilish kerak",
       "heroSubtitle": "Xato yoki texnik muammoga duch keldingizmi? Bizga xabar qiling, biz tuzatamiz.",
       "toc": {
@@ -1109,17 +1109,17 @@
         },
         "response": {
           "title": "Keyin nima bo'ladi",
-          "body": "Bizning qo'llab-quvvatlash jamoamiz hisobotingizni 1-2 ish kuni ichida ko'rib chiqadi. Agar bizga qo'shimcha ma'lumot kerak bo'lsa, email orqali sizga murojaat qilamiz. Muammo hal qilingandan keyin, sizga xabar beramiz. Jobs.uz ni yaxshilashda yordam berganingiz uchun rahmat!"
+          "body": "Bizning qo'llab-quvvatlash jamoamiz hisobotingizni 1-2 ish kuni ichida ko'rib chiqadi. Agar bizga qo'shimcha ma'lumot kerak bo'lsa, email orqali sizga murojaat qilamiz. Muammo hal qilingandan keyin, sizga xabar beramiz. cari-kerja.id ni yaxshilashda yordam berganingiz uchun rahmat!"
         }
       },
       "cta": {
         "title": "Xabar qilishga tayyormisiz?",
-        "subtitle": "Bizning aloqa formamizdan foydalaning yoki support@jobs.uz ga email yuboring.",
+        "subtitle": "Bizning aloqa formamizdan foydalaning yoki support@cari-kerja.id ga email yuboring.",
         "button": "Qo'llab-quvvatlash bilan bog'lanish"
       }
     },
     "supportedBrowsers": {
-      "pageTitle": "Qo'llab-quvvatlanadigan brauzerlar - Jobs.uz Yordam",
+      "pageTitle": "Qo'llab-quvvatlanadigan brauzerlar - cari-kerja.id Yordam",
       "heroTitle": "Qo'llab-quvvatlanadigan brauzerlar",
       "heroSubtitle": "Zamonaviy, yangilangan brauzerdan foydalanib eng yaxshi tajribani ta'minlang.",
       "toc": {
@@ -1141,13 +1141,13 @@
         },
         "mobile": {
           "title": "Mobil brauzerlar",
-          "desc": "Telefoningizda Jobs.uz dan foydalanish"
+          "desc": "Telefoningizda cari-kerja.id dan foydalanish"
         }
       },
       "sections": {
         "browsers": {
           "title": "Tavsiya etilgan brauzerlar",
-          "body": "Jobs.uz eng so'nggi versiyalarda eng yaxshi ishlaydi:",
+          "body": "cari-kerja.id eng so'nggi versiyalarda eng yaxshi ishlaydi:",
           "bullets": [
             "Google Chrome",
             "Mozilla Firefox",
@@ -1170,7 +1170,7 @@
         },
         "cookies": {
           "title": "Cookie-larni yoqing",
-          "body": "Jobs.uz sizning sessiyangizni saqlash va afzalliklaringizni eslab qolish uchun cookie-larni talab qiladi. Brauzer sozlamalaringizda cookie-lar yoqilganligiga ishonch hosil qiling. Cookie-larsiz tizimga kira olmaysiz yoki ma'lum xususiyatlardan foydalana olmaysiz."
+          "body": "cari-kerja.id sizning sessiyangizni saqlash va afzalliklaringizni eslab qolish uchun cookie-larni talab qiladi. Brauzer sozlamalaringizda cookie-lar yoqilganligiga ishonch hosil qiling. Cookie-larsiz tizimga kira olmaysiz yoki ma'lum xususiyatlardan foydalana olmaysiz."
         },
         "cache": {
           "title": "Keshni tozalang",
@@ -1184,7 +1184,7 @@
         },
         "mobile": {
           "title": "Mobil brauzerlar",
-          "body": "Jobs.uz to'liq moslashuvchan va mobil qurilmalarda ishlaydi. Biz foydalanishni tavsiya qilamiz:",
+          "body": "cari-kerja.id to'liq moslashuvchan va mobil qurilmalarda ishlaydi. Biz foydalanishni tavsiya qilamiz:",
           "bullets": [
             "iOS da Safari",
             "Android da Chrome",
@@ -1200,9 +1200,9 @@
       }
     },
     "apply": {
-      "pageTitle": "Ish uchun qanday ariza topshirish kerak - Jobs.uz Yordam",
+      "pageTitle": "Ish uchun qanday ariza topshirish kerak - cari-kerja.id Yordam",
       "heroTitle": "Ish uchun qanday ariza topshirish kerak",
-      "heroSubtitle": "Jobs.uz da ish uchun ariza topshirish va suhbatlarga chaqirilish bo'yicha to'liq qo'llanma.",
+      "heroSubtitle": "cari-kerja.id da ish uchun ariza topshirish va suhbatlarga chaqirilish bo'yicha to'liq qo'llanma.",
       "toc": {
         "profile": {
           "title": "Profilingizni to'ldiring",
@@ -1260,7 +1260,7 @@
             "Kontakt ma'lumotlaringizni va professional havolalarni qo'shing (LinkedIn, portfel va boshqalar)."
           ],
           "tipLabel": "Professional maslahat",
-          "tipBody": "Bir necha ishlarga tez ariza topshirish uchun har safar qayta yuklash kerakmas qilib, rezyumengizni Jobs.uz profilingizga yuklang."
+          "tipBody": "Bir necha ishlarga tez ariza topshirish uchun har safar qayta yuklash kerakmas qilib, rezyumengizni cari-kerja.id profilingizga yuklang."
         },
         "search": {
           "title": "Ish qidiring",
@@ -1350,9 +1350,9 @@
       }
     },
     "postJob": {
-      "pageTitle": "Ish e'lonini qanday joylashtirish kerak - Jobs.uz Yordam",
+      "pageTitle": "Ish e'lonini qanday joylashtirish kerak - cari-kerja.id Yordam",
       "heroTitle": "Ish e'lonini qanday joylashtirish kerak",
-      "heroSubtitle": "Jobs.uz da samarali ish e'lonlarini joylashtirish uchun ish beruvchilar va rekruterlar uchun to'liq qo'llanma.",
+      "heroSubtitle": "cari-kerja.id da samarali ish e'lonlarini joylashtirish uchun ish beruvchilar va rekruterlar uchun to'liq qo'llanma.",
       "toc": {
         "start": {
           "title": "Boshlash",
@@ -1395,7 +1395,7 @@
         "start": {
           "title": "Boshlash",
           "cardTitle": "Birinchi ishingizni joylashtirish qadamlari",
-          "body": "Jobs.uz da ish joylashtirish uchun sizga rekruter yoki ish beruvchi hisobi kerak:",
+          "body": "cari-kerja.id da ish joylashtirish uchun sizga rekruter yoki ish beruvchi hisobi kerak:",
           "bullets": [
             "Agar hali ro'yxatdan o'tmagan bo'lsangiz, rekruter/ish beruvchi sifatida ro'yxatdan o'ting.",
             "Kompaniya profilini to'ldiring (logotip, tavsif, veb-sayt va h.k. qo'shing).",
@@ -1536,7 +1536,7 @@
     "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
     "introduction": {
       "title": "1. Kirish",
-      "content": "Jobs.uz (\"biz\" yoki \"bizning\") Jobs.uz veb-saytini boshqaradi. Ushbu sahifa siz xizmatdan foydalanganingizda shaxsiy ma'lumotlarni yig'ish, foydalanish va oshkor qilish bo'yicha bizning siyosatini va ularni qanday boshqarish haqida tushuntirib beradi."
+      "content": "cari-kerja.id (\"biz\" yoki \"bizning\") cari-kerja.id veb-saytini boshqaradi. Ushbu sahifa siz xizmatdan foydalanganingizda shaxsiy ma'lumotlarni yig'ish, foydalanish va oshkor qilish bo'yicha bizning siyosatini va ularni qanday boshqarish haqida tushuntirib beradi."
     },
     "informationCollection": {
       "title": "2. Ma'lumot yig'ish va foydalanish",
@@ -1612,7 +1612,7 @@
       "title": "11. Biz bilan bog'lanish",
       "intro": "Ushbu maxfiylik siyosati haqida savollar bo'lsa, iltimos biz bilan bog'lanish:",
       "emailLabel": "Elektron pochta",
-      "email": "privacy@jobs.uz",
+      "email": "privacy@cari-kerja.id",
       "addressLabel": "Manzil",
       "address": "Toshkent, O'zbekiston"
     }
@@ -1622,38 +1622,38 @@
     "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
     "agreement": {
       "title": "1. Shartlarga rozilik",
-      "content": "Jobs.uz saytiga kirish va undan foydalanish orqali siz ushbu Xizmat ko'rsatish shartlariga rozi ekanligingizni tasdiqlaysiz. Agar rozilik bermasangiz, iltimos xizmatdan foydalanmang."
+      "content": "cari-kerja.id saytiga kirish va undan foydalanish orqali siz ushbu Xizmat ko'rsatish shartlariga rozi ekanligingizni tasdiqlaysiz. Agar rozilik bermasangiz, iltimos xizmatdan foydalanmang."
     },
     "useLicense": {
       "title": "2. Foydalanish litsenziyasi",
-      "content": "Jobs.uz-dagi materiallarni shaxsiy, notijorat maqsadlarida vaqtincha yuklab olishga ruxsat beriladi. Bu egallikni o‘tkazish emas, litsenziya hisoblanadi.",
+      "content": "cari-kerja.id-dagi materiallarni shaxsiy, notijorat maqsadlarida vaqtincha yuklab olishga ruxsat beriladi. Bu egallikni o‘tkazish emas, litsenziya hisoblanadi.",
       "prohibitions": [
         "Materiallarni o'zgartirish yoki nusxalash",
         "Materiallarni tijorat maqsadlarida yoki ommaviy ko'rsatish uchun ishlatish",
-        "Jobs.uzdagi dasturiy ta'minotni dekompilyatsiya qilish yoki qayta tahlil qilishga harakat qilish",
+        "cari-kerja.iddagi dasturiy ta'minotni dekompilyatsiya qilish yoki qayta tahlil qilishga harakat qilish",
         "Avtorsk huquq yoki boshqa egalik belgilanishlarini olib tashlash",
         "Materiallarni boshqa shaxsga o'tkazish yoki boshqa serverda aks ettirish"
       ]
     },
     "disclaimer": {
       "title": "3. Majburiyatdan voz kechish",
-      "content": "Jobs.uzdagi materiallar \"boshqacha ko‘rsatilmaguncha\" holatda taqdim etiladi. Jobs.uz hech qanday kafolat bermaydi va barcha mumkin bo‘lgan kafolatlardan voz kechadi."
+      "content": "cari-kerja.iddagi materiallar \"boshqacha ko‘rsatilmaguncha\" holatda taqdim etiladi. cari-kerja.id hech qanday kafolat bermaydi va barcha mumkin bo‘lgan kafolatlardan voz kechadi."
     },
     "limitations": {
       "title": "4. Majburiyatlarning cheklanishi",
-      "content": "Hech qanday holatda Jobs.uz yoki uning yetkazib beruvchilari sayt materiallaridan foydalanish yoki foydalanib bo'lmasligidan kelib chiqadigan zarar uchun javobgar bo'lmaydi."
+      "content": "Hech qanday holatda cari-kerja.id yoki uning yetkazib beruvchilari sayt materiallaridan foydalanish yoki foydalanib bo'lmasligidan kelib chiqadigan zarar uchun javobgar bo'lmaydi."
     },
     "accuracy": {
       "title": "5. Materiallarning to'g'riligi",
-      "content": "Jobs.uzdagi materiallarda texnik yoki boshqa xatolar bo‘lishi mumkin. Jobs.uz ularning aniqligi, to‘liqligi yoki dolzarbligini kafolatlamaydi va o‘zgartirish huquqini o‘zida saqlaydi."
+      "content": "cari-kerja.iddagi materiallarda texnik yoki boshqa xatolar bo‘lishi mumkin. cari-kerja.id ularning aniqligi, to‘liqligi yoki dolzarbligini kafolatlamaydi va o‘zgartirish huquqini o‘zida saqlaydi."
     },
     "links": {
       "title": "6. Havolalar",
-      "content": "Jobs.uz tashqi saytlarning mazmuni uchun javobgar emas. Havola mavjudligi sayt tomonidan ma'qullashni anglatmaydi. Tashqi saytlardan foydalanish sizning mas'uliyatingizda."
+      "content": "cari-kerja.id tashqi saytlarning mazmuni uchun javobgar emas. Havola mavjudligi sayt tomonidan ma'qullashni anglatmaydi. Tashqi saytlardan foydalanish sizning mas'uliyatingizda."
     },
     "modifications": {
       "title": "7. O'zgartirishlar",
-      "content": "Jobs.uz ushbu Shartlarni istalgan vaqtda o'zgartirishi mumkin. Saytdan foydalanish orqali siz amaldagi Shartlarga rozi bo'lasiz."
+      "content": "cari-kerja.id ushbu Shartlarni istalgan vaqtda o'zgartirishi mumkin. Saytdan foydalanish orqali siz amaldagi Shartlarga rozi bo'lasiz."
     },
     "governingLaw": {
       "title": "8. Tatbiq etiluvchi qonun",
@@ -1682,11 +1682,11 @@
       "title": "12. Biz bilan bog'laning",
       "content": "Agar Ushbu Xizmat ko'rsatish shartlari bo'yicha savollaringiz bo'lsa, biz bilan bog'laning:",
       "emailLabel": "Email",
-      "email": "legal@jobs.uz"
+      "email": "legal@cari-kerja.id"
     }
   },
   "contactPage": {
-    "pageTitle": "Job Portal - Aloqa",
+    "pageTitle": "Cari Kerja - Aloqa",
     "title": "Biz bilan bog'laning",
     "subtitle": "Savolingiz bormi yoki yordam kerakmi? Jamoamizga murojaat qiling — biz ish beruvchilar va ish izlovchilarga yordam beramiz.",
     "mainOffice": "Asosiy ofis",
@@ -1722,49 +1722,49 @@
     "mapPlaceholderTitle": "Xarita uchun joy",
     "mapPlaceholderSubtitle": "Bu yerga Google Maps iframe yoki statik xarita qo'shing",
     "postalAddress": "Pochta manzili",
-    "postalAddressLine": "123 Jobs Street, Cityname, Country",
+    "postalAddressLine": "Oscorp Building, Jl. TB Simatupang, Jakarta Selatan, 12430",
     "urgentPrefix": "Shoshilinch savollar bo'lsa qo'ng'iroq qiling",
     "urgentSuffix": "Boshqa masalalar uchun yuqoridagi formadan foydalaning yoki bo'limlarimizdan biriga email yuboring."
   },
   "termsPage": {
-    "pageTitle": "Foydalanish shartlari - Jobs.uz",
+    "pageTitle": "Foydalanish shartlari - cari-kerja.id",
     "heroTitle": "Foydalanish shartlari",
     "lastUpdated": "Oxirgi yangilanish: 4-fevral, 2026",
     "sections": {
       "agreement": {
         "title": "1. Shartlarga rozilik",
-        "body": "Jobs.uz sayti va platformasiga kirish va undan foydalanish orqali siz ushbu kelishuv shartlarini qabul qilasiz va ularga rioya qilishga rozilik bildirasiz. Agar yuqoridagi shartlarga rozi bo'lmasangiz, iltimos, ushbu xizmatdan foydalanmang."
+        "body": "cari-kerja.id sayti va platformasiga kirish va undan foydalanish orqali siz ushbu kelishuv shartlarini qabul qilasiz va ularga rioya qilishga rozilik bildirasiz. Agar yuqoridagi shartlarga rozi bo'lmasangiz, iltimos, ushbu xizmatdan foydalanmang."
       },
       "license": {
         "title": "2. Foydalanish litsenziyasi",
-        "body": "Jobs.uz platformasidagi materiallarning (ma'lumot yoki dasturiy ta'minot) bitta nusxasini shaxsiy, notijorat va vaqtincha ko'rish uchun vaqtincha yuklab olishga ruxsat beriladi. Bu litsenziya berilishidir, mulk huquqini o'tkazish emas, va ushbu litsenziya bo'yicha siz quyidagilarni qila olmaysiz:",
+        "body": "cari-kerja.id platformasidagi materiallarning (ma'lumot yoki dasturiy ta'minot) bitta nusxasini shaxsiy, notijorat va vaqtincha ko'rish uchun vaqtincha yuklab olishga ruxsat beriladi. Bu litsenziya berilishidir, mulk huquqini o'tkazish emas, va ushbu litsenziya bo'yicha siz quyidagilarni qila olmaysiz:",
         "bullets": [
           "Materiallarni o'zgartirish yoki nusxalash",
           "Materiallardan tijorat maqsadida yoki ommaviy namoyish uchun foydalanish",
-          "Jobs.uz dagi har qanday dasturiy ta'minotni dekompilyatsiya qilish yoki teskari muhandislik qilishga urinish",
+          "cari-kerja.id dagi har qanday dasturiy ta'minotni dekompilyatsiya qilish yoki teskari muhandislik qilishga urinish",
           "Materiallardan mualliflik huquqi yoki boshqa mulkiy eslatmalarni olib tashlash",
           "Materiallarni boshqa shaxslarga o'tkazish yoki ularni boshqa serverda “mirror” qilish"
         ]
       },
       "disclaimer": {
         "title": "3. Mas'uliyatdan voz kechish",
-        "body": "Jobs.uz saytidagi materiallar “mavjud holatda” taqdim etiladi. Jobs.uz hech qanday ochiq yoki nazarda tutilgan kafolat bermaydi va shu bilan savdo sifatiga yaroqlilik, ma'lum bir maqsadga muvofiqlik yoki intellektual mulk huquqlarini buzmaslik kabi barcha boshqa kafolatlardan, cheklovlarsiz, voz kechadi."
+        "body": "cari-kerja.id saytidagi materiallar “mavjud holatda” taqdim etiladi. cari-kerja.id hech qanday ochiq yoki nazarda tutilgan kafolat bermaydi va shu bilan savdo sifatiga yaroqlilik, ma'lum bir maqsadga muvofiqlik yoki intellektual mulk huquqlarini buzmaslik kabi barcha boshqa kafolatlardan, cheklovlarsiz, voz kechadi."
       },
       "limitations": {
         "title": "4. Cheklovlar",
-        "body": "Hech qanday holatda Jobs.uz yoki uning yetkazib beruvchilari Jobs.uz dagi materiallardan foydalanish yoki foydalana olmaslik natijasida kelib chiqadigan har qanday zararlar (jumladan, ma'lumot yoki foyda yo'qotilishi yoki biznes faoliyatining to'xtashi tufayli yuzaga keladigan zararlar) uchun javobgar bo'lmaydi, hatto Jobs.uz yoki uning vakolatli vakili bunday zarar ehtimoli haqida og'zaki yoki yozma ravishda xabardor qilingan bo'lsa ham."
+        "body": "Hech qanday holatda cari-kerja.id yoki uning yetkazib beruvchilari cari-kerja.id dagi materiallardan foydalanish yoki foydalana olmaslik natijasida kelib chiqadigan har qanday zararlar (jumladan, ma'lumot yoki foyda yo'qotilishi yoki biznes faoliyatining to'xtashi tufayli yuzaga keladigan zararlar) uchun javobgar bo'lmaydi, hatto cari-kerja.id yoki uning vakolatli vakili bunday zarar ehtimoli haqida og'zaki yoki yozma ravishda xabardor qilingan bo'lsa ham."
       },
       "accuracy": {
         "title": "5. Materiallarning aniqligi",
-        "body": "Jobs.uz saytidagi materiallar texnik, tipografik yoki fotografik xatolarni o'z ichiga olishi mumkin. Jobs.uz saytida joylashgan materiallarning aniqligi, to'liqligi yoki dolzarbligini kafolatlamaydi. Jobs.uz istalgan vaqtda ogohlantirishsiz sayt materiallariga o'zgartirishlar kiritishi mumkin."
+        "body": "cari-kerja.id saytidagi materiallar texnik, tipografik yoki fotografik xatolarni o'z ichiga olishi mumkin. cari-kerja.id saytida joylashgan materiallarning aniqligi, to'liqligi yoki dolzarbligini kafolatlamaydi. cari-kerja.id istalgan vaqtda ogohlantirishsiz sayt materiallariga o'zgartirishlar kiritishi mumkin."
       },
       "links": {
         "title": "6. Havolalar",
-        "body": "Jobs.uz o'z saytiga havola qilingan barcha saytlarni ko'rib chiqmagan va bunday havolalangan saytlarning mazmuni uchun javobgar emas. Har qanday havolaning kiritilishi Jobs.uz tomonidan saytni ma'qullashni anglatmaydi. Bunday havolalangan saytlarni foydalanish foydalanuvchining o'z tavakkalchiligida."
+        "body": "cari-kerja.id o'z saytiga havola qilingan barcha saytlarni ko'rib chiqmagan va bunday havolalangan saytlarning mazmuni uchun javobgar emas. Har qanday havolaning kiritilishi cari-kerja.id tomonidan saytni ma'qullashni anglatmaydi. Bunday havolalangan saytlarni foydalanish foydalanuvchining o'z tavakkalchiligida."
       },
       "modifications": {
         "title": "7. O'zgartirishlar",
-        "body": "Jobs.uz o'z sayti uchun ushbu foydalanish shartlarini istalgan vaqtda ogohlantirishsiz qayta ko'rib chiqishi mumkin. Ushbu saytdan foydalanish orqali siz ushbu foydalanish shartlarining amaldagi versiyasiga rioya qilishga rozilik bildirasiz."
+        "body": "cari-kerja.id o'z sayti uchun ushbu foydalanish shartlarini istalgan vaqtda ogohlantirishsiz qayta ko'rib chiqishi mumkin. Ushbu saytdan foydalanish orqali siz ushbu foydalanish shartlarining amaldagi versiyasiga rioya qilishga rozilik bildirasiz."
       },
       "governing": {
         "title": "8. Qo'llaniladigan qonun",

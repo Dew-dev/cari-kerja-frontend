@@ -1,0 +1,1648 @@
+﻿{
+  "jobs": "Lowongan",
+  "companies": "Perusahaan",
+  "jobsByCompany": "Lowongan per Perusahaan",
+  "browseByCompanySubtitle": "Jelajahi perusahaan berdasarkan industri",
+  "industry": "Industri",
+  "all": "Semua",
+  "searchCompany": "Cari perusahaan",
+  "searchResultsFor": "Hasil pencarian untuk",
+  "noCompaniesAvailable": "Tidak ada perusahaan tersedia",
+  "salary": "Gaji",
+  "dashboard": "Dasbor",
+  "createjob": "Buat Lowongan",
+  "editjob": "Edit Lowongan",
+  "createJobSubtitle": "Isi detail untuk menerbitkan lowongan kerja baru",
+  "editJobSubtitle": "Isi detail untuk memperbarui lowongan kerja",
+  "applicants": "Pelamar",
+  "login": "Masuk",
+  "your": "Milik",
+  "Profile": "Profil",
+  "apply": "Lamar",
+  "signUp": "Daftar",
+  "dontHaveAccount": "Belum punya akun?",
+  "signing": "Sedang masuk...",
+  "signingUp": "Sedang mendaftar...",
+  "find": "Cari",
+  "next": "Berikutnya",
+  "previous": "Sebelumnya",
+  "allLocations": "Semua Lokasi",
+  "searchLocation": "Cari lokasi...",
+  "browseByCity": "Cari Lowongan per Kota",
+  "browseByCitySubtitle": "Temukan lowongan di kotamu atau jelajahi peluang di seluruh negeri",
+  "searchCities": "Cari kota...",
+  "cities": "Kota",
+  "alphabetically": "Abjad",
+  "regionally": "Per Wilayah",
+  "noCitiesFound": "Kota tidak ditemukan",
+  "tryDifferentSearch": "Coba kata kunci lain",
+  "resumeGenerator": "Pembuat CV",
+  "resumeGeneratorSubtitle": "Buat CV profesional dalam hitungan menit",
+  "personalInformation": "Informasi Pribadi",
+  "fullName": "Nama Lengkap",
+  "enterFullName": "Masukkan nama lengkap Anda",
+  "enterEmail": "Masukkan email Anda",
+  "phone": "Telepon",
+  "enterPhone": "Masukkan nomor telepon Anda",
+  "address": "Alamat",
+  "enterAddress": "Masukkan alamat Anda",
+  "professionalSummary": "Ringkasan Profesional",
+  "enterSummary": "Tulis ringkasan singkat tentang diri Anda",
+  "workExperience": "Pengalaman Kerja",
+  "jobTitle": "Jabatan",
+  "enterJobTitle": "Masukkan jabatan",
+  "company": "Perusahaan",
+  "enterCompany": "Masukkan nama perusahaan",
+  "startDate": "Tanggal Mulai",
+  "endDate": "Tanggal Selesai",
+  "currentlyWorking": "Masih bekerja di sini",
+  "description": "Deskripsi",
+  "enterDescription": "Deskripsikan tanggung jawab dan pencapaian Anda",
+  "remove": "Hapus",
+  "addExperience": "Tambah Pengalaman",
+  "education": "Pendidikan",
+  "degree": "Gelar",
+  "enterDegree": "Masukkan gelar/kualifikasi",
+  "institution": "Institusi",
+  "enterInstitution": "Masukkan nama sekolah/universitas",
+  "addEducation": "Tambah Pendidikan",
+  "skills": "Keahlian",
+  "enterSkill": "Masukkan keahlian",
+  "add": "Tambah",
+  "preview": "Pratinjau",
+  "downloadPDF": "Unduh PDF",
+  "profileDataLoaded": "Data profil dimuat ke CV",
+  "profileAutofillHint": "Gunakan data profil Anda untuk mengisi otomatis CV ini",
+  "loadFromProfile": "Muat dari Profil",
+  "loadingProfileData": "Memuat...",
+  "nav": {
+    "searchJobs": "Cari lowongan",
+    "postResume": "Posting CV",
+    "forEmployers": "Untuk perusahaan",
+    "signIn": "Masuk",
+    "language": "Bahasa"
+  },
+  "home": {
+    "title": "Portal lowongan #1 di Indonesia",
+    "subtitle": "Temukan peluangmu di sini!",
+    "findJobs": "Cari lowongan",
+    "pickUpJobs": "Ambil lowongan",
+    "keywordPlaceholder": "Jabatan atau kata kunci",
+    "allUkraine": "Seluruh Indonesia",
+    "home": "Beranda"
+  },
+  "footer": {
+    "resources": "Sumber Daya",
+    "contact": "Kontak",
+    "about": "Tentang",
+    "career": "Karir",
+    "news": "Berita",
+    "help": "Bantuan",
+    "terms": "Syarat penggunaan",
+    "faq": "FAQ",
+    "termsOfService": "Syarat Layanan",
+    "privacyPolicy": "Kebijakan Privasi"
+  },
+  "register": {
+    "titleRecruiter": "Pendaftaran Perekrut",
+    "title": "Buat Akun",
+    "subtitle": "Bergabunglah hari ini dan mulai langkah pertama menuju karir impianmu.",
+    "haveAccount": "Sudah punya akun?",
+    "signIn": "Masuk",
+    "personalInfo": "Informasi Pribadi",
+    "firstName": "Nama Depan",
+    "lastName": "Nama Belakang",
+    "fullName": "Nama Lengkap",
+    "username": "Nama Pengguna",
+    "email": "Alamat Email",
+    "password": "Kata Sandi",
+    "confirmPassword": "Konfirmasi Kata Sandi",
+    "registerButton": "Daftar",
+    "loading": "Mendaftar...",
+    "companyName": "Nama Perusahaan",
+    "contactNumber": "Nomor Kontak",
+    "contactPerson": "Narahubung",
+    "signUp": "Daftar",
+    "noAccount": "Belum punya akun?"
+  },
+  "contactActions": {
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "call": "Telepon"
+  },
+  "job_description": "Deskripsi Pekerjaan",
+  "job_title": "Jabatan",
+  "add_tag": "Tambah tag",
+  "select_currency": "Pilih Mata Uang",
+  "min_salary": "Gaji Min",
+  "max_salary": "Gaji Maks",
+  "select": "Pilih",
+  "job_type": "Jenis Pekerjaan",
+  "job_level": "Level Pekerjaan",
+  "deadline": "Batas Waktu",
+  "advanced_info": "Informasi Lanjutan",
+  "job_title_placeholder": "Masukkan jabatan di sini",
+  "job_description_placeholder": "Masukkan deskripsi pekerjaan di sini",
+  "tags": "Tag",
+  "location": "Lokasi",
+  "submit": "Kirim",
+  "province": "Provinsi",
+  "city": "Kota",
+  "post_job": "Posting Lowongan",
+  "edit_job": "Edit Lowongan",
+  "category": "Kategori",
+  "select_category": "Pilih Kategori",
+  "activeJobs": "Lowongan Aktif",
+  "archivedJobs": "Lowongan Diarsipkan",
+  "noJobsFound": "Tidak ada lowongan ditemukan.",
+  "loadingJobs": "Memuat lowongan...",
+  "managejobs": "Kelola Lowongan Kerja Anda",
+  "status": "Status",
+  "actions": "Aksi",
+  "clickHere": "Klik Di Sini",
+  "forgotyourPassword": "Lupa Kata Sandi?",
+  "forgotPasswordSubtitle": "Masukkan email Anda untuk mereset kata sandi.",
+  "resetPassword": "Reset Kata Sandi",
+  "sendingResetLink": "Mengirim tautan reset...",
+  "backToLogin": "Kembali ke Login",
+  "resetLinkSent": "Tautan reset kata sandi telah dikirim ke email Anda.",
+  "newPassword": "Kata Sandi Baru",
+  "confirmNewPassword": "Konfirmasi Kata Sandi Baru",
+  "updatePassword": "Perbarui Kata Sandi",
+  "updatingPassword": "Memperbarui kata sandi...",
+  "passwordUpdated": "Kata sandi Anda berhasil diperbarui.",
+  "goToLogin": "Ke Halaman Login",
+  "saveChanges": "Simpan Perubahan",
+  "companyLogo": "Logo Perusahaan",
+  "faq": {
+    "title": "Bantuan & FAQ",
+    "subtitle": "Jawaban atas pertanyaan umum untuk pencari kerja dan perusahaan.",
+    "searchPlaceholder": "Cari artikel bantuan, mis. 'cara melamar', 'posting lowongan'",
+    "searchButton": "Cari",
+    "categoriesHeading": "Kategori Populer",
+    "resultSingular": "hasil",
+    "resultPlural": "hasil",
+    "resultsFoundFor": "ditemukan untuk",
+    "noResults": "Tidak ada hasil untuk \"{query}\" — coba kata kunci lain",
+    "categories": {
+      "seekers": {
+        "title": "Untuk pencari kerja",
+        "description": "Melamar, profil, dan CV",
+        "links": {
+          "apply": "Cara melamar pekerjaan",
+          "cv": "Membuat dan mengedit CV",
+          "applications": "Mengelola lamaran"
+        }
+      },
+      "employers": {
+        "title": "Untuk perusahaan",
+        "description": "Posting lowongan, kelola kandidat",
+        "links": {
+          "postJob": "Posting lowongan",
+          "searchResumes": "Cari CV",
+          "pricing": "Paket & harga"
+        }
+      },
+      "account": {
+        "title": "Akun & pengaturan",
+        "description": "Masuk, pendaftaran, email",
+        "links": {
+          "register": "Daftar / Masuk",
+          "reset": "Reset kata sandi"
+        }
+      },
+      "technical": {
+        "title": "Masalah teknis",
+        "description": "Masalah situs dan laporan bug",
+        "links": {
+          "report": "Laporkan bug",
+          "browsers": "Browser yang didukung"
+        }
+      }
+    },
+    "faqs": [
+      {
+        "q": "Bagaimana cara membuat akun?",
+        "a": "Untuk membuat akun, klik <strong>Daftar</strong> dan ikuti langkah-langkahnya. Anda bisa mendaftar sebagai pencari kerja atau perusahaan.",
+        "tag": "Akun"
+      },
+      {
+        "q": "Bagaimana cara melamar pekerjaan?",
+        "a": "Buka lowongan dan klik <strong>Lamar</strong>. Anda bisa melampirkan CV atau menggunakan profil untuk mengirim lamaran.",
+        "tag": "Lowongan"
+      },
+      {
+        "q": "Bagaimana cara memposting lowongan?",
+        "a": "Perusahaan harus mendaftar dan memverifikasi akun. Setelah masuk, buka <strong>Posting Lowongan</strong> dan isi formulirnya.",
+        "tag": "Perusahaan"
+      },
+      {
+        "q": "Saya lupa kata sandi — apa yang harus dilakukan?",
+        "a": "Gunakan tautan <strong>Lupa Kata Sandi</strong> di halaman login untuk menerima email dengan instruksi reset.",
+        "tag": "Akun"
+      }
+    ],
+    "popular": [
+      {
+        "title": "Cara melamar pekerjaan",
+        "excerpt": "Panduan langkah demi langkah untuk pelamar"
+      },
+      {
+        "title": "Memposting lowongan: praktik terbaik",
+        "excerpt": "Tips menulis iklan lowongan yang efektif"
+      }
+    ],
+    "contact": {
+      "stillNeedHelp": "Masih butuh bantuan?",
+      "supportSubtitle": "Hubungi tim dukungan kami dan kami akan membalas dalam 2 hari kerja.",
+      "emailSupport": "Email dukungan",
+      "callUs": "Hubungi kami"
+    }
+  },
+  "recruiterProfile": "Profil Perekrut",
+  "recruiterPublic": {
+    "visitWebsite": "Kunjungi Website",
+    "openPositions": "Posisi Terbuka",
+    "aboutCompany": "Tentang Perusahaan",
+    "noDescriptionProvided": "Tidak ada deskripsi.",
+    "noAddressProvided": "Alamat tidak tersedia",
+    "noContactNameProvided": "Nama kontak tidak tersedia",
+    "noContactPhoneProvided": "Telepon kontak tidak tersedia",
+    "noWebsiteProvided": "Website tidak tersedia",
+    "contactInformation": "Informasi Kontak",
+    "contactPerson": "Narahubung",
+    "phone": "Telepon",
+    "address": "Alamat",
+    "openPositionsCount": "Posisi Terbuka ({count})",
+    "noActiveJobs": "Tidak ada lowongan aktif",
+    "checkBackLater": "Kembali lagi nanti untuk peluang baru",
+    "posted": "Diposting",
+    "deadline": "Batas Waktu",
+    "failedToLoad": "Gagal memuat profil perekrut"
+  },
+  "visibleToCandidates": "Informasi ini akan terlihat oleh kandidat",
+  "fileTypeAndSize": "JPG atau PNG, maks 2MB",
+  "companyWebsite": "Website Perusahaan",
+  "contactName": "Nama Kontak",
+  "contactPhone": "Telepon Kontak",
+  "companyAddress": "Alamat Perusahaan",
+  "selectIndustry": "Pilih Industri",
+  "companyDescription": "Deskripsi Perusahaan",
+  "changePassword": "Ubah Kata Sandi",
+  "applied_at": "Dilamar pada",
+  "applicationStatus": "Status Lamaran",
+  "back": "Kembali",
+  "loading": "Memuat",
+  "loadingDots": "Memuat...",
+  "employmentType": "Jenis Pekerjaan",
+  "jobDescription": "Deskripsi Pekerjaan",
+  "requirements": "Persyaratan",
+  "responsibilities": "Tanggung Jawab",
+  "benefits": "Tunjangan",
+  "aboutCompany": "Tentang Perusahaan",
+  "viewCompanyProfile": "Lihat Profil Perusahaan",
+  "similarJobs": "Lowongan Serupa",
+  "jobNotFound": "Lowongan Tidak Ditemukan",
+  "backToJobListings": "Kembali ke Daftar Lowongan",
+  "coverLetter": "Surat Lamaran",
+  "resume": "CV",
+  "viewDownloadResume": "Lihat / Unduh CV",
+  "noCoverLetterProvided": "Tidak ada surat lamaran.",
+  "noResumeUploaded": "Belum ada CV yang diunggah.",
+  "internalNotes": "Catatan Internal",
+  "addNote": "Tambah Catatan",
+  "addInternalNote": "Tambah catatan internal...",
+  "candidate": "Kandidat",
+  "noApplicantsYet": "Belum ada pelamar",
+  "viewResume": "Lihat CV",
+  "noResumeProvided": "Tidak ada CV",
+  "publishJob": "Terbitkan Lowongan",
+  "closeJob": "Tutup Lowongan",
+  "viewJob": "Lihat lowongan",
+  "viewApplicants": "Lihat pelamar",
+  "noArchivedJobs": "Tidak ada lowongan diarsipkan.",
+  "noActiveJobs": "Tidak ada lowongan aktif. Buat lowongan pertamamu!",
+  "publish": "Terbitkan",
+  "close": "Tutup",
+  "categories": "Kategori",
+  "allCategories": "Semua Kategori",
+  "employmentTypes": "Jenis Pekerjaan",
+  "filter": "Filter",
+  "foundJobVacancies": "Ditemukan {count} Lowongan",
+  "latest": "Terbaru",
+  "oldest": "Terlama",
+  "highestSalary": "Gaji Tertinggi",
+  "viewMoreCategories": "Lihat lebih banyak kategori",
+  "viewLessCategories": "Tampilkan lebih sedikit kategori",
+  "alreadyApplied": "Sudah Dilamar",
+  "applyNow": "Lamar Sekarang",
+  "applying": "Melamar...",
+  "loadingApplicants": "Memuat pelamar…",
+  "postedJustNow": "Baru saja diposting",
+  "postedAgo": "Diposting {time} lalu",
+  "failedToUpdateStatus": "Gagal memperbarui status pelamar",
+  "failed": "Gagal",
+  "resetFilters": "Reset filter",
+  "sortBy": "Urutkan",
+  "add_requirement": "Tambah persyaratan",
+  "add_responsibility": "Tambah tanggung jawab",
+  "add_benefit": "Tambah tunjangan",
+  "questions": "Pertanyaan",
+  "add_question": "Tambah pertanyaan",
+  "question": "Pertanyaan",
+  "question_text": "Teks pertanyaan",
+  "question_type": "Tipe pertanyaan",
+  "type_text": "Teks",
+  "type_options": "Pilihan",
+  "type_rating": "Rating",
+  "type_multiple_choice": "Pilihan ganda",
+  "type_boolean": "Ya/Tidak",
+  "options": "Pilihan",
+  "options_placeholder": "Pilihan dipisahkan koma",
+  "required": "Wajib",
+  "optional": "Opsional",
+  "applyForJob": "Lamar Pekerjaan",
+  "selectResume": "Pilih CV",
+  "chooseResume": "Pilih CV",
+  "noResumesAvailable": "Belum ada CV. Buat CV terlebih dahulu.",
+  "coverLetterPlaceholder": "Ceritakan mengapa Anda cocok untuk posisi ini...",
+  "additionalQuestions": "Pertanyaan Tambahan",
+  "yourAnswer": "Jawaban Anda...",
+  "yes": "Ya",
+  "no": "Tidak",
+  "selectOption": "Pilih opsi",
+  "cancel": "Batal",
+  "submitApplication": "Kirim Lamaran",
+  "submitting": "Mengirim...",
+  "applicationSubmittedSuccess": "Lamaran berhasil dikirim! Perekrut akan segera meninjau lamaran Anda.",
+  "applicationSubmitFailed": "Gagal mengirim lamaran. Silakan coba lagi.",
+  "recruitersCannotApply": "Perekrut tidak bisa melamar pekerjaan. Fitur ini hanya untuk pencari kerja.",
+  "answers": "Pertanyaan & Jawaban",
+  "choices": "Pilihan",
+  "jobnotfoundSub": "Lowongan yang Anda cari tidak ada atau telah dihapus.",
+  "goBackToJobs": "Kembali ke daftar lowongan",
+  "found": "Ditemukan",
+  "vacancies": "Lowongan",
+  "otherFilters": "Filter Lainnya",
+  "showRecommendations": "Tampilkan Rekomendasi",
+  "recommendation": "Rekomendasi",
+  "recommendedForYou": "Direkomendasikan untuk Anda",
+  "recommendedJobsDesc": "Lowongan yang cocok berdasarkan profil dan preferensi Anda",
+  "recommendedVacancies": "lowongan yang direkomendasikan",
+  "recommended": "Direkomendasikan",
+  "jobsByCategory": "Lowongan per kategori",
+  "jobsByCity": "Lowongan per Kota",
+  "allJobs": "Semua Lowongan",
+  "latestJobs": "Lowongan Terbaru",
+  "findWorkers": "Cari Karyawan",
+  "exploreJobsByLocation": "Temukan lowongan di kotamu",
+  "searchTalentedProfessionals": "Temukan profesional berbakat",
+  "browseCategories": "Jelajahi Kategori Lowongan",
+  "browseCategoriesSubtitle": "Temukan lowongan berdasarkan kategori dan jelajahi peluang di bidangmu",
+  "searchCategories": "Cari kategori...",
+  "categoriesFound": "Kategori Ditemukan",
+  "nameAZ": "Nama (A-Z)",
+  "nameZA": "Nama (Z-A)",
+  "mostJobs": "Lowongan Terbanyak",
+  "leastJobs": "Lowongan Tersedikit",
+  "availableJobs": "lowongan tersedia",
+  "noCategoriesFound": "Kategori Tidak Ditemukan",
+  "clearSearch": "Hapus Pencarian",
+  "applied": "Dilamar",
+  "topCompanies": "Perusahaan Terkemuka",
+  "companiesHiring": "Perusahaan yang sedang merekrut",
+  "browseAllCompanies": "Lihat semua perusahaan",
+  "featuredJobs": "Lowongan Unggulan",
+  "bestJobsAvailable": "Lihat peluang kerja terbaik",
+  "browseAllJobs": "Lihat Semua Lowongan",
+  "seeAllJobs": "Lihat Semua Lowongan",
+  "exploreByCategory": "Jelajahi lowongan per industri",
+  "viewAllJobs": "Lihat semua posisi tersedia",
+  "newListings": "Lowongan baru diposting",
+  "noJobsAvailable": "Belum ada lowongan tersedia saat ini",
+  "save": "Simpan",
+  "saved": "Tersimpan",
+  "view": "Lihat",
+  "jobSavedSuccessfully": "Lowongan berhasil disimpan",
+  "jobRemovedFromSaved": "Lowongan dihapus dari simpanan",
+  "errorSavingJob": "Gagal menyimpan lowongan",
+  "profile": {
+    "myProfile": "Profil Saya",
+    "manageProfile": "Kelola profil, lamaran, dan lowongan tersimpan",
+    "changePassword": "Ubah Kata Sandi",
+    "personalInfo": "Info Pribadi",
+    "workExperienceEducation": "Pengalaman & Pendidikan",
+    "work": "Kerja",
+    "edu": "Pendidikan",
+    "cert": "Sertifikasi",
+    "appliedJobs": "Lamaran",
+    "savedJobs": "Tersimpan",
+    "profilePhoto": "Foto Profil",
+    "jpgOrPngMax2MB": "JPG atau PNG, maks 2MB",
+    "fullName": "Nama Lengkap",
+    "email": "Email",
+    "phone": "Telepon",
+    "dateOfBirth": "Tanggal Lahir",
+    "gender": "Jenis Kelamin",
+    "selectGender": "Pilih Jenis Kelamin",
+    "nationality": "Kewarganegaraan",
+    "searchNationality": "Cari kewarganegaraan...",
+    "religion": "Agama",
+    "selectReligion": "Pilih Agama",
+    "maritalStatus": "Status Pernikahan",
+    "selectStatus": "Pilih Status",
+    "currentSalary": "Gaji Saat Ini",
+    "expectedSalary": "Ekspektasi Gaji",
+    "salaryExample": "contoh: 5000000",
+    "selectCurrency": "Pilih Mata Uang",
+    "loadingCurrencies": "Memuat mata uang...",
+    "address": "Alamat",
+    "yourAddress": "Alamat Anda",
+    "profileSummary": "Ringkasan Profil",
+    "profileSummaryPlaceholder": "Ceritakan tentang diri Anda, pengalaman, dan apa yang Anda cari...",
+    "saving": "Menyimpan...",
+    "saveChanges": "Simpan Perubahan",
+    "manageResumes": "Kelola CV",
+    "uploadPDF": "Unggah PDF",
+    "maxSize5MB": "Maks 5MB",
+    "title": "Judul",
+    "professionalResume": "contoh: CV Profesional",
+    "setAsDefault": "Jadikan default",
+    "default": "Default",
+    "addResume": "Tambah CV",
+    "noResumesUploaded": "Belum ada CV diunggah",
+    "resumesCount": "CV: {current}/{limit}",
+    "maxResumesReached": "Maksimal {limit} CV",
+    "primary": "Utama",
+    "workExperience": "Pengalaman Kerja",
+    "addExperience": "Tambah Pengalaman",
+    "noWorkExperienceAdded": "Belum ada pengalaman kerja",
+    "companyName": "Nama Perusahaan",
+    "jobTitle": "Jabatan",
+    "startDate": "Tanggal Mulai",
+    "endDate": "Tanggal Selesai",
+    "currentlyWorkingHere": "Masih bekerja di sini",
+    "description": "Deskripsi",
+    "deleteEducation": "Pendidikan",
+    "noEducationAdded": "Belum ada pendidikan ditambahkan",
+    "addEducation": "Tambah Pendidikan",
+    "institution": "Institusi",
+    "degree": "Gelar",
+    "major": "Jurusan",
+    "currentlyStudyingHere": "Masih belajar di sini",
+    "certifications": "Sertifikasi",
+    "addCertification": "Tambah Sertifikasi",
+    "noCertificationsAdded": "Belum ada sertifikasi ditambahkan",
+    "certificationName": "Nama Sertifikasi",
+    "issuingOrganization": "Organisasi Penerbit",
+    "issueDate": "Tanggal Terbit",
+    "expiryDateOptional": "Tanggal Kadaluarsa (Opsional)",
+    "credentialID": "ID Kredensial",
+    "credentialURL": "URL Kredensial",
+    "activeCertification": "Sertifikasi aktif",
+    "skills": "Keahlian",
+    "addSkill": "Tambah Keahlian",
+    "noSkillsAdded": "Belum ada keahlian ditambahkan.",
+    "appliedJobsList": "Lowongan Dilamar",
+    "loadingAppliedJobs": "Memuat lamaran...",
+    "noAppliedJobs": "Anda belum melamar lowongan apapun.",
+    "applied": "Dilamar",
+    "untitledJob": "Lowongan Tanpa Judul",
+    "savedJobsList": "Lowongan Tersimpan",
+    "loadingSavedJobs": "Memuat lowongan tersimpan...",
+    "noSavedJobs": "Belum ada lowongan tersimpan.",
+    "loadingProfile": "Memuat profil...",
+    "profileUpdatedSuccessfully": "Profil berhasil diperbarui",
+    "failedToUpdateProfile": "Gagal memperbarui profil",
+    "resumeAddedSuccessfully": "CV berhasil ditambahkan",
+    "failedToUploadResume": "Gagal mengunggah CV",
+    "onlyPDFAllowed": "Hanya PDF yang diperbolehkan",
+    "maxSizeMB": "Ukuran maks {size}MB",
+    "titleRequired": "Judul wajib diisi",
+    "maxResumes": "Maks {limit} CV",
+    "resumeRemoved": "CV dihapus",
+    "resumeSetAsPrimary": "CV dijadikan utama",
+    "failedToDeleteResume": "Gagal menghapus CV",
+    "failedToSetPrimaryResume": "Gagal mengatur CV utama",
+    "workExperienceAdded": "Pengalaman kerja diperbarui",
+    "failedToAddWorkExperience": "Gagal menambah pengalaman kerja",
+    "failedToUpdateWorkExperience": "Gagal memperbarui pengalaman kerja",
+    "workExperienceRemoved": "Pengalaman kerja dihapus",
+    "failedToDeleteWorkExperience": "Gagal menghapus pengalaman kerja",
+    "educationAdded": "Pendidikan diperbarui",
+    "failedToAddEducation": "Gagal menambah pendidikan",
+    "failedToUpdateEducation": "Gagal memperbarui pendidikan",
+    "educationRemoved": "Pendidikan dihapus",
+    "failedToDeleteEducation": "Gagal menghapus pendidikan",
+    "certificationAdded": "Sertifikasi diperbarui",
+    "failedToAddCertification": "Gagal menambah sertifikasi",
+    "failedToUpdateCertification": "Gagal memperbarui sertifikasi",
+    "certificationRemoved": "Sertifikasi dihapus",
+    "failedToDeleteCertification": "Gagal menghapus sertifikasi",
+    "skillAdded": "Keahlian ditambahkan",
+    "skillAlreadyAdded": "Keahlian sudah ditambahkan",
+    "failedToAddSkill": "Gagal menambah keahlian",
+    "skillCreatedAndAdded": "Keahlian dibuat dan ditambahkan",
+    "failedToCreateSkill": "Gagal membuat keahlian",
+    "skillRemoved": "Keahlian dihapus",
+    "failedToDeleteSkill": "Gagal menghapus keahlian",
+    "searchOrAddYourSkills": "Cari atau tambah keahlian...",
+    "typeToSearchOrPressEnter": "Ketik untuk mencari atau tekan Enter untuk membuat baru",
+    "removeFromSaved": "Hapus dari simpanan",
+    "removedFromSavedJobs": "Dihapus dari lowongan tersimpan",
+    "failedToRemoveSavedJob": "Gagal menghapus lowongan tersimpan",
+    "selectFile": "Pilih file",
+    "maxFileSize2MB": "Ukuran file maks 2MB",
+    "fullNameLabel": "Nama Lengkap",
+    "yourNamePlaceholder": "Nama Anda",
+    "addSkillsButton": "Tambah Keahlian",
+    "primaryButton": "Utama",
+    "descriptionPlaceholder": "Deskripsi",
+    "delete": "Hapus",
+    "searchOrCreateSkill": "Cari atau buat keahlian...",
+    "createSkill": "Buat",
+    "loadingSkills": "Memuat keahlian...",
+    "done": "Selesai",
+    "failedtoaddskill": "Gagal menambah keahlian",
+    "failedtoremoveskill": "Gagal menghapus keahlian",
+    "skilladded": "Keahlian ditambahkan",
+    "skillremoved": "Keahlian dihapus"
+  },
+  "about": {
+    "pageTitle": "Tentang",
+    "title": "Tentang Cari Kerja",
+    "heroDescription": "Cari Kerja adalah platform lowongan kerja modern yang menghubungkan profesional berbakat dengan perusahaan di Indonesia. Kami fokus membangun platform transparan dan efisien bagi pencari kerja maupun perusahaan.",
+    "ourMission": "Misi kami",
+    "history": "Sejarah",
+    "missionTitle": "Misi kami",
+    "missionDescription": "Kami percaya setiap profesional berbakat berhak mendapat akses ke peluang bermakna, dan setiap perusahaan berhak menemukan orang yang tepat. Platform kami dirancang agar proses pencarian kerja menjadi lebih sederhana, cepat, dan efektif.",
+    "missionDetails": "Kami berkomitmen membangun kepercayaan melalui transparansi, memberikan layanan pelanggan terbaik, dan terus meningkatkan platform. Baik Anda mencari karir berikutnya atau talenta luar biasa, Cari Kerja hadir untuk membantu Anda sukses.",
+    "ourStory": "Kisah kami",
+    "launched": "Diluncurkan",
+    "launchedDescription": "Cari Kerja didirikan dengan visi sederhana: menciptakan platform terpercaya tempat pencari kerja dan perusahaan bisa terhubung dengan mudah.",
+    "expansion": "Membangun momentum",
+    "expansionDescription": "Sepanjang 2025, kami fokus memperluas fitur, meningkatkan pengalaman pengguna, dan mengembangkan komunitas kami.",
+    "future": "Melihat ke depan",
+    "futureDescription": "Memasuki 2026 dan seterusnya, kami berkomitmen untuk terus berinovasi demi pengalaman terbaik bagi semua pengguna.",
+    "getInTouch": "Hubungi kami",
+    "contactDescription": "Untuk kemitraan, pertanyaan, atau bergabung dengan tim kami:",
+    "headOffice": "Kantor Pusat",
+    "location": "Jakarta, Indonesia",
+    "email": "Email",
+    "careers": "Karir",
+    "careersDescription": "Tertarik bekerja bersama kami? Kirim CV ke ",
+    "ctaTitle": "Mencari talenta atau pekerjaan berikutnya?",
+    "searchJobs": "Cari lowongan",
+    "forEmployers": "Untuk perusahaan"
+  },
+  "help": {
+    "common": {
+      "quickNav": "Navigasi Cepat"
+    },
+    "cv": {
+      "pageTitle": "Cara Meningkatkan CV - Bantuan Cari Kerja",
+      "heroTitle": "Cara Meningkatkan CV",
+      "heroSubtitle": "CV yang baik sangat penting untuk mendapat wawancara. Pelajari tips agar CV Anda menonjol.",
+      "toc": {
+        "format": { "title": "Pilih Format yang Tepat", "desc": "Pelajari standar format" },
+        "summary": { "title": "Tulis Ringkasan yang Kuat", "desc": "Tarik perhatian di bagian pertama" },
+        "achievements": { "title": "Tonjolkan Pencapaian", "desc": "Tunjukkan hasil, bukan hanya tanggung jawab" },
+        "education": { "title": "Pendidikan & Sertifikasi", "desc": "Cantumkan kualifikasi dengan efektif" },
+        "ats": { "title": "Optimalkan untuk ATS", "desc": "Pastikan sistem bisa membaca CV Anda" },
+        "upload": { "title": "Unggah CV Anda", "desc": "Agar ditemukan perekrut" }
+      },
+      "sections": {
+        "format": {
+          "title": "Pilih Format yang Tepat",
+          "bullets": [
+            "Gunakan tata letak bersih dan profesional dengan font konsisten.",
+            "Singkat padat: 1-2 halaman untuk sebagian besar posisi.",
+            "Hindari grafis berlebihan kecuali di bidang kreatif.",
+            "Gunakan poin-poin dan judul untuk meningkatkan keterbacaan."
+          ],
+          "note": "CV sederhana dan terstruktur memudahkan perekrut menemukan informasi penting."
+        },
+        "summary": {
+          "title": "Tulis Ringkasan yang Kuat",
+          "bullets": [
+            "Mulai dengan 2-3 kalimat tentang pengalaman dan tujuan Anda.",
+            "Sebutkan keahlian utama dan nilai yang Anda bawa.",
+            "Sesuaikan ringkasan untuk setiap lamaran."
+          ],
+          "example": "Contoh: 'Software engineer berpengalaman 5+ tahun di backend, spesialisasi Python dan cloud. Mencari peran senior untuk memimpin proyek inovatif.'"
+        },
+        "achievements": {
+          "title": "Tonjolkan Pencapaian",
+          "bullets": [
+            "Gunakan angka: 'Meningkatkan penjualan 20%' bukan 'Bertanggung jawab atas penjualan.'",
+            "Fokus pada dampak dan hasil.",
+            "Tunjukkan inisiatif dan kemampuan pemecahan masalah."
+          ]
+        },
+        "education": {
+          "title": "Pendidikan & Sertifikasi",
+          "bullets": [
+            "Cantumkan gelar tertinggi terlebih dahulu dengan nama universitas dan tahun lulus.",
+            "Sertakan sertifikasi relevan.",
+            "Sebutkan penghargaan jika ada."
+          ]
+        },
+        "ats": {
+          "title": "Optimalkan untuk ATS",
+          "bullets": [
+            "Gunakan judul seksi standar: Pengalaman Kerja, Pendidikan, Keahlian.",
+            "Sertakan kata kunci dari deskripsi pekerjaan.",
+            "Hindari gambar dan tabel yang tidak bisa dibaca ATS."
+          ]
+        },
+        "upload": {
+          "title": "Unggah CV ke Cari Kerja",
+          "bullets": [
+            "Buka profil dan unggah versi PDF CV Anda.",
+            "Perbarui secara rutin.",
+            "Perekrut bisa melihat CV Anda saat Anda melamar atau saat mereka mencari di database."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Siap memperbarui CV?",
+        "subtitle": "Unggah",
+        "button": "Buka Profil"
+      }
+    },
+    "applications": {
+      "pageTitle": "Lacak Lamaran Kerja - Bantuan Cari Kerja",
+      "heroTitle": "Lacak Lamaran Kerja Anda",
+      "heroSubtitle": "Tetap terorganisir dan tindak lanjuti semua lamaran secara efektif.",
+      "toc": {
+        "track": { "title": "Cara Melacak Lamaran", "desc": "Lihat semua lamaran yang terkirim" },
+        "status": { "title": "Status Lamaran", "desc": "Pahami arti setiap status" },
+        "notes": { "title": "Buat Catatan", "desc": "Dokumentasikan progress lamaran" },
+        "followUp": { "title": "Tindak Lanjut", "desc": "Praktik terbaik untuk follow up" },
+        "keepApplying": { "title": "Tetap Melamar", "desc": "Jangan tunggu satu balasan" }
+      },
+      "sections": {
+        "track": {
+          "title": "Cara Melacak Lamaran",
+          "body": "Setelah melamar di Cari Kerja, lihat semua lamaran di profil bagian Lowongan Dilamar. Setiap entri menampilkan jabatan, perusahaan, tanggal lamar, dan status saat ini."
+        },
+        "status": {
+          "title": "Status Lamaran",
+          "bullets": [
+            "Menunggu: Lamaran dikirim dan menunggu ditinjau.",
+            "Ditinjau: Perekrut telah melihat lamaran Anda.",
+            "Wawancara: Anda masuk daftar pendek untuk wawancara.",
+            "Ditolak: Anda tidak terpilih untuk posisi ini.",
+            "Diterima: Selamat! Anda mendapat tawaran posisi."
+          ]
+        },
+        "notes": {
+          "title": "Buat Catatan",
+          "body": "Buat catatan untuk setiap lamaran: tanggal lamar, detail lowongan, kontak perekrut, jadwal wawancara, dan pengingat follow up."
+        },
+        "followUp": {
+          "title": "Tindak Lanjut",
+          "tips": [
+            "Tunggu minimal 1-2 minggu sebelum follow up.",
+            "Kirim email sopan.",
+            "Singkat dan profesional.",
+            "Jika tidak ada balasan setelah 2 follow up, beralih ke peluang lain."
+          ]
+        },
+        "keepApplying": {
+          "title": "Tetap Melamar",
+          "body": "Jangan menggantungkan harapan pada satu lamaran. Semakin banyak lamaran, semakin besar peluang mendapat wawancara."
+        }
+      },
+      "cta": {
+        "title": "Cek Lamaran Anda",
+        "subtitle": "Lihat semua lowongan yang telah Anda lamar.",
+        "button": "Lihat Lamaran Saya"
+      }
+    },
+    "searchResumes": {
+      "pageTitle": "Cara Mencari CV - Bantuan Cari Kerja",
+      "heroTitle": "Cara Mencari CV",
+      "heroSubtitle": "Temukan kandidat yang tepat dengan cepat.",
+      "toc": {
+        "filters": { "title": "Gunakan Filter", "desc": "Persempit berdasarkan keahlian, lokasi, pengalaman" },
+        "keywords": { "title": "Pencarian Kata Kunci", "desc": "Temukan kandidat dengan keahlian spesifik" },
+        "review": { "title": "Tinjau Profil", "desc": "Cek CV, pengalaman, dan keahlian" },
+        "shortlist": { "title": "Buat Daftar Pendek", "desc": "Simpan profil menjanjikan" },
+        "contact": { "title": "Hubungi Kandidat", "desc": "Jangkau langsung atau undang melamar" }
+      },
+      "sections": {
+        "filters": {
+          "title": "Gunakan Filter",
+          "body": "Filter berdasarkan lokasi, keahlian, jabatan, tingkat pendidikan, dan tahun pengalaman."
+        },
+        "keywords": {
+          "title": "Pencarian Kata Kunci",
+          "body": "Masukkan kata kunci terkait keahlian atau teknologi yang Anda butuhkan.",
+          "bullets": [
+            "Cari keahlian spesifik seperti 'JavaScript', 'React', atau 'Manajemen Proyek'.",
+            "Gunakan beberapa kata kunci untuk hasil lebih terarah.",
+            "Kombinasikan dengan filter untuk mempersempit kandidat."
+          ]
+        },
+        "review": {
+          "title": "Tinjau Profil",
+          "body": "Tinjau profil kandidat secara menyeluruh.",
+          "bullets": [
+            "Cek pengalaman kerja dan pencapaian.",
+            "Tinjau pendidikan dan sertifikasi.",
+            "Lihat keahlian.",
+            "Unduh atau lihat CV untuk detail lebih lanjut."
+          ]
+        },
+        "shortlist": {
+          "title": "Buat Daftar Pendek",
+          "body": "Simpan kandidat menjanjikan untuk ditinjau nanti."
+        },
+        "contact": {
+          "title": "Hubungi Kandidat",
+          "body": "Jangkau kandidat melalui informasi kontak mereka, atau undang melamar posisi terbuka Anda."
+        }
+      },
+      "cta": {
+        "title": "Mulai Mencari Talenta",
+        "subtitle": "Temukan kandidat berkualitas hari ini.",
+        "button": "Cari CV"
+      }
+    },
+    "pricing": {
+      "pageTitle": "Harga & Paket - Bantuan Cari Kerja",
+      "heroTitle": "Harga & Paket",
+      "heroSubtitle": "Pilih paket terbaik untuk kebutuhan rekrutmen Anda.",
+      "toc": {
+        "plans": { "title": "Paket Kami", "desc": "Opsi gratis dan premium" },
+        "credits": { "title": "Kredit Posting", "desc": "Cara kerja kredit" },
+        "team": { "title": "Akun Tim", "desc": "Kelola beberapa perekrut" },
+        "billing": { "title": "Penagihan", "desc": "Metode pembayaran dan faktur" },
+        "trials": { "title": "Uji Coba Gratis", "desc": "Coba fitur premium tanpa risiko" },
+        "custom": { "title": "Paket Kustom", "desc": "Untuk organisasi besar" }
+      },
+      "sections": {
+        "plans": {
+          "title": "Paket Kami",
+          "bullets": [
+            "Gratis: Posting hingga 3 lowongan per bulan.",
+            "Starter: 10 posting/bulan, filter lanjutan.",
+            "Profesional: 50 posting/bulan, akses database CV.",
+            "Enterprise: Posting tak terbatas, branding kustom, API."
+          ],
+          "note": "Semua paket termasuk pelacakan lamaran dan notifikasi email."
+        },
+        "credits": {
+          "title": "Kredit Posting",
+          "body": "Setiap paket menyertakan kredit posting per bulan. Kredit bisa digunakan hingga 3 bulan."
+        },
+        "team": {
+          "title": "Akun Tim",
+          "body": "Paket Profesional dan Enterprise mendukung beberapa anggota tim."
+        },
+        "billing": {
+          "title": "Penagihan",
+          "bullets": [
+            "Kami menerima kartu kredit, transfer bank, dan dompet digital.",
+            "Langganan diperbarui otomatis.",
+            "Faktur tersedia di akun Anda.",
+            "Bisa dibatalkan kapan saja."
+          ]
+        },
+        "trials": {
+          "title": "Uji Coba Gratis",
+          "body": "Coba fitur premium selama 14 hari tanpa biaya."
+        },
+        "custom": {
+          "title": "Paket Kustom",
+          "body": "Hubungi tim penjualan kami untuk solusi kustom."
+        }
+      },
+      "cta": {
+        "title": "Siap Upgrade?",
+        "subtitle": "Pilih paket yang sesuai.",
+        "button": "Lihat Harga"
+      }
+    },
+    "register": {
+      "pageTitle": "Cara Mendaftar - Bantuan Cari Kerja",
+      "heroTitle": "Cara Mendaftar",
+      "heroSubtitle": "Buat akun dan mulai melamar atau posting lowongan.",
+      "toc": {
+        "type": { "title": "Pilih Tipe Akun", "desc": "Pencari kerja atau perekrut" },
+        "registration": { "title": "Langkah Pendaftaran", "desc": "Isi formulir dan kirim" },
+        "verify": { "title": "Verifikasi Email", "desc": "Cek kotak masuk" },
+        "profile": { "title": "Lengkapi Profil", "desc": "Tambah detail untuk memulai" },
+        "security": { "title": "Tips Keamanan", "desc": "Jaga keamanan akun" }
+      },
+      "sections": {
+        "type": {
+          "title": "Pilih Tipe Akun",
+          "body": "Pilih antara Pencari Kerja atau Perekrut/Perusahaan.",
+          "bullets": [
+            "Pencari Kerja: Buat profil, unggah CV, dan lamar pekerjaan.",
+            "Perekrut/Perusahaan: Posting lowongan, cari CV, kelola kandidat."
+          ],
+          "note": "Hanya satu tipe akun per alamat email."
+        },
+        "registration": {
+          "title": "Langkah Pendaftaran",
+          "bullets": [
+            "Klik Daftar di halaman utama.",
+            "Pilih tipe akun.",
+            "Masukkan email, buat kata sandi, dan isi nama."
+          ]
+        },
+        "verify": {
+          "title": "Verifikasi Email",
+          "body": "Klik tautan di email verifikasi untuk mengaktifkan akun Anda."
+        },
+        "profile": {
+          "title": "Lengkapi Profil",
+          "body": "Lengkapi profil setelah verifikasi.",
+          "bullets": [
+            "Pencari Kerja: Tambah pengalaman, pendidikan, keahlian, dan CV.",
+            "Perekrut: Tambah detail perusahaan, logo, dan kontak."
+          ],
+          "note": "Profil lengkap meningkatkan visibilitas."
+        },
+        "security": {
+          "title": "Tips Keamanan",
+          "body": "Gunakan kata sandi kuat dan unik.",
+          "bullets": [
+            "Gunakan kata sandi yang kuat.",
+            "Aktifkan autentikasi dua faktor.",
+            "Jangan bagikan kata sandi.",
+            "Keluar di komputer bersama."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Siap Memulai?",
+        "subtitle": "Buat akun sekarang.",
+        "button": "Daftar Sekarang"
+      }
+    },
+    "resetPassword": {
+      "pageTitle": "Cara Reset Kata Sandi - Bantuan Cari Kerja",
+      "heroTitle": "Cara Reset Kata Sandi",
+      "heroSubtitle": "Lupa kata sandi? Ikuti langkah berikut.",
+      "toc": {
+        "start": { "title": "Mulai Proses Reset", "desc": "Klik Lupa Kata Sandi di halaman login" },
+        "email": { "title": "Cek Email", "desc": "Cari tautan reset" },
+        "password": { "title": "Atur Kata Sandi Baru", "desc": "Pilih kata sandi yang kuat" },
+        "issues": { "title": "Pemecahan Masalah", "desc": "Jika tidak berhasil" },
+        "security": { "title": "Praktik Keamanan", "desc": "Jaga keamanan akun" }
+      },
+      "sections": {
+        "start": {
+          "title": "Mulai Proses Reset",
+          "body": "Buka halaman login, klik Lupa Kata Sandi, masukkan email, lalu klik Kirim Tautan Reset.",
+          "steps": [
+            "Buka halaman login.",
+            "Klik Lupa Kata Sandi.",
+            "Masukkan email akun Anda.",
+            "Klik Kirim Tautan Reset."
+          ]
+        },
+        "email": {
+          "title": "Cek Email Anda",
+          "body": "Kami akan mengirim tautan reset yang berlaku 1 jam."
+        },
+        "password": {
+          "title": "Atur Kata Sandi Baru",
+          "bullets": [
+            "Klik tautan di email.",
+            "Masukkan kata sandi baru (minimal 8 karakter).",
+            "Konfirmasi kata sandi baru.",
+            "Klik Perbarui Kata Sandi."
+          ],
+          "note": "Kata sandi baru harus berbeda dari sebelumnya."
+        },
+        "issues": {
+          "title": "Pemecahan Masalah",
+          "body": "Cek folder spam jika email tidak tiba.",
+          "bullets": [
+            "Email tidak tiba? Cek spam.",
+            "Tautan kadaluarsa? Minta tautan baru.",
+            "Email tidak dikenal? Pastikan menggunakan email yang benar.",
+            "Masih bermasalah? Hubungi dukungan kami."
+          ]
+        },
+        "security": {
+          "title": "Praktik Keamanan",
+          "body": "Gunakan kata sandi unik dan kuat.",
+          "bullets": [
+            "Gunakan kata sandi unik untuk Cari Kerja.",
+            "Pertimbangkan manajer kata sandi.",
+            "Perbarui secara berkala.",
+            "Reset segera jika mencurigai akses tidak sah."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Butuh Bantuan?",
+        "subtitle": "Hubungi dukungan jika tidak bisa mereset.",
+        "button": "Hubungi Dukungan"
+      }
+    },
+    "reportIssue": {
+      "pageTitle": "Cara Melaporkan Masalah - Bantuan Cari Kerja",
+      "heroTitle": "Cara Melaporkan Masalah",
+      "heroSubtitle": "Menemukan bug? Beri tahu kami.",
+      "toc": {
+        "describe": { "title": "Deskripsikan Masalah", "desc": "Jelaskan apa yang terjadi" },
+        "steps": { "title": "Langkah Reproduksi", "desc": "Bantu kami memahami kejadiannya" },
+        "screenshots": { "title": "Tangkapan Layar", "desc": "Bukti visual membantu" },
+        "device": { "title": "Info Perangkat & Browser", "desc": "Ceritakan setup Anda" },
+        "response": { "title": "Selanjutnya", "desc": "Proses dukungan kami" }
+      },
+      "sections": {
+        "describe": {
+          "title": "Deskripsikan Masalah",
+          "body": "Apa yang Anda coba lakukan? Apa yang terjadi sebagai gantinya?",
+          "example": "Contoh: 'Saya mencoba mengunggah CV PDF tapi mendapat pesan error tipe file tidak didukung.'"
+        },
+        "steps": {
+          "title": "Langkah Reproduksi",
+          "body": "Cantumkan langkah yang menyebabkan masalah:",
+          "bullets": [
+            "Halaman apa yang Anda kunjungi?",
+            "Tindakan apa yang dilakukan?",
+            "Pesan error apa yang muncul?"
+          ]
+        },
+        "screenshots": {
+          "title": "Tangkapan Layar",
+          "body": "Lampirkan tangkapan layar jika memungkinkan."
+        },
+        "device": {
+          "title": "Info Perangkat & Browser",
+          "body": "Ceritakan:",
+          "bullets": [
+            "Perangkat apa (desktop, ponsel, tablet)?",
+            "Browser dan versi (Chrome, Firefox, Safari)?",
+            "Sistem operasi (Windows, macOS, iOS, Android)?"
+          ]
+        },
+        "response": {
+          "title": "Selanjutnya",
+          "body": "Tim kami akan meninjau laporan dalam 1-2 hari kerja. Terima kasih membantu meningkatkan Cari Kerja!"
+        }
+      },
+      "cta": {
+        "title": "Siap Melaporkan?",
+        "subtitle": "Hubungi kami via formulir atau email support@cari-kerja.id.",
+        "button": "Hubungi Dukungan"
+      }
+    },
+    "supportedBrowsers": {
+      "pageTitle": "Browser yang Didukung - Bantuan Cari Kerja",
+      "heroTitle": "Browser yang Didukung",
+      "heroSubtitle": "Gunakan browser modern untuk pengalaman terbaik.",
+      "toc": {
+        "browsers": { "title": "Browser Direkomendasikan", "desc": "Browser yang kami dukung" },
+        "requirements": { "title": "Persyaratan Minimum", "desc": "Versi dan pengaturan" },
+        "cookies": { "title": "Aktifkan Cookie", "desc": "Diperlukan untuk login" },
+        "cache": { "title": "Hapus Cache", "desc": "Perbaiki masalah pemuatan" },
+        "mobile": { "title": "Browser Mobile", "desc": "Di ponsel" }
+      },
+      "sections": {
+        "browsers": {
+          "title": "Browser yang Direkomendasikan",
+          "body": "Cari Kerja bekerja terbaik di:",
+          "bullets": ["Google Chrome", "Mozilla Firefox", "Microsoft Edge", "Safari (macOS dan iOS)", "Opera"],
+          "note": "Selalu perbarui browser untuk keamanan terbaik."
+        },
+        "requirements": {
+          "title": "Persyaratan Minimum",
+          "bullets": ["Chrome 90+", "Firefox 88+", "Edge 90+", "Safari 14+", "Opera 76+"],
+          "body": "Versi lama mungkin mengalami masalah."
+        },
+        "cookies": {
+          "title": "Aktifkan Cookie",
+          "body": "Cookie diperlukan untuk login dan fitur lainnya."
+        },
+        "cache": {
+          "title": "Hapus Cache",
+          "body": "Jika ada masalah pemuatan, hapus cache browser:",
+          "bullets": [
+            "Chrome: Pengaturan > Privasi > Hapus data penjelajahan",
+            "Firefox: Opsi > Privasi > Hapus Data",
+            "Safari: Preferensi > Privasi > Kelola Data Website",
+            "Edge: Pengaturan > Privasi > Hapus data penjelajahan"
+          ]
+        },
+        "mobile": {
+          "title": "Browser Mobile",
+          "body": "Cari Kerja sepenuhnya responsif. Rekomendasi:",
+          "bullets": ["Safari di iOS", "Chrome di Android", "Firefox di Android"],
+          "note": "Selalu perbarui browser untuk pengalaman terbaik."
+        }
+      },
+      "cta": {
+        "title": "Masih Bermasalah?",
+        "subtitle": "Hubungi dukungan kami.",
+        "button": "Hubungi Dukungan"
+      }
+    },
+    "apply": {
+      "pageTitle": "Cara Melamar - Bantuan Cari Kerja",
+      "heroTitle": "Cara Melamar Pekerjaan",
+      "heroSubtitle": "Panduan lengkap melamar pekerjaan di Cari Kerja.",
+      "toc": {
+        "profile": { "title": "Lengkapi Profil", "desc": "Siapkan akun" },
+        "resume": { "title": "Siapkan CV", "desc": "Unggah dan optimalkan CV" },
+        "search": { "title": "Cari Lowongan", "desc": "Temukan peluang" },
+        "apply": { "title": "Kirim Lamaran", "desc": "Lamar dengan percaya diri" },
+        "followUp": { "title": "Tindak Lanjut", "desc": "Setelah melamar" },
+        "mistakes": { "title": "Kesalahan Umum", "desc": "Hindari ini" },
+        "interview": { "title": "Persiapan Wawancara", "desc": "Tampil terbaik" }
+      },
+      "sections": {
+        "profile": {
+          "title": "Lengkapi Profil",
+          "cardTitle": "Elemen Profil Penting",
+          "bullets": [
+            "Tambah nama lengkap, kontak, dan lokasi.",
+            "Unggah foto profesional.",
+            "Tulis ringkasan profil menarik.",
+            "Cantumkan keahlian, pengalaman, dan pendidikan.",
+            "Perbarui profil secara berkala."
+          ],
+          "note": "Tips: Profil lengkap meningkatkan peluang diperhatikan perekrut."
+        },
+        "resume": {
+          "title": "Siapkan CV",
+          "cardTitle": "Praktik Terbaik CV",
+          "bullets": [
+            "Gunakan format profesional dan bersih.",
+            "1-2 halaman untuk sebagian besar posisi.",
+            "Sesuaikan CV untuk setiap lamaran.",
+            "Kuantifikasi pencapaian.",
+            "Periksa ejaan dan tata bahasa.",
+            "Simpan dalam PDF.",
+            "Sertakan kontak dan tautan profesional."
+          ],
+          "tipLabel": "Tips Pro",
+          "tipBody": "Unggah CV ke profil Cari Kerja agar bisa melamar ke banyak lowongan dengan mudah."
+        },
+        "search": {
+          "title": "Cari Lowongan",
+          "cardTitle": "Tips Mencari Lowongan",
+          "bullets": [
+            "Masukkan kata kunci jabatan, keahlian, atau industri.",
+            "Gunakan filter lokasi, gaji, jenis pekerjaan.",
+            "Atur notifikasi lowongan.",
+            "Simpan lowongan menarik.",
+            "Lamar lebih awal untuk keunggulan."
+          ],
+          "note": "Lamar lebih awal memberi Anda keunggulan."
+        },
+        "apply": {
+          "title": "Kirim Lamaran",
+          "cardTitle": "Langkah Pengiriman",
+          "bullets": [
+            "Klik Lamar pada daftar lowongan.",
+            "Pilih CV yang ingin dikirim.",
+            "Tulis surat lamaran jika diperlukan.",
+            "Jawab pertanyaan tambahan.",
+            "Tinjau lamaran sebelum mengirim.",
+            "Klik Kirim Lamaran.",
+            "Anda akan menerima konfirmasi email."
+          ],
+          "templateTitle": "Contoh Surat Lamaran",
+          "templateBody": "Yth. [Nama HRD],\n\nSaya ingin melamar posisi [Jabatan] di [Perusahaan]. Dengan [X tahun] pengalaman di [bidang], saya yakin bisa berkontribusi nyata.\n\nKeahlian utama:\n- [Keahlian #1]\n- [Keahlian #2]\n- [Keahlian #3]\n\nSaya antusias bergabung dan siap mendiskusikan kesesuaian lebih lanjut.\n\nTerima kasih.\n[Nama Anda]"
+        },
+        "followUp": {
+          "title": "Tindak Lanjut",
+          "cardTitle": "Setelah Melamar",
+          "bullets": [
+            "Pantau status di profil bagian Lowongan Dilamar.",
+            "Tunggu 1-2 minggu sebelum follow up.",
+            "Kirim email sopan jika punya kontak perekrut.",
+            "Terus lamar lowongan lain.",
+            "Profesional dalam semua komunikasi."
+          ],
+          "tipLabel": "Tips Follow Up",
+          "tipBody": "Setelah 2-3 minggu tanpa balasan, boleh follow up sekali lagi. Kemudian fokus ke peluang lain."
+        },
+        "mistakes": {
+          "title": "Kesalahan Umum",
+          "items": [
+            { "title": "Lamaran Generik", "body": "Tidak menyesuaikan CV untuk posisi spesifik." },
+            { "title": "Kesalahan Ceroboh", "body": "Typo atau informasi usang dalam lamaran." },
+            { "title": "Mengabaikan Instruksi", "body": "Tidak mengikuti instruksi lamaran." },
+            { "title": "Kualifikasi Tidak Sesuai", "body": "Melamar posisi terlalu jauh dari level keahlian." },
+            { "title": "Tidak Ada Follow Up", "body": "Lupa menindaklanjuti lamaran." }
+          ]
+        },
+        "interview": {
+          "title": "Persiapan Wawancara",
+          "cardTitle": "Panduan Wawancara",
+          "bullets": [
+            "Riset perusahaan sebelum wawancara.",
+            "Tinjau deskripsi pekerjaan dan siapkan contoh pengalaman.",
+            "Latih pertanyaan wawancara umum.",
+            "Siapkan pertanyaan untuk pewawancara.",
+            "Berpakaian profesional dan tepat waktu.",
+            "Kirim email terima kasih dalam 24 jam.",
+            "Percaya diri dan tunjukkan minat tulus."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Siap Melamar?",
+        "subtitle": "Cari lowongan dan kirim lamaran pertama hari ini.",
+        "button": "Cari Lowongan"
+      }
+    },
+    "postJob": {
+      "pageTitle": "Cara Posting Lowongan - Bantuan Cari Kerja",
+      "heroTitle": "Cara Memposting Lowongan",
+      "heroSubtitle": "Panduan bagi perusahaan untuk memposting lowongan efektif.",
+      "toc": {
+        "start": { "title": "Memulai", "desc": "Setup akun" },
+        "description": { "title": "Tulis Deskripsi", "desc": "Buat listing menarik" },
+        "details": { "title": "Detail Lowongan", "desc": "Lokasi, gaji, jenis pekerjaan" },
+        "skills": { "title": "Keahlian Dibutuhkan", "desc": "Kualifikasi dan pengalaman" },
+        "attract": { "title": "Tarik Kandidat", "desc": "Buat menonjol" },
+        "manage": { "title": "Kelola Lamaran", "desc": "Tinjau kandidat" },
+        "mistakes": { "title": "Kesalahan Umum", "desc": "Hindari ini" },
+        "optimize": { "title": "Optimalkan Listing", "desc": "Lebih banyak pelamar berkualitas" },
+        "after": { "title": "Setelah Posting", "desc": "Langkah berikutnya" }
+      },
+      "sections": {
+        "start": {
+          "title": "Memulai",
+          "cardTitle": "Langkah Posting Lowongan Pertama",
+          "body": "Butuh akun perekrut atau perusahaan:",
+          "bullets": [
+            "Daftar sebagai perekrut jika belum.",
+            "Lengkapi profil perusahaan.",
+            "Verifikasi email.",
+            "Pilih paket atau gunakan kredit gratis.",
+            "Klik Posting Lowongan dari dasbor."
+          ],
+          "tipLabel": "Penting",
+          "tipBody": "Akun aktif dan kredit posting diperlukan untuk menerbitkan lowongan."
+        },
+        "description": {
+          "title": "Tulis Deskripsi Lowongan",
+          "body": "Deskripsi jelas menarik kandidat yang tepat:",
+          "bullets": [
+            "Ringkasan singkat peran.",
+            "Tanggung jawab utama.",
+            "Kualifikasi yang diperlukan.",
+            "Kualifikasi tambahan (nice-to-have).",
+            "Budaya dan nilai perusahaan.",
+            "Tunjangan dan keistimewaan."
+          ],
+          "template": "Contoh Template:",
+          "templateContent": "Jabatan: Senior Software Engineer\n\nTentang Kami: [Perusahaan] adalah...\n\nTanggung Jawab:\n- Merancang aplikasi web\n- Berkolaborasi dengan tim\n- Menulis kode berkualitas\n\nKualifikasi:\n- Pengalaman 5+ tahun\n- Python, JavaScript, SQL\n\nYang Kami Tawarkan:\n- Gaji kompetitif\n- Asuransi kesehatan\n- WFH"
+        },
+        "details": {
+          "title": "Detail Lowongan",
+          "cardTitle": "Detail Penting",
+          "body": "Berikan detail spesifik:",
+          "bullets": [
+            "Jabatan yang jelas dan standar.",
+            "Lokasi atau apakah remote.",
+            "Jenis pekerjaan (full-time, part-time, kontrak).",
+            "Rentang gaji.",
+            "Kategori yang relevan.",
+            "Batas waktu lamaran."
+          ],
+          "tipLabel": "Tips Pro",
+          "tipBody": "Lowongan dengan info gaji rata-rata mendapat 30% lebih banyak lamaran."
+        },
+        "skills": {
+          "title": "Keahlian yang Dibutuhkan",
+          "body": "Cantumkan keahlian yang diperlukan secara spesifik:",
+          "examples": [
+            "Developer: Python, Django, REST API, Git",
+            "Marketing: SEO, Google Analytics, Media Sosial",
+            "Desainer: Photoshop, Figma, UI/UX",
+            "Sales: CRM, Negosiasi, Lead Generation"
+          ],
+          "note": "Fokus pada 5-10 keahlian terpenting."
+        },
+        "attract": {
+          "title": "Tarik Kandidat Terbaik",
+          "body": "Buat listing Anda menonjol:",
+          "bullets": [
+            "Gunakan bahasa yang jelas.",
+            "Tonjolkan keunikan perusahaan.",
+            "Tekankan tunjangan.",
+            "Sertakan foto atau video tim.",
+            "Tanggapi pelamar dengan cepat."
+          ],
+          "tip": "Kandidat lebih cenderung melamar jika terhubung dengan misi perusahaan."
+        },
+        "manage": {
+          "title": "Kelola Lamaran",
+          "body": "Setelah lowongan terbit:",
+          "steps": [
+            "Tinjau lamaran di dasbor.",
+            "Filter kandidat berdasarkan status dan keahlian.",
+            "Lihat CV dan surat lamaran.",
+            "Ubah status pelamar.",
+            "Hubungi kandidat.",
+            "Buat catatan.",
+            "Kirim undangan wawancara atau penolakan dengan cepat."
+          ],
+          "tip": "Balas semua pelamar. Mencerminkan profesionalisme perusahaan."
+        },
+        "mistakes": {
+          "title": "Kesalahan yang Harus Dihindari",
+          "bullets": [
+            "Judul atau deskripsi yang tidak jelas.",
+            "Tidak menyertakan info gaji.",
+            "Terlalu banyak persyaratan.",
+            "Typo dalam posting.",
+            "Tidak menanggapi pelamar tepat waktu.",
+            "Posting duplikat."
+          ]
+        },
+        "optimize": {
+          "title": "Optimalkan Listing",
+          "body": "Tingkatkan posting untuk lebih banyak pelamar berkualitas:",
+          "tips": [
+            "Gunakan kata kunci relevan.",
+            "Spesifik tentang peran.",
+            "Deskripsi 300-600 kata.",
+            "Ajakan bertindak yang jelas.",
+            "Perbarui jika tidak mendapat kandidat tepat.",
+            "Promosikan di media sosial.",
+            "Pantau performa dan sesuaikan."
+          ]
+        },
+        "after": {
+          "title": "Setelah Posting",
+          "body": "Yang harus dilakukan:",
+          "steps": [
+            "Pantau lamaran setiap hari.",
+            "Tinjau analitik lowongan.",
+            "Edit jika diperlukan.",
+            "Tutup setelah menemukan kandidat.",
+            "Arsipkan posting lama."
+          ]
+        }
+      },
+      "cta": {
+        "title": "Siap Posting Lowongan?",
+        "subtitle": "Mulai menarik talenta terbaik hari ini.",
+        "button": "Posting Lowongan"
+      }
+    },
+    "userProfile": {
+      "changePassword": {
+        "title": "Ubah Kata Sandi",
+        "currentPassword": "Kata sandi saat ini",
+        "newPassword": "Kata sandi baru",
+        "confirmPassword": "Konfirmasi kata sandi baru",
+        "submit": "Ubah Kata Sandi",
+        "saving": "Menyimpan...",
+        "success": "Kata sandi diubah. Silakan masuk kembali.",
+        "mismatch": "Konfirmasi kata sandi tidak cocok",
+        "failed": "Gagal mengubah kata sandi"
+      }
+    }
+  },
+  "privacyPolicy": {
+    "title": "Kebijakan Privasi",
+    "lastUpdated": "Terakhir diperbarui: 4 Februari 2026",
+    "introduction": {
+      "title": "1. Pendahuluan",
+      "content": "Cari Kerja menjelaskan kebijakan terkait pengumpulan, penggunaan, dan pengungkapan data pribadi saat Anda menggunakan layanan kami."
+    },
+    "informationCollection": {
+      "title": "2. Pengumpulan & Penggunaan Informasi",
+      "intro": "Kami mengumpulkan beberapa jenis informasi:",
+      "items": {
+        "accountTitle": "Informasi Akun:",
+        "account": "nama, email, telepon, dan kata sandi",
+        "profileTitle": "Informasi Profil:",
+        "profile": "CV, pengalaman kerja, pendidikan, dan keahlian",
+        "applicationTitle": "Data Lamaran:",
+        "application": "lamaran kerja, surat lamaran, dan riwayat",
+        "technicalTitle": "Data Teknis:",
+        "technical": "alamat IP, jenis browser, halaman yang dikunjungi",
+        "communicationTitle": "Data Komunikasi:",
+        "communication": "pesan antara pencari kerja dan perekrut"
+      }
+    },
+    "useOfData": {
+      "title": "3. Penggunaan Data",
+      "content": "Kami menggunakan data untuk menyediakan layanan, memberi notifikasi, dukungan pelanggan, dan peningkatan layanan.",
+      "items": {
+        "provide": "Menyediakan dan memelihara layanan",
+        "notify": "Memberi notifikasi perubahan",
+        "support": "Dukungan pelanggan",
+        "analysis": "Analisis dan peningkatan layanan",
+        "monitor": "Memantau penggunaan",
+        "technical": "Mendeteksi masalah teknis",
+        "marketing": "Komunikasi promosi (dengan persetujuan)"
+      }
+    },
+    "security": {
+      "title": "4. Keamanan Data",
+      "content": "Keamanan data Anda penting bagi kami. Tidak ada metode transmisi yang 100% aman."
+    },
+    "cookies": {
+      "title": "5. Cookie",
+      "content": "Kami menggunakan cookie untuk meningkatkan pengalaman. Beberapa fitur mungkin tidak berfungsi tanpa cookie."
+    },
+    "thirdPartyAccess": {
+      "title": "6. Akses Pihak Ketiga",
+      "content": "Kami tidak menjual atau menyewakan data pribadi Anda kepada pihak ketiga."
+    },
+    "disclosure": {
+      "title": "7. Pengungkapan Data",
+      "intro": "Kami dapat mengungkapkan data dalam keadaan berikut:",
+      "items": {
+        "byLaw": "Berdasarkan hukum",
+        "protect": "Melindungi hak perusahaan",
+        "merger": "Kasus merger atau akuisisi",
+        "consent": "Dengan persetujuan Anda"
+      }
+    },
+    "retention": {
+      "title": "8. Retensi Data",
+      "content": "Kami menyimpan data hanya selama diperlukan. Anda bisa meminta penghapusan akun kapan saja."
+    },
+    "rights": {
+      "title": "9. Hak Data Anda",
+      "intro": "Hak Anda terkait data pribadi:",
+      "items": {
+        "access": "Mengakses data pribadi",
+        "correct": "Memperbaiki data tidak akurat",
+        "delete": "Meminta penghapusan data",
+        "optOut": "Menolak komunikasi pemasaran",
+        "portable": "Meminta salinan dalam format portabel"
+      }
+    },
+    "changes": {
+      "title": "10. Perubahan Kebijakan",
+      "content": "Kami dapat memperbarui kebijakan ini dan akan memberi tahu tentang perubahan signifikan."
+    },
+    "contact": {
+      "title": "11. Hubungi Kami",
+      "intro": "Pertanyaan tentang kebijakan privasi:",
+      "emailLabel": "Email",
+      "email": "privacy@cari-kerja.id",
+      "addressLabel": "Alamat",
+      "address": "Jakarta, Indonesia"
+    }
+  },
+  "termsOfService": {
+    "title": "Syarat Layanan",
+    "lastUpdated": "Terakhir diperbarui: 4 Februari 2026",
+    "agreement": { "title": "1. Persetujuan", "content": "Dengan menggunakan Cari Kerja, Anda menerima Syarat Layanan ini." },
+    "useLicense": {
+      "title": "2. Lisensi Penggunaan",
+      "content": "Izin terbatas untuk tampilan pribadi non-komersial. Anda tidak boleh:",
+      "prohibitions": ["Memodifikasi materi", "Penggunaan komersial", "Merekayasa balik perangkat lunak", "Menghapus hak cipta", "Mentransfer ke server lain"]
+    },
+    "disclaimer": { "title": "3. Penafian", "content": "Materi disediakan 'apa adanya' tanpa jaminan." },
+    "limitations": { "title": "4. Batasan", "content": "Cari Kerja tidak bertanggung jawab atas kerusakan dari penggunaan platform." },
+    "accuracy": { "title": "5. Keakuratan", "content": "Materi mungkin mengandung kesalahan. Dapat diubah tanpa pemberitahuan." },
+    "links": { "title": "6. Tautan", "content": "Cari Kerja tidak bertanggung jawab atas konten situs tertaut." },
+    "modifications": { "title": "7. Modifikasi", "content": "Syarat dapat direvisi kapan saja." },
+    "governingLaw": { "title": "8. Hukum yang Berlaku", "content": "Diatur oleh hukum Republik Indonesia." },
+    "userAccounts": { "title": "9. Akun Pengguna", "content": "Anda bertanggung jawab atas kerahasiaan akun." },
+    "prohibitedConduct": {
+      "title": "10. Perilaku yang Dilarang",
+      "content": "Anda setuju untuk tidak:",
+      "items": ["Informasi palsu", "Melanggar hukum", "Melecehkan pengguna lain", "Akses tidak sah", "Spam"]
+    },
+    "termination": { "title": "11. Penghentian", "content": "Kami dapat menghentikan akun kapan saja." },
+    "contact": { "title": "12. Hubungi Kami", "content": "Pertanyaan tentang Syarat Layanan:", "emailLabel": "Email", "email": "legal@cari-kerja.id" }
+  },
+  "contactPage": {
+    "pageTitle": "Cari Kerja - Kontak",
+    "title": "Hubungi Kami",
+    "subtitle": "Ada pertanyaan? Tim kami siap membantu.",
+    "mainOffice": "Kantor utama",
+    "officeAddressLine1": "Jl. Sudirman No. 123",
+    "officeAddressLine2": "Jakarta, Indonesia 10220",
+    "workingHours": "Jam kerja",
+    "workingHoursWeekdays": "Sen — Jum: 09.00 — 18.00",
+    "workingHoursSat": "Sab: 10.00 — 14.00",
+    "support": "Dukungan",
+    "supportDesc": "Pertanyaan umum dan dukungan teknis.",
+    "recruiters": "Perekrut",
+    "recruitersDesc": "Posting lowongan, paket, dan layanan HR.",
+    "advertising": "Iklan",
+    "advertisingDesc": "Peluang kemitraan dan iklan.",
+    "press": "Pers",
+    "pressDesc": "Pertanyaan media.",
+    "emailLabel": "Email:",
+    "phoneLabel": "Telepon:",
+    "sendMessage": "Kirim pesan",
+    "yourName": "Nama Anda",
+    "fullNamePlaceholder": "Nama lengkap",
+    "email": "Email",
+    "emailPlaceholder": "anda@contoh.com",
+    "subject": "Subjek",
+    "subjectPlaceholder": "Subjek",
+    "message": "Pesan",
+    "messagePlaceholder": "Tulis pesan Anda",
+    "sending": "Mengirim...",
+    "sendMessageButton": "Kirim pesan",
+    "messageSent": "Pesan berhasil terkirim.",
+    "sendFailed": "Gagal mengirim. Coba lagi.",
+    "ourLocation": "Lokasi kami",
+    "mapPlaceholderTitle": "Placeholder peta",
+    "mapPlaceholderSubtitle": "Tambahkan Google Maps di sini",
+    "postalAddress": "Alamat pos",
+    "postalAddressLine": "Oscorp Building, Jl. TB Simatupang, Jakarta Selatan, 12430",
+    "urgentPrefix": "Untuk pertanyaan mendesak hubungi",
+    "urgentSuffix": "Untuk hal lain gunakan formulir di atas."
+  },
+  "termsPage": {
+    "pageTitle": "Syarat Layanan - Cari Kerja",
+    "heroTitle": "Syarat Layanan",
+    "lastUpdated": "Terakhir diperbarui: 4 Februari 2026",
+    "sections": {
+      "agreement": { "title": "1. Persetujuan", "body": "Dengan menggunakan Cari Kerja, Anda menerima syarat ini." },
+      "license": {
+        "title": "2. Lisensi",
+        "body": "Izin terbatas untuk penggunaan pribadi non-komersial. Anda tidak boleh:",
+        "bullets": ["Memodifikasi materi", "Penggunaan komersial", "Merekayasa balik", "Menghapus hak cipta", "Transfer ke server lain"]
+      },
+      "disclaimer": { "title": "3. Penafian", "body": "Materi disediakan 'apa adanya' tanpa jaminan." },
+      "limitations": { "title": "4. Batasan", "body": "Tidak bertanggung jawab atas kerusakan dari penggunaan platform." },
+      "accuracy": { "title": "5. Keakuratan", "body": "Materi mungkin mengandung kesalahan dan dapat diubah tanpa pemberitahuan." },
+      "links": { "title": "6. Tautan", "body": "Tidak bertanggung jawab atas konten situs tertaut." },
+      "modifications": { "title": "7. Modifikasi", "body": "Syarat dapat direvisi kapan saja." },
+      "governing": { "title": "8. Hukum yang Berlaku", "body": "Diatur oleh hukum Republik Indonesia dengan yurisdiksi eksklusif pengadilan di Jakarta." },
+      "accounts": { "title": "9. Akun Pengguna", "body": "Anda bertanggung jawab atas kerahasiaan akun dan semua aktivitas di dalamnya." },
+      "prohibited": {
+        "title": "10. Perilaku yang Dilarang",
+        "intro": "Anda setuju untuk tidak:",
+        "bullets": ["Informasi palsu", "Melanggar hukum", "Melecehkan pengguna", "Akses tidak sah", "Spam"]
+      },
+      "termination": { "title": "11. Penghentian", "body": "Kami dapat menghentikan akun kapan saja tanpa pemberitahuan." },
+      "contact": { "title": "12. Hubungi Kami", "bodyPrefix": "Pertanyaan tentang Syarat Layanan, hubungi kami di" }
+    }
+  },
+  "searchWorkers": {
+    "title": "Cari Karyawan",
+    "subtitle": "Temukan dan terhubung dengan profesional berbakat",
+    "filters": "Filter",
+    "searchName": "Cari Nama",
+    "workerNamePlaceholder": "Nama karyawan...",
+    "skills": "Keahlian",
+    "skillsPlaceholder": "mis. JavaScript, React",
+    "separateWithCommas": "Pisahkan dengan koma",
+    "gender": "Jenis Kelamin",
+    "allGenders": "Semua Jenis Kelamin",
+    "male": "Laki-laki",
+    "female": "Perempuan",
+    "other": "Lainnya",
+    "nationality": "Kewarganegaraan",
+    "nationalityPlaceholder": "mis. Indonesia",
+    "minExperience": "Pengalaman Min. (Tahun)",
+    "educationLevel": "Tingkat Pendidikan",
+    "allLevels": "Semua Tingkat",
+    "highSchool": "SMA/SMK",
+    "diploma": "Diploma",
+    "bachelor": "Sarjana (S1)",
+    "master": "Magister (S2)",
+    "doctorate": "Doktor (S3)",
+    "minSalary": "Ekspektasi Gaji Min.",
+    "maxSalary": "Ekspektasi Gaji Maks.",
+    "sortBy": "Urutkan",
+    "newest": "Terbaru",
+    "name": "Nama",
+    "salary": "Gaji",
+    "order": "Urutan",
+    "descending": "Menurun",
+    "ascending": "Menaik",
+    "searching": "Mencari...",
+    "search": "Cari",
+    "reset": "Reset",
+    "results": "Hasil",
+    "perPage": "per halaman",
+    "expectedSalary": "Ekspektasi Gaji:",
+    "experience": "Pengalaman:",
+    "position": "posisi",
+    "positions": "posisi",
+    "education": "Pendidikan:",
+    "viewFullProfile": "Lihat Profil Lengkap",
+    "noWorkersFound": "Karyawan tidak ditemukan",
+    "tryAdjustingFilters": "Coba sesuaikan filter atau kriteria pencarian",
+    "allNationalities": "Semua Kewarganegaraan"
+  },
+  "workerProfile": {
+    "back": "Kembali",
+    "salaryInformation": "Informasi Gaji",
+    "expectedSalary": "Ekspektasi Gaji",
+    "currentSalary": "Gaji Saat Ini",
+    "skills": "Keahlian",
+    "workExperience": "Pengalaman Kerja",
+    "present": "Sekarang",
+    "education": "Pendidikan",
+    "certifications": "Sertifikasi",
+    "issued": "Diterbitkan",
+    "expires": "Kadaluarsa",
+    "credentialId": "ID Kredensial",
+    "viewCredential": "Lihat Kredensial",
+    "notFound": "Profil Tidak Ditemukan",
+    "notFoundMessage": "Profil yang Anda cari tidak ada atau telah dihapus.",
+    "goBack": "Kembali"
+  },
+  "auth": {
+    "emailLabel": "Alamat Email",
+    "usernameLabel": "Nama Pengguna",
+    "passwordLabel": "Kata Sandi",
+    "confirmPasswordLabel": "Konfirmasi Kata Sandi",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Lupa kata sandi?",
+    "dontHaveAccount": "Belum punya akun?",
+    "createAccount": "Buat akun",
+    "alreadyHaveAccount": "Sudah punya akun?",
+    "signInHere": "Masuk di sini",
+    "areYouRecruiter": "Apakah Anda perekrut?",
+    "signInAsRecruiter": "Masuk sebagai Perekrut",
+    "lookingForJob": "Sedang mencari kerja?",
+    "jobSeekerLogin": "Login pencari kerja",
+    "dontHaveRecruiterAccount": "Belum punya akun perekrut?",
+    "registerHere": "Daftar di sini",
+    "termsAndPrivacy": "Dengan masuk, Anda menyetujui",
+    "termsAndPrivacyRegister": "Dengan membuat akun, Anda menyetujui",
+    "jobSeekerSubtitle": "Masuk ke akun pencari kerja Anda",
+    "recruiterSubtitle": "Akses dasbor rekrutmen Anda",
+    "joinCommunity": "Bergabunglah dan temukan peluang berikutnya",
+    "startPosting": "Mulai posting lowongan dan temukan talenta",
+    "fullName": "Nama Lengkap",
+    "companyName": "Nama Perusahaan",
+    "contactPerson": "Narahubung",
+    "contactPhone": "Nomor Kontak",
+    "phonePlaceholder": "+62 (XX) XXXX-XXXX",
+    "passwordRequirements": "Min 8 karakter, huruf besar, huruf kecil, angka & simbol",
+    "placeholders": {
+      "email": "anda@contoh.com",
+      "name": "Budi Santoso",
+      "username": "budisantoso123",
+      "companyUsername": "perusahaan123",
+      "recruiterEmail": "perekrut@perusahaan.com",
+      "company": "PT Perusahaan Anda",
+      "contactName": "Budi Manajer"
+    },
+    "buttons": {
+      "signIn": "Masuk",
+      "signingIn": "Sedang masuk...",
+      "resetPassword": "Reset Kata Sandi",
+      "savingPassword": "Menyimpan...",
+      "sendResetLink": "Kirim tautan reset",
+      "sending": "Mengirim...",
+      "resendVerification": "Kirim ulang email verifikasi",
+      "verify": "Memverifikasi...",
+      "redirecting": "Mengalihkan ke login…"
+    },
+    "messages": {
+      "emailNotVerified": "Email Anda belum diverifikasi.",
+      "verificationSent": "Email verifikasi dikirim",
+      "failedToSendVerification": "Gagal mengirim email verifikasi",
+      "verificationSuccess": "Email terverifikasi. Mengalihkan ke login…",
+      "invalidToken": "Tautan verifikasi tidak valid atau kadaluarsa",
+      "passwordResetSuccess": "Kata sandi berhasil direset.",
+      "noPassword": "Kata sandi wajib diisi",
+      "passwordMismatch": "Konfirmasi kata sandi tidak cocok",
+      "failedReset": "Gagal mereset kata sandi"
+    },
+    "sendResetLinkSubtitle": "Masukkan email dan kami akan mengirim tautan reset.",
+    "newPassword": "Kata Sandi Baru",
+    "enterNewPassword": "Masukkan kata sandi baru di bawah.",
+    "ifEmailExists": "Jika email ada, tautan reset telah dikirim.",
+    "resendIn": "Kirim ulang dalam"
+  },
+  "notifications": {
+    "sessionExpired": "Sesi berakhir, silakan masuk kembali",
+    "jobDeletedSuccessfully": "Lowongan berhasil dihapus",
+    "actionFailed": "Aksi gagal. Silakan coba lagi.",
+    "failedToUpdateJobStatus": "Gagal memperbarui status lowongan",
+    "failedToDuplicateJob": "Gagal menduplikasi lowongan",
+    "verificationEmailSent": "Email verifikasi dikirim",
+    "failedToSendVerificationEmail": "Gagal mengirim email verifikasi",
+    "failedToCreateJobPost": "Gagal membuat posting lowongan",
+    "jobUpdatedSuccessfully": "Lowongan berhasil diperbarui!",
+    "recruitersCannotSaveJobs": "Perekrut tidak dapat menyimpan lowongan",
+    "jobRemovedFromSaved": "Lowongan dihapus dari simpanan",
+    "jobSavedSuccessfully": "Lowongan berhasil disimpan",
+    "errorSavingJob": "Gagal menyimpan lowongan",
+    "profileUpdated": "Profil diperbarui",
+    "failedToUpdateProfile": "Gagal memperbarui profil",
+    "maxFileSize2MB": "Ukuran file maks 2MB",
+    "pleaseSelectFile": "Silakan pilih file",
+    "statusUpdatedSuccessfully": "Status berhasil diperbarui"
+  },
+  "noDescriptionProvided": "Tidak ada deskripsi.",
+  "noAddressProvided": "Alamat tidak tersedia",
+  "noContactNameProvided": "Nama kontak tidak tersedia",
+  "noContactPhoneProvided": "Telepon kontak tidak tersedia",
+  "noWebsiteProvided": "Website tidak tersedia"
+}

@@ -5,7 +5,7 @@ import { onMounted } from "vue";
 const { t } = useI18n();
 
 onMounted(() => {
-  document.title = "Jobs.uz - " + t("about.pageTitle");
+  document.title = "cari-kerja.id - " + t("about.pageTitle");
 });
 </script>
 
@@ -126,9 +126,9 @@ onMounted(() => {
               <p class="text-gray-600 mt-2">
                 {{ $t("about.email") }}:
                 <a
-                  href="mailto:info@jobs.uz"
+                  href="mailto:info@cari-kerja.id"
                   class="text-blue-600 hover:underline"
-                  >info@jobs.uz</a
+                  >info@cari-kerja.id</a
                 >
               </p>
             </div>
@@ -138,9 +138,9 @@ onMounted(() => {
               <p class="text-gray-600">
                 {{ $t("about.careersDescription") }}
                 <a
-                  href="mailto:careers@jobs.uz"
+                  href="mailto:careers@cari-kerja.id"
                   class="text-blue-600 hover:underline"
-                  >careers@jobs.uz</a
+                  >careers@cari-kerja.id</a
                 >
               </p>
             </div>
