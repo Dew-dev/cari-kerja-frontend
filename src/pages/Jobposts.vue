@@ -6,7 +6,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div class="flex flex-col lg:flex-row gap-6">
         <!-- Sidebar - Categories & Filters -->
-        <aside class="hidden lg:block w-64 shrink-0">
+        <aside :class="['shrink-0 w-full lg:w-64', showFilters ? 'block' : 'hidden lg:block']">
           <div class="bg-white rounded-lg shadow p-4 sticky top-6">
             <h3 class="font-semibold text-lg mb-4 text-gray-900">
               {{ $t("categories") }}
