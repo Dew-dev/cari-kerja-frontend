@@ -617,8 +617,8 @@ async function submit() {
     const res = await api.post("/job-posts", payload, authHeaders);
     const { code, message, data } = res?.data || {};
     const jobId = data?.id || data?.data?.id;
-    console.log("CREATE JOB POST RES:", res.data);
-    if (res.data.code !== 201 || !jobId) {
+    console.log("CREATE JOB POST RES:", res.data.code);
+    if (res.data.code !== 201) {
       push.error(err.response?.data?.message || t("notifications.failedToCreateJobPost"));
       return;
     }
