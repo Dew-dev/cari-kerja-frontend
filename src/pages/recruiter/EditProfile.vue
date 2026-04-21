@@ -20,7 +20,19 @@ const form = reactive({
   address: "",
   industry_id: "",
   description: "",
+  employee_count: "",
+  instagram_url: "",
+  tiktok_url: "",
 });
+
+const descWordCount = computed(() =>
+  form.description.trim() === '' ? 0 : form.description.trim().split(/\s+/).length
+)
+const descWordCountColor = computed(() => {
+  if (descWordCount.value < 80) return 'text-red-500'
+  if (descWordCount.value > 130) return 'text-red-500'
+  return 'text-green-600'
+})
 
 const industries = ref([]);
 const industrySearch = ref("");
@@ -43,14 +55,27 @@ const onLogoChange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  // validasi size 2MB
-  if (file.size > 2 * 1024 * 1024) {
-    push.warning(t("notifications.maxFileSize2MB"));
+  // max 500kb
+  if (file.size > 500 * 1024) {
+    push.warning(t("notifications.maxFileSize500KB") || "Ukuran foto maksimal 500 KB");
+    e.target.value = '';
     return;
   }
 
-  avatarFile.value = file;
-  avatarPreview.value = URL.createObjectURL(file);
+  // min 512x512
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    if (img.width < 512 || img.height < 512) {
+      push.warning(t("notifications.minImageSize512") || "Ukuran foto minimal 512×512 px");
+      URL.revokeObjectURL(url);
+      e.target.value = '';
+      return;
+    }
+    avatarFile.value = file;
+    avatarPreview.value = url;
+  };
+  img.src = url;
 };
 /* =====================
    LOAD DATA
@@ -74,6 +99,9 @@ async function loadProfile() {
     form.address = r.address ?? "";
     form.industry_id = r.industry_id ? String(r.industry_id) : "";
     form.description = r.description ?? "";
+    form.employee_count = r.employee_count ?? "";
+    form.instagram_url = r.instagram_url ?? "";
+    form.tiktok_url = r.tiktok_url ?? "";
 
     if (r.avatar_url) {
       avatarFromBackend.value = r.avatar_url;
@@ -123,6 +151,9 @@ async function saveProfile() {
     fd.append("address", form.address);
     fd.append("industry_id", form.industry_id);
     fd.append("description", form.description);
+    fd.append("employee_count", form.employee_count);
+    fd.append("instagram_url", form.instagram_url);
+    fd.append("tiktok_url", form.tiktok_url);
 
     if (avatarFile.value) {
       fd.append("avatar", avatarFile.value);
@@ -178,7 +209,7 @@ onMounted(loadProfile);
           <div>
             <label class="block text-sm font-medium mb-1"> {{ t("companyLogo") }} </label>
             <input type="file" accept="image/*" @change="onLogoChange" class="text-sm w-full rounded-lg border border-gray-200 shadow-sm px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            <p class="text-xs text-gray-500 mt-1">{{ t("fileTypeAndSize") }}</p>
+          <p class="text-xs text-gray-500 mt-1">JPG/PNG, rasio 1:1, min. 512×512 px, maks. 500 KB</p>
           </div>
         </div>
 
@@ -202,12 +233,28 @@ onMounted(loadProfile);
           class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           :placeholder="t('contactPhone')"
         />
-
+        <input
+          v-model="form.employee_count"
+          type="number"
+          min="1"
+          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          :placeholder="'Jumlah Karyawan (Ex. 50)'"
+        />
         <textarea
           v-model="form.address"
           class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           rows="2"
           :placeholder="t('companyAddress')"
+        />
+        <input
+          v-model="form.instagram_url"
+          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Instagram (https://instagram.com/...)"
+        />
+        <input
+          v-model="form.tiktok_url"
+          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="TikTok (https://tiktok.com/@...)"
         />
 
         <!-- INDUSTRY (SEARCHABLE SELECT) -->
@@ -219,12 +266,18 @@ onMounted(loadProfile);
           @search="handleIndustrySearch"
         />
 
-        <textarea
-          v-model="form.description"
-          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 col-span-2"
-          rows="4"
-          :placeholder="t('companyDescription')"
-        />
+        <div class="col-span-2">
+          <textarea
+            v-model="form.description"
+            class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows="4"
+            :placeholder="t('companyDescription')"
+          />
+          <p class="text-xs mt-1" :class="descWordCountColor">
+            {{ descWordCount }} kata
+            <span class="text-gray-400 ml-1">(min. 80 – maks. 130)</span>
+          </p>
+        </div>
         <div class="flex justify-end pt-4 border-t col-span-2">
             
           <RouterLink
