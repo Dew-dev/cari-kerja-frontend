@@ -6,8 +6,8 @@ const { locale } = useI18n()
 const languages = [
   { code: "en", label: "EN" },
   { code: "id", label: "ID" },
-  { code: "ru", label: "RU" },
-  { code: "uz", label: "UZ" },
+  // { code: "ru", label: "RU" },
+  // { code: "uz", label: "UZ" },
 ]
 
 function setLang(code) {

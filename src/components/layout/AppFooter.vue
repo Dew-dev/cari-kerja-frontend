@@ -9,6 +9,7 @@ const open = ref(false);
 
 const languages = [
   { code: "en", label: "English" },
+  { code: "id", label: "Indonesia" },
   { code: "ru", label: "Русский" },
   { code: "uz", label: "O‘zbekcha" },
 ];

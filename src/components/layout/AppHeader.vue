@@ -204,8 +204,8 @@ function logout() {
 const languages = [
   { code: "en", label: "English" },
   { code: "id", label: "Indonesia" },
-  // { code: "ru", label: "Русский" },
-  // { code: "uz", label: "O'zbekcha" },
+  { code: "ru", label: "Русский" },
+  { code: "uz", label: "O'zbekcha" },
 ];
 
 function setLang(lang) {
