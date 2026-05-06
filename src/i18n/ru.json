@@ -1945,6 +1945,7 @@
     "profileUpdated": "Профиль обновлен",
     "failedToUpdateProfile": "Не удалось обновить профиль",
     "minImageSize256": "Минимальный размер изображения 256x256 px",
+    "minImageSize128": "Минимальный размер изображения 128x128 px",
     "maxFileSize2MB": "Максимальный размер файла 2МБ",
     "pleaseSelectFile": "Пожалуйста, выберите файл",
     "statusUpdatedSuccessfully": "Статус успешно обновлен",

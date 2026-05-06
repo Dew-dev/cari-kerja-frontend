@@ -29,7 +29,7 @@ const descWordCount = computed(() =>
   form.description.trim() === '' ? 0 : form.description.trim().split(/\s+/).length
 )
 const descWordCountColor = computed(() => {
-  if (descWordCount.value < 80) return 'text-red-500'
+  if (descWordCount.value < 60) return 'text-red-500'
   if (descWordCount.value > 130) return 'text-red-500'
   return 'text-green-600'
 })
@@ -63,12 +63,12 @@ const onLogoChange = (e) => {
     return;
   }
 
-  // min 256x256
+  // min 128x128
   const img = new Image();
   const url = URL.createObjectURL(file);
   img.onload = () => {
-    if (img.width < 256 || img.height < 256) {
-      push.warning(t("notifications.minImageSize256") || "Ukuran foto minimal 256x256 px");
+    if (img.width < 128 || img.height < 128) {
+      push.warning(t("notifications.minImageSize128") || "Ukuran foto minimal 128x128 px");
       URL.revokeObjectURL(url);
       e.target.value = '';
       return;
@@ -210,7 +210,7 @@ onMounted(loadProfile);
           <div>
             <label class="block text-sm font-medium mb-1"> {{ t("companyLogo") }} </label>
             <input type="file" accept="image/*" @change="onLogoChange" class="text-sm w-full rounded-lg border border-gray-200 shadow-sm px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          <p class="text-xs text-gray-500 mt-1">JPG/PNG, rasio 1:1, min. 256x256 px, maks. 500 KB</p>
+          <p class="text-xs text-gray-500 mt-1">JPG/PNG, rasio 1:1, min. 128x128 px, maks. 500 KB</p>
           </div>
         </div>
 
@@ -276,7 +276,7 @@ onMounted(loadProfile);
           />
           <p class="text-xs mt-1" :class="descWordCountColor">
             {{ descWordCount }} kata
-            <span class="text-gray-400 ml-1">(min. 80 – maks. 130)</span>
+            <span class="text-gray-400 ml-1">(min. 60 – maks. 130)</span>
           </p>
         </div>
         <div class="flex justify-end pt-4 border-t col-span-2">
