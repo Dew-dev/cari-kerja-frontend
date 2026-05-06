@@ -1636,6 +1636,7 @@
     "errorSavingJob": "Gagal menyimpan lowongan",
     "profileUpdated": "Profil diperbarui",
     "failedToUpdateProfile": "Gagal memperbarui profil",
+    "minImageSize256": "Ukuran foto minimal 256x256 px",
     "maxFileSize2MB": "Ukuran file maks 2MB",
     "pleaseSelectFile": "Silakan pilih file",
     "statusUpdatedSuccessfully": "Status berhasil diperbarui"

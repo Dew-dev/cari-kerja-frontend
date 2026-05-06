@@ -63,12 +63,12 @@ const onLogoChange = (e) => {
     return;
   }
 
-  // min 512x512
+  // min 256x256
   const img = new Image();
   const url = URL.createObjectURL(file);
   img.onload = () => {
-    if (img.width < 512 || img.height < 512) {
-      push.warning(t("notifications.minImageSize512") || "Ukuran foto minimal 512×512 px");
+    if (img.width < 256 || img.height < 256) {
+      push.warning(t("notifications.minImageSize256") || "Ukuran foto minimal 256x256 px");
       URL.revokeObjectURL(url);
       e.target.value = '';
       return;
@@ -210,7 +210,7 @@ onMounted(loadProfile);
           <div>
             <label class="block text-sm font-medium mb-1"> {{ t("companyLogo") }} </label>
             <input type="file" accept="image/*" @change="onLogoChange" class="text-sm w-full rounded-lg border border-gray-200 shadow-sm px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          <p class="text-xs text-gray-500 mt-1">JPG/PNG, rasio 1:1, min. 512×512 px, maks. 500 KB</p>
+          <p class="text-xs text-gray-500 mt-1">JPG/PNG, rasio 1:1, min. 256x256 px, maks. 500 KB</p>
           </div>
         </div>
 

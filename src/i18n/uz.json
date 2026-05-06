@@ -1943,6 +1943,7 @@
     "errorSavingJob": "Ishni saqlashda xatolik",
     "profileUpdated": "Profil yangilandi",
     "failedToUpdateProfile": "Profilni yangilash muvaffaq bo'lmadi",
+    "minImageSize256": "Rasmning minimal o'lchami 256x256 px",
     "maxFileSize2MB": "Maksimal fayl hajmi 2MB",
     "pleaseSelectFile": "Iltimos faylni tanlang",
     "statusUpdatedSuccessfully": "Holat muvaffaqiyatli yangilandi"
