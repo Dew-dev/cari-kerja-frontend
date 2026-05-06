@@ -43,7 +43,7 @@
               <div class="shrink-0">
                 <img
                   :src="
-                    import.meta.env.VITE_FILE_STORAGE_URL + job.avatar_url ||
+                    fileStorageUrl + job.avatar_url ||
                     '/company-default-image.png'
                   "
                   @error="(e) => (e.target.src = '/company-default-image.png')"
@@ -302,7 +302,7 @@
             <div class="flex items-center gap-3 mb-4">
               <img
                 :src="
-                  import.meta.env.VITE_FILE_STORAGE_URL + job.avatar_url ||
+                  fileStorageUrl + job.avatar_url ||
                   '/company-default-image.png'
                 "
                 @error="(e) => (e.target.src = '/company-default-image.png')"
@@ -721,6 +721,7 @@ const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
+const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 
 // State
 const props = defineProps(["id"]);

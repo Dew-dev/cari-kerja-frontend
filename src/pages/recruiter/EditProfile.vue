@@ -40,6 +40,7 @@ let industrySearchTimeout = null;
 const avatarFile = ref(null);
 const avatarPreview = ref(null);
 const avatarFromBackend = ref(null);
+const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 const loading = ref(false);
 
 const industryOptions = computed(() =>
@@ -199,7 +200,7 @@ onMounted(loadProfile);
               <img
                 v-if="avatarPreview || avatarFromBackend"
                 :src="
-                  avatarPreview || `${import.meta.env.VITE_FILE_STORAGE_URL}${avatarFromBackend}`
+                  avatarPreview || `${fileStorageUrl}${avatarFromBackend}`
                 "
                 class="h-full w-full object-cover"
               />

@@ -297,7 +297,7 @@
                     <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
                       <img
                         v-if="worker.avatar_url"
-                        :src="`${import.meta.env.VITE_FILE_STORAGE_URL}${worker.avatar_url}`"
+                        :src="`${fileStorageUrl}${worker.avatar_url}`"
                         :alt="worker.name"
                         class="w-full h-full object-cover"
                       />
@@ -451,6 +451,7 @@ import api from '@/services/api'
 
 const router = useRouter()
 const route = useRoute()
+const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 
 // State
 const workers = ref([])

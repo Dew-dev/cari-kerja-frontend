@@ -326,7 +326,7 @@
                       <img
                         :src="
                           job.avatar_url
-                            ? import.meta.env.VITE_FILE_STORAGE_URL + job.avatar_url
+                            ? fileStorageUrl + job.avatar_url
                             : '/company-default-image.png'
                         "
                         @error="
@@ -523,6 +523,7 @@ const route = useRoute();
 const router = useRouter();
 
 // State
+const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 const jobs = ref([]);
 const categories = ref([]);
 const loading = ref(true);
