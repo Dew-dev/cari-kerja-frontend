@@ -72,10 +72,19 @@
 
         <!-- AUTHENTICATED -->
         <template v-else>
-          <ProfileAvatar
-            :name="auth.user?.name"
-            :avatar="auth.user?.avatar_url"
-          />
+          <div class="flex items-center gap-2 cursor-pointer" @click="goProfile">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+              <img
+                v-if="auth.user?.avatar_url"
+                :src="`${fileStorageUrl}${auth.user?.avatar_url}`"
+                class="w-full h-full object-cover"
+              />
+              <span v-else class="text-sm font-semibold text-gray-700">
+                {{ auth.user?.name?.charAt(0)?.toUpperCase() }}
+              </span>
+            </div>
+            <span class="text-sm">{{ auth.user?.name }}</span>
+          </div>
 
           <button
             class="border border-white shadow-sm px-4 py-3 rounded hover:bg-white hover:text-blue-500 font-semibold transition duration-200"
@@ -155,10 +164,16 @@
 
           <template v-else>
             <div class="flex items-center gap-3">
-              <ProfileAvatar
-                :name="auth.user?.name"
-                :avatar="auth.user?.avatar_url"
-              />
+              <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden cursor-pointer" @click="goProfile">
+                <img
+                  v-if="auth.user?.avatar_url"
+                  :src="`${fileStorageUrl}${auth.user?.avatar_url}`"
+                  class="w-full h-full object-cover"
+                />
+                <span v-else class="text-sm font-semibold text-gray-700">
+                  {{ auth.user?.name?.charAt(0)?.toUpperCase() }}
+                </span>
+              </div>
               <div class="flex-1">
                 <div class="font-semibold">{{ auth.user?.name }}</div>
                 <button
@@ -179,7 +194,6 @@
 <script setup>
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import ProfileAvatar from "@/components/common/ProfileAvatar.vue";
 import RecruiterHeader from "@/components/layout/RecruiterHeader.vue";
 import UserHeader from "@/components/layout/UserHeader.vue";
 
@@ -193,12 +207,21 @@ import { useAuthStore } from "@/stores/authStore.js";
 const router = useRouter();
 const route = useRoute();
 const auth = useAuthStore();
+const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 
 function logout() {
   auth.logout();
   mobileOpen.value = false;
   open.value = false;
   router.push("/");
+}
+
+function goProfile() {
+  if (auth.role === "recruiter") {
+    router.push("/recruiter/profile/edit");
+  } else {
+    router.push("/profile/edit");
+  }
 }
 
 const languages = [
