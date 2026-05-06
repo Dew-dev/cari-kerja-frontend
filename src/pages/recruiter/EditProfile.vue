@@ -167,7 +167,7 @@ async function saveProfile() {
     push.success(t("notifications.profileUpdated"));
   } catch (err) {
     console.error("Save failed", err);
-    push.error(t("notifications.failedToUpdateProfile"));
+    push.error(err?.response?.data?.message || t("notifications.failedToUpdateProfile"));
   }
 }
 
