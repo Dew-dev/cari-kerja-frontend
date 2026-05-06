@@ -248,7 +248,7 @@ async function onSubmit() {
   error.value = "";
 
   try {
-    const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1";
+    const baseURL = import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_FILE_STORAGE_URL}/api/v1`;
     const response = await axios.post(`${baseURL}/contact-us`, {
       name: form.name,
       email: form.email,

@@ -63,10 +63,10 @@ const loading = ref(false);
 const groups = ref([]);
 const fileStorageOrigin = (() => {
   try {
-    const baseUrl = import.meta.env.VITE_FILE_STORAGE_URL || "http://localhost:5000";
+    const baseUrl = import.meta.env.VITE_FILE_STORAGE_URL;
     return new URL(baseUrl).origin;
   } catch {
-    return "http://localhost:5000";
+    return import.meta.env.VITE_FILE_STORAGE_URL;
   }
 })();
 

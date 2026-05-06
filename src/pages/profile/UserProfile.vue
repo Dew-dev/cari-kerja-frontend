@@ -96,7 +96,7 @@ const loadingSkills = ref(false);
 const RESUME_LIMIT = 3;
 const CV_MAX_MB = 5;
 const linkStorageUrl =
-  import.meta.env.VITE_FILE_STORAGE_URL || "http://localhost:5000";
+  import.meta.env.VITE_FILE_STORAGE_URL;
 
 const savedJobCards = computed(() =>
   (savedJobs.value || []).map((item) => item?.job || item?.job_post || item),

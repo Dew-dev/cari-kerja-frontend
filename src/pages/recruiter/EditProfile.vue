@@ -199,7 +199,7 @@ onMounted(loadProfile);
               <img
                 v-if="avatarPreview || avatarFromBackend"
                 :src="
-                  avatarPreview || `http://localhost:5000${avatarFromBackend}`
+                  avatarPreview || `${import.meta.env.VITE_FILE_STORAGE_URL}${avatarFromBackend}`
                 "
                 class="h-full w-full object-cover"
               />

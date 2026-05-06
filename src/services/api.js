@@ -5,7 +5,7 @@ import { useAuthStore } from "../stores/authStore";
 import { i18n } from "../i18n";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1",
+  baseURL: import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_FILE_STORAGE_URL}/api/v1`,
 });
 
 let isRefreshing = false;

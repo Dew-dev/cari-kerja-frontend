@@ -75,7 +75,7 @@ onMounted(fetchRecruiter)
           <div class="h-20 w-20 sm:h-28 sm:w-28 rounded-xl overflow-hidden shadow-lg bg-white shrink-0">
             <img
               v-if="recruiter.avatar_url"
-              :src="`http://localhost:5000${recruiter.avatar_url}`"
+              :src="`${import.meta.env.VITE_FILE_STORAGE_URL}${recruiter.avatar_url}`"
               class="h-full w-full object-cover"
               :alt="recruiter.company_name"
             />

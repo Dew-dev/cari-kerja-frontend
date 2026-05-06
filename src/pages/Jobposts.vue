@@ -326,7 +326,7 @@
                       <img
                         :src="
                           job.avatar_url
-                            ? 'http://localhost:5000' + job.avatar_url
+                            ? import.meta.env.VITE_FILE_STORAGE_URL + job.avatar_url
                             : '/company-default-image.png'
                         "
                         @error="
