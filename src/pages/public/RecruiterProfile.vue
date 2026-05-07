@@ -77,7 +77,7 @@ onMounted(fetchRecruiter)
             <img
               v-if="recruiter.avatar_url"
               :src="`${fileStorageUrl}${recruiter.avatar_url}`"
-              class="h-full w-full object-cover"
+              class="h-full w-full object-contain"
               :alt="recruiter.company_name"
             />
             <div v-else class="h-full w-full flex items-center justify-center text-blue-600 text-3xl font-bold">

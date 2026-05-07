@@ -104,7 +104,7 @@
                     v-if="getAvatarUrl(recruiter)"
                     :src="getAvatarUrl(recruiter)"
                     :alt="recruiter.company_name || recruiter.name"
-                    class="h-12 w-12 rounded-full object-cover"
+                    class="h-12 w-12 rounded-full object-contain"
                   />
                   <div
                     v-else
@@ -143,7 +143,7 @@
                     v-if="getAvatarUrl(company)"
                     :src="getAvatarUrl(company)"
                     :alt="company.company_name || company.name"
-                    class="h-20 w-20 rounded-xl object-cover ring-1 ring-gray-200"
+                    class="h-20 w-20 rounded-xl object-contain ring-1 ring-gray-200"
                   />
                   <div
                     v-else

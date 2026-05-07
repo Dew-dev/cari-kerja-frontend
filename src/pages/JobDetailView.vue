@@ -48,7 +48,7 @@
                   "
                   @error="(e) => (e.target.src = '/company-default-image.png')"
                   :alt="job.company_name"
-                  class="w-20 h-20 rounded-lg shadow-sm object-cover"
+                  class="w-20 h-20 rounded-lg shadow-sm object-contain"
                 />
               </div>
               <div class="flex-1">
@@ -307,7 +307,7 @@
                 "
                 @error="(e) => (e.target.src = '/company-default-image.png')"
                 :alt="job.company_name"
-                class="w-16 h-16 rounded-lg shadow-sm object-cover"
+                class="w-16 h-16 rounded-lg shadow-sm object-contain"
               />
               <div>
                 <h4 class="font-semibold text-gray-900">

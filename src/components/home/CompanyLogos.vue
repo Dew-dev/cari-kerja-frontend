@@ -22,7 +22,7 @@
                 v-if="company.logo"
                 :src="company.logo"
                 :alt="company.name"
-                class="h-14 w-14 rounded-full object-cover"
+                class="h-14 w-14 rounded-full object-contain"
               />
               <span
                 v-else

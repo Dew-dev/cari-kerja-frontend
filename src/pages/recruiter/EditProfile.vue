@@ -202,7 +202,7 @@ onMounted(loadProfile);
                 :src="
                   avatarPreview || `${fileStorageUrl}${avatarFromBackend}`
                 "
-                class="h-full w-full object-cover"
+                class="h-full w-full object-contain"
               />
             </div>
           </div>
