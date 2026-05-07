@@ -214,60 +214,124 @@ onMounted(loadProfile);
           </div>
         </div>
 
-        <input
-          v-model="form.company_name"
-          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          :placeholder="t('companyName')"
-        />
-        <input
-          v-model="form.company_website"
-          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          :placeholder="t('companyWebsite')"
-        />
-        <input
-          v-model="form.contact_name"
-          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          :placeholder="t('contactName')"
-        />
-        <input
-          v-model="form.contact_phone"
-          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          :placeholder="t('contactPhone')"
-        />
-        <input
-          v-model="form.employee_count"
-          type="number"
-          min="1"
-          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          :placeholder="'Jumlah Karyawan (Ex. 50)'"
-        />
-        <textarea
-          v-model="form.address"
-          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          rows="2"
-          :placeholder="t('companyAddress')"
-        />
-        <input
-          v-model="form.instagram_url"
-          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Instagram (https://instagram.com/...)"
-        />
-        <input
-          v-model="form.tiktok_url"
-          class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="TikTok (https://tiktok.com/@...)"
-        />
+        <!-- Company Name (wajib) -->
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">
+            {{ t('companyName') }} <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="form.company_name"
+            class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            :placeholder="t('companyName')"
+          />
+        </div>
 
-        <!-- INDUSTRY (SEARCHABLE SELECT) -->
-        <SearchableSelect
-          :options="filteredIndustryOptions"
-          :value="form.industry_id"
-          :placeholder="t('selectIndustry')"
-          @change="(val) => (form.industry_id = String(val || ''))"
-          @search="handleIndustrySearch"
-        />
+        <!-- Company Website (opsional) -->
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">
+            {{ t('companyWebsite') }} <span class="text-gray-400 text-xs">(opsional)</span>
+          </label>
+          <input
+            v-model="form.company_website"
+            class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            :placeholder="t('companyWebsite')"
+          />
+        </div>
 
+        <!-- Contact Name (wajib) -->
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">
+            {{ t('contactName') }} <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="form.contact_name"
+            class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            :placeholder="t('contactName')"
+          />
+        </div>
+
+        <!-- Contact Phone (wajib) -->
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">
+            {{ t('contactPhone') }} <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="form.contact_phone"
+            class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            :placeholder="t('contactPhone')"
+          />
+        </div>
+
+        <!-- Employee Count (opsional) -->
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">
+            Jumlah Karyawan <span class="text-gray-400 text-xs">(opsional)</span>
+          </label>
+          <input
+            v-model="form.employee_count"
+            type="number"
+            min="1"
+            class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Ex. 50"
+          />
+        </div>
+
+        <!-- Address (wajib) -->
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">
+            {{ t('companyAddress') }} <span class="text-red-500">*</span>
+          </label>
+          <textarea
+            v-model="form.address"
+            class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows="2"
+            :placeholder="t('companyAddress')"
+          />
+        </div>
+
+        <!-- Instagram (opsional) -->
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">
+            Instagram <span class="text-gray-400 text-xs">(opsional)</span>
+          </label>
+          <input
+            v-model="form.instagram_url"
+            class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="https://instagram.com/..."
+          />
+        </div>
+
+        <!-- TikTok (opsional) -->
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">
+            TikTok <span class="text-gray-400 text-xs">(opsional)</span>
+          </label>
+          <input
+            v-model="form.tiktok_url"
+            class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="https://tiktok.com/@..."
+          />
+        </div>
+
+        <!-- Industry (wajib) -->
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">
+            {{ t('selectIndustry') }} <span class="text-red-500">*</span>
+          </label>
+          <SearchableSelect
+            :options="filteredIndustryOptions"
+            :value="form.industry_id"
+            :placeholder="t('selectIndustry')"
+            @change="(val) => (form.industry_id = String(val || ''))"
+            @search="handleIndustrySearch"
+          />
+        </div>
+
+        <!-- Description (wajib) -->
         <div class="col-span-2">
+          <label class="block text-xs font-medium text-gray-600 mb-1">
+            {{ t('companyDescription') }} <span class="text-red-500">*</span>
+          </label>
           <textarea
             v-model="form.description"
             class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
