@@ -1,9 +1,26 @@
-# Git Workflow Rules
+# Git Workflow Rule
 
-This project follows a strict Git workflow. Please adhere to the following rules for any changes:
-1. Do not push directly to the `main` or `master` branch.
-2. Create a new branch for each feature or bug fix.
-3. Commit changes with clear, descriptive commit messages.
-4. Ensure all code changes are tested before committing.
-5. Once a feature is complete, suggest the user to review the changes and commit them, or ask for permission to commit and push on their behalf if authorized.
-6. The frontend conversation only has read access to the backend repository located at `C:\Users\mybook\Documents\Project-Webside\job-portal\cari-kerja-backend`. Do not attempt to write or modify any files in the backend repository from this conversation. Instead, provide instructions or an implementation plan for the backend agent.
+## Deskripsi
+Aturan ini mewajibkan setiap perubahan kode atau penambahan fitur agar mematuhi standar Git Workflow untuk menjaga kerapian histori repositori.
+
+## Aturan
+1. **Selalu Buat Branch Baru**: Sebelum menulis atau mengubah kode, pastikan untuk selalu membuat branch baru dari branch utama (`develop`) menggunakan format yang jelas.
+   - Contoh format: `feature/nama-fitur`, `fix/nama-perbaikan`, `chore/nama-task`.
+2. **Commit Granular**: Lakukan commit secara berkala (granular) untuk setiap perubahan fungsional yang sudah selesai, bukan satu commit raksasa di akhir.
+3. **Conventional Commits**: Penamaan pesan commit harus menggunakan standar Conventional Commits:
+   - `feat:` untuk penambahan fitur baru.
+   - `fix:` untuk perbaikan bug.
+   - `docs:` untuk perubahan pada dokumentasi.
+   - `style:` untuk perubahan formatting (spasi, titik koma, dsb) yang tidak mengubah logika kode.
+   - `refactor:` untuk perubahan kode yang tidak menambah fitur atau memperbaiki bug.
+   - `chore:` untuk pembaruan pada proses build atau alat bantu lainnya.
+4. **Tidak Mendorong Langsung ke Develop**: Agen tidak boleh melakukan push langsung ke branch utama (`develop`). Push hanya dilakukan pada branch fitur, kemudian berikan instruksi kepada user (atau buatkan pull request jika diinstruksikan) untuk melakukan merge/review ke branch `develop`.
+
+# Pembagian Tugas Backend & Frontend
+
+## Deskripsi
+Aturan ini menetapkan batasan ruang lingkup kerja agen terkait perubahan frontend. Karena pengguna memiliki agen terpisah untuk menangani frontend.
+
+## Aturan
+1. **Hanya Fokus pada Frontend**: Agen tidak diperbolehkan mengubah kode atau file apapun yang berada di direktori backend. Terhadap direktori `C:\Users\Hakim\Documents\Freelance\job-portal\cari-kerja-backend`, agen hanya diberikan akses **Read-Only** (hanya untuk membaca dan memahami konteks), tanpa izin untuk menambah, memodifikasi, atau menghapus file apa pun.
+2. **Berikan Instruksi Khusus**: Jika ada perubahan fitur yang memerlukan penyesuaian di backend, agen harus mendeskripsikan secara spesifik apa saja yang perlu dilakukan pada sisi backend, dan menyerahkannya sebagai **Instruksi untuk Agen Backend** yang dapat disalin oleh pengguna.
