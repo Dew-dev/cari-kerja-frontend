@@ -7,7 +7,7 @@
       <div class="flex flex-col lg:flex-row gap-6">
         <!-- Sidebar - Categories & Filters -->
         <aside :class="['shrink-0 w-full lg:w-64', showFilters ? 'block' : 'hidden lg:block']">
-          <div class="bg-white rounded-lg shadow p-4 sticky top-6">
+          <div class="bg-white rounded-lg shadow p-4 sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
             <h3 class="font-semibold text-lg mb-4 text-gray-900">
               {{ $t("categories") }}
             </h3>
@@ -185,11 +185,20 @@
               </h4>
               <div class="space-y-3">
                 <div>
-                  <label class="block text-xs text-gray-600 mb-1">Min (IDR)</label>
+                  <label class="block text-xs text-gray-600 mb-1">Currency</label>
+                  <select v-model="salaryCurrency" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="IDR">IDR</option>
+                    <option value="UZS">UZS</option>
+                    <option value="USD">USD</option>
+                    <option value="AED">AED</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs text-gray-600 mb-1">Min ({{ salaryCurrency }})</label>
                   <input type="number" v-model="salaryMin" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Min salary" />
                 </div>
                 <div>
-                  <label class="block text-xs text-gray-600 mb-1">Max (IDR)</label>
+                  <label class="block text-xs text-gray-600 mb-1">Max ({{ salaryCurrency }})</label>
                   <input type="number" v-model="salaryMax" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Max salary" />
                 </div>
                 <button @click="handleFilterChange" class="w-full rounded-md border border-gray-200 shadow-sm px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100">
@@ -572,6 +581,7 @@ let provinceTimeout = null;
 let cityTimeout = null;
 const salaryMin = ref(null);
 const salaryMax = ref(null);
+const salaryCurrency = ref("IDR");
 
 // Computed
 const displayPages = computed(() => {
@@ -803,6 +813,11 @@ const jobService = {
         hasActiveFilters = true;
       }
 
+      if (filters.salaryCurrency) {
+        params.currency = filters.salaryCurrency;
+        hasActiveFilters = true;
+      }
+
       if (filters.sortBy && filters.sortBy !== "" && filters.sortBy !== "created_at") {
         hasActiveFilters = true;
         if (filters.sortBy === "latest") {
@@ -865,6 +880,7 @@ const loadJobs = async () => {
       cities_name: selectedCity.value,
       salaryMin: salaryMin.value,
       salaryMax: salaryMax.value,
+      salaryCurrency: salaryCurrency.value,
       sortBy: sortBy.value,
       page: currentPage.value,
       recommendations: recommendations.value,
@@ -978,6 +994,7 @@ const handleFilterChange = () => {
       cities_name: selectedCity.value || undefined,
       salary_min: salaryMin.value || undefined,
       salary_max: salaryMax.value || undefined,
+      salary_currency: salaryCurrency.value || undefined,
       recommendations: "false",
       page: 1, // Reset ke 1 hanya saat fungsi ini dipanggil
     },
@@ -997,6 +1014,7 @@ const resetFilters = () => {
   cityOptions.value = [];
   salaryMin.value = null;
   salaryMax.value = null;
+  salaryCurrency.value = "IDR";
   sortBy.value = "";
   currentPage.value = 1;
 
@@ -1033,6 +1051,7 @@ const enableRecommendations = () => {
   cityInput.value = "";
   salaryMin.value = null;
   salaryMax.value = null;
+  salaryCurrency.value = "IDR";
   sortBy.value = "";
   searchQuery.value = "";
   
@@ -1081,6 +1100,7 @@ watch(
     selectedCity.value = q.cities_name || "";
     salaryMin.value = q.salary_min ? Number(q.salary_min) : null;
     salaryMax.value = q.salary_max ? Number(q.salary_max) : null;
+    salaryCurrency.value = q.salary_currency || "IDR";
     if (q.province_name) {
       provinceInput.value = q.province_name;
       resolveProvinceIdByName(q.province_name).catch(() => null);
@@ -1099,7 +1119,8 @@ watch(
       q.province_name ||
       q.cities_name ||
       q.salary_min !== undefined ||
-      q.salary_max !== undefined
+      q.salary_max !== undefined ||
+      (q.salary_currency !== undefined && q.salary_currency !== "IDR")
     );
     
     // Recommendations only for non-recruiter logged-in users
