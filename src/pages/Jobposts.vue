@@ -813,9 +813,11 @@ const jobService = {
         hasActiveFilters = true;
       }
 
-      if (filters.salaryCurrency) {
+      if (filters.salaryCurrency && filters.salaryCurrency !== "IDR") {
         params.currency = filters.salaryCurrency;
         hasActiveFilters = true;
+      } else if (filters.salaryCurrency === "IDR" && (filters.salaryMin || filters.salaryMax)) {
+        params.currency = filters.salaryCurrency;
       }
 
       if (filters.sortBy && filters.sortBy !== "" && filters.sortBy !== "created_at") {
@@ -994,7 +996,7 @@ const handleFilterChange = () => {
       cities_name: selectedCity.value || undefined,
       salary_min: salaryMin.value || undefined,
       salary_max: salaryMax.value || undefined,
-      salary_currency: salaryCurrency.value || undefined,
+      salary_currency: salaryCurrency.value !== "IDR" ? salaryCurrency.value : undefined,
       recommendations: "false",
       page: 1, // Reset ke 1 hanya saat fungsi ini dipanggil
     },
