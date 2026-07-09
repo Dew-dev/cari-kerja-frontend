@@ -187,6 +187,7 @@
                 <div>
                   <label class="block text-xs text-gray-600 mb-1">Currency</label>
                   <select v-model="salaryCurrency" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="ALL">ALL</option>
                     <option value="IDR">IDR</option>
                     <option value="UZS">UZS</option>
                     <option value="USD">USD</option>
@@ -581,7 +582,7 @@ let provinceTimeout = null;
 let cityTimeout = null;
 const salaryMin = ref(null);
 const salaryMax = ref(null);
-const salaryCurrency = ref("IDR");
+const salaryCurrency = ref("ALL");
 
 // Computed
 const displayPages = computed(() => {
@@ -813,7 +814,7 @@ const jobService = {
         hasActiveFilters = true;
       }
 
-      if (filters.salaryCurrency && filters.salaryCurrency !== "IDR") {
+      if (filters.salaryCurrency && filters.salaryCurrency !== "ALL") {
         params.currency = filters.salaryCurrency;
         hasActiveFilters = true;
       } else if (filters.salaryCurrency === "IDR" && (filters.salaryMin || filters.salaryMax)) {
@@ -996,7 +997,7 @@ const handleFilterChange = () => {
       cities_name: selectedCity.value || undefined,
       salary_min: salaryMin.value || undefined,
       salary_max: salaryMax.value || undefined,
-      salary_currency: salaryCurrency.value !== "IDR" ? salaryCurrency.value : undefined,
+      salary_currency: salaryCurrency.value !== "ALL" ? salaryCurrency.value : undefined,
       recommendations: "false",
       page: 1, // Reset ke 1 hanya saat fungsi ini dipanggil
     },
@@ -1016,7 +1017,7 @@ const resetFilters = () => {
   cityOptions.value = [];
   salaryMin.value = null;
   salaryMax.value = null;
-  salaryCurrency.value = "IDR";
+  salaryCurrency.value = "ALL";
   sortBy.value = "";
   currentPage.value = 1;
 
@@ -1053,7 +1054,7 @@ const enableRecommendations = () => {
   cityInput.value = "";
   salaryMin.value = null;
   salaryMax.value = null;
-  salaryCurrency.value = "IDR";
+  salaryCurrency.value = "ALL";
   sortBy.value = "";
   searchQuery.value = "";
   
@@ -1102,7 +1103,7 @@ watch(
     selectedCity.value = q.cities_name || "";
     salaryMin.value = q.salary_min ? Number(q.salary_min) : null;
     salaryMax.value = q.salary_max ? Number(q.salary_max) : null;
-    salaryCurrency.value = q.salary_currency || "IDR";
+    salaryCurrency.value = q.salary_currency || "ALL";
     if (q.province_name) {
       provinceInput.value = q.province_name;
       resolveProvinceIdByName(q.province_name).catch(() => null);
@@ -1122,7 +1123,7 @@ watch(
       q.cities_name ||
       q.salary_min !== undefined ||
       q.salary_max !== undefined ||
-      (q.salary_currency !== undefined && q.salary_currency !== "IDR")
+      (q.salary_currency !== undefined && q.salary_currency !== "ALL")
     );
     
     // Recommendations only for non-recruiter logged-in users
