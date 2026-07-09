@@ -196,11 +196,11 @@
                 </div>
                 <div>
                   <label class="block text-xs text-gray-600 mb-1">Min ({{ salaryCurrency }})</label>
-                  <input type="number" v-model="salaryMin" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Min salary" />
+                  <input type="text" v-model="displaySalaryMin" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Min salary" />
                 </div>
                 <div>
                   <label class="block text-xs text-gray-600 mb-1">Max ({{ salaryCurrency }})</label>
-                  <input type="number" v-model="salaryMax" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Max salary" />
+                  <input type="text" v-model="displaySalaryMax" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Max salary" />
                 </div>
                 <button @click="handleFilterChange" class="w-full rounded-md border border-gray-200 shadow-sm px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100">
                   Apply
@@ -585,6 +585,36 @@ const salaryMax = ref(null);
 const salaryCurrency = ref("ALL");
 
 // Computed
+const displaySalaryMin = computed({
+  get: () => {
+    if (salaryMin.value === null || salaryMin.value === undefined || salaryMin.value === "") return "";
+    return Number(salaryMin.value).toLocaleString("id-ID");
+  },
+  set: (val) => {
+    if (!val) {
+      salaryMin.value = null;
+      return;
+    }
+    const raw = String(val).replace(/\D/g, "");
+    salaryMin.value = raw ? Number(raw) : null;
+  },
+});
+
+const displaySalaryMax = computed({
+  get: () => {
+    if (salaryMax.value === null || salaryMax.value === undefined || salaryMax.value === "") return "";
+    return Number(salaryMax.value).toLocaleString("id-ID");
+  },
+  set: (val) => {
+    if (!val) {
+      salaryMax.value = null;
+      return;
+    }
+    const raw = String(val).replace(/\D/g, "");
+    salaryMax.value = raw ? Number(raw) : null;
+  },
+});
+
 const displayPages = computed(() => {
   const pages = [];
   const start = Math.max(1, currentPage.value - 1);
