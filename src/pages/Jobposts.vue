@@ -817,6 +817,8 @@ const jobService = {
       if (filters.salaryCurrency && filters.salaryCurrency !== "ALL") {
         params.currency = filters.salaryCurrency;
         hasActiveFilters = true;
+      } else if (filters.salaryCurrency === "IDR" && (filters.salaryMin || filters.salaryMax)) {
+        params.currency = filters.salaryCurrency;
       }
 
       if (filters.sortBy && filters.sortBy !== "" && filters.sortBy !== "created_at") {
