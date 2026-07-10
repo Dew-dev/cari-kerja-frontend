@@ -92,7 +92,7 @@ async function submit() {
 
 function loginWithGoogle() {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_FILE_STORAGE_URL}/api/v1`;
-  window.location.href = `${apiBaseUrl}/users/google?role_id=1`;
+  window.location.href = `${apiBaseUrl}/users/google?role_id=1&origin=${encodeURIComponent(window.location.origin)}`;
 }
 </script>
 
