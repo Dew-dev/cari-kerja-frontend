@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import { push } from "notivue";
 import { useI18n } from "vue-i18n";
+import api from "@/services/api";
 
 const route = useRoute();
 const router = useRouter();
@@ -15,22 +16,38 @@ onMounted(async () => {
   const refreshToken = route.query.refreshToken;
   const userStr = route.query.user;
 
-  if (!token || !refreshToken || !userStr) {
+  if (!token || !refreshToken) {
     push.error(t("auth.messages.invalidToken") || "Authentication failed or parameters missing.");
     router.push("/login");
     return;
   }
 
   try {
-    const user = JSON.parse(decodeURIComponent(userStr));
-
-    // Save tokens and user to local storage and update auth store
+    // Save tokens to local storage and update auth store first
     auth.token = token;
     auth.refreshToken = refreshToken;
-    auth.user = user;
-
     localStorage.setItem("token", token);
     localStorage.setItem("refreshToken", refreshToken);
+
+    let user = null;
+    if (userStr) {
+      user = JSON.parse(decodeURIComponent(userStr));
+    } else {
+      // Fetch user profile from the backend using the new token
+      const profileRes = await api.get("/users/workers/me");
+      const workerData = profileRes.data.data;
+      user = {
+        id: workerData.id,
+        user_id: workerData.user_id,
+        name: workerData.name,
+        email: workerData.email,
+        avatar_url: workerData.avatar_url,
+        role: "user"
+      };
+    }
+
+    // Save the user details
+    auth.user = user;
     localStorage.setItem("user", JSON.stringify(user));
 
     push.success("Login successful!");
@@ -40,6 +57,12 @@ onMounted(async () => {
   } catch (error) {
     console.error("Callback parsing error:", error);
     push.error("An error occurred during sign in.");
+    auth.token = null;
+    auth.refreshToken = null;
+    auth.user = null;
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
     router.push("/login");
   }
 });
