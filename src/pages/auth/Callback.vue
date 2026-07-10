@@ -35,12 +35,8 @@ onMounted(async () => {
 
     push.success("Login successful!");
 
-    // Role-based redirect
-    if (user.role === "recruiter") {
-      router.push("/recruiter/jobs");
-    } else {
-      router.push("/jobposts");
-    }
+    // Redirect directly to profile page
+    router.push("/profile/edit");
   } catch (error) {
     console.error("Callback parsing error:", error);
     push.error("An error occurred during sign in.");
