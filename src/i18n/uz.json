@@ -1,4 +1,4 @@
-﻿{
+{
   "jobs": "Ish o'rinlari",
   "companies": "Kompaniyalar",
   "jobsByCompany": "Kompaniyalar bo'yicha ishlar",
@@ -1954,5 +1954,13 @@
   "noAddressProvided": "Manzil berilmagan",
   "noContactNameProvided": "Aloqa shaxsi berilmagan",
   "noContactPhoneProvided": "Aloqa raqami berilmagan",
-  "noWebsiteProvided": "Veb-sayt berilmagan"
+  "noWebsiteProvided": "Veb-sayt berilmagan",
+  "notFound": {
+    "pageTitle": "Sahifa topilmadi",
+    "title": "404",
+    "subtitle": "Voy! Sahifa topilmadi",
+    "description": "Siz qidirayotgan sahifa o'chirilgan, nomi o'zgartirilgan yoki vaqtincha foydalanishga topshirilmagan bo'lishi mumkin.",
+    "backHome": "Bosh sahifaga qaytish",
+    "findJobs": "Ishlarni topish"
+  }
 }
