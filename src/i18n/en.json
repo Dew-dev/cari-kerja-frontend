@@ -1,4 +1,4 @@
-﻿{
+{
   "jobs": "Jobs",
   "companies": "Companies",
   "jobsByCompany": "Jobs by Company",
@@ -1860,6 +1860,8 @@
     "goBack": "Go Back"
   },
   "auth": {
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google",
     "emailLabel": "Email Address",
     "usernameLabel": "Username",
     "passwordLabel": "Password",

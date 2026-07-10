@@ -36,13 +36,10 @@ export function registerRecruiter(payload) {
 }
 
 export function logout() {
-  return api.post(
-    "/users/logout",
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }
-  );
+  const token = localStorage.getItem("token");
+  const headers = {};
+  if (token && token !== "google-cookie-session") {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  return api.post("/users/logout", {}, { headers });
 }

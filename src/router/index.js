@@ -8,6 +8,7 @@ let hasShownSessionExpiredToastOnGuard = false;
 
 function isJwtExpired(token) {
   if (!token) return true;
+  if (token === "google-cookie-session") return false;
 
   try {
     const payloadBase64 = token.split(".")[1];
@@ -135,6 +136,12 @@ const routes = [
     name: "login",
     meta: { guestOnly: true },
     component: () => import("../pages/auth/Login.vue"),
+  },
+  {
+    path: "/auth/callback",
+    name: "auth-callback",
+    meta: { guestOnly: true },
+    component: () => import("../pages/auth/Callback.vue"),
   },
   {
     path: "/recruiter-login",
