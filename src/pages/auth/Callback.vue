@@ -30,7 +30,7 @@ onMounted(async () => {
     localStorage.setItem("refreshToken", refreshToken);
 
     let user = null;
-    if (userStr) {
+    if (userStr && userStr !== "undefined") {
       user = JSON.parse(decodeURIComponent(userStr));
     } else {
       // Fetch user profile from the backend using the new token
