@@ -1,4 +1,4 @@
-﻿{
+{
   "jobs": "Lowongan",
   "companies": "Perusahaan",
   "jobsByCompany": "Lowongan per Perusahaan",
@@ -1555,6 +1555,8 @@
     "goBack": "Kembali"
   },
   "auth": {
+    "signInWithGoogle": "Masuk dengan Google",
+    "signUpWithGoogle": "Daftar dengan Google",
     "emailLabel": "Alamat Email",
     "usernameLabel": "Nama Pengguna",
     "passwordLabel": "Kata Sandi",
