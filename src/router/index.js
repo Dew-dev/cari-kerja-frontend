@@ -8,6 +8,7 @@ let hasShownSessionExpiredToastOnGuard = false;
 
 function isJwtExpired(token) {
   if (!token) return true;
+  if (token === "google-cookie-session") return false;
 
   try {
     const payloadBase64 = token.split(".")[1];
