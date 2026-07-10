@@ -1648,5 +1648,13 @@
   "noAddressProvided": "Alamat tidak tersedia",
   "noContactNameProvided": "Nama kontak tidak tersedia",
   "noContactPhoneProvided": "Telepon kontak tidak tersedia",
-  "noWebsiteProvided": "Website tidak tersedia"
+  "noWebsiteProvided": "Website tidak tersedia",
+  "notFound": {
+    "pageTitle": "Halaman Tidak Ditemukan",
+    "title": "404",
+    "subtitle": "Oops! Halaman tidak ditemukan",
+    "description": "Halaman yang Anda cari mungkin telah dihapus, mengalami perubahan nama, atau sedang tidak tersedia untuk sementara waktu.",
+    "backHome": "Kembali ke Beranda",
+    "findJobs": "Cari Lowongan"
+  }
 }
