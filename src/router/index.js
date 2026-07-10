@@ -276,6 +276,11 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "not-found",
+    component: () => import("../pages/NotFound.vue"),
+  },
 ];
 
 const router = createRouter({
