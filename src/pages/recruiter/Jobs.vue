@@ -18,6 +18,9 @@
           <span>{{ t("createjob") }}</span>
         </router-link>
       </div>
+      <!-- ACTIVE PLAN BANNER -->
+      <ActivePlanBanner />
+
       <!-- TABS -->
       <div class="mb-6 border-b border-gray-200">
         <div class="flex flex-wrap gap-4 text-sm font-semibold">
@@ -117,6 +120,16 @@
                 class="px-3 py-2 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-all duration-150"
               >
                 <i class="pi pi-users text-base"></i>
+              </button>
+
+              <!-- BOOST BUTTON (mobile) -->
+              <button
+                v-if="activeTab === 'active'"
+                title="Boost iklan"
+                @click="openBoostModal(job)"
+                class="px-3 py-2 text-orange-500 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all duration-150"
+              >
+                <i class="pi pi-chart-line text-base"></i>
               </button>
 
               <button
@@ -244,8 +257,14 @@
             >
               <!-- JOB -->
               <td class="px-6 py-5">
-                <div class="font-semibold text-gray-900 text-base">
+                <div class="font-semibold text-gray-900 text-base flex items-center gap-2 flex-wrap">
                   {{ job.title }}
+                  <span v-if="job.boost_type === 'hot'" class="px-2 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full flex items-center gap-1">
+                    <i class="pi pi-star-fill text-[10px]"></i> HOT
+                  </span>
+                  <span v-else-if="job.boost_type === 'top10'" class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-bold rounded-full flex items-center gap-1">
+                    <i class="pi pi-chart-line text-[10px]"></i> Top-10
+                  </span>
                 </div>
                 <div class="text-xs text-gray-600 mt-1 flex items-center gap-2">
                   <span class="px-2 py-0.5 bg-gray-100 rounded">{{ job.employment_type }}</span>
@@ -319,6 +338,15 @@
                       class="p-2 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-100 rounded-lg transition-all duration-150 transform hover:scale-110"
                     >
                       <i class="pi pi-users text-base"></i>
+                    </button>
+
+                    <!-- BOOST BUTTON (desktop) -->
+                    <button
+                      title="Boost iklan"
+                      @click="openBoostModal(job)"
+                      class="p-2 text-orange-500 hover:text-orange-600 hover:bg-orange-100 rounded-lg transition-all duration-150 transform hover:scale-110"
+                    >
+                      <i class="pi pi-chart-line text-base"></i>
                     </button>
 
                     <!-- MORE ACTIONS DROPDOWN BUTTON -->
@@ -632,6 +660,24 @@
       </div>
     </div>
   </div>
+  <!-- BOOST JOB MODAL -->
+  <BoostJobModal
+    v-if="boostModalJob"
+    :show="showBoostModal"
+    :job="boostModalJob"
+    @close="showBoostModal = false"
+    @success="fetchJobs"
+  />
+
+  <!-- SINGLE POST MODAL -->
+  <SinglePostModal
+    v-if="singlePostModalJob"
+    :show="showSinglePostModal"
+    :job="singlePostModalJob"
+    @close="showSinglePostModal = false"
+    @success="fetchJobs"
+  />
+
 </template>
 
 <script setup>
@@ -641,6 +687,9 @@ import { push } from "notivue";
 import { getJobPostsSelf } from "@/services/jobposts.api";
 import { useRouter } from "vue-router";
 import api from "@/services/api";
+import ActivePlanBanner from "@/components/recruiter/ActivePlanBanner.vue";
+import BoostJobModal from "@/components/recruiter/BoostJobModal.vue";
+import SinglePostModal from "@/components/recruiter/SinglePostModal.vue";
 
 const activeTab = ref("active"); // active | archived
 
@@ -909,5 +958,25 @@ async function duplicateJob(jobId) {
     console.error("Duplicate failed", err);
     push.error(t("notifications.failedToDuplicateJob"));
   }
+}
+
+// ─── Boost Modal ─────────────────────────────────────────────────────────────
+const showBoostModal = ref(false);
+const boostModalJob = ref(null);
+
+function openBoostModal(job) {
+  boostModalJob.value = job;
+  showBoostModal.value = true;
+  closeMenu();
+}
+
+// ─── Single Post Modal ────────────────────────────────────────────────────────
+const showSinglePostModal = ref(false);
+const singlePostModalJob = ref(null);
+
+function openSinglePostModal(job) {
+  singlePostModalJob.value = job;
+  showSinglePostModal.value = true;
+  closeMenu();
 }
 </script>

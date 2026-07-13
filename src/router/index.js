@@ -274,6 +274,21 @@ const routes = [
         component: () => import("@/pages/recruiter/Jobs.vue"),
         meta: { requiresAuth: true, role: "recruiter" },
       },
+      {
+        path: "pricing",
+        name: "recruiter-pricing",
+        component: () => import("../pages/recruiter/Pricing.vue"),
+      },
+      {
+        path: "orders",
+        name: "recruiter-orders",
+        component: () => import("../pages/recruiter/PaymentOrders.vue"),
+      },
+      {
+        path: "payment/success",
+        name: "recruiter-payment-success",
+        component: () => import("../pages/recruiter/PaymentSuccess.vue"),
+      },
     ],
   },
   {
