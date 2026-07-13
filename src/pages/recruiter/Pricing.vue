@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { push } from "notivue";
-import { getAllPlans, getActivePlan, createInvoice } from "@/services/payments.api.js";
+import { getAllPlans, getActivePlan } from "@/services/payments.api.js";
 
 const router = useRouter();
 
@@ -10,7 +10,6 @@ const router = useRouter();
 const plans = ref({ subscription: [], single_post: [], boost: [] });
 const activePlan = ref(null);
 const loading = ref(true);
-const invoiceLoading = ref(null); // stores plan key being processed
 const activeTab = ref("subscription"); // subscription | single_post | boost
 
 // ─── Fetch Data ───────────────────────────────────────────────────────────────
@@ -51,28 +50,12 @@ function isCurrentPlan(plan) {
   return activePlan.value?.subscription?.plan_name === plan.name;
 }
 
-// ─── Buy Plan ────────────────────────────────────────────────────────────────
-async function buyPlan(orderType, plan) {
-  const key = `${orderType}-${plan.id}`;
-  if (invoiceLoading.value === key) return;
-  invoiceLoading.value = key;
-
-  try {
-    const payload = { order_type: orderType, plan_id: plan.id };
-    const res = await createInvoice(payload);
-
-    if (res?.data?.payment_url) {
-      window.open(res.data.payment_url, "_blank");
-      push.success("Invoice berhasil dibuat! Selesaikan pembayaran di tab baru.");
-    } else {
-      push.error("Gagal membuat invoice. Coba lagi.");
-    }
-  } catch (err) {
-    const msg = err?.response?.data?.message || "Gagal membuat invoice pembayaran";
-    push.error(msg);
-  } finally {
-    invoiceLoading.value = null;
-  }
+// ─── Go to Checkout ──────────────────────────────────────────────────────────
+function goToCheckout(orderType, plan) {
+  router.push({
+    path: "/recruiter/checkout",
+    query: { type: orderType, plan_id: plan.id },
+  });
 }
 
 // ─── Subscription Plan Icons & Gradient ──────────────────────────────────────
@@ -216,16 +199,13 @@ function getPlanMeta(planName) {
           </button>
           <button
             v-else
-            @click="buyPlan('subscription', plan)"
-            :disabled="invoiceLoading === `subscription-${plan.id}`"
+            @click="goToCheckout('subscription', plan)"
             :class="[
               'w-full py-3 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2',
               `bg-gradient-to-r ${getPlanMeta(plan.name).gradient} text-white hover:shadow-lg hover:scale-[1.02] active:scale-95`,
-              invoiceLoading === `subscription-${plan.id}` ? 'opacity-70 cursor-wait' : '',
             ]"
           >
-            <span v-if="invoiceLoading === `subscription-${plan.id}`" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-            <span v-else><i class="pi pi-credit-card mr-1"></i>Pilih Paket</span>
+            <i class="pi pi-arrow-right mr-1"></i>Pilih Paket
           </button>
         </div>
       </div>
@@ -286,18 +266,15 @@ function getPlanMeta(planName) {
 
             <!-- CTA -->
             <button
-              @click="buyPlan('single_post', plan)"
-              :disabled="invoiceLoading === `single_post-${plan.id}`"
+              @click="goToCheckout('single_post', plan)"
               :class="[
-                'w-full py-3 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2',
+                'w-full py-3 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95',
                 plan.is_hot
                   ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:shadow-lg hover:shadow-orange-500/30'
                   : 'bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:shadow-lg hover:shadow-blue-500/30',
-                invoiceLoading === `single_post-${plan.id}` ? 'opacity-70 cursor-wait' : 'hover:scale-[1.02] active:scale-95',
               ]"
             >
-              <span v-if="invoiceLoading === `single_post-${plan.id}`" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-              <span v-else><i class="pi pi-shopping-cart mr-1"></i>Beli Sekarang</span>
+              <i class="pi pi-arrow-right mr-1"></i>Lihat Detail & Beli
             </button>
           </div>
         </div>
@@ -399,12 +376,18 @@ function getPlanMeta(planName) {
               Pilih job post target di halaman Jobs setelah membeli.
             </p>
 
-            <button
-              @click="push.info('Pilih job post yang ingin di-boost di halaman Jobs, lalu klik tombol Boost.')"
-              class="w-full py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-white/70 hover:bg-white/10 transition-all duration-200"
+            <router-link
+              to="/recruiter/jobs"
+              :class="[
+                'w-full py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2',
+                plan.boost_priority === 1
+                  ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-white hover:shadow-lg hover:shadow-amber-500/30 hover:scale-[1.02]'
+                  : 'bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:shadow-lg hover:shadow-blue-500/30 hover:scale-[1.02]',
+              ]"
             >
-              <i class="pi pi-arrow-right mr-1"></i> Boost via Halaman Jobs
-            </button>
+              <i class="pi pi-briefcase"></i>
+              <span>Boost via Halaman Jobs</span>
+            </router-link>
           </div>
         </div>
 

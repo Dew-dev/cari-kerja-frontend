@@ -280,6 +280,11 @@ const routes = [
         component: () => import("../pages/recruiter/Pricing.vue"),
       },
       {
+        path: "checkout",
+        name: "recruiter-checkout",
+        component: () => import("../pages/recruiter/PaymentCheckout.vue"),
+      },
+      {
         path: "orders",
         name: "recruiter-orders",
         component: () => import("../pages/recruiter/PaymentOrders.vue"),
