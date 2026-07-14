@@ -710,6 +710,7 @@ import api from "@/services/api";
 import ActivePlanBanner from "@/components/recruiter/ActivePlanBanner.vue";
 import BoostJobModal from "@/components/recruiter/BoostJobModal.vue";
 import SinglePostModal from "@/components/recruiter/SinglePostModal.vue";
+import { getAllPlans, getPaymentOrders } from "@/services/payments.api.js";
 
 const activeTab = ref("active"); // active | archived
 
@@ -727,6 +728,51 @@ const page = ref(1);
 const limit = ref(5);
 const totalPages = ref(1);
 const openMenuId = ref(null);
+
+const boostPlans = ref([]);
+const paidBoostOrders = ref([]);
+
+async function loadBoostMetadata() {
+  try {
+    const [plansRes, ordersRes] = await Promise.all([
+      getAllPlans("boost"),
+      getPaymentOrders({ order_type: "boost", status: "paid", limit: 100 })
+    ]);
+    boostPlans.value = plansRes?.data?.boost || [];
+    paidBoostOrders.value = ordersRes?.data || [];
+  } catch (err) {
+    console.error("Failed to load boost metadata", err);
+  }
+}
+
+function applyBoostsToJobs() {
+  if (!jobs.value || jobs.value.length === 0) return;
+  
+  jobs.value = jobs.value.map(job => {
+    if (job.boost_type) return job;
+    
+    const activeBoost = paidBoostOrders.value.find(order => {
+      if (order.job_post_id !== job.id) return false;
+      
+      const plan = boostPlans.value.find(p => p.id === order.plan_id);
+      if (!plan) return false;
+      
+      const paidAt = new Date(order.paid_at || order.created_at);
+      const expiresAt = new Date(paidAt.getTime() + plan.duration_days * 24 * 60 * 60 * 1000);
+      return expiresAt > new Date();
+    });
+    
+    if (activeBoost) {
+      const plan = boostPlans.value.find(p => p.id === activeBoost.plan_id);
+      return {
+        ...job,
+        boost_type: plan?.boost_priority === 1 ? "hot" : "top10",
+      };
+    }
+    
+    return job;
+  });
+}
 
 function toggleMenu(jobId) {
   openMenuId.value = openMenuId.value === jobId ? null : jobId;
@@ -863,6 +909,7 @@ async function fetchJobs() {
     });
     if (!countit.value && activeTab.value === "active") {
       jobs.value = res.data?.data || [];
+      applyBoostsToJobs();
       totalPages.value = res.data?.meta?.totalPage || 1;
     }
     jobCounter.value = res.data?.meta?.total || 0;
@@ -883,6 +930,7 @@ async function archivedJobs() {
     });
     if (!countit.value && activeTab.value === "archived") {
       jobs.value = res.data?.data || [];
+      applyBoostsToJobs();
       totalPages.value = res.data?.meta?.totalPage || 1;
     }
     archivedJobCounter.value = res.data?.meta?.total || 0;
@@ -892,7 +940,8 @@ async function archivedJobs() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await loadBoostMetadata();
   fetchJobs();
   archivedJobs();
 });
