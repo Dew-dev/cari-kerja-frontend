@@ -63,8 +63,14 @@
           >
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0">
-                <div class="font-semibold text-gray-900 truncate">
-                  {{ job.title }}
+                <div class="font-semibold text-gray-900 flex items-center gap-1.5 flex-wrap">
+                  <span>{{ job.title }}</span>
+                  <span v-if="job.boost_type === 'hot'" class="px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap">
+                    <i class="pi pi-star-fill text-[8px]"></i> HOT
+                  </span>
+                  <span v-else-if="job.boost_type === 'top10'" class="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap">
+                    <i class="pi pi-chart-line text-[8px]"></i> Top-10
+                  </span>
                 </div>
                 <div class="text-xs text-gray-500 mt-1">
                   Created {{ formatDate(job.created_at) }}
