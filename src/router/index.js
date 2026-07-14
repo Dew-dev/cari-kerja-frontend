@@ -274,6 +274,31 @@ const routes = [
         component: () => import("@/pages/recruiter/Jobs.vue"),
         meta: { requiresAuth: true, role: "recruiter" },
       },
+      {
+        path: "pricing",
+        name: "recruiter-pricing",
+        component: () => import("../pages/recruiter/Pricing.vue"),
+      },
+      {
+        path: "checkout",
+        name: "recruiter-checkout",
+        component: () => import("../pages/recruiter/PaymentCheckout.vue"),
+      },
+      {
+        path: "orders",
+        name: "recruiter-orders",
+        component: () => import("../pages/recruiter/PaymentOrders.vue"),
+      },
+      {
+        path: "payment/success",
+        name: "recruiter-payment-success",
+        component: () => import("../pages/recruiter/PaymentSuccess.vue"),
+      },
+      {
+        path: "payment/failure",
+        name: "recruiter-payment-failure",
+        component: () => import("../pages/recruiter/PaymentFailure.vue"),
+      },
     ],
   },
   {

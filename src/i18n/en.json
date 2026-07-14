@@ -1961,5 +1961,163 @@
     "description": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
     "backHome": "Back to Home",
     "findJobs": "Find Jobs"
+  },
+  "payment": {
+    "pricing": "Plans & Pricing",
+    "pricingTitle": "Boost Recruitment",
+    "pricingTitleAccent": " Without Limits",
+    "pricingSubtitle": "Choose a plan that fits your business needs — from free to enterprise.",
+    "activePlan": "Active plan",
+    "maxPosts": "max active jobs",
+    "singleSlots": "single slots",
+    "loadingPlans": "Loading plans...",
+    "tabs": {
+      "subscription": "Subscription",
+      "singlePost": "Single Post",
+      "boost": "Boost Job"
+    },
+    "planName": {
+      "free": "Free",
+      "starter": "Starter",
+      "pro": "Pro",
+      "business": "Business"
+    },
+    "features": {
+      "free": ["1 active job post", "No fees", "Basic access"],
+      "starter": ["5 active job posts", "Valid for 30 days", "All standard features"],
+      "pro": ["15 active job posts", "Valid for 30 days", "Priority support"],
+      "business": ["25 active job posts", "Valid for 30 days", "Premium support"],
+      "activePosts": "active job posts simultaneously",
+      "durationDays": "days since activation",
+      "secureXendit": "Secure payment processed by Xendit"
+    },
+    "priceFormat": {
+      "free": "Free",
+      "days": "days"
+    },
+    "cta": {
+      "default": "Default Plan",
+      "active": "Active Plan",
+      "select": "Choose Plan",
+      "details": "View Details & Buy",
+      "boost": "Boost via Jobs Page"
+    },
+    "singlePostDesc": "Buy single postings without a subscription. Perfect for occasional recruitment needs.",
+    "slots": {
+      "available": "Available Single Slots",
+      "expires": "Expires",
+      "hint": "Apply this slot when posting a job vacancy on the Jobs page."
+    },
+    "boostTitle": "Boost Job",
+    "boostSubtitle": "Increase your job posting's visibility to get more applicants.",
+    "boostTypes": {
+      "top10Title": "Boost Top-10",
+      "top10Desc": "Your job stays in the top 10 positions every day for the boost duration.",
+      "hotTitle": "Boost Hot (Top Position)",
+      "hotDesc": "Your job stands out at the absolute top position — maximum exposure."
+    },
+    "boostModal": {
+      "title": "Boost Job",
+      "info": "Choose a boost plan, and you will be redirected to the checkout page for pricing details and payment options.",
+      "hot": "HOT — Top Position",
+      "hotDesc": "Top position",
+      "top10": "Top-10 Daily",
+      "top10Desc": "Top 10 daily",
+      "selectPay": "Select",
+      "empty": "No boost plans available",
+      "footer": "Secure via Xendit · Activated automatically after payment"
+    },
+    "history": "View my transaction history",
+    "checkout": {
+      "backToPlans": "Back to Plans",
+      "backToDetails": "Back to Details",
+      "stepPlanDetail": "Plan Details",
+      "stepMethod": "Payment Method",
+      "priceDetails": "Price Breakdown",
+      "planPrice": "Plan price",
+      "ppn": "VAT",
+      "subtotal": "Subtotal",
+      "totalPay": "Total Payment",
+      "vatHint": "Prices include 11% VAT in compliance with Indonesian tax laws.",
+      "feeHint": "Payment method fee will be displayed in the next step.",
+      "continue": "Continue",
+      "selectedPlan": "Selected plan",
+      "qrisDesc": "GoPay, OVO, Dana, ShopeePay, etc.",
+      "vaTitle": "Transfer Virtual Account",
+      "vaDesc": "BCA, BNI, BRI, Mandiri, Permata, BSI",
+      "vaSelect": "Select bank to generate Virtual Account:",
+      "cardTitle": "Credit / Debit Card",
+      "cardDesc": "Visa, Mastercard, JCB",
+      "cardName": "Cardholder Name",
+      "cardNamePlaceholder": "As printed on the card",
+      "cardNumber": "Card Number",
+      "cardExpiry": "Expiration Date",
+      "cardCvv": "CVV / CVC",
+      "cardCvvHint": "(3-4 digits)",
+      "cardSecureHint": "Your card details are verified on encrypted Xendit payment checkout (PCI DSS).",
+      "totalCharged": "Total Charged",
+      "payButton": "Generate Invoice",
+      "secureTransaction": "Payments are processed securely by Xendit · PCI DSS Compliant",
+      "errors": {
+        "invalidParams": "Invalid plan parameters",
+        "planNotFound": "Plan not found",
+        "fetchFailed": "Failed to load plan details",
+        "selectMethod": "Please select a payment method first",
+        "nameRequired": "Cardholder name is required",
+        "cardNumberInvalid": "Invalid card number",
+        "cardExpiryInvalid": "Invalid format (MM/YY)",
+        "cardCvvInvalid": "CVV must be at least 3 digits"
+      }
+    },
+    "orders": {
+      "title": "Transaction History",
+      "subtitle": "All billing and transaction records of your account",
+      "buyPlan": "Purchase Plan",
+      "allStatus": "All Statuses",
+      "allTypes": "All Types",
+      "empty": "No transactions yet",
+      "emptyDesc": "Get started by purchasing a plan to speed up your recruitment.",
+      "table": {
+        "date": "Date",
+        "type": "Type",
+        "plan": "Plan",
+        "amount": "Amount",
+        "status": "Status",
+        "action": "Action"
+      },
+      "status": {
+        "pending": "Pending Payment",
+        "paid": "Paid",
+        "expired": "Expired",
+        "failed": "Failed"
+      },
+      "types": {
+        "subscription": "Subscription",
+        "singlePost": "Single Post",
+        "boost": "Boost"
+      },
+      "actionPay": "Pay",
+      "totalOrders": "total transactions"
+    },
+    "success": {
+      "title": "Payment Successful!",
+      "desc": "Your package will be activated automatically in a few moments.",
+      "currentPlan": "Current Active Plan",
+      "maxPosts": "Max Active Posts",
+      "expiresAt": "Valid Until",
+      "activeProcess": "Your package is currently being activated. Please check back shortly or review your transaction history.",
+      "manageJobs": "Manage My Jobs",
+      "history": "Transaction History",
+      "amountPaid": "Amount Paid"
+    },
+    "failure": {
+      "title": "Payment Failed",
+      "desc": "We are sorry, your transaction could not be processed or was cancelled.",
+      "reason": "Reason for Failure",
+      "reasonDesc": "The payment could not be completed. Please try another payment method or contact your bank.",
+      "tryAgain": "Try Again",
+      "backPricing": "Back to Plans",
+      "support": "Contact Support"
+    }
   }
 }
