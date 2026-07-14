@@ -736,7 +736,7 @@ async function loadBoostMetadata() {
   try {
     const [plansRes, ordersRes] = await Promise.all([
       getAllPlans("boost"),
-      getPaymentOrders({ order_type: "boost", status: "paid", limit: 100 })
+      getPaymentOrders({ order_type: "boost", status: "paid", limit: 50 })
     ]);
     boostPlans.value = plansRes?.data?.boost || [];
     paidBoostOrders.value = ordersRes?.data || [];
