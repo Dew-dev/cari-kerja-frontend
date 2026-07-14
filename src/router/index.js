@@ -154,6 +154,12 @@ const routes = [
     component: () => import("../pages/Jobposts.vue"),
   },
   {
+    path: "/jobposts/hot",
+    name: "HotJobposts",
+    component: () => import("../pages/HotJobposts.vue"),
+    meta: { public: true },
+  },
+  {
     path: "/jobposts/:id",
     name: "JobDetail",
     component: () => import("../pages/JobDetailView.vue"), // Sesuaikan path-nya
