@@ -59,7 +59,14 @@
           <div
             v-for="(job, index) in jobs"
             :key="job.id"
-            class="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
+            :class="[
+              'rounded-xl border shadow-sm p-4 transition-all duration-150',
+              job.boost_type === 'hot'
+                ? 'bg-gradient-to-br from-amber-50/70 to-orange-50/45 border-orange-200 ring-1 ring-orange-100/50'
+                : job.boost_type === 'top10'
+                ? 'bg-gradient-to-br from-blue-50/70 to-indigo-50/45 border-blue-200 ring-1 ring-blue-100/50'
+                : 'bg-white border-gray-100'
+            ]"
           >
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0">
@@ -259,7 +266,14 @@
             <tr
               v-for="(job, index) in jobs"
               :key="job.id"
-              class="border-b border-gray-100 hover:bg-blue-50/50 transition-all duration-150"
+              :class="[
+                'border-b border-gray-100 transition-all duration-150',
+                job.boost_type === 'hot'
+                  ? 'bg-amber-50/40 hover:bg-amber-100/40'
+                  : job.boost_type === 'top10'
+                  ? 'bg-blue-50/20 hover:bg-blue-100/30'
+                  : 'hover:bg-blue-50/50'
+              ]"
             >
               <!-- JOB -->
               <td class="px-6 py-5">

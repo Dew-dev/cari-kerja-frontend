@@ -342,7 +342,14 @@
               <div
                 v-for="job in jobs"
                 :key="job.id"
-                class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-4 sm:p-5 md:p-6 cursor-pointer mb-6 last:mb-0"
+                :class="[
+                  'rounded-lg shadow transition-all duration-200 p-4 sm:p-5 md:p-6 cursor-pointer mb-6 last:mb-0 border-2',
+                  job.boost_type === 'hot'
+                    ? 'bg-gradient-to-br from-amber-50/70 to-orange-50/40 border-orange-200 hover:shadow-orange-200/40 hover:shadow-xl ring-2 ring-orange-100/50'
+                    : job.boost_type === 'top10'
+                    ? 'bg-gradient-to-br from-blue-50/70 to-indigo-50/40 border-blue-200 hover:shadow-blue-200/40 hover:shadow-xl ring-2 ring-blue-100/50'
+                    : 'bg-white border-transparent hover:shadow-lg'
+                ]"
                 @click="viewJobDetail(job.id)"
               >
                 <!-- Mobile-first card: image on top, content below -->
@@ -368,8 +375,14 @@
 
                   <div class="flex items-start justify-between gap-4">
                     <div class="flex-1 min-w-0">
-                      <h3 class="text-lg font-semibold text-gray-900 truncate">
-                        {{ job.title }}
+                      <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-1.5 flex-wrap">
+                        <span>{{ job.title }}</span>
+                        <span v-if="job.boost_type === 'hot'" class="px-2 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap shadow-sm">
+                          <i class="pi pi-star-fill text-[8px]"></i> HOT
+                        </span>
+                        <span v-else-if="job.boost_type === 'top10'" class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap border border-blue-200 shadow-sm">
+                          <i class="pi pi-chart-line text-[8px]"></i> Top-10
+                        </span>
                       </h3>
 
                       <div
