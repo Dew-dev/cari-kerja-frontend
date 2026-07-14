@@ -2107,7 +2107,17 @@
       "expiresAt": "Valid Until",
       "activeProcess": "Your package is currently being activated. Please check back shortly or review your transaction history.",
       "manageJobs": "Manage My Jobs",
-      "history": "Transaction History"
+      "history": "Transaction History",
+      "amountPaid": "Amount Paid"
+    },
+    "failure": {
+      "title": "Payment Failed",
+      "desc": "We are sorry, your transaction could not be processed or was cancelled.",
+      "reason": "Reason for Failure",
+      "reasonDesc": "The payment could not be completed. Please try another payment method or contact your bank.",
+      "tryAgain": "Try Again",
+      "backPricing": "Back to Plans",
+      "support": "Contact Support"
     }
   }
 }

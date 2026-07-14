@@ -2108,7 +2108,17 @@
       "expiresAt": "Gacha amal qiladi",
       "activeProcess": "Paketingiz faollashtirilmoqda. Iltimos, bir necha daqiqadan so'ng tekshirib ko'ring yoki tranzaksiyalar tarixini ko'ring.",
       "manageJobs": "E'lonlarimni boshqarish",
-      "history": "Tranzaksiyalar tarixi"
+      "history": "Tranzaksiyalar tarixi",
+      "amountPaid": "To'langan summa"
+    },
+    "failure": {
+      "title": "To'lov amalga oshmadi",
+      "desc": "Kechirasiz, tranzaksiyangizni qayta ishlab bo'lmadi yoki u bekor qilindi.",
+      "reason": "Muvaffaqiyatsizlik sababi",
+      "reasonDesc": "To'lovni amalga oshirib bo'lmadi. Iltimos, boshqa to'lov usulini sinab ko'ring yoki bankingiz bilan bog'laning.",
+      "tryAgain": "Qaytadan urinish",
+      "backPricing": "Tariflarga qaytish",
+      "support": "Yordam xizmati bilan bog'lanish"
     }
   }
 }

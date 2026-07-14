@@ -294,6 +294,11 @@ const routes = [
         name: "recruiter-payment-success",
         component: () => import("../pages/recruiter/PaymentSuccess.vue"),
       },
+      {
+        path: "payment/failure",
+        name: "recruiter-payment-failure",
+        component: () => import("../pages/recruiter/PaymentFailure.vue"),
+      },
     ],
   },
   {

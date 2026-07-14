@@ -1802,7 +1802,17 @@
       "expiresAt": "Berlaku Hingga",
       "activeProcess": "Paket Anda sedang dalam proses aktivasi. Cek kembali dalam beberapa saat atau lihat riwayat transaksi.",
       "manageJobs": "Kelola Iklan Saya",
-      "history": "Riwayat Transaksi"
+      "history": "Riwayat Transaksi",
+      "amountPaid": "Jumlah yang Dibayarkan"
+    },
+    "failure": {
+      "title": "Pembayaran Gagal",
+      "desc": "Mohon maaf, transaksi Anda tidak dapat diproses atau telah dibatalkan.",
+      "reason": "Alasan Kegagalan",
+      "reasonDesc": "Pembayaran tidak dapat diselesaikan. Silakan coba metode pembayaran lain atau hubungi bank Anda.",
+      "tryAgain": "Coba Lagi",
+      "backPricing": "Kembali ke Paket",
+      "support": "Hubungi Bantuan"
     }
   }
 }
