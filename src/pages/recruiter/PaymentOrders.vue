@@ -1,35 +1,34 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getPaymentOrders } from "@/services/payments.api.js";
 
 const router = useRouter();
+const { t }  = useI18n();
 
 // ─── State ───────────────────────────────────────────────────────────────────
-const orders = ref([]);
-const loading = ref(true);
-const meta = ref({ page: 1, limit: 10, total: 0, totalPages: 1 });
+const orders       = ref([]);
+const loading      = ref(true);
+const meta         = ref({ page: 1, limit: 10, total: 0, totalPages: 1 });
 const filterStatus = ref("");
-const filterType = ref("");
-const currentPage = ref(1);
+const filterType   = ref("");
+const currentPage  = ref(1);
 
 // ─── Fetch ────────────────────────────────────────────────────────────────────
 async function fetchOrders() {
   loading.value = true;
   try {
-    const params = {
-      page: currentPage.value,
-      limit: meta.value.limit,
-    };
+    const params = { page: currentPage.value, limit: meta.value.limit };
     if (filterStatus.value) params.status = filterStatus.value;
-    if (filterType.value) params.order_type = filterType.value;
+    if (filterType.value)   params.order_type = filterType.value;
 
     const res = await getPaymentOrders(params);
     orders.value = res?.data || [];
     if (res?.meta) meta.value = res.meta;
-  } catch (err) {
-    push.error("Gagal memuat riwayat transaksi");
+  } catch {
+    push.error(t("payment.checkout.errors.fetchFailed"));
   } finally {
     loading.value = false;
   }
@@ -44,9 +43,7 @@ watch([filterStatus, filterType], () => {
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function formatRupiah(amount) {
   return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
+    style: "currency", currency: "IDR", minimumFractionDigits: 0,
   }).format(amount);
 }
 
@@ -58,18 +55,26 @@ function formatDate(dateStr) {
   });
 }
 
+// Computes translation labels dynamically
 const statusMeta = {
-  pending:  { label: "Menunggu Bayar", cls: "bg-yellow-100 text-yellow-700",  icon: "pi-clock" },
-  paid:     { label: "Lunas",          cls: "bg-green-100 text-green-700",    icon: "pi-check-circle" },
-  expired:  { label: "Kadaluarsa",     cls: "bg-gray-100 text-gray-500",      icon: "pi-times-circle" },
-  failed:   { label: "Gagal",          cls: "bg-red-100 text-red-600",        icon: "pi-exclamation-circle" },
+  pending: { cls: "bg-yellow-100 text-yellow-700", icon: "pi-clock" },
+  paid:    { cls: "bg-green-100 text-green-700",   icon: "pi-check-circle" },
+  expired: { cls: "bg-gray-100 text-gray-500",     icon: "pi-times-circle" },
+  failed:  { cls: "bg-red-100 text-red-600",       icon: "pi-exclamation-circle" },
 };
+function getStatusLabel(status) {
+  return t(`payment.orders.status.${status}`, status);
+}
 
 const typeMeta = {
-  subscription: { label: "Langganan",    icon: "pi-calendar",    cls: "text-violet-600 bg-violet-50" },
-  single_post:  { label: "Iklan Satuan", icon: "pi-file-edit",   cls: "text-blue-600 bg-blue-50" },
-  boost:        { label: "Boost",        icon: "pi-chart-line",  cls: "text-orange-600 bg-orange-50" },
+  subscription: { labelKey: "payment.orders.types.subscription", icon: "pi-calendar",   cls: "text-violet-600 bg-violet-50" },
+  single_post:  { labelKey: "payment.orders.types.singlePost",   icon: "pi-file-edit",  cls: "text-blue-600 bg-blue-50" },
+  boost:        { labelKey: "payment.orders.types.boost",        icon: "pi-chart-line", cls: "text-orange-600 bg-orange-50" },
 };
+function getTypeLabel(type) {
+  const key = typeMeta[type]?.labelKey;
+  return key ? t(key) : type;
+}
 
 function prevPage() {
   if (currentPage.value > 1) { currentPage.value--; fetchOrders(); }
@@ -87,19 +92,19 @@ function nextPage() {
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <button @click="router.back()" class="text-sm text-gray-500 hover:text-gray-800 flex items-center gap-1 mb-2 transition-colors">
-            <i class="pi pi-arrow-left text-xs"></i> Kembali
+            <i class="pi pi-arrow-left text-xs"></i> {{ t("payment.checkout.backToPlans") }}
           </button>
           <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <i class="pi pi-history text-blue-600"></i>
-            Riwayat Transaksi
+            {{ t("payment.orders.title") }}
           </h1>
-          <p class="text-sm text-gray-500 mt-1">Semua riwayat pembayaran akun Anda</p>
+          <p class="text-sm text-gray-500 mt-1">{{ t("payment.orders.subtitle") }}</p>
         </div>
         <router-link
           to="/recruiter/pricing"
           class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all shadow-md hover:shadow-lg"
         >
-          <i class="pi pi-plus"></i> Beli Paket
+          <i class="pi pi-plus"></i> {{ t("payment.orders.buyPlan") }}
         </router-link>
       </div>
 
@@ -109,21 +114,21 @@ function nextPage() {
           v-model="filterStatus"
           class="text-sm px-4 py-2 rounded-xl border border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-700"
         >
-          <option value="">Semua Status</option>
-          <option value="pending">Menunggu Bayar</option>
-          <option value="paid">Lunas</option>
-          <option value="expired">Kadaluarsa</option>
-          <option value="failed">Gagal</option>
+          <option value="">{{ t("payment.orders.allStatus") }}</option>
+          <option value="pending">{{ t("payment.orders.status.pending") }}</option>
+          <option value="paid">{{ t("payment.orders.status.paid") }}</option>
+          <option value="expired">{{ t("payment.orders.status.expired") }}</option>
+          <option value="failed">{{ t("payment.orders.status.failed") }}</option>
         </select>
 
         <select
           v-model="filterType"
           class="text-sm px-4 py-2 rounded-xl border border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-700"
         >
-          <option value="">Semua Tipe</option>
-          <option value="subscription">Langganan</option>
-          <option value="single_post">Iklan Satuan</option>
-          <option value="boost">Boost</option>
+          <option value="">{{ t("payment.orders.allTypes") }}</option>
+          <option value="subscription">{{ t("payment.orders.types.subscription") }}</option>
+          <option value="single_post">{{ t("payment.orders.types.singlePost") }}</option>
+          <option value="boost">{{ t("payment.orders.types.boost") }}</option>
         </select>
       </div>
 
@@ -140,13 +145,13 @@ function nextPage() {
         <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <i class="pi pi-inbox text-2xl text-gray-400"></i>
         </div>
-        <h3 class="text-gray-700 font-semibold mb-1">Belum ada transaksi</h3>
-        <p class="text-gray-400 text-sm mb-6">Mulai dengan membeli paket untuk meningkatkan rekrutmen Anda.</p>
+        <h3 class="text-gray-700 font-semibold mb-1">{{ t("payment.orders.empty") }}</h3>
+        <p class="text-gray-400 text-sm mb-6">{{ t("payment.orders.emptyDesc") }}</p>
         <router-link
           to="/recruiter/pricing"
           class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all"
         >
-          <i class="pi pi-star"></i> Lihat Paket
+          <i class="pi pi-star"></i> {{ t("payment.pricing") }}
         </router-link>
       </div>
 
@@ -157,12 +162,12 @@ function nextPage() {
           <table class="w-full text-sm">
             <thead class="bg-gray-50 border-b border-gray-100">
               <tr>
-                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Tanggal</th>
-                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Tipe</th>
-                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Paket</th>
-                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Jumlah</th>
-                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Status</th>
-                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Aksi</th>
+                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ t("payment.orders.table.date") }}</th>
+                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ t("payment.orders.table.type") }}</th>
+                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ t("payment.orders.table.plan") }}</th>
+                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ t("payment.orders.table.amount") }}</th>
+                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ t("payment.orders.table.status") }}</th>
+                <th class="text-left px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ t("payment.orders.table.action") }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-50">
@@ -175,7 +180,7 @@ function nextPage() {
                 <td class="px-5 py-4">
                   <span :class="['inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold', typeMeta[order.order_type]?.cls || 'bg-gray-100 text-gray-600']">
                     <i :class="`pi ${typeMeta[order.order_type]?.icon || 'pi-circle'} text-xs`"></i>
-                    {{ typeMeta[order.order_type]?.label || order.order_type }}
+                    {{ getTypeLabel(order.order_type) }}
                   </span>
                 </td>
                 <td class="px-5 py-4 text-gray-700 font-medium">{{ order.metadata?.plan_display_name || "-" }}</td>
@@ -183,7 +188,7 @@ function nextPage() {
                 <td class="px-5 py-4">
                   <span :class="['inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold', statusMeta[order.status]?.cls || 'bg-gray-100 text-gray-500']">
                     <i :class="`pi ${statusMeta[order.status]?.icon || 'pi-circle'} text-xs`"></i>
-                    {{ statusMeta[order.status]?.label || order.status }}
+                    {{ getStatusLabel(order.status) }}
                   </span>
                 </td>
                 <td class="px-5 py-4">
@@ -193,7 +198,7 @@ function nextPage() {
                     target="_blank"
                     class="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline font-semibold"
                   >
-                    <i class="pi pi-external-link text-xs"></i> Bayar
+                    <i class="pi pi-external-link text-xs"></i> {{ t("payment.orders.actionPay") }}
                   </a>
                   <span v-else class="text-gray-300 text-xs">—</span>
                 </td>
@@ -209,12 +214,12 @@ function nextPage() {
               <div>
                 <span :class="['inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-semibold', typeMeta[order.order_type]?.cls]">
                   <i :class="`pi ${typeMeta[order.order_type]?.icon} text-xs`"></i>
-                  {{ typeMeta[order.order_type]?.label }}
+                  {{ getTypeLabel(order.order_type) }}
                 </span>
                 <div class="font-semibold text-gray-800 mt-1">{{ order.metadata?.plan_display_name || "-" }}</div>
               </div>
               <span :class="['px-2.5 py-1 rounded-lg text-xs font-semibold', statusMeta[order.status]?.cls]">
-                {{ statusMeta[order.status]?.label }}
+                {{ getStatusLabel(order.status) }}
               </span>
             </div>
             <div class="flex items-center justify-between text-sm">
@@ -227,14 +232,14 @@ function nextPage() {
               target="_blank"
               class="mt-2 inline-flex items-center gap-1 text-xs text-blue-600 font-semibold"
             >
-              <i class="pi pi-external-link text-xs"></i> Selesaikan Pembayaran
+              <i class="pi pi-external-link text-xs"></i> {{ t("payment.orders.actionPay") }}
             </a>
           </div>
         </div>
 
         <!-- Pagination -->
         <div class="flex items-center justify-between px-5 py-4 border-t border-gray-100 text-sm text-gray-500">
-          <span>{{ meta.total }} transaksi total</span>
+          <span>{{ meta.total }} {{ t("payment.orders.totalOrders") }}</span>
           <div class="flex items-center gap-2">
             <button
               @click="prevPage"

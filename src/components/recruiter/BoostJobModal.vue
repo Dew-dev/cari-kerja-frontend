@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { getAllPlans } from "@/services/payments.api.js";
 import { push } from "notivue";
 
@@ -10,9 +11,10 @@ const props = defineProps({
 });
 const emit = defineEmits(["close"]);
 
-const router      = useRouter();
-const boostPlans  = ref([]);
-const loading     = ref(true);
+const router     = useRouter();
+const { t }      = useI18n();
+const boostPlans = ref([]);
+const loading    = ref(true);
 
 onMounted(async () => {
   try {
@@ -25,7 +27,7 @@ onMounted(async () => {
   }
 });
 
-const hotPlans   = computed(() => boostPlans.value.filter((p) => p.boost_priority === 1));
+const hotPlans  = computed(() => boostPlans.value.filter((p) => p.boost_priority === 1));
 const top10Plans = computed(() => boostPlans.value.filter((p) => p.boost_priority !== 1));
 
 function formatRupiah(amount) {
@@ -65,7 +67,7 @@ function close() { emit("close"); }
               <i class="pi pi-chart-line text-blue-600 text-sm"></i>
             </div>
             <div>
-              <div class="font-bold text-gray-800 text-sm leading-tight">Boost Iklan</div>
+              <div class="font-bold text-gray-800 text-sm leading-tight">{{ t("payment.boostModal.title") }}</div>
               <div class="text-gray-400 text-xs truncate max-w-[200px]">{{ job.title }}</div>
             </div>
           </div>
@@ -86,21 +88,21 @@ function close() { emit("close"); }
           </div>
 
           <div v-else>
-            <!-- Empty -->
-            <div v-if="!hotPlans.length && !top10Plans.length" class="text-center py-6 text-gray-400 text-sm">
-              <i class="pi pi-info-circle text-xl mb-2 block"></i>
-              Paket boost belum tersedia
+            <!-- Info banner -->
+            <div class="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-xl p-3 mb-5 text-xs text-blue-700">
+              <i class="pi pi-info-circle text-blue-500 flex-shrink-0 mt-0.5"></i>
+              <span>{{ t("payment.boostModal.info") }}</span>
             </div>
 
-            <div v-else class="space-y-3">
-              <!-- HOT Plans -->
-              <div v-if="hotPlans.length">
-                <div class="flex items-center gap-1.5 mb-2">
-                  <span class="w-5 h-5 bg-amber-100 rounded flex items-center justify-center">
-                    <i class="pi pi-star-fill text-amber-500 text-[10px]"></i>
-                  </span>
-                  <span class="text-xs font-bold text-gray-700 uppercase tracking-wide">HOT — Paling Atas</span>
-                </div>
+            <!-- HOT Plans -->
+            <div v-if="hotPlans.length" class="mb-5">
+              <div class="flex items-center gap-1.5 mb-2">
+                <span class="w-5 h-5 bg-amber-100 rounded flex items-center justify-center">
+                  <i class="pi pi-star-fill text-amber-500 text-[10px]"></i>
+                </span>
+                <span class="text-xs font-bold text-gray-700 uppercase tracking-wide">{{ t("payment.boostModal.hot") }}</span>
+              </div>
+              <div class="space-y-2">
                 <div
                   v-for="plan in hotPlans"
                   :key="plan.id"
@@ -108,7 +110,7 @@ function close() { emit("close"); }
                 >
                   <div class="min-w-0">
                     <div class="font-semibold text-gray-800 text-sm truncate">{{ plan.display_name }}</div>
-                    <div class="text-xs text-gray-500 mt-0.5">{{ plan.duration_days }} hari • Posisi teratas</div>
+                    <div class="text-xs text-gray-500 mt-0.5">{{ plan.duration_days }} {{ t("payment.priceFormat.days") }} • {{ t("payment.boostModal.hotDesc") }}</div>
                   </div>
                   <div class="flex items-center gap-2 flex-shrink-0">
                     <span class="text-amber-600 font-bold text-sm">{{ formatRupiah(plan.price_idr) }}</span>
@@ -116,20 +118,22 @@ function close() { emit("close"); }
                       @click="goToCheckout(plan)"
                       class="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white text-xs font-bold rounded-lg transition-all shadow-sm hover:shadow flex items-center gap-1"
                     >
-                      <i class="pi pi-bolt text-[10px]"></i> Pilih
+                      <i class="pi pi-bolt text-[10px]"></i> {{ t("payment.boostModal.selectPay") }}
                     </button>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- Top-10 Plans -->
-              <div v-if="top10Plans.length">
-                <div class="flex items-center gap-1.5 mb-2">
-                  <span class="w-5 h-5 bg-blue-100 rounded flex items-center justify-center">
-                    <i class="pi pi-chart-line text-blue-500 text-[10px]"></i>
-                  </span>
-                  <span class="text-xs font-bold text-gray-700 uppercase tracking-wide">Top-10 Harian</span>
-                </div>
+            <!-- Top-10 Plans -->
+            <div v-if="top10Plans.length">
+              <div class="flex items-center gap-1.5 mb-2">
+                <span class="w-5 h-5 bg-blue-100 rounded flex items-center justify-center">
+                  <i class="pi pi-chart-line text-blue-500 text-[10px]"></i>
+                </span>
+                <span class="text-xs font-bold text-gray-700 uppercase tracking-wide">{{ t("payment.boostModal.top10") }}</span>
+              </div>
+              <div class="space-y-2">
                 <div
                   v-for="plan in top10Plans"
                   :key="plan.id"
@@ -137,7 +141,7 @@ function close() { emit("close"); }
                 >
                   <div class="min-w-0">
                     <div class="font-semibold text-gray-800 text-sm truncate">{{ plan.display_name }}</div>
-                    <div class="text-xs text-gray-500 mt-0.5">{{ plan.duration_days }} hari • 10 besar harian</div>
+                    <div class="text-xs text-gray-500 mt-0.5">{{ plan.duration_days }} {{ t("payment.priceFormat.days") }} • {{ t("payment.boostModal.top10Desc") }}</div>
                   </div>
                   <div class="flex items-center gap-2 flex-shrink-0">
                     <span class="text-blue-600 font-bold text-sm">{{ formatRupiah(plan.price_idr) }}</span>
@@ -145,17 +149,23 @@ function close() { emit("close"); }
                       @click="goToCheckout(plan)"
                       class="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white text-xs font-bold rounded-lg transition-all shadow-sm hover:shadow flex items-center gap-1"
                     >
-                      <i class="pi pi-chart-line text-[10px]"></i> Pilih
+                      <i class="pi pi-chart-line text-[10px]"></i> {{ t("payment.boostModal.selectPay") }}
                     </button>
                   </div>
                 </div>
               </div>
             </div>
 
+            <!-- Empty -->
+            <div v-if="!hotPlans.length && !top10Plans.length" class="text-center py-6 text-gray-400 text-sm">
+              <i class="pi pi-info-circle text-xl mb-2 block"></i>
+              {{ t("payment.boostModal.empty") }}
+            </div>
+
             <!-- Footer note -->
             <p class="text-center text-gray-400 text-[11px] mt-4 flex items-center justify-center gap-1">
               <i class="pi pi-lock text-[10px]"></i>
-              Aman via Xendit · Aktif otomatis setelah bayar
+              {{ t("payment.boostModal.footer") }}
             </p>
           </div>
         </div>

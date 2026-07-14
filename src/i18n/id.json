@@ -1656,5 +1656,153 @@
     "description": "Halaman yang Anda cari mungkin telah dihapus, mengalami perubahan nama, atau sedang tidak tersedia untuk sementara waktu.",
     "backHome": "Kembali ke Beranda",
     "findJobs": "Cari Lowongan"
+  },
+  "payment": {
+    "pricing": "Paket & Harga",
+    "pricingTitle": "Tingkatkan Rekrutmen",
+    "pricingTitleAccent": " Tanpa Batas",
+    "pricingSubtitle": "Pilih paket yang sesuai kebutuhan bisnis Anda — dari gratis hingga enterprise.",
+    "activePlan": "Paket aktif",
+    "maxPosts": "iklan maks.",
+    "singleSlots": "slot satuan",
+    "loadingPlans": "Memuat paket...",
+    "tabs": {
+      "subscription": "Langganan",
+      "singlePost": "Iklan Satuan",
+      "boost": "Boost Iklan"
+    },
+    "planName": {
+      "free": "Free",
+      "starter": "Starter",
+      "pro": "Pro",
+      "business": "Business"
+    },
+    "features": {
+      "free": ["1 iklan aktif", "Tanpa biaya", "Akses dasar"],
+      "starter": ["5 iklan aktif", "Berlaku 30 hari", "Semua fitur standar"],
+      "pro": ["15 iklan aktif", "Berlaku 30 hari", "Prioritas dukungan"],
+      "business": ["25 iklan aktif", "Berlaku 30 hari", "Dukungan premium"],
+      "activePosts": "iklan aktif bersamaan",
+      "durationDays": "hari sejak aktivasi",
+      "secureXendit": "Pembayaran aman via Xendit"
+    },
+    "priceFormat": {
+      "free": "Gratis",
+      "days": "hari"
+    },
+    "cta": {
+      "default": "Paket Default",
+      "active": "Paket Aktif",
+      "select": "Pilih Paket",
+      "details": "Lihat Detail & Beli",
+      "boost": "Boost via Halaman Jobs"
+    },
+    "singlePostDesc": "Beli iklan satuan tanpa berlangganan. Cocok untuk kebutuhan rekrutmen sesekali.",
+    "slots": {
+      "available": "Slot Satuan Tersedia",
+      "expires": "Kadaluarsa",
+      "hint": "Gunakan slot ini saat memposting lowongan via halaman Jobs."
+    },
+    "boostTitle": "Boost Iklan",
+    "boostSubtitle": "Tingkatkan visibilitas iklan Anda agar dilihat lebih banyak pencari kerja.",
+    "boostTypes": {
+      "top10Title": "Boost Top-10",
+      "top10Desc": "Iklan Anda muncul di 10 posisi teratas setiap hari dalam durasi paket.",
+      "hotTitle": "Boost Hot (Paling Atas)",
+      "hotDesc": "Iklan Anda tampil paling atas dari semua iklan lainnya — visibilitas maksimal."
+    },
+    "boostModal": {
+      "title": "Boost Iklan",
+      "info": "Pilih paket boost, lalu Anda akan diarahkan ke halaman detail harga dan pilihan metode pembayaran.",
+      "hot": "HOT — Paling Atas",
+      "hotDesc": "Posisi teratas",
+      "top10": "Top-10 Harian",
+      "top10Desc": "10 besar harian",
+      "selectPay": "Pilih",
+      "empty": "Paket boost belum tersedia",
+      "footer": "Aman via Xendit · Aktif otomatis setelah bayar"
+    },
+    "history": "Lihat riwayat transaksi saya",
+    "checkout": {
+      "backToPlans": "Kembali ke Paket",
+      "backToDetails": "Kembali ke Detail",
+      "stepPlanDetail": "Detail Paket",
+      "stepMethod": "Metode Pembayaran",
+      "priceDetails": "Rincian Harga",
+      "planPrice": "Harga paket",
+      "ppn": "PPN",
+      "subtotal": "Subtotal",
+      "totalPay": "Total Pembayaran",
+      "vatHint": "Harga sudah termasuk PPN 11% sesuai peraturan perpajakan Indonesia.",
+      "feeHint": "Biaya metode pembayaran akan ditampilkan di langkah berikutnya.",
+      "continue": "Lanjutkan",
+      "selectedPlan": "Paket dipilih",
+      "qrisDesc": "GoPay, OVO, Dana, ShopeePay, dll.",
+      "vaTitle": "Transfer Virtual Account",
+      "vaDesc": "BCA, BNI, BRI, Mandiri, Permata, BSI",
+      "vaSelect": "Pilih bank untuk generate Virtual Account:",
+      "cardTitle": "Kartu Kredit / Debit",
+      "cardDesc": "Visa, Mastercard, JCB",
+      "cardName": "Nama Pemegang Kartu",
+      "cardNamePlaceholder": "Sesuai yang tercetak di kartu",
+      "cardNumber": "Nomor Kartu",
+      "cardExpiry": "Masa Berlaku",
+      "cardCvv": "CVV / CVC",
+      "cardCvvHint": "(3–4 digit)",
+      "cardSecureHint": "Detail kartu diverifikasi di halaman Xendit yang terenkripsi (PCI DSS).",
+      "totalCharged": "Total yang dibayarkan",
+      "payButton": "Buat Tagihan Pembayaran",
+      "secureTransaction": "Transaksi diproses aman oleh Xendit · PCI DSS Compliant",
+      "errors": {
+        "invalidParams": "Parameter paket tidak valid",
+        "planNotFound": "Paket tidak ditemukan",
+        "fetchFailed": "Gagal memuat detail paket",
+        "selectMethod": "Pilih metode pembayaran terlebih dahulu",
+        "nameRequired": "Nama pemegang kartu wajib diisi",
+        "cardNumberInvalid": "Nomor kartu tidak valid",
+        "cardExpiryInvalid": "Format MM/YY tidak valid",
+        "cardCvvInvalid": "CVV minimal 3 digit"
+      }
+    },
+    "orders": {
+      "title": "Riwayat Transaksi",
+      "subtitle": "Semua riwayat pembayaran akun Anda",
+      "buyPlan": "Beli Paket",
+      "allStatus": "Semua Status",
+      "allTypes": "Semua Tipe",
+      "empty": "Belum ada transaksi",
+      "emptyDesc": "Mulai dengan membeli paket untuk meningkatkan rekrutmen Anda.",
+      "table": {
+        "date": "Tanggal",
+        "type": "Tipe",
+        "plan": "Paket",
+        "amount": "Jumlah",
+        "status": "Status",
+        "action": "Aksi"
+      },
+      "status": {
+        "pending": "Menunggu Bayar",
+        "paid": "Lunas",
+        "expired": "Kadaluarsa",
+        "failed": "Gagal"
+      },
+      "types": {
+        "subscription": "Langganan",
+        "singlePost": "Iklan Satuan",
+        "boost": "Boost"
+      },
+      "actionPay": "Bayar",
+      "totalOrders": "transaksi total"
+    },
+    "success": {
+      "title": "Pembayaran Berhasil!",
+      "desc": "Paket Anda akan segera diaktifkan secara otomatis.",
+      "currentPlan": "Paket Aktif Sekarang",
+      "maxPosts": "Maks. Iklan Aktif",
+      "expiresAt": "Berlaku Hingga",
+      "activeProcess": "Paket Anda sedang dalam proses aktivasi. Cek kembali dalam beberapa saat atau lihat riwayat transaksi.",
+      "manageJobs": "Kelola Iklan Saya",
+      "history": "Riwayat Transaksi"
+    }
   }
 }

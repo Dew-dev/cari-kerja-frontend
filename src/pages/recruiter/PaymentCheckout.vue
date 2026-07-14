@@ -1,11 +1,13 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getAllPlans, createInvoice } from "@/services/payments.api.js";
 
 const route  = useRoute();
 const router = useRouter();
+const { t }  = useI18n();
 
 const orderType = route.query.type;
 const planId    = Number(route.query.plan_id);
@@ -23,7 +25,7 @@ const cardErrors = ref({});
 
 onMounted(async () => {
   if (!orderType || !planId) {
-    push.error("Parameter paket tidak valid");
+    push.error(t("payment.checkout.errors.invalidParams"));
     router.replace("/recruiter/pricing");
     return;
   }
@@ -35,11 +37,11 @@ onMounted(async () => {
     else if (orderType === "boost")    list = res?.data?.boost || [];
     plan.value = list.find((p) => p.id === planId) || null;
     if (!plan.value) {
-      push.error("Paket tidak ditemukan");
+      push.error(t("payment.checkout.errors.planNotFound"));
       router.replace("/recruiter/pricing");
     }
   } catch {
-    push.error("Gagal memuat detail paket");
+    push.error(t("payment.checkout.errors.fetchFailed"));
     router.replace("/recruiter/pricing");
   } finally {
     loading.value = false;
@@ -80,6 +82,7 @@ const grandTotal = computed(() => baseTotal.value + methodFee.value);
 const selectedBankObj = computed(() => VA_BANKS.find((b) => b.id === selectedBank.value) || null);
 
 function formatRupiah(n) {
+  if (n === 0) return t("payment.priceFormat.free");
   return new Intl.NumberFormat("id-ID", {
     style: "currency", currency: "IDR", minimumFractionDigits: 0,
   }).format(Number(n));
@@ -87,10 +90,10 @@ function formatRupiah(n) {
 
 // ─── Plan visual meta ─────────────────────────────────────────────────────────
 const SUB_META = {
-  starter:  { gradient: "from-blue-500 to-blue-700",    icon: "pi-bolt",      color: "blue" },
-  pro:      { gradient: "from-violet-500 to-violet-700", icon: "pi-crown",    color: "violet" },
-  business: { gradient: "from-amber-500 to-orange-600", icon: "pi-briefcase", color: "amber" },
-  free:     { gradient: "from-slate-400 to-slate-600",  icon: "pi-gift",      color: "slate" },
+  starter:  { gradient: "from-blue-500 to-blue-700",    icon: "pi-bolt" },
+  pro:      { gradient: "from-violet-500 to-violet-700", icon: "pi-crown" },
+  business: { gradient: "from-amber-500 to-orange-600", icon: "pi-briefcase" },
+  free:     { gradient: "from-slate-400 to-slate-600",  icon: "pi-gift" },
 };
 const planMeta = computed(() => {
   if (!plan.value) return { gradient: "from-slate-400 to-slate-600", icon: "pi-circle" };
@@ -108,23 +111,23 @@ const planMeta = computed(() => {
 const planFeatures = computed(() => {
   if (!plan.value) return [];
   if (orderType === "subscription")
-    return [`${plan.value.max_active_posts} iklan aktif bersamaan`, `Berlaku ${plan.value.duration_days} hari sejak aktivasi`, "Pembayaran aman via Xendit"];
+    return [`${plan.value.max_active_posts} ${t("payment.features.activePosts")}`, t("payment.features.durationDays", { days: plan.value.duration_days }), t("payment.features.secureXendit")];
   if (orderType === "single_post") {
-    const f = ["1 slot iklan pekerjaan", `Berlaku ${plan.value.duration_days} hari sejak aktivasi`, "Tanpa perlu berlangganan"];
+    const f = ["1 slot iklan pekerjaan", t("payment.features.durationDays", { days: plan.value.duration_days }), "Tanpa perlu berlangganan"];
     if (plan.value.is_hot) f.push("Tampil sebagai iklan HOT 🔥");
     return f;
   }
   if (orderType === "boost") {
     const label = plan.value.boost_priority === 1 ? "Posisi paling atas dari semua iklan" : "Masuk 10 iklan teratas setiap hari";
-    return [label, `Durasi ${plan.value.duration_days} hari`, "Aktif otomatis setelah pembayaran"];
+    return [label, t("payment.features.durationDays", { days: plan.value.duration_days }), "Aktif otomatis setelah pembayaran"];
   }
   return [];
 });
 
 const orderTypeLabel = computed(() => {
-  if (orderType === "subscription")  return "Paket Langganan";
-  if (orderType === "single_post")   return "Iklan Satuan";
-  if (orderType === "boost") return plan.value?.boost_priority === 1 ? "Boost HOT — Paling Atas" : "Boost Top-10 Harian";
+  if (orderType === "subscription")  return t("payment.orders.types.subscription");
+  if (orderType === "single_post")   return t("payment.orders.types.singlePost");
+  if (orderType === "boost") return plan.value?.boost_priority === 1 ? t("payment.boostModal.hot") : t("payment.boostModal.top10");
   return "Paket";
 });
 
@@ -143,10 +146,10 @@ function onCvvInput(e) { card.value.cvv = e.target.value.replace(/\D/g, "").slic
 function validateCard() {
   const errs = {};
   const num = card.value.number.replace(/\s/g, "");
-  if (!card.value.name.trim())                      errs.name   = "Nama pemegang kartu wajib diisi";
-  if (num.length < 15)                              errs.number = "Nomor kartu tidak valid";
-  if (!/^\d{2}\/\d{2}$/.test(card.value.expiry))   errs.expiry = "Format MM/YY tidak valid";
-  if (card.value.cvv.length < 3)                    errs.cvv    = "CVV minimal 3 digit";
+  if (!card.value.name.trim())                      errs.name   = t("payment.checkout.errors.nameRequired");
+  if (num.length < 15)                              errs.number = t("payment.checkout.errors.cardNumberInvalid");
+  if (!/^\d{2}\/\d{2}$/.test(card.value.expiry))   errs.expiry = t("payment.checkout.errors.cardExpiryInvalid");
+  if (card.value.cvv.length < 3)                    errs.cvv    = t("payment.checkout.errors.cardCvvInvalid");
   cardErrors.value = errs;
   return Object.keys(errs).length === 0;
 }
@@ -202,12 +205,12 @@ async function createBill() {
         class="flex items-center gap-2 text-gray-400 hover:text-gray-700 text-sm mb-6 transition-colors group"
       >
         <i class="pi pi-arrow-left text-xs group-hover:-translate-x-1 transition-transform"></i>
-        {{ step === 1 ? "Kembali ke Paket" : "Kembali ke Detail" }}
+        {{ step === 1 ? t("payment.checkout.backToPlans") : t("payment.checkout.backToDetails") }}
       </button>
 
       <!-- Step indicator -->
       <div class="flex items-center gap-2 mb-7">
-        <template v-for="(label, i) in ['Detail Paket', 'Metode Pembayaran']" :key="i">
+        <template v-for="(label, i) in [t('payment.checkout.stepPlanDetail'), t('payment.checkout.stepMethod')]" :key="i">
           <div class="flex items-center gap-2">
             <div :class="[
               'w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all duration-300',
@@ -261,7 +264,7 @@ async function createBill() {
                   <span class="w-6 h-6 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-center flex-shrink-0">
                     <i class="pi pi-shield text-blue-600 text-[10px]"></i>
                   </span>
-                  Transaksi aman diproses oleh <strong class="text-gray-800 ml-1">Xendit</strong>
+                  {{ t("payment.features.secureXendit") }}
                 </li>
               </ul>
             </div>
@@ -270,26 +273,26 @@ async function createBill() {
           <!-- Price breakdown -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
             <h3 class="text-gray-800 font-semibold mb-4 flex items-center gap-2 text-sm">
-              <i class="pi pi-receipt text-blue-500"></i> Rincian Harga
+              <i class="pi pi-receipt text-blue-500"></i> {{ t("payment.checkout.priceDetails") }}
             </h3>
             <div class="space-y-3 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-500">Harga paket</span>
+                <span class="text-gray-500">{{ t("payment.checkout.planPrice") }}</span>
                 <span class="text-gray-800 font-medium">{{ formatRupiah(subtotal) }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-500">PPN ({{ (PPN_RATE * 100).toFixed(0) }}%)</span>
+                <span class="text-gray-500">{{ t("payment.checkout.ppn") }} ({{ (PPN_RATE * 100).toFixed(0) }}%)</span>
                 <span class="text-gray-800 font-medium">{{ formatRupiah(ppnAmount) }}</span>
               </div>
               <div class="h-px bg-gray-100"></div>
               <div class="flex justify-between items-center">
-                <span class="text-gray-800 font-bold">Subtotal</span>
+                <span class="text-gray-800 font-bold">{{ t("payment.checkout.subtotal") }}</span>
                 <span class="text-gray-900 font-extrabold text-lg">{{ formatRupiah(baseTotal) }}</span>
               </div>
             </div>
             <p class="text-gray-400 text-xs mt-4">
               <i class="pi pi-info-circle mr-1"></i>
-              Biaya metode pembayaran akan ditampilkan di langkah berikutnya.
+              {{ t("payment.checkout.feeHint") }}
             </p>
           </div>
 
@@ -298,7 +301,7 @@ async function createBill() {
             @click="goToMethodSelect"
             :class="`w-full py-3.5 rounded-2xl text-sm font-bold text-white bg-gradient-to-r ${planMeta.gradient} hover:shadow-lg hover:scale-[1.01] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 shadow`"
           >
-            Lanjutkan <i class="pi pi-arrow-right"></i>
+            {{ t("payment.checkout.continue") }} <i class="pi pi-arrow-right"></i>
           </button>
         </div>
 
@@ -313,12 +316,12 @@ async function createBill() {
                   <i :class="`pi ${planMeta.icon} text-white text-sm`"></i>
                 </div>
                 <div>
-                  <div class="text-white/70 text-xs">{{ orderTypeLabel }}</div>
+                  <div class="text-white/70 text-xs">{{ t("payment.checkout.selectedPlan") }}</div>
                   <div class="text-white font-bold text-sm">{{ plan.display_name }}</div>
                 </div>
               </div>
               <div class="text-right">
-                <div class="text-white/70 text-xs">Subtotal</div>
+                <div class="text-white/70 text-xs">{{ t("payment.checkout.subtotal") }}</div>
                 <div class="text-white font-extrabold">{{ formatRupiah(baseTotal) }}</div>
               </div>
             </div>
@@ -327,7 +330,7 @@ async function createBill() {
           <!-- Payment methods -->
           <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
             <h3 class="text-gray-800 font-semibold mb-4 text-sm flex items-center gap-2">
-              <i class="pi pi-credit-card text-blue-500"></i> Pilih Metode Pembayaran
+              <i class="pi pi-credit-card text-blue-500"></i> {{ t("payment.checkout.stepMethod") }}
             </h3>
 
             <div class="space-y-2.5">
@@ -346,7 +349,7 @@ async function createBill() {
                       <span class="text-gray-800 font-semibold text-sm">QRIS</span>
                       <span class="px-1.5 py-0.5 bg-green-100 text-green-700 text-[10px] font-bold rounded border border-green-200">Instant</span>
                     </div>
-                    <div class="text-gray-400 text-xs mt-0.5">GoPay, OVO, Dana, ShopeePay, dll.</div>
+                    <div class="text-gray-400 text-xs mt-0.5">{{ t("payment.checkout.qrisDesc") }}</div>
                   </div>
                   <div :class="['w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0', selectedMethod === 'qris' ? 'border-blue-500 bg-blue-500' : 'border-gray-300']">
                     <div v-if="selectedMethod === 'qris'" class="w-2 h-2 bg-white rounded-full"></div>
@@ -356,7 +359,7 @@ async function createBill() {
                   <div v-if="selectedMethod === 'qris'" class="border-t border-blue-100 px-4 pb-4 pt-3">
                     <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-2.5 text-sm">
                       <div class="flex justify-between text-gray-600">
-                        <span>Subtotal</span>
+                        <span>{{ t("payment.checkout.subtotal") }}</span>
                         <span>{{ formatRupiah(baseTotal) }}</span>
                       </div>
                       <div class="flex justify-between text-gray-600">
@@ -368,13 +371,10 @@ async function createBill() {
                       </div>
                       <div class="h-px bg-blue-100"></div>
                       <div class="flex justify-between text-gray-900 font-bold">
-                        <span>Total Bayar</span>
+                        <span>{{ t("payment.checkout.totalCharged") }}</span>
                         <span class="text-base">{{ formatRupiah(grandTotal) }}</span>
                       </div>
                     </div>
-                    <p class="text-gray-400 text-xs mt-2.5">
-                      <i class="pi pi-info-circle mr-1"></i>Biaya MDR QRIS 0.7% sesuai regulasi Bank Indonesia.
-                    </p>
                   </div>
                 </Transition>
               </div>
@@ -389,8 +389,8 @@ async function createBill() {
                     <i class="pi pi-building-columns text-white text-sm"></i>
                   </div>
                   <div class="flex-1">
-                    <div class="text-gray-800 font-semibold text-sm">Transfer Virtual Account</div>
-                    <div class="text-gray-400 text-xs mt-0.5">BCA, BNI, BRI, Mandiri, Permata, BSI</div>
+                    <div class="text-gray-800 font-semibold text-sm">{{ t("payment.checkout.vaTitle") }}</div>
+                    <div class="text-gray-400 text-xs mt-0.5">{{ t("payment.checkout.vaDesc") }}</div>
                   </div>
                   <div :class="['w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0', selectedMethod === 'va' ? 'border-green-500 bg-green-500' : 'border-gray-300']">
                     <div v-if="selectedMethod === 'va'" class="w-2 h-2 bg-white rounded-full"></div>
@@ -398,7 +398,7 @@ async function createBill() {
                 </div>
                 <Transition name="expand">
                   <div v-if="selectedMethod === 'va'" class="border-t border-green-100 px-4 pb-4 pt-3">
-                    <p class="text-gray-500 text-xs mb-3">Pilih bank untuk generate Virtual Account:</p>
+                    <p class="text-gray-500 text-xs mb-3">{{ t("payment.checkout.vaSelect") }}</p>
                     <div class="grid grid-cols-3 gap-2">
                       <button
                         v-for="bank in VA_BANKS"
@@ -422,7 +422,7 @@ async function createBill() {
                     <Transition name="expand">
                       <div v-if="selectedBankObj" class="mt-3 bg-green-50 border border-green-100 rounded-xl p-4 space-y-2.5 text-sm">
                         <div class="flex justify-between text-gray-600">
-                          <span>Subtotal</span>
+                          <span>{{ t("payment.checkout.subtotal") }}</span>
                           <span>{{ formatRupiah(baseTotal) }}</span>
                         </div>
                         <div class="flex justify-between text-gray-600">
@@ -431,7 +431,7 @@ async function createBill() {
                         </div>
                         <div class="h-px bg-green-100"></div>
                         <div class="flex justify-between text-gray-900 font-bold">
-                          <span>Total Bayar</span>
+                          <span>{{ t("payment.checkout.totalCharged") }}</span>
                           <span class="text-base">{{ formatRupiah(grandTotal) }}</span>
                         </div>
                       </div>
@@ -450,8 +450,8 @@ async function createBill() {
                     <i class="pi pi-credit-card text-white text-sm"></i>
                   </div>
                   <div class="flex-1">
-                    <div class="text-gray-800 font-semibold text-sm">Kartu Kredit / Debit</div>
-                    <div class="text-gray-400 text-xs mt-0.5">Visa, Mastercard, JCB</div>
+                    <div class="text-gray-800 font-semibold text-sm">{{ t("payment.checkout.cardTitle") }}</div>
+                    <div class="text-gray-400 text-xs mt-0.5">{{ t("payment.checkout.cardDesc") }}</div>
                   </div>
                   <div :class="['w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0', selectedMethod === 'card' ? 'border-violet-500 bg-violet-500' : 'border-gray-300']">
                     <div v-if="selectedMethod === 'card'" class="w-2 h-2 bg-white rounded-full"></div>
@@ -462,11 +462,11 @@ async function createBill() {
                     <div class="space-y-3">
                       <!-- Name -->
                       <div>
-                        <label class="text-gray-600 text-xs font-medium mb-1.5 block">Nama Pemegang Kartu</label>
+                        <label class="text-gray-600 text-xs font-medium mb-1.5 block">{{ t("payment.checkout.cardName") }}</label>
                         <input
                           v-model="card.name"
                           type="text"
-                          placeholder="Sesuai yang tercetak di kartu"
+                          :placeholder="t('payment.checkout.cardNamePlaceholder')"
                           class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 text-sm placeholder-gray-300 focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-all uppercase"
                           style="text-transform: uppercase"
                           @input="cardErrors.name = ''"
@@ -475,7 +475,7 @@ async function createBill() {
                       </div>
                       <!-- Card number -->
                       <div>
-                        <label class="text-gray-600 text-xs font-medium mb-1.5 block">Nomor Kartu</label>
+                        <label class="text-gray-600 text-xs font-medium mb-1.5 block">{{ t("payment.checkout.cardNumber") }}</label>
                         <input
                           :value="card.number"
                           @input="onCardNumberInput"
@@ -491,7 +491,7 @@ async function createBill() {
                       <!-- Expiry + CVV -->
                       <div class="grid grid-cols-2 gap-3">
                         <div>
-                          <label class="text-gray-600 text-xs font-medium mb-1.5 block">Masa Berlaku</label>
+                          <label class="text-gray-600 text-xs font-medium mb-1.5 block">{{ t("payment.checkout.cardExpiry") }}</label>
                           <input
                             :value="card.expiry"
                             @input="onExpiryInput"
@@ -505,7 +505,7 @@ async function createBill() {
                           <p v-if="cardErrors.expiry" class="text-red-500 text-xs mt-1">{{ cardErrors.expiry }}</p>
                         </div>
                         <div>
-                          <label class="text-gray-600 text-xs font-medium mb-1.5 block">CVV / CVC <span class="text-gray-300 text-[10px]">(3–4 digit)</span></label>
+                          <label class="text-gray-600 text-xs font-medium mb-1.5 block">{{ t("payment.checkout.cardCvv") }} <span class="text-gray-300 text-[10px]">{{ t("payment.checkout.cardCvvHint") }}</span></label>
                           <input
                             :value="card.cvv"
                             @input="onCvvInput"
@@ -522,7 +522,7 @@ async function createBill() {
                       <!-- Card fee breakdown -->
                       <div class="bg-violet-50 border border-violet-100 rounded-xl p-4 space-y-2.5 text-sm">
                         <div class="flex justify-between text-gray-600">
-                          <span>Subtotal</span><span>{{ formatRupiah(baseTotal) }}</span>
+                          <span>{{ t("payment.checkout.subtotal") }}</span><span>{{ formatRupiah(baseTotal) }}</span>
                         </div>
                         <div class="flex justify-between text-gray-600">
                           <span class="flex items-center gap-1.5">
@@ -533,12 +533,12 @@ async function createBill() {
                         </div>
                         <div class="h-px bg-violet-100"></div>
                         <div class="flex justify-between text-gray-900 font-bold">
-                          <span>Total Bayar</span><span class="text-base">{{ formatRupiah(grandTotal) }}</span>
+                          <span>{{ t("payment.checkout.totalCharged") }}</span><span class="text-base">{{ formatRupiah(grandTotal) }}</span>
                         </div>
                       </div>
                       <p class="text-gray-400 text-xs flex items-center gap-1.5">
                         <i class="pi pi-lock text-[11px]"></i>
-                        Detail kartu diverifikasi di halaman Xendit yang terenkripsi (PCI DSS).
+                        {{ t("payment.checkout.cardSecureHint") }}
                       </p>
                     </div>
                   </div>
@@ -550,7 +550,7 @@ async function createBill() {
 
           <!-- Grand total -->
           <div v-if="selectedMethod" class="bg-white border border-gray-200 rounded-2xl px-5 py-3.5 flex items-center justify-between shadow-sm">
-            <span class="text-gray-500 text-sm">Total yang dibayarkan</span>
+            <span class="text-gray-500 text-sm">{{ t("payment.checkout.totalCharged") }}</span>
             <span class="text-gray-900 font-extrabold text-xl transition-all duration-300">{{ formatRupiah(grandTotal) }}</span>
           </div>
 
@@ -568,12 +568,12 @@ async function createBill() {
             <span v-if="invoiceLoading" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
             <template v-else>
               <i class="pi pi-file-check"></i>
-              <span>Buat Tagihan Pembayaran</span>
+              <span>{{ t("payment.checkout.payButton") }}</span>
             </template>
           </button>
 
           <p class="text-center text-gray-400 text-xs flex items-center justify-center gap-1.5">
-            <i class="pi pi-lock text-[11px]"></i> Transaksi diproses aman oleh Xendit · PCI DSS Compliant
+            <i class="pi pi-lock text-[11px]"></i> {{ t("payment.checkout.secureTransaction") }}
           </p>
         </div>
       </div>

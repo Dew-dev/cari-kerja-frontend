@@ -1,9 +1,12 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { getActivePlan } from "@/services/payments.api.js";
 
+const { t } = useI18n();
+
 const activePlan = ref(null);
-const loading = ref(true);
+const loading    = ref(true);
 
 onMounted(async () => {
   try {
@@ -16,13 +19,16 @@ onMounted(async () => {
   }
 });
 
-const planName = computed(() => activePlan.value?.subscription?.plan_display_name || "Free");
-const maxPosts = computed(() => activePlan.value?.max_active_posts || 1);
+const planName = computed(() => {
+  const name = activePlan.value?.subscription?.plan_name || "Free";
+  return t(`payment.planName.${name.toLowerCase()}`, name);
+});
+const maxPosts    = computed(() => activePlan.value?.max_active_posts || 1);
 const singleSlots = computed(() => activePlan.value?.single_post_slots || 0);
-const expiresAt = computed(() => {
+const expiresAt   = computed(() => {
   const exp = activePlan.value?.subscription?.expires_at;
   if (!exp) return null;
-  return new Date(exp).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+  return new Date(exp).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
 });
 const isFree = computed(() => !activePlan.value?.subscription);
 
@@ -46,7 +52,9 @@ const planGradient = computed(() => {
           <i class="pi pi-gift text-white text-sm"></i>
         </div>
         <div>
-          <div class="font-semibold text-gray-800 text-sm">Paket Free — 1 iklan aktif</div>
+          <div class="font-semibold text-gray-800 text-sm">
+            {{ t("payment.activePlan") }} {{ t("payment.planName.free") }} — 1 {{ t("payment.maxPosts") }}
+          </div>
           <div class="text-xs text-gray-500 mt-0.5">Upgrade untuk memposting lebih banyak lowongan sekaligus.</div>
         </div>
       </div>
@@ -66,7 +74,7 @@ const planGradient = computed(() => {
             <i class="pi pi-crown text-white text-sm"></i>
           </div>
           <div>
-            <div class="text-white/80 text-xs font-medium uppercase tracking-wider">Paket Aktif</div>
+            <div class="text-white/80 text-xs font-medium uppercase tracking-wider">{{ t("payment.activePlan") }}</div>
             <div class="text-white font-bold text-sm">{{ planName }}</div>
           </div>
         </div>
@@ -75,15 +83,15 @@ const planGradient = computed(() => {
         <div class="flex items-center gap-4 sm:gap-6">
           <div class="text-center">
             <div class="text-white font-bold text-xl leading-none">{{ maxPosts }}</div>
-            <div class="text-white/60 text-xs mt-0.5">Iklan maks.</div>
+            <div class="text-white/60 text-xs mt-0.5">{{ t("payment.maxPosts") }}</div>
           </div>
           <div v-if="singleSlots > 0" class="text-center">
             <div class="text-white font-bold text-xl leading-none">{{ singleSlots }}</div>
-            <div class="text-white/60 text-xs mt-0.5">Slot satuan</div>
+            <div class="text-white/60 text-xs mt-0.5">{{ t("payment.singleSlots") }}</div>
           </div>
           <div v-if="expiresAt" class="text-center hidden sm:block">
             <div class="text-white font-semibold text-xs leading-none">{{ expiresAt }}</div>
-            <div class="text-white/60 text-xs mt-0.5">Kadaluarsa</div>
+            <div class="text-white/60 text-xs mt-0.5">{{ t("payment.slots.expires") }}</div>
           </div>
         </div>
 
@@ -106,7 +114,7 @@ const planGradient = computed(() => {
 
       <!-- Expiry mobile -->
       <div v-if="expiresAt" class="sm:hidden mt-2 text-white/60 text-xs">
-        <i class="pi pi-calendar text-xs mr-1"></i>Berlaku hingga {{ expiresAt }}
+        <i class="pi pi-calendar text-xs mr-1"></i>{{ t("payment.slots.expires") }} {{ expiresAt }}
       </div>
     </div>
   </div>

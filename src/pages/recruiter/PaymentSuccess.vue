@@ -1,19 +1,21 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { getActivePlan } from "@/services/payments.api.js";
 
 const router = useRouter();
-const route = useRoute();
+const route  = useRoute();
+const { t }   = useI18n();
 
 const activePlan = ref(null);
-const loading = ref(true);
+const loading    = ref(true);
 
 onMounted(async () => {
   try {
     const res = await getActivePlan();
     if (res?.data) activePlan.value = res.data;
-  } catch (err) {
+  } catch {
     // silently fail
   } finally {
     loading.value = false;
@@ -42,10 +44,10 @@ onMounted(async () => {
 
       <!-- Title -->
       <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-3">
-        Pembayaran Berhasil!
+        {{ t("payment.success.title") }}
       </h1>
       <p class="text-green-300/80 text-lg mb-6">
-        Paket Anda akan segera diaktifkan secara otomatis.
+        {{ t("payment.success.desc") }}
       </p>
 
       <!-- Loading indicator -->
@@ -60,19 +62,19 @@ onMounted(async () => {
             <i class="pi pi-check-circle text-green-400 text-xl"></i>
           </div>
           <div>
-            <div class="text-white font-semibold text-sm">Paket Aktif Sekarang</div>
+            <div class="text-white font-semibold text-sm">{{ t("payment.success.currentPlan") }}</div>
             <div class="text-green-300 font-bold text-lg capitalize">{{ activePlan.subscription.plan_display_name }}</div>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3 text-sm">
           <div class="bg-white/8 rounded-lg p-3">
-            <div class="text-white/50 text-xs mb-1">Maks. Iklan Aktif</div>
+            <div class="text-white/50 text-xs mb-1">{{ t("payment.success.maxPosts") }}</div>
             <div class="text-white font-bold text-xl">{{ activePlan.max_active_posts }}</div>
           </div>
           <div class="bg-white/8 rounded-lg p-3">
-            <div class="text-white/50 text-xs mb-1">Berlaku Hingga</div>
+            <div class="text-white/50 text-xs mb-1">{{ t("payment.success.expiresAt") }}</div>
             <div class="text-white font-semibold text-sm">
-              {{ new Date(activePlan.subscription.expires_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}
+              {{ new Date(activePlan.subscription.expires_at).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) }}
             </div>
           </div>
         </div>
@@ -83,8 +85,8 @@ onMounted(async () => {
         <div class="flex items-center gap-3 text-left">
           <i class="pi pi-info-circle text-blue-400 text-2xl flex-shrink-0"></i>
           <div>
-            <div class="text-white font-semibold text-sm">Pembayaran diterima</div>
-            <div class="text-white/60 text-xs mt-1">Paket Anda sedang dalam proses aktivasi. Cek kembali dalam beberapa saat atau lihat riwayat transaksi.</div>
+            <div class="text-white font-semibold text-sm">{{ t("payment.checkout.totalCharged") }}</div>
+            <div class="text-white/60 text-xs mt-1">{{ t("payment.success.activeProcess") }}</div>
           </div>
         </div>
       </div>
@@ -93,22 +95,17 @@ onMounted(async () => {
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
         <router-link
           to="/recruiter/jobs"
-          class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-400 text-white font-semibold rounded-xl transition-all shadow-lg shadow-green-500/30 hover:shadow-green-400/40"
+          class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-50 hover:bg-green-400 text-white font-semibold rounded-xl transition-all shadow-lg shadow-green-500/30 hover:shadow-green-400/40"
         >
-          <i class="pi pi-briefcase"></i> Kelola Iklan Saya
+          <i class="pi pi-briefcase"></i> {{ t("payment.success.manageJobs") }}
         </router-link>
         <router-link
           to="/recruiter/orders"
           class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-white/20 transition-all"
         >
-          <i class="pi pi-history"></i> Riwayat Transaksi
+          <i class="pi pi-history"></i> {{ t("payment.success.history") }}
         </router-link>
       </div>
-
-      <p class="mt-8 text-white/30 text-xs">
-        Ada pertanyaan? Hubungi tim kami via halaman
-        <router-link to="/contact" class="underline hover:text-white/60">Contact</router-link>.
-      </p>
     </div>
   </div>
 </template>
