@@ -6,7 +6,7 @@ import { push } from "notivue";
 import { getAllPlans, getActivePlan } from "@/services/payments.api.js";
 
 const router = useRouter();
-const { t } = useI18n();
+const { t, tm } = useI18n();
 
 const plans     = ref({ subscription: [], single_post: [], boost: [] });
 const activePlan = ref(null);
@@ -62,10 +62,10 @@ function getPlanVisual(planName) {
 
 function getPlanFeatures(planName) {
   const name = planName?.toLowerCase();
-  if (name === "free") return t("payment.features.free");
-  if (name === "starter") return t("payment.features.starter");
-  if (name === "pro") return t("payment.features.pro");
-  if (name === "business") return t("payment.features.business");
+  if (name === "free") return tm("payment.features.free");
+  if (name === "starter") return tm("payment.features.starter");
+  if (name === "pro") return tm("payment.features.pro");
+  if (name === "business") return tm("payment.features.business");
   return [];
 }
 </script>
