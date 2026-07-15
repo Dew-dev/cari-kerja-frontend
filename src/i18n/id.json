@@ -82,6 +82,24 @@
     "signIn": "Masuk",
     "language": "Bahasa"
   },
+  "chat": {
+    "title": "Pesan",
+    "searchPlaceholder": "Cari percakapan...",
+    "typeMessage": "Ketik pesan...",
+    "send": "Kirim",
+    "noConversations": "Belum ada percakapan",
+    "noConversationsSubtitle": "Pesan Anda dengan rekruter akan muncul di sini",
+    "noResults": "Percakapan tidak ditemukan",
+    "selectConversation": "Pilih percakapan",
+    "selectConversationSubtitle": "Pilih percakapan dari daftar untuk mulai mengobrol",
+    "noMessages": "Belum ada pesan",
+    "startConversation": "Ucapkan halo untuk memulai percakapan!",
+    "online": "Online",
+    "offline": "Offline",
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "failedToSend": "Gagal mengirim pesan"
+  },
   "home": {
     "title": "Portal lowongan #1 di Indonesia",
     "subtitle": "Temukan peluangmu di sini!",
@@ -566,7 +584,28 @@
     "failedtoaddskill": "Gagal menambah keahlian",
     "failedtoremoveskill": "Gagal menghapus keahlian",
     "skilladded": "Keahlian ditambahkan",
-    "skillremoved": "Keahlian dihapus"
+    "skillremoved": "Keahlian dihapus",
+    "cvParser": {
+      "tab": "Parse CV",
+      "title": "Parser CV",
+      "subtitle": "Unggah CV Anda untuk mendeteksi dan mengisi data profil secara otomatis. Tinjau setiap bagian sebelum menyimpan.",
+      "uploadLabel": "Unggah CV (PDF atau DOCX)",
+      "acceptedFormats": "Format diterima: PDF, DOCX – Maks 10MB",
+      "parseButton": "Parse CV",
+      "parsing": "Memproses...",
+      "selectFile": "Silakan pilih file CV",
+      "invalidType": "Hanya file PDF atau DOCX yang diizinkan",
+      "failedToParse": "Gagal memproses CV",
+      "parseSuccess": "CV berhasil diproses – tinjau dan terapkan data di bawah ini",
+      "foundInCV": "Ditemukan di CV Anda",
+      "applyToProfile": "Terapkan ke Profil",
+      "apply": "Terapkan",
+      "applyAll": "Terapkan Semua",
+      "appliedPersonalInfo": "Info personal diterapkan ke profil. Tinjau dan simpan jika sudah sesuai.",
+      "appliedSection": "Diterapkan ke profil. Buka tab terkait dan simpan setiap entri.",
+      "applyHint": "Data belum disimpan. Buka tab terkait dan klik Simpan pada setiap entri.",
+      "skillsHint": "Keahlian yang ditemukan di CV Anda. Tambahkan secara manual melalui tab Profil."
+    }
   },
   "about": {
     "pageTitle": "Tentang",

@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { login as loginApi } from "../services/auth.api";
 import { refreshToken as refreshApi } from "../services/auth.api";
+import { disconnectSocket } from "../composables/useSocket";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -57,6 +58,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     logout() {
+      disconnectSocket();
       this.token = null;
       this.refreshToken = null;
       this.user = null;
