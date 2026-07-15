@@ -33,4 +33,4 @@ export const sendMessage = (conversationId, data) =>
  * @param {string} conversationId
  */
 export const markAsRead = (conversationId) =>
-  api.patch(`/chat/${conversationId}/read`)
+  api.put(`/chat/${conversationId}/read`)
