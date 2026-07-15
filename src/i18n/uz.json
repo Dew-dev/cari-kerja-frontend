@@ -1,4 +1,4 @@
-﻿{
+{
   "jobs": "Ish o'rinlari",
   "companies": "Kompaniyalar",
   "jobsByCompany": "Kompaniyalar bo'yicha ishlar",
@@ -1883,6 +1883,10 @@
     "goBack": "Orqaga qaytish"
   },
   "auth": {
+    "signInWithGoogle": "Google orqali kirish",
+    "signUpWithGoogle": "Google orqali ro'yxatdan o'tish",
+    "signInWithTelegram": "Telegram orqali kirish",
+    "signUpWithTelegram": "Telegram orqali ro'yxatdan o'tish",
     "emailLabel": "Elektron pochta manzili",
     "usernameLabel": "Foydalanuvchi nomi",
     "passwordLabel": "Parol",
@@ -1975,5 +1979,171 @@
   "noAddressProvided": "Manzil berilmagan",
   "noContactNameProvided": "Aloqa shaxsi berilmagan",
   "noContactPhoneProvided": "Aloqa raqami berilmagan",
-  "noWebsiteProvided": "Veb-sayt berilmagan"
+  "noWebsiteProvided": "Veb-sayt berilmagan",
+  "notFound": {
+    "pageTitle": "Sahifa topilmadi",
+    "title": "404",
+    "subtitle": "Voy! Sahifa topilmadi",
+    "description": "Siz qidirayotgan sahifa o'chirilgan, nomi o'zgartirilgan yoki vaqtincha foydalanishga topshirilmagan bo'lishi mumkin.",
+    "backHome": "Bosh sahifaga qaytish",
+    "findJobs": "Ishlarni topish"
+  },
+  "payment": {
+    "pricing": "Tariflar va narxlar",
+    "pricingTitle": "Xodimlarni yollashni tezlashtiring",
+    "pricingTitleAccent": " cheksiz",
+    "pricingSubtitle": "Biznesingiz ehtiyojlariga mos keladigan tarifni tanlang — bepuldan tortib korporativgacha.",
+    "activePlan": "Faol tarif",
+    "maxPosts": "maks. faol e'lonlar",
+    "singleSlots": "bitta e'lon slotlari",
+    "loadingPlans": "Tariflar yuklanmoqda...",
+    "tabs": {
+      "subscription": "Obuna",
+      "singlePost": "Yagona e'lon",
+      "boost": "E'lonni ko'tarish"
+    },
+    "planName": {
+      "free": "Bepul",
+      "starter": "Boshlang'ich",
+      "pro": "Professional",
+      "business": "Biznes"
+    },
+    "features": {
+      "free": ["1 faol e'lon", "To'lovsiz", "Baza kirish"],
+      "starter": ["5 faol e'lon", "Muddati 30 kun", "Barcha standart funksiyalar"],
+      "pro": ["15 faol e'lon", "Muddati 30 kun", "Ustuvor qo'llab-quvvatlash"],
+      "business": ["25 faol e'lon", "Muddati 30 kun", "Premium qo'llab-quvvatlash"],
+      "activePosts": "faol e'lonlar bir vaqtning o'zida",
+      "durationDays": "kun faollashtirilganidan keyin",
+      "secureXendit": "Xendit orqali xavfsiz to'lov"
+    },
+    "priceFormat": {
+      "free": "Bepul",
+      "days": "kun"
+    },
+    "cta": {
+      "default": "Standart tarif",
+      "active": "Faol tarif",
+      "select": "Tarifni tanlash",
+      "details": "Tafsilotlarni ko'rish va sotib olish",
+      "boost": "E'lonlar sahifasida ko'tarish"
+    },
+    "singlePostDesc": "Obuna bo'lmasdan yagona e'lonlarni sotib oling. Vaqti-vaqti bilan xodim yollash ehtiyojlari uchun mos keladi.",
+    "slots": {
+      "available": "Mavjud yagona e'lon slotlari",
+      "expires": "Muddati tugaydi",
+      "hint": "E'lonlar sahifasida e'lon joylashtirishda ushbu slotni qo'llang."
+    },
+    "boostTitle": "E'lonni ko'tarish",
+    "boostSubtitle": "Ko'proq nomzodlarni jalb qilish uchun e'loningizning ko'rinuvchanligini oshiring.",
+    "boostTypes": {
+      "top10Title": "Boost Top-10",
+      "top10Desc": "E'loningiz xizmat muddati davomida har kuni eng yuqori 10 ta o'rinda turadi.",
+      "hotTitle": "Boost Hot (Eng yuqori pozitsiya)",
+      "hotDesc": "E'loningiz barcha e'lonlardan yuqorida — maksimal ko'rinuvchanlikda aks etadi."
+    },
+    "boostModal": {
+      "title": "E'lonni ko'tarish",
+      "info": "Ko'tarish tarifini tanlang, va siz narx tafsilotlari hamda to'lov usulini tanlash uchun rasmiylashtirish sahifasiga yo'naltirilasiz.",
+      "hot": "HOT — Eng yuqori pozitsiya",
+      "hotDesc": "Eng yuqori pozitsiya",
+      "top10": "Top-10 Kundalik",
+      "top10Desc": "Kuniga top-10",
+      "selectPay": "Tanlash",
+      "empty": "Ko'tarish tariflari mavjud emas",
+      "footer": "Xendit orqali xavfsiz to'lov · To'lovdan so'ng avtomatik faollashadi"
+    },
+    "history": "Tranzaksiyalarim tarixini ko'rish",
+    "checkout": {
+      "backToPlans": "Tariflarga qaytish",
+      "backToDetails": "Tafsilotlarga qaytish",
+      "stepPlanDetail": "Tarif tafsilotlari",
+      "stepMethod": "To'lov usuli",
+      "priceDetails": "Narx tafsilotlari",
+      "planPrice": "Tarif narxi",
+      "ppn": "QQS",
+      "subtotal": "Jami komissiyasiz",
+      "totalPay": "Umumiy to'lov",
+      "vatHint": "Narxlar Indoneziya soliq qonunchiligiga muvofiq 11% QQSni o'z ichiga oladi.",
+      "feeHint": "To'lov tizimi komissiyasi keyingi bosqichda hisoblab ko'rsatiladi.",
+      "continue": "Davom etish",
+      "selectedPlan": "Tanlangan tarif",
+      "qrisDesc": "GoPay, OVO, Dana, ShopeePay va b.",
+      "vaTitle": "Virtual Account orqali o'tkazish",
+      "vaDesc": "BCA, BNI, BRI, Mandiri, Permata, BSI",
+      "vaSelect": "Virtual Account yaratish uchun bankni tanlang:",
+      "cardTitle": "Kredit / Debet karta",
+      "cardDesc": "Visa, Mastercard, JCB",
+      "cardName": "Karta egasining ismi",
+      "cardNamePlaceholder": "Kartada yozilganidek",
+      "cardNumber": "Karta raqami",
+      "cardExpiry": "Amal qilish muddati",
+      "cardCvv": "CVV / CVC",
+      "cardCvvHint": "(3-4 raqam)",
+      "cardSecureHint": "Karta ma'lumotlaringiz shifrlangan Xendit to'lov sahifasida himoyalangan (PCI DSS).",
+      "totalCharged": "To'lov uchun jami",
+      "payButton": "Hisob-faktura yaratish",
+      "secureTransaction": "To'lov Xendit orqali xavfsiz amalga oshiriladi · PCI DSS Compliant",
+      "errors": {
+        "invalidParams": "Noto'g'ri tarif parametrlari",
+        "planNotFound": "Tarif topilmadi",
+        "fetchFailed": "Tarif tafsilotlarini yuklab bo'lmadi",
+        "selectMethod": "Iltimos, avval to'lov usulini tanlang",
+        "nameRequired": "Karta egasining ismi kiritilishi shart",
+        "cardNumberInvalid": "Noto'g'ri karta raqami",
+        "cardExpiryInvalid": "Muddati formati noto'g'ri (OO/YY)",
+        "cardCvvInvalid": "CVV kamida 3 ta raqam bo'lishi kerak"
+      }
+    },
+    "orders": {
+      "title": "Tranzaksiyalar tarixi",
+      "subtitle": "Hisobingizdagi barcha to'lov va hisob-kitob yozuvlari",
+      "buyPlan": "Tarifni sotib olish",
+      "allStatus": "Barcha holatlar",
+      "allTypes": "Barcha turlar",
+      "empty": "Tranzaksiyalar hali mavjud emas",
+      "emptyDesc": "Xodimlarni yollashni tezlashtirish uchun tarif rejasini sotib oling.",
+      "table": {
+        "date": "Sana",
+        "type": "Tur",
+        "plan": "Tarif",
+        "amount": "Miqdor",
+        "status": "Holat",
+        "action": "Harakat"
+      },
+      "status": {
+        "pending": "To'lov kutilmoqda",
+        "paid": "To'langan",
+        "expired": "Muddati o'tgan",
+        "failed": "Xatolik"
+      },
+      "types": {
+        "subscription": "Obuna",
+        "singlePost": "Yagona e'lon",
+        "boost": "Ko'tarish"
+      },
+      "actionPay": "To'lash",
+      "totalOrders": "jami tranzaksiyalar"
+    },
+    "success": {
+      "title": "To'lov muvaffaqiyatli amalga oshirildi!",
+      "desc": "Sizning xizmatlar paketingiz yaqin daqiqalarda avtomatik faollashtiriladi.",
+      "currentPlan": "Joriy faol tarif",
+      "maxPosts": "Maks. faol e'lonlar",
+      "expiresAt": "Gacha amal qiladi",
+      "activeProcess": "Paketingiz faollashtirilmoqda. Iltimos, bir necha daqiqadan so'ng tekshirib ko'ring yoki tranzaksiyalar tarixini ko'ring.",
+      "manageJobs": "E'lonlarimni boshqarish",
+      "history": "Tranzaksiyalar tarixi",
+      "amountPaid": "To'langan summa"
+    },
+    "failure": {
+      "title": "To'lov amalga oshmadi",
+      "desc": "Kechirasiz, tranzaksiyangizni qayta ishlab bo'lmadi yoki u bekor qilindi.",
+      "reason": "Muvaffaqiyatsizlik sababi",
+      "reasonDesc": "To'lovni amalga oshirib bo'lmadi. Iltimos, boshqa to'lov usulini sinab ko'ring yoki bankingiz bilan bog'laning.",
+      "tryAgain": "Qaytadan urinish",
+      "backPricing": "Tariflarga qaytish",
+      "support": "Yordam xizmati bilan bog'lanish"
+    }
+  }
 }
