@@ -1557,6 +1557,8 @@
   "auth": {
     "signInWithGoogle": "Masuk dengan Google",
     "signUpWithGoogle": "Daftar dengan Google",
+    "signInWithTelegram": "Masuk dengan Telegram",
+    "signUpWithTelegram": "Daftar dengan Telegram",
     "emailLabel": "Alamat Email",
     "usernameLabel": "Nama Pengguna",
     "passwordLabel": "Kata Sandi",
