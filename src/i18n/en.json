@@ -98,7 +98,10 @@
     "offline": "Offline",
     "today": "Today",
     "yesterday": "Yesterday",
-    "failedToSend": "Failed to send message"
+    "failedToSend": "Failed to send message",
+    "chatButton": "Chat",
+    "failedToStartChat": "Failed to start conversation",
+    "cannotStartChat": "Cannot identify worker"
   },
   "home": {
     "title": "Indonesia's #1 job portal",

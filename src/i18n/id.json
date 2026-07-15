@@ -98,7 +98,10 @@
     "offline": "Offline",
     "today": "Hari ini",
     "yesterday": "Kemarin",
-    "failedToSend": "Gagal mengirim pesan"
+    "failedToSend": "Gagal mengirim pesan",
+    "chatButton": "Chat",
+    "failedToStartChat": "Gagal memulai percakapan",
+    "cannotStartChat": "Tidak dapat mengidentifikasi pekerja"
   },
   "home": {
     "title": "Portal lowongan #1 di Indonesia",
