@@ -59,12 +59,25 @@
           <div
             v-for="(job, index) in jobs"
             :key="job.id"
-            class="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
+            :class="[
+              'rounded-xl border shadow-sm p-4 transition-all duration-150',
+              job.boost_type === 'hot'
+                ? 'bg-gradient-to-br from-amber-50/70 to-orange-50/45 border-orange-200 ring-1 ring-orange-100/50'
+                : job.boost_type === 'top10'
+                ? 'bg-gradient-to-br from-blue-50/70 to-indigo-50/45 border-blue-200 ring-1 ring-blue-100/50'
+                : 'bg-white border-gray-100'
+            ]"
           >
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0">
-                <div class="font-semibold text-gray-900 truncate">
-                  {{ job.title }}
+                <div class="font-semibold text-gray-900 flex items-center gap-1.5 flex-wrap">
+                  <span>{{ job.title }}</span>
+                  <span v-if="job.boost_type === 'hot'" class="px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap">
+                    <i class="pi pi-star-fill text-[8px]"></i> HOT
+                  </span>
+                  <span v-else-if="job.boost_type === 'top10'" class="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap">
+                    <i class="pi pi-chart-line text-[8px]"></i> Top-10
+                  </span>
                 </div>
                 <div class="text-xs text-gray-500 mt-1">
                   Created {{ formatDate(job.created_at) }}
@@ -253,7 +266,14 @@
             <tr
               v-for="(job, index) in jobs"
               :key="job.id"
-              class="border-b border-gray-100 hover:bg-blue-50/50 transition-all duration-150"
+              :class="[
+                'border-b border-gray-100 transition-all duration-150',
+                job.boost_type === 'hot'
+                  ? 'bg-amber-50/40 hover:bg-amber-100/40'
+                  : job.boost_type === 'top10'
+                  ? 'bg-blue-50/20 hover:bg-blue-100/30'
+                  : 'hover:bg-blue-50/50'
+              ]"
             >
               <!-- JOB -->
               <td class="px-6 py-5">
@@ -690,6 +710,7 @@ import api from "@/services/api";
 import ActivePlanBanner from "@/components/recruiter/ActivePlanBanner.vue";
 import BoostJobModal from "@/components/recruiter/BoostJobModal.vue";
 import SinglePostModal from "@/components/recruiter/SinglePostModal.vue";
+import { getAllPlans, getPaymentOrders } from "@/services/payments.api.js";
 
 const activeTab = ref("active"); // active | archived
 
@@ -707,6 +728,51 @@ const page = ref(1);
 const limit = ref(5);
 const totalPages = ref(1);
 const openMenuId = ref(null);
+
+const boostPlans = ref([]);
+const paidBoostOrders = ref([]);
+
+async function loadBoostMetadata() {
+  try {
+    const [plansRes, ordersRes] = await Promise.all([
+      getAllPlans("boost"),
+      getPaymentOrders({ order_type: "boost", status: "paid", limit: 50 })
+    ]);
+    boostPlans.value = plansRes?.data?.boost || [];
+    paidBoostOrders.value = ordersRes?.data || [];
+  } catch (err) {
+    console.error("Failed to load boost metadata", err);
+  }
+}
+
+function applyBoostsToJobs() {
+  if (!jobs.value || jobs.value.length === 0) return;
+  
+  jobs.value = jobs.value.map(job => {
+    if (job.boost_type) return job;
+    
+    const activeBoost = paidBoostOrders.value.find(order => {
+      if (order.job_post_id !== job.id) return false;
+      
+      const plan = boostPlans.value.find(p => p.id === order.plan_id);
+      if (!plan) return false;
+      
+      const paidAt = new Date(order.paid_at || order.created_at);
+      const expiresAt = new Date(paidAt.getTime() + plan.duration_days * 24 * 60 * 60 * 1000);
+      return expiresAt > new Date();
+    });
+    
+    if (activeBoost) {
+      const plan = boostPlans.value.find(p => p.id === activeBoost.plan_id);
+      return {
+        ...job,
+        boost_type: plan?.boost_priority === 1 ? "hot" : "top10",
+      };
+    }
+    
+    return job;
+  });
+}
 
 function toggleMenu(jobId) {
   openMenuId.value = openMenuId.value === jobId ? null : jobId;
@@ -843,6 +909,7 @@ async function fetchJobs() {
     });
     if (!countit.value && activeTab.value === "active") {
       jobs.value = res.data?.data || [];
+      applyBoostsToJobs();
       totalPages.value = res.data?.meta?.totalPage || 1;
     }
     jobCounter.value = res.data?.meta?.total || 0;
@@ -863,6 +930,7 @@ async function archivedJobs() {
     });
     if (!countit.value && activeTab.value === "archived") {
       jobs.value = res.data?.data || [];
+      applyBoostsToJobs();
       totalPages.value = res.data?.meta?.totalPage || 1;
     }
     archivedJobCounter.value = res.data?.meta?.total || 0;
@@ -872,7 +940,8 @@ async function archivedJobs() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await loadBoostMetadata();
   fetchJobs();
   archivedJobs();
 });

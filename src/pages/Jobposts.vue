@@ -301,6 +301,54 @@
             </div>
           </div>
 
+          <!-- HOT Jobs Section -->
+          <div v-if="hotJobs.length > 0" class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-xl font-extrabold text-gray-900 flex items-center gap-2">
+                <span class="text-orange-500">🔥</span> Lowongan Terhangat (HOT Jobs)
+              </h2>
+              <router-link
+                to="/jobposts/hot"
+                class="text-xs font-bold text-orange-600 hover:text-orange-700 hover:underline flex items-center gap-1 transition-all"
+              >
+                Lihat Semua <i class="pi pi-angle-right text-[10px]"></i>
+              </router-link>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div
+                v-for="job in hotJobs"
+                :key="'hot-' + job.id"
+                class="bg-gradient-to-br from-amber-50/70 to-orange-50/40 border-2 border-orange-200 rounded-xl shadow-xs hover:shadow-orange-200/50 hover:shadow-md transition-all duration-200 p-4 cursor-pointer flex flex-col justify-between"
+                @click="viewJobDetail(job.id)"
+              >
+                <div>
+                  <div class="flex items-start justify-between gap-2 mb-3">
+                    <div class="w-10 h-10 bg-white border border-gray-150 rounded-lg flex items-center justify-center p-1.5 flex-shrink-0 shadow-2xs">
+                      <img
+                        :src="job.avatar_url ? fileStorageUrl + job.avatar_url : '/company-default-image.png'"
+                        @error="(e) => (e.target.src = '/company-default-image.png')"
+                        :alt="job.company_name"
+                        class="max-w-full max-h-full object-contain"
+                      />
+                    </div>
+                    <span class="px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-extrabold rounded-full flex items-center gap-0.5 whitespace-nowrap shadow-3xs">
+                      <i class="pi pi-star-fill text-[7px]"></i> HOT
+                    </span>
+                  </div>
+                  
+                  <h3 class="font-bold text-gray-900 text-sm line-clamp-1 mb-1" :title="job.title">{{ job.title }}</h3>
+                  <p class="text-xs text-gray-600 mb-2 truncate">{{ job.company_name }}</p>
+                </div>
+                
+                <div class="mt-4 pt-3 border-t border-orange-100 flex items-center justify-between">
+                  <span class="text-xs text-gray-500"><i class="pi pi-map-marker text-[10px]"></i> {{ job.location }}</span>
+                  <span class="text-xs font-bold text-orange-600 truncate">{{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Results Header -->
           <div class="bg-white rounded-lg shadow p-4 mb-4 hidden lg:block">
             <div class="flex items-center justify-between">
@@ -342,7 +390,14 @@
               <div
                 v-for="job in jobs"
                 :key="job.id"
-                class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-4 sm:p-5 md:p-6 cursor-pointer mb-6 last:mb-0"
+                :class="[
+                  'rounded-lg shadow transition-all duration-200 p-4 sm:p-5 md:p-6 cursor-pointer mb-6 last:mb-0 border-2',
+                  job.boost_type === 'hot'
+                    ? 'bg-gradient-to-br from-amber-50/70 to-orange-50/40 border-orange-200 hover:shadow-orange-200/40 hover:shadow-xl ring-2 ring-orange-100/50'
+                    : job.boost_type === 'top10'
+                    ? 'bg-gradient-to-br from-blue-50/70 to-indigo-50/40 border-blue-200 hover:shadow-blue-200/40 hover:shadow-xl ring-2 ring-blue-100/50'
+                    : 'bg-white border-transparent hover:shadow-lg'
+                ]"
                 @click="viewJobDetail(job.id)"
               >
                 <!-- Mobile-first card: image on top, content below -->
@@ -368,8 +423,14 @@
 
                   <div class="flex items-start justify-between gap-4">
                     <div class="flex-1 min-w-0">
-                      <h3 class="text-lg font-semibold text-gray-900 truncate">
-                        {{ job.title }}
+                      <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-1.5 flex-wrap">
+                        <span>{{ job.title }}</span>
+                        <span v-if="job.boost_type === 'hot'" class="px-2 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap shadow-sm">
+                          <i class="pi pi-star-fill text-[8px]"></i> HOT
+                        </span>
+                        <span v-else-if="job.boost_type === 'top10'" class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap border border-blue-200 shadow-sm">
+                          <i class="pi pi-chart-line text-[8px]"></i> Top-10
+                        </span>
                       </h3>
 
                       <div
@@ -1175,10 +1236,26 @@ watch(
 );
 
 // Lifecycle
+const hotJobs = ref([]);
+const loadingHot = ref(false);
+
+async function fetchHotJobs() {
+  loadingHot.value = true;
+  try {
+    const res = await getJobPosts({ limit: 100 });
+    const all = res.data?.data || [];
+    hotJobs.value = all.filter(j => j.boost_type === "hot").slice(0, 5);
+  } catch (err) {
+    console.error("Error loading hot jobs:", err);
+  } finally {
+    loadingHot.value = false;
+  }
+}
+
 onMounted(() => {
   loadCategories();
   loadEmploymentTypes();
-  // recommendations.value = true;
+  fetchHotJobs();
 });
 </script>
 
