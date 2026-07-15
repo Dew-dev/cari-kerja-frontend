@@ -240,6 +240,18 @@ const routes = [
     meta: { public: true },
   },
   {
+    path: "/chat",
+    name: "chat",
+    meta: { requiresAuth: true },
+    component: () => import("../pages/chat/ChatPage.vue"),
+  },
+  {
+    path: "/chat/:conversationId",
+    name: "chat-detail",
+    meta: { requiresAuth: true },
+    component: () => import("../pages/chat/ChatPage.vue"),
+  },
+  {
     path: "/recruiter",
     meta: { requiresAuth: true, role: "recruiter", blockRole: "user" },
     children: [

@@ -576,7 +576,28 @@
     "failedtoaddskill": "Ko'nikmani qo'shish muvaffaq bo'lmadi",
     "failedtoremoveskill": "Ko'nikmani o'chirish muvaffaq bo'lmadi",
     "skilladded": "Ko'nikma qo'shildi",
-    "skillremoved": "Ko'nikma o'chirildi"
+    "skillremoved": "Ko'nikma o'chirildi",
+    "cvParser": {
+      "tab": "CV Tahlili",
+      "title": "CV Tahlilchi",
+      "subtitle": "Profil ma'lumotlarini avtomatik to'ldirish uchun CV yuklang. Saqlashdan oldin har bir bo'limni tekshiring.",
+      "uploadLabel": "CV yuklash (PDF yoki DOCX)",
+      "acceptedFormats": "Formatlar: PDF, DOCX – Maks. 10MB",
+      "parseButton": "CV Tahlil qilish",
+      "parsing": "Tahlil qilinmoqda...",
+      "selectFile": "CV faylini tanlang",
+      "invalidType": "Faqat PDF yoki DOCX fayllar ruxsat etiladi",
+      "failedToParse": "CVni tahlil qilish muvaffaq bo'lmadi",
+      "parseSuccess": "CV muvaffaqiyatli tahlil qilindi – quyidagi ma'lumotlarni tekshiring va qo'llang",
+      "foundInCV": "CV-ingizda topildi",
+      "applyToProfile": "Profilga qo'llash",
+      "apply": "Qo'llash",
+      "applyAll": "Hammasini qo'llash",
+      "appliedPersonalInfo": "Shaxsiy ma'lumotlar profilga qo'llandi. Tayyor bo'lgach saqlang.",
+      "appliedSection": "Profilga qo'llandi. Tabga o'ting va har bir yozuvni saqlang.",
+      "applyHint": "Ma'lumotlar hali saqlanmagan. Tabga o'ting va Saqlash tugmasini bosing.",
+      "skillsHint": "CV-ingizda topilgan ko'nikmalar. Ularni Profil tabidan qo'lda qo'shing."
+    }
   },
   "about": {
     "pageTitle": "Biz haqida",

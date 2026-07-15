@@ -82,6 +82,24 @@
     "signIn": "Sign in",
     "language": "Language"
   },
+  "chat": {
+    "title": "Messages",
+    "searchPlaceholder": "Search conversations...",
+    "typeMessage": "Type a message...",
+    "send": "Send",
+    "noConversations": "No conversations yet",
+    "noConversationsSubtitle": "Your messages with recruiters will appear here",
+    "noResults": "No conversations found",
+    "selectConversation": "Select a conversation",
+    "selectConversationSubtitle": "Choose a conversation from the list to start chatting",
+    "noMessages": "No messages yet",
+    "startConversation": "Say hello to get the conversation started!",
+    "online": "Online",
+    "offline": "Offline",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "failedToSend": "Failed to send message"
+  },
   "home": {
     "title": "Indonesia's #1 job portal",
     "subtitle": "Find your opportunities here!",
@@ -574,7 +592,28 @@
     "failedtoaddskill": "Failed to add skill",
     "failedtoremoveskill": "Failed to remove skill",
     "skilladded": "Skill added",
-    "skillremoved": "Skill removed"
+    "skillremoved": "Skill removed",
+    "cvParser": {
+      "tab": "CV Parser",
+      "title": "Parse Your CV",
+      "subtitle": "Upload your CV to automatically detect and fill in your profile data. Review each section before saving.",
+      "uploadLabel": "Upload CV (PDF or DOCX)",
+      "acceptedFormats": "Accepted: PDF, DOCX – Max 10MB",
+      "parseButton": "Parse CV",
+      "parsing": "Parsing...",
+      "selectFile": "Please select a CV file",
+      "invalidType": "Only PDF or DOCX files are allowed",
+      "failedToParse": "Failed to parse CV",
+      "parseSuccess": "CV parsed successfully – review and apply the data below",
+      "foundInCV": "Found in your CV",
+      "applyToProfile": "Apply to Profile",
+      "apply": "Apply",
+      "applyAll": "Apply All",
+      "appliedPersonalInfo": "Personal info applied to profile. Review and save when ready.",
+      "appliedSection": "Applied to profile. Go to the tab and save each entry.",
+      "applyHint": "Entries are not saved yet. Go to the tab and click Save on each entry.",
+      "skillsHint": "Skills found in your CV. Add them manually via the Profile tab."
+    }
   },
   "about": {
     "pageTitle": "About",
