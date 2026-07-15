@@ -107,7 +107,7 @@ async function startChat(applicant) {
 
   try {
     chattingId.value = applicant.application_id;
-    const res = await startConversation({ participant_id: workerId, participant_role: "worker" });
+    const res = await startConversation({ worker_id: workerId });
     const conversationId = res.data?.data?.id || res.data?.id;
     if (!conversationId) throw new Error("No conversation ID returned");
     router.push(`/chat/${conversationId}`);

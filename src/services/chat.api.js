@@ -1,8 +1,9 @@
 import api from './api'
 
 /**
- * Start a conversation (or retrieve existing one) with a participant.
- * @param {Object} data - { participant_id, participant_role }
+ * Start a conversation (or retrieve existing one).
+ * - Recruiter sends: { worker_id, job_id? }
+ * - Worker sends:    { recruiter_id, job_id? }
  */
 export const startConversation = (data) => api.post('/chat/start', data)
 
@@ -14,7 +15,7 @@ export const getConversations = () => api.get('/chat/conversations')
 /**
  * Get paginated messages for a conversation.
  * @param {string} conversationId
- * @param {Object} params - { page, limit, before_id }
+ * @param {Object} params - { page, limit }
  */
 export const getMessages = (conversationId, params = {}) =>
   api.get(`/chat/${conversationId}/messages`, { params })
@@ -22,7 +23,7 @@ export const getMessages = (conversationId, params = {}) =>
 /**
  * Send a text message in a conversation.
  * @param {string} conversationId
- * @param {Object} data - { content }
+ * @param {Object} data - { message, type? }
  */
 export const sendMessage = (conversationId, data) =>
   api.post(`/chat/${conversationId}/messages`, data)
@@ -32,4 +33,4 @@ export const sendMessage = (conversationId, data) =>
  * @param {string} conversationId
  */
 export const markAsRead = (conversationId) =>
-  api.put(`/chat/${conversationId}/read`)
+  api.patch(`/chat/${conversationId}/read`)

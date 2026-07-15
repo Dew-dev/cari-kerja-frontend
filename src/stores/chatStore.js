@@ -126,7 +126,7 @@ export const useChatStore = defineStore('chat', () => {
     }
 
     try {
-      const res = await sendMessageApi(conversationId, { content })
+      const res = await sendMessageApi(conversationId, { message: content, type: 'text' })
       const sent = res.data?.data || res.data
 
       // Replace optimistic with real message

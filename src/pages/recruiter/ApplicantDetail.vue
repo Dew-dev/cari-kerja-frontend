@@ -112,8 +112,7 @@ async function startChat() {
   try {
     startingChat.value = true;
     const res = await startConversation({
-      participant_id: worker.value.id,
-      participant_role: "worker",
+      worker_id: worker.value.id,
     });
     const conversationId = res.data?.data?.id || res.data?.id;
     if (!conversationId) throw new Error("No conversation ID");
