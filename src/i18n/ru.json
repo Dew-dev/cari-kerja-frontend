@@ -1863,6 +1863,10 @@
     "goBack": "Вернуться назад"
   },
   "auth": {
+    "signInWithGoogle": "Войти через Google",
+    "signUpWithGoogle": "Зарегистрироваться через Google",
+    "signInWithTelegram": "Войти через Telegram",
+    "signUpWithTelegram": "Зарегистрироваться через Telegram",
     "emailLabel": "Адрес электронной почты",
     "usernameLabel": "Имя пользователя",
     "passwordLabel": "Пароль",

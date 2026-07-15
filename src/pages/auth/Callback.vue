@@ -11,6 +11,19 @@ const router = useRouter();
 const auth = useAuthStore();
 const { t } = useI18n();
 
+function decodeJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+}
+
 onMounted(async () => {
   const token = route.query.token;
   const refreshToken = route.query.refreshToken;
@@ -33,17 +46,33 @@ onMounted(async () => {
     if (userStr && userStr !== "undefined") {
       user = JSON.parse(decodeURIComponent(userStr));
     } else {
-      // Fetch user profile from the backend using the new token
-      const profileRes = await api.get("/users/workers/me");
-      const workerData = profileRes.data.data;
-      user = {
-        id: workerData.id,
-        user_id: workerData.user_id,
-        name: workerData.name,
-        email: workerData.email,
-        avatar_url: workerData.avatar_url,
-        role: "user"
-      };
+      // Decode JWT to find role
+      const decoded = decodeJwt(token);
+      if (decoded && decoded.role_id === 2) {
+        // Fetch recruiter profile
+        const profileRes = await api.get(`/users/${decoded.id}/recruiters`);
+        const recruiterData = profileRes.data.data;
+        user = {
+          id: recruiterData.id,
+          user_id: recruiterData.user_id,
+          name: recruiterData.contact_name || recruiterData.company_name || decoded.name || "Recruiter",
+          email: decoded.email || recruiterData.email || "",
+          avatar_url: recruiterData.avatar_url,
+          role: "recruiter"
+        };
+      } else {
+        // Fetch worker profile from the backend using the new token
+        const profileRes = await api.get("/users/workers/me");
+        const workerData = profileRes.data.data;
+        user = {
+          id: workerData.id,
+          user_id: workerData.user_id,
+          name: workerData.name,
+          email: workerData.email,
+          avatar_url: workerData.avatar_url,
+          role: "user"
+        };
+      }
     }
 
     // Save the user details
@@ -52,8 +81,12 @@ onMounted(async () => {
 
     push.success("Login successful!");
 
-    // Redirect directly to profile page
-    router.push("/profile/edit");
+    // Redirect based on role
+    if (user.role === "recruiter") {
+      router.push("/recruiter/jobs");
+    } else {
+      router.push("/profile/edit");
+    }
   } catch (error) {
     console.error("Callback parsing error:", error);
     push.error("An error occurred during sign in.");

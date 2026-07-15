@@ -1862,6 +1862,10 @@
     "goBack": "Orqaga qaytish"
   },
   "auth": {
+    "signInWithGoogle": "Google orqali kirish",
+    "signUpWithGoogle": "Google orqali ro'yxatdan o'tish",
+    "signInWithTelegram": "Telegram orqali kirish",
+    "signUpWithTelegram": "Telegram orqali ro'yxatdan o'tish",
     "emailLabel": "Elektron pochta manzili",
     "usernameLabel": "Foydalanuvchi nomi",
     "passwordLabel": "Parol",

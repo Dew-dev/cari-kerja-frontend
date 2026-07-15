@@ -1862,6 +1862,8 @@
   "auth": {
     "signInWithGoogle": "Sign in with Google",
     "signUpWithGoogle": "Sign up with Google",
+    "signInWithTelegram": "Sign in with Telegram",
+    "signUpWithTelegram": "Sign up with Telegram",
     "emailLabel": "Email Address",
     "usernameLabel": "Username",
     "passwordLabel": "Password",
