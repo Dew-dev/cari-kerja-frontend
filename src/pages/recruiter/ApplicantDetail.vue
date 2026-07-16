@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getWorkerByApplication } from "@/services/applications";
 import api from "@/services/api";
+import { startConversation } from "@/services/chat.api";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -103,6 +104,25 @@ async function addNote() {
 
 onMounted(fetchNotes);
 onMounted(fetchWorker);
+
+const startingChat = ref(false);
+
+async function startChat() {
+  if (!worker.value?.id) return;
+  try {
+    startingChat.value = true;
+    const res = await startConversation({
+      worker_id: worker.value.id,
+    });
+    const conversationId = res.data?.data?.id || res.data?.id;
+    if (!conversationId) throw new Error("No conversation ID");
+    router.push(`/chat/${conversationId}`);
+  } catch (err) {
+    push.error(err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation");
+  } finally {
+    startingChat.value = false;
+  }
+}
 </script>
 
 <template>
@@ -246,6 +266,18 @@ onMounted(fetchWorker);
                     </svg>
                     {{ $t('contactActions.whatsapp') }}
                   </a>
+
+                  <!-- Chat button -->
+                  <button
+                    @click="startChat"
+                    :disabled="startingChat"
+                    class="flex items-center justify-center gap-2 text-blue-700 hover:text-blue-800 font-medium text-sm transition-colors disabled:opacity-60"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    {{ startingChat ? '...' : $t('chat.chatButton') }}
+                  </button>
                 </div>
               </div>
             </div>

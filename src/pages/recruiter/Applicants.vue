@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import api from "@/services/api";
+import { startConversation } from "@/services/chat.api";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -93,6 +94,28 @@ function formatDate(date) {
     month: "short",
     year: "numeric",
   });
+}
+
+const chattingId = ref(null); // track which applicant is loading chat
+
+async function startChat(applicant) {
+  const workerId = applicant.worker_id || applicant.user_id || applicant.id;
+  if (!workerId) {
+    push.error(t("chat.cannotStartChat") || "Cannot identify worker");
+    return;
+  }
+
+  try {
+    chattingId.value = applicant.application_id;
+    const res = await startConversation({ worker_id: workerId });
+    const conversationId = res.data?.data?.id || res.data?.id;
+    if (!conversationId) throw new Error("No conversation ID returned");
+    router.push(`/chat/${conversationId}`);
+  } catch (err) {
+    push.error(err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation");
+  } finally {
+    chattingId.value = null;
+  }
 }
 const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
 </script>
@@ -202,16 +225,28 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
               </td>
 
               <td class="px-4 py-3 text-right">
-                <button
-                  @click.stop="
-                    $router.push(
-                      `/recruiter/jobs/${route.params.id}/applicants/${a.application_id}`,
-                    )
-                  "
-                  class="text-blue-600 text-sm hover:underline"
-                >
-                  View
-                </button>
+                <div class="flex items-center justify-end gap-2">
+                  <button
+                    @click.stop="startChat(a)"
+                    :disabled="chattingId === a.application_id"
+                    class="inline-flex items-center gap-1 text-sm px-3 py-1.5 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition disabled:opacity-50"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    {{ chattingId === a.application_id ? '...' : $t('chat.chatButton') }}
+                  </button>
+                  <button
+                    @click.stop="
+                      $router.push(
+                        `/recruiter/jobs/${route.params.id}/applicants/${a.application_id}`,
+                      )
+                    "
+                    class="text-blue-600 text-sm hover:underline"
+                  >
+                    View
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
