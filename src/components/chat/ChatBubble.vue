@@ -24,7 +24,27 @@ const props = defineProps({
   },
 })
 
-const isMine = computed(() => props.message.sender_id === auth.user?.id)
+const senderId = computed(
+  () => props.message.sender?.id || props.message.sender_id,
+)
+
+const isMine = computed(() => {
+  const myId = auth.user?.user_id || auth.user?.id
+  const sid = senderId.value
+  if (!myId || !sid) return false
+  return String(sid) === String(myId)
+})
+
+const displayName = computed(
+  () => props.message.sender?.name || props.participantName || '',
+)
+
+const avatarSrc = computed(() => {
+  const url = props.message.sender?.avatar_url || props.participantAvatar
+  if (!url) return null
+  if (/^https?:\/\//i.test(url)) return url
+  return `${fileStorageUrl}${url}`
+})
 
 function formatTime(dateStr) {
   if (!dateStr) return ''
@@ -34,23 +54,23 @@ function formatTime(dateStr) {
 
 <template>
   <div
-    class="flex gap-2 mb-1"
-    :class="isMine ? 'flex-row-reverse' : 'flex-row'"
+    class="flex gap-2 mb-1 w-full"
+    :class="isMine ? 'justify-end' : 'justify-start'"
   >
     <!-- Avatar (theirs) -->
     <div v-if="!isMine && showAvatar" class="shrink-0 self-end">
       <div class="w-7 h-7 rounded-full overflow-hidden bg-blue-100">
         <img
-          v-if="participantAvatar"
-          :src="`${fileStorageUrl}${participantAvatar}`"
-          :alt="participantName"
+          v-if="avatarSrc"
+          :src="avatarSrc"
+          :alt="displayName"
           class="w-full h-full object-cover"
         />
         <span
           v-else
           class="w-full h-full flex items-center justify-center text-xs font-bold text-blue-600"
         >
-          {{ participantName?.charAt(0)?.toUpperCase() || '?' }}
+          {{ displayName?.charAt(0)?.toUpperCase() || '?' }}
         </span>
       </div>
     </div>
@@ -68,7 +88,7 @@ function formatTime(dateStr) {
           message._pending ? 'opacity-70' : 'opacity-100',
         ]"
       >
-        {{ message.content }}
+        {{ message.message || message.content }}
       </div>
 
       <!-- Timestamp + Read status -->

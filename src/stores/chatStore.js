@@ -6,6 +6,30 @@ import {
   sendMessage as sendMessageApi,
   markAsRead as markAsReadApi,
 } from '@/services/chat.api'
+import { useAuthStore } from '@/stores/authStore'
+
+function getSenderId(message) {
+  return message?.sender?.id || message?.sender_id
+}
+
+function getCurrentUserId() {
+  const auth = useAuthStore()
+  const me = auth.user
+  return me?.user_id || me?.id
+}
+
+function isSameUser(a, b) {
+  if (!a || !b) return false
+  return String(a) === String(b)
+}
+
+function getMessageText(message) {
+  return message?.message || message?.content || ''
+}
+
+function isOwnMessage(message) {
+  return isSameUser(getSenderId(message), getCurrentUserId())
+}
 
 export const useChatStore = defineStore('chat', () => {
   // ─── State ────────────────────────────────────────────────────────────────
@@ -103,14 +127,26 @@ export const useChatStore = defineStore('chat', () => {
 
   async function sendMessage(conversationId, content) {
     // Optimistic update
+    const auth = useAuthStore()
+    const me = auth.user
     const tempId = `temp_${Date.now()}`
     const optimistic = {
       id: tempId,
       conversation_id: conversationId,
-      content,
+      message: content,
+      type: 'text',
       is_read: false,
       _pending: true,
       created_at: new Date().toISOString(),
+      sender: me
+        ? {
+            id: me.user_id || me.id,
+            username: me.username,
+            name: me.name,
+            avatar_url: me.avatar_url,
+            role_id: me.role_id,
+          }
+        : undefined,
     }
 
     if (!messages.value[conversationId]) {
@@ -121,7 +157,7 @@ export const useChatStore = defineStore('chat', () => {
     // Update conversation last message optimistically
     const conv = conversations.value.find((c) => c.id === conversationId)
     if (conv) {
-      conv.last_message = { content, created_at: optimistic.created_at }
+      conv.last_message = { message: content, created_at: optimistic.created_at }
       conv.updated_at = optimistic.created_at
     }
 
@@ -163,21 +199,42 @@ export const useChatStore = defineStore('chat', () => {
   // ─── Real-time handlers (called by components using socket) ──────────────
   function handleIncomingMessage(message) {
     const { conversation_id } = message
+    const myId = getCurrentUserId()
+    const ownMessage = isOwnMessage(message)
 
-    // Add message to state if conversation is loaded
     if (messages.value[conversation_id] !== undefined) {
-      const existingIds = new Set(messages.value[conversation_id].map((m) => m.id))
-      if (!existingIds.has(message.id)) {
-        messages.value[conversation_id].push(message)
+      const list = messages.value[conversation_id]
+      const existingIdx = list.findIndex((m) => m.id === message.id)
+
+      if (existingIdx !== -1) {
+        list[existingIdx] = { ...list[existingIdx], ...message }
+      } else if (ownMessage) {
+        // Own message: merge with optimistic bubble instead of duplicating
+        const pendingIdx = list.findIndex(
+          (m) =>
+            m._pending &&
+            isSameUser(getSenderId(m), myId) &&
+            getMessageText(m) === getMessageText(message),
+        )
+        if (pendingIdx !== -1) {
+          list[pendingIdx] = message
+        }
+      } else {
+        list.push(message)
       }
     }
 
     // Update conversation list
     const conv = conversations.value.find((c) => c.id === conversation_id)
     if (conv) {
-      conv.last_message = { content: message.content, created_at: message.created_at }
+      conv.last_message = {
+        message: getMessageText(message),
+        created_at: message.created_at,
+      }
       conv.updated_at = message.created_at
-      conv.unread_count = (conv.unread_count || 0) + 1
+      if (!ownMessage) {
+        conv.unread_count = (conv.unread_count || 0) + 1
+      }
     } else {
       // New conversation not yet in list — refresh
       fetchConversations()
@@ -188,7 +245,7 @@ export const useChatStore = defineStore('chat', () => {
     const { conversation_id, reader_id } = data
     if (messages.value[conversation_id]) {
       messages.value[conversation_id].forEach((m) => {
-        if (m.sender_id !== reader_id) {
+        if (!isSameUser(getSenderId(m), reader_id)) {
           m.is_read = true
         }
       })

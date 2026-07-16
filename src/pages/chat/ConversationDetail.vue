@@ -137,7 +137,7 @@ function handleReceiveMessage(message) {
 
 function handleTyping({ conversationId, userId }) {
   if (conversationId !== props.conversationId) return
-  if (userId === auth.user?.id) return
+  if (userId === auth.user?.user_id || userId === auth.user?.id) return
   chatStore.setTyping(conversationId, userId, true)
 }
 
@@ -170,12 +170,6 @@ async function handleSend() {
   try {
     await chatStore.sendMessage(props.conversationId, content)
     await scrollToBottom('smooth')
-
-    // Notify socket (other participant receives via receive_message event)
-    socketEmit('send_message', {
-      conversationId: props.conversationId,
-      content,
-    })
   } catch (err) {
     push.error('Failed to send message')
   } finally {
@@ -201,11 +195,15 @@ function showDateSeparator(messages, index) {
   return curr !== prev
 }
 
+function getSenderId(message) {
+  return message.sender?.id || message.sender_id
+}
+
 function showAvatar(messages, index) {
   if (index === messages.length - 1) return true
   const curr = messages[index]
   const next = messages[index + 1]
-  return curr.sender_id !== next.sender_id
+  return getSenderId(curr) !== getSenderId(next)
 }
 
 // ─── Lifecycle ────────────────────────────────────────────────────────────────

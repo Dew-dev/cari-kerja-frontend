@@ -97,7 +97,7 @@ function truncate(str, len = 42) {
           class="text-xs truncate"
           :class="(conversation.unread_count || 0) > 0 ? 'text-gray-700 font-medium' : 'text-gray-400'"
         >
-          {{ truncate(lastMessage?.content) || $t('chat.noMessages') }}
+          {{ truncate(lastMessage?.message || lastMessage?.content) || $t('chat.noMessages') }}
         </p>
         <UnreadBadge :count="conversation.unread_count || 0" />
       </div>
