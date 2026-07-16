@@ -93,6 +93,33 @@ const skillSearchQuery = ref("");
 const skillSuggestions = ref([]);
 const loadingSkills = ref(false);
 
+const languages = ref([]);
+const showLanguageModal = ref(false);
+const editingLanguageId = ref(null);
+const languageForm = reactive({
+  language_id: null,
+  language_name: "",
+  proficiency_level_id: "",
+  is_primary: false,
+});
+const languageSuggestions = ref([]);
+const loadingLanguageOptions = ref(false);
+const savingLanguage = ref(false);
+let languageSearchTimeout = null;
+
+// Seeded ids in proficiency_levels (backend returns only the name on profile load)
+const PROFICIENCY_NAME_TO_ID = { Beginner: 1, Intermediate: 2, Fluent: 3, Native: 4 };
+const proficiencyOptions = computed(() => [
+  { id: 1, label: t("profile.proficiency.beginner") },
+  { id: 2, label: t("profile.proficiency.intermediate") },
+  { id: 3, label: t("profile.proficiency.fluent") },
+  { id: 4, label: t("profile.proficiency.native") },
+]);
+
+function proficiencyLabel(id) {
+  return proficiencyOptions.value.find((p) => p.id === Number(id))?.label || "";
+}
+
 // CV Parser
 const cvParserFileInput = ref(null);
 const cvParserLoading = ref(false);
@@ -186,6 +213,12 @@ async function loadProfile() {
     //   isSaved: true,
     }));
     skills.value = data.worker_skills ?? [];
+    languages.value = (data.languages ?? []).map((l) => ({
+      ...l,
+      // Profile endpoint returns the proficiency name (as `name`) but not its id
+      proficiency_level_id:
+        l.proficiency_level_id ?? PROFICIENCY_NAME_TO_ID[l.proficiency_level_name || l.name] ?? "",
+    }));
   } catch (err) {
     console.error("Failed to load profile:", err);
   } finally {
@@ -663,6 +696,119 @@ async function deleteSkill(skill) {
      push.success(t('profile.skillRemoved'));
   } catch (err) {
      push.error(t('profile.failedToDeleteSkill'));
+  }
+}
+
+// Languages
+async function fetchLanguageOptions(search = "") {
+  if (!search.trim()) {
+    languageSuggestions.value = [];
+    return;
+  }
+  try {
+    loadingLanguageOptions.value = true;
+    const res = await api.get(`/languages?search=${encodeURIComponent(search)}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    languageSuggestions.value = res.data?.data || [];
+  } catch (err) {
+    // Master languages endpoint may not be deployed yet; free-text input still works
+    console.error("Failed to fetch languages:", err);
+    languageSuggestions.value = [];
+  } finally {
+    loadingLanguageOptions.value = false;
+  }
+}
+
+function handleLanguageSearch(e) {
+  languageForm.language_name = e.target.value;
+  languageForm.language_id = null;
+  clearTimeout(languageSearchTimeout);
+  languageSearchTimeout = setTimeout(() => fetchLanguageOptions(e.target.value), 300);
+}
+
+function selectLanguageSuggestion(lang) {
+  languageForm.language_id = lang.id;
+  languageForm.language_name = lang.name;
+  languageSuggestions.value = [];
+}
+
+function openLanguageModal(language = null) {
+  editingLanguageId.value = language?.id || null;
+  languageForm.language_id = language?.language_id ?? null;
+  languageForm.language_name = language?.language_name || "";
+  languageForm.proficiency_level_id = language?.proficiency_level_id || "";
+  languageForm.is_primary = Boolean(language?.is_primary);
+  languageSuggestions.value = [];
+  showLanguageModal.value = true;
+}
+
+function closeLanguageModal() {
+  showLanguageModal.value = false;
+  editingLanguageId.value = null;
+  languageSuggestions.value = [];
+}
+
+async function saveLanguage() {
+  const name = languageForm.language_name.trim();
+  if (!name || !languageForm.proficiency_level_id) {
+    push.warning(t("profile.languageFormIncomplete"));
+    return;
+  }
+
+  const isDuplicate = languages.value.some(
+    (l) =>
+      l.id !== editingLanguageId.value &&
+      l.language_name?.trim().toLowerCase() === name.toLowerCase(),
+  );
+  if (isDuplicate) {
+    push.warning(t("profile.languageAlreadyAdded"));
+    return;
+  }
+
+  // Keep sending language_name for backward compatibility alongside language_id
+  const payload = {
+    language_name: name,
+    proficiency_level_id: Number(languageForm.proficiency_level_id),
+    is_primary: languageForm.is_primary,
+  };
+  if (languageForm.language_id) {
+    payload.language_id = languageForm.language_id;
+  }
+
+  try {
+    savingLanguage.value = true;
+    const headers = { Authorization: `Bearer ${localStorage.getItem("token")}` };
+
+    if (editingLanguageId.value) {
+      await api.put(`/workers/languages/${editingLanguageId.value}`, payload, { headers });
+      const idx = languages.value.findIndex((l) => l.id === editingLanguageId.value);
+      if (idx !== -1) {
+        languages.value[idx] = { ...languages.value[idx], ...payload };
+      }
+      push.success(t("profile.languageUpdated"));
+    } else {
+      const res = await api.post("/workers/languages", payload, { headers });
+      languages.value.push({ id: res.data?.data?.id, ...payload });
+      push.success(t("profile.languageAdded"));
+    }
+    closeLanguageModal();
+  } catch (err) {
+    push.error(err?.response?.data?.message || t("profile.failedToSaveLanguage"));
+  } finally {
+    savingLanguage.value = false;
+  }
+}
+
+async function deleteLanguage(language) {
+  try {
+    await api.delete(`/workers/languages/${language.id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    languages.value = languages.value.filter((l) => l.id !== language.id);
+    push.success(t("profile.languageRemoved"));
+  } catch (err) {
+    push.error(err?.response?.data?.message || t("profile.failedToDeleteLanguage"));
   }
 }
 
@@ -1494,6 +1640,67 @@ watch(activeTab, (newTab) => {
               class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm"
             >
               + {{ $t('profile.addSkillsButton') }}
+            </button>
+          </div>
+
+          <!-- Languages Section -->
+          <div class="border-t pt-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              {{ $t('profile.languages') }}
+              <span class="ml-2 text-xs text-gray-400">Optional</span>
+            </label>
+
+            <div
+              v-if="languages.length === 0"
+              class="text-xs md:text-sm text-gray-500 py-2"
+            >
+              {{ $t('profile.noLanguagesAdded') }}
+            </div>
+            <div v-else class="space-y-2 mt-2">
+              <div
+                v-for="language in languages"
+                :key="language.id"
+                class="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2"
+              >
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="text-sm font-medium text-gray-800">
+                    {{ language.language_name }}
+                  </span>
+                  <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs">
+                    {{ proficiencyLabel(language.proficiency_level_id) }}
+                  </span>
+                  <span
+                    v-if="language.is_primary"
+                    class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full text-xs"
+                  >
+                    {{ $t('profile.primaryLanguage') }}
+                  </span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <button
+                    type="button"
+                    @click="openLanguageModal(language)"
+                    class="text-blue-600 hover:text-blue-800 text-sm"
+                  >
+                    {{ $t('profile.edit') }}
+                  </button>
+                  <button
+                    type="button"
+                    @click="deleteLanguage(language)"
+                    class="text-red-600 hover:text-red-800 text-sm"
+                  >
+                    {{ $t('profile.remove') }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              @click="openLanguageModal()"
+              class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
+            >
+              + {{ $t('profile.addLanguageButton') }}
             </button>
           </div>
 
@@ -2516,6 +2723,93 @@ watch(activeTab, (newTab) => {
         >
           {{ $t('profile.done') }}
         </button>
+      </div>
+    </div>
+
+    <!-- Language Modal -->
+    <div
+      v-if="showLanguageModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      @click.self="closeLanguageModal"
+    >
+      <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold">
+            {{ editingLanguageId ? $t('profile.editLanguage') : $t('profile.addLanguageButton') }}
+          </h3>
+          <button
+            @click="closeLanguageModal"
+            class="text-gray-400 hover:text-gray-600 text-xl"
+          >
+            ×
+          </button>
+        </div>
+
+        <!-- Language name with master suggestions -->
+        <label class="text-xs md:text-sm font-medium text-gray-700">
+          {{ $t('profile.languageName') }}
+        </label>
+        <div class="relative mb-3">
+          <input
+            :value="languageForm.language_name"
+            @input="handleLanguageSearch"
+            type="text"
+            :placeholder="$t('profile.searchOrTypeLanguage')"
+            class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div
+            v-if="languageSuggestions.length"
+            class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-gray-200 rounded-md"
+          >
+            <div
+              v-for="lang in languageSuggestions"
+              :key="lang.id"
+              @click="selectLanguageSuggestion(lang)"
+              class="px-3 py-2 text-sm cursor-pointer hover:bg-blue-50"
+            >
+              {{ lang.name }}
+            </div>
+          </div>
+          <p v-if="loadingLanguageOptions" class="text-xs text-gray-500 mt-1">
+            {{ $t('profile.loadingLanguages') }}
+          </p>
+        </div>
+
+        <!-- Proficiency level -->
+        <label class="text-xs md:text-sm font-medium text-gray-700">
+          {{ $t('profile.proficiencyLevel') }}
+        </label>
+        <select
+          v-model="languageForm.proficiency_level_id"
+          class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+        >
+          <option value="" disabled>{{ $t('profile.selectProficiency') }}</option>
+          <option v-for="level in proficiencyOptions" :key="level.id" :value="level.id">
+            {{ level.label }}
+          </option>
+        </select>
+
+        <!-- Primary language -->
+        <label class="flex items-center gap-2 text-sm text-gray-700 mb-4">
+          <input v-model="languageForm.is_primary" type="checkbox" class="rounded" />
+          {{ $t('profile.setAsPrimaryLanguage') }}
+        </label>
+
+        <div class="flex gap-2">
+          <button
+            @click="closeLanguageModal"
+            class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
+          >
+            {{ $t('profile.cancel') }}
+          </button>
+          <button
+            @click="saveLanguage"
+            :disabled="savingLanguage"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm disabled:opacity-50"
+          >
+            {{ savingLanguage ? $t('profile.saving') : $t('profile.save') }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
