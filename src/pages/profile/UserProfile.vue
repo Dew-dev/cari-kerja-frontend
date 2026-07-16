@@ -107,8 +107,6 @@ const loadingLanguageOptions = ref(false);
 const savingLanguage = ref(false);
 let languageSearchTimeout = null;
 
-// Seeded ids in proficiency_levels (backend returns only the name on profile load)
-const PROFICIENCY_NAME_TO_ID = { Beginner: 1, Intermediate: 2, Fluent: 3, Native: 4 };
 const proficiencyOptions = computed(() => [
   { id: 1, label: t("profile.proficiency.beginner") },
   { id: 2, label: t("profile.proficiency.intermediate") },
@@ -213,12 +211,7 @@ async function loadProfile() {
     //   isSaved: true,
     }));
     skills.value = data.worker_skills ?? [];
-    languages.value = (data.languages ?? []).map((l) => ({
-      ...l,
-      // Profile endpoint returns the proficiency name (as `name`) but not its id
-      proficiency_level_id:
-        l.proficiency_level_id ?? PROFICIENCY_NAME_TO_ID[l.proficiency_level_name || l.name] ?? "",
-    }));
+    languages.value = data.languages ?? [];
   } catch (err) {
     console.error("Failed to load profile:", err);
   } finally {
@@ -707,12 +700,10 @@ async function fetchLanguageOptions(search = "") {
   }
   try {
     loadingLanguageOptions.value = true;
-    const res = await api.get(`/languages?search=${encodeURIComponent(search)}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    // Public endpoint, no token required
+    const res = await api.get(`/languages?search=${encodeURIComponent(search)}`);
     languageSuggestions.value = res.data?.data || [];
   } catch (err) {
-    // Master languages endpoint may not be deployed yet; free-text input still works
     console.error("Failed to fetch languages:", err);
     languageSuggestions.value = [];
   } finally {
