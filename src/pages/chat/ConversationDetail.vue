@@ -44,6 +44,7 @@ const messagesRef = ref(null)
 const sentinelRef = ref(null)
 const isAtBottom = ref(true)
 const loadingOlder = ref(false)
+const initializing = ref(true)
 
 // ─── Computed ─────────────────────────────────────────────────────────────────
 const conversation = computed(() =>
@@ -80,13 +81,22 @@ const loading = computed(
 // ─── Scroll helpers ────────────────────────────────────────────────────────────
 async function scrollToBottom(behavior = 'auto') {
   await nextTick()
-  if (messagesRef.value) {
-    messagesRef.value.scrollTo({ top: messagesRef.value.scrollHeight, behavior })
+  await new Promise((resolve) => requestAnimationFrame(resolve))
+
+  const el = messagesRef.value
+  if (!el) return
+
+  if (behavior === 'smooth') {
+    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+  } else {
+    // Instant jump — avoid CSS scroll-smooth fighting the initial open
+    el.scrollTop = el.scrollHeight
   }
+  isAtBottom.value = true
 }
 
 function onScroll() {
-  if (!messagesRef.value) return
+  if (!messagesRef.value || initializing.value || loadingOlder.value) return
   const { scrollTop, scrollHeight, clientHeight } = messagesRef.value
   isAtBottom.value = scrollHeight - scrollTop - clientHeight < 60
 }
@@ -95,26 +105,35 @@ function onScroll() {
 let observer = null
 
 function setupIntersectionObserver() {
-  if (!sentinelRef.value) return
+  if (!sentinelRef.value || !messagesRef.value) return
 
+  observer?.disconnect()
   observer = new IntersectionObserver(
     async ([entry]) => {
-      if (entry.isIntersecting && pagination.value?.hasMore && !pagination.value?.loading) {
-        loadingOlder.value = true
-        const prevScrollHeight = messagesRef.value?.scrollHeight || 0
-
-        await chatStore.loadMoreMessages(props.conversationId)
-
-        // Preserve scroll position after prepending older messages
-        await nextTick()
-        if (messagesRef.value) {
-          const newScrollHeight = messagesRef.value.scrollHeight
-          messagesRef.value.scrollTop = newScrollHeight - prevScrollHeight
-        }
-        loadingOlder.value = false
+      if (
+        !entry.isIntersecting ||
+        initializing.value ||
+        loadingOlder.value ||
+        !pagination.value?.hasMore ||
+        pagination.value?.loading
+      ) {
+        return
       }
+
+      loadingOlder.value = true
+      const prevScrollHeight = messagesRef.value?.scrollHeight || 0
+
+      await chatStore.loadMoreMessages(props.conversationId)
+
+      // Preserve scroll position after prepending older messages
+      await nextTick()
+      if (messagesRef.value) {
+        const newScrollHeight = messagesRef.value.scrollHeight
+        messagesRef.value.scrollTop = newScrollHeight - prevScrollHeight
+      }
+      loadingOlder.value = false
     },
-    { root: messagesRef.value, threshold: 0.1 },
+    { root: messagesRef.value, threshold: 0 },
   )
 
   observer.observe(sentinelRef.value)
@@ -208,10 +227,18 @@ function showAvatar(messages, index) {
 
 // ─── Lifecycle ────────────────────────────────────────────────────────────────
 async function init() {
+  initializing.value = true
+  observer?.disconnect()
+
   await chatStore.fetchMessages(props.conversationId)
-  await scrollToBottom()
+  // Wait until message bubbles are painted, then jump to latest
+  await scrollToBottom('auto')
+  await scrollToBottom('auto')
+
   await chatStore.markAsRead(props.conversationId)
 
+  initializing.value = false
+  await nextTick()
   setupIntersectionObserver()
 }
 
@@ -253,11 +280,11 @@ watch(
   },
 )
 
-// Scroll to bottom when new messages arrive
+// Scroll to bottom when new messages arrive (not during initial open)
 watch(
   messages,
   async () => {
-    if (isAtBottom.value) {
+    if (!initializing.value && isAtBottom.value) {
       await scrollToBottom('smooth')
     }
   },
@@ -285,7 +312,7 @@ watch(someoneTyping, async (val) => {
     <!-- Messages area -->
     <div
       ref="messagesRef"
-      class="flex-1 overflow-y-auto px-3 py-2 scroll-smooth"
+      class="flex-1 overflow-y-auto px-3 py-2"
       @scroll="onScroll"
     >
       <!-- Sentinel for infinite scroll (load older messages) -->
