@@ -40,7 +40,9 @@ const filteredConversations = computed(() => {
 
 // ─── Navigation ───────────────────────────────────────────────────────────────
 function selectConversation(conversation) {
-  router.push({ name: 'chat-detail', params: { conversationId: conversation.id } })
+  const conversationId = conversation.id || conversation.conversation_id
+  if (!conversationId) return
+  router.push({ name: 'chat-detail', params: { conversationId } })
   mobileShowDetail.value = true
 }
 
@@ -49,8 +51,15 @@ function goBack() {
   router.push({ name: 'chat' })
 }
 
-// ─── Real-time: update conversation list on new messages ─────────────────────
+// ─── Real-time: update list; skip if detail already handles this conversation ─
 function handleIncomingMessage(message) {
+  // ConversationDetail also listens — avoid processing the same event twice
+  if (
+    activeConversationId.value &&
+    message?.conversation_id === activeConversationId.value
+  ) {
+    return
+  }
   chatStore.handleIncomingMessage(message)
 }
 
@@ -85,12 +94,12 @@ watch(activeConversationId, (id) => {
     - Mobile: either list OR detail (based on mobileShowDetail)
   -->
   <div
-    class="flex bg-gray-50"
+    class="flex bg-gray-50 overflow-hidden"
     style="height: calc(100vh - 64px)"
   >
     <!-- ─── LEFT SIDEBAR: Conversation List ─────────────────────────────────── -->
     <aside
-      class="flex flex-col bg-white border-r border-gray-100"
+      class="flex flex-col bg-white border-r border-gray-100 min-h-0"
       :class="[
         'md:w-80 md:flex md:shrink-0',
         mobileShowDetail ? 'hidden' : 'flex w-full',
@@ -130,7 +139,7 @@ watch(activeConversationId, (id) => {
       </div>
 
       <!-- List -->
-      <div class="flex-1 overflow-y-auto">
+      <div class="flex-1 min-h-0 overflow-y-auto">
         <!-- Skeleton -->
         <ConversationSkeleton v-if="chatStore.loadingConversations" />
 
@@ -157,7 +166,7 @@ watch(activeConversationId, (id) => {
 
     <!-- ─── RIGHT PANEL: Detail or Empty State ────────────────────────────── -->
     <main
-      class="flex-1 flex flex-col min-w-0"
+      class="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden"
       :class="mobileShowDetail ? 'flex' : 'hidden md:flex'"
     >
       <!-- Conversation detail -->

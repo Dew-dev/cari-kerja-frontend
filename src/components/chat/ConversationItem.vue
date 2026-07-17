@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
+import { getMessageText } from '@/stores/chatStore'
 import UnreadBadge from './UnreadBadge.vue'
 
 const auth = useAuthStore()
@@ -30,7 +31,24 @@ const participant = computed(() => {
   return props.conversation.recruiter || props.conversation.participant
 })
 
-const lastMessage = computed(() => props.conversation.last_message)
+const lastMessage = computed(
+  () =>
+    props.conversation.last_message ??
+    props.conversation.latest_message ??
+    props.conversation.lastMessage,
+)
+
+const lastMessageText = computed(() => getMessageText(lastMessage.value))
+
+const lastMessageAt = computed(() => {
+  const last = lastMessage.value
+  if (typeof last === 'object' && last?.created_at) return last.created_at
+  return (
+    props.conversation.last_message_at ||
+    props.conversation.updated_at ||
+    props.conversation.created_at
+  )
+})
 
 function formatTime(dateStr) {
   if (!dateStr) return ''
@@ -58,7 +76,7 @@ function truncate(str, len = 42) {
 <template>
   <button
     class="w-full flex items-center gap-3 px-4 py-3 text-left transition hover:bg-gray-50 focus:outline-none"
-    :class="active ? 'bg-blue-50 border-r-2 border-blue-600' : ''"
+    :class="active ? 'bg-blue-50/80 border-r-2 border-blue-600' : 'border-r-2 border-transparent'"
     @click="emit('click', conversation)"
   >
     <!-- Avatar -->
@@ -86,10 +104,10 @@ function truncate(str, len = 42) {
           class="text-sm font-semibold truncate"
           :class="(conversation.unread_count || 0) > 0 ? 'text-gray-900' : 'text-gray-700'"
         >
-          {{ participant?.name || '...' }}
+          {{ participant?.name || participant?.company_name || '...' }}
         </p>
         <span class="text-[10px] text-gray-400 shrink-0">
-          {{ formatTime(conversation.updated_at || lastMessage?.created_at) }}
+          {{ formatTime(lastMessageAt) }}
         </span>
       </div>
       <div class="flex items-center justify-between gap-1">
@@ -97,7 +115,7 @@ function truncate(str, len = 42) {
           class="text-xs truncate"
           :class="(conversation.unread_count || 0) > 0 ? 'text-gray-700 font-medium' : 'text-gray-400'"
         >
-          {{ truncate(lastMessage?.message || lastMessage?.content) || $t('chat.noMessages') }}
+          {{ truncate(lastMessageText) || $t('chat.noMessages') }}
         </p>
         <UnreadBadge :count="conversation.unread_count || 0" />
       </div>

@@ -8,6 +8,7 @@ import api from "@/services/api";
 import { startConversation } from "@/services/chat.api";
 import { getJobStages, moveApplicationStage } from "@/services/pipeline.api";
 import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
+import { resolveWorkerProfileId } from "@/utils/chatIdentity";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -100,11 +101,12 @@ onMounted(fetchWorker);
 const startingChat = ref(false);
 
 async function startChat() {
-  if (!worker.value?.id) return;
+  const workerId = resolveWorkerProfileId(worker.value);
+  if (!workerId) return;
   try {
     startingChat.value = true;
     const res = await startConversation({
-      worker_id: worker.value.id,
+      worker_id: workerId,
     });
     const conversationId = res.data?.data?.id || res.data?.id;
     if (!conversationId) throw new Error("No conversation ID");
