@@ -1598,31 +1598,47 @@
     }
   },
   "privacyPolicy": {
+    "pageTitle": "Cari Kerja - Privacy Policy",
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: February 4, 2026",
+    "subtitle": "How we collect, use, and protect your personal data when you use Cari Kerja.",
+    "lastUpdated": "Last updated: July 17, 2026",
+    "onThisPage": "On this page",
+    "toc": {
+      "introduction": "Introduction",
+      "informationCollection": "Information we collect",
+      "useOfData": "How we use data",
+      "security": "Data security",
+      "cookies": "Cookies",
+      "thirdPartyAccess": "Third parties",
+      "disclosure": "Disclosure",
+      "retention": "Data retention",
+      "rights": "Your rights",
+      "changes": "Policy changes",
+      "contact": "Contact us"
+    },
     "introduction": {
       "title": "1. Introduction",
-      "content": "Cari Kerja (\"we\" or \"us\" or \"our\") operates the Cari Kerja website. This page explains our policies regarding the collection, use, and disclosure of personal data when you use our service and the choices you have associated with that data."
+      "content": "Cari Kerja (\"we\", \"us\", or \"our\") operates the Cari Kerja job portal. This page explains our policies regarding the collection, use, and disclosure of personal data when you use our service, and the choices you have associated with that data."
     },
     "informationCollection": {
       "title": "2. Information Collection and Use",
-      "intro": "We collect several different types of information for various purposes to provide and improve our service to you:",
+      "intro": "We collect several types of information to provide and improve our service:",
       "items": {
-        "accountTitle": "Account Information:",
+        "accountTitle": "Account information:",
         "account": "name, email address, phone number, and password",
-        "profileTitle": "Profile Information:",
+        "profileTitle": "Profile information:",
         "profile": "resume, work experience, education, skills, and qualifications",
-        "applicationTitle": "Application Data:",
+        "applicationTitle": "Application data:",
         "application": "job applications, cover letters, and application history",
-        "technicalTitle": "Technical Data:",
+        "technicalTitle": "Technical data:",
         "technical": "IP address, browser type, pages visited, and time spent on pages",
-        "communicationTitle": "Communication Data:",
+        "communicationTitle": "Communication data:",
         "communication": "messages between job seekers and recruiters"
       }
     },
     "useOfData": {
       "title": "3. Use of Data",
-      "content": "We use the collected data for various purposes including providing and maintaining the service, notifying you about changes, offering customer support, analyzing and improving the service, monitoring usage, and addressing technical issues.",
+      "content": "We use the collected data for various purposes, including providing and maintaining the service, notifying you about changes, offering customer support, analyzing and improving the service, monitoring usage, and addressing technical issues.",
       "items": {
         "provide": "To provide and maintain the service",
         "notify": "To notify you about changes to our service",
@@ -1666,7 +1682,7 @@
         "access": "The right to access your personal data",
         "correct": "The right to correct inaccurate data",
         "delete": "The right to request deletion of your data",
-        "optOut": "The right to opt-out of marketing communications",
+        "optOut": "The right to opt out of marketing communications",
         "portable": "The right to request a copy of your data in a portable format"
       }
     },
@@ -1678,9 +1694,10 @@
       "title": "11. Contact Us",
       "intro": "If you have any questions about this privacy policy, please contact us at:",
       "emailLabel": "Email",
-      "email": "privacy@Cari Kerja",
+      "email": "privacy{'@'}cari-kerja.co.id",
       "addressLabel": "Address",
-      "address": "Jakarta, Indonesia"
+      "address": "Jakarta, Indonesia",
+      "contactPageLink": "Visit our contact page"
     }
   },
   "termsOfService": {
