@@ -855,11 +855,19 @@ async function loadSavedJobs() {
 
   try {
     const res = await getSavedJobs();
-    const data = res?.data || res || [];
+    const data = res?.data ?? [];
     savedJobs.value = Array.isArray(data) ? data : [];
   } catch (err) {
-    savedError.value =
-      err?.response?.data?.message || "Failed to load saved jobs";
+    const message = err?.response?.data?.message || "";
+    const status = err?.response?.status;
+    if (
+      status === 404 ||
+      /not found|tidak ditemukan/i.test(String(message))
+    ) {
+      savedJobs.value = [];
+      return;
+    }
+    savedError.value = message || "Failed to load saved jobs";
     savedJobs.value = [];
   } finally {
     loadingSaved.value = false;
