@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { getStageColorClasses } from "@/constants/pipeline";
+import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
 
 const { t } = useI18n();
 
@@ -28,10 +28,11 @@ function columnLabel(column) {
 // so the funnel is never empty — clearly marked as an estimate in the UI.
 const conversionSteps = computed(() => {
   if (props.conversionRates?.length) {
+    // Backend returns `rate` as a 0..1 fraction — normalize to a percentage.
     return props.conversionRates.map((row) => ({
       fromLabel: row.from_label,
       toLabel: row.to_label,
-      rate: row.rate,
+      rate: Math.round(row.rate * 1000) / 10,
       estimated: false,
     }));
   }
@@ -74,7 +75,7 @@ const hasEstimatedRates = computed(() => conversionSteps.value.some((s) => s.est
           class="rounded-lg border border-gray-200 p-3 text-center"
         >
           <div class="flex items-center justify-center gap-1.5 mb-1">
-            <span class="w-2 h-2 rounded-full" :class="getStageColorClasses(column.color).dot"></span>
+            <span class="w-2 h-2 rounded-full" :style="getStageColorStyles(resolveStageColor(column)).dot"></span>
             <span class="text-xs text-gray-500 truncate">{{ columnLabel(column) }}</span>
           </div>
           <div class="text-xl font-bold text-gray-900">

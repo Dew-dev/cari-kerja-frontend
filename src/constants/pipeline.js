@@ -6,14 +6,18 @@
  * Every stage returned by the backend must carry a `stage_type` matching
  * one of these keys so the frontend can map custom/per-job stages back to
  * a stable column when viewing the global (cross-job) board.
+ *
+ * Colors mirror the hex values the backend seeds by default (see
+ * `018_candidate_pipeline.sql` / `candidate_pipeline` module) so the global
+ * (virtual) columns visually match the real per-job stages.
  */
 export const CANONICAL_STAGE_TYPES = [
-  { type: "applied", i18nKey: "pipeline.stages.applied", color: "blue" },
-  { type: "screening", i18nKey: "pipeline.stages.screening", color: "amber" },
-  { type: "interview", i18nKey: "pipeline.stages.interview", color: "purple" },
-  { type: "offer", i18nKey: "pipeline.stages.offer", color: "teal" },
-  { type: "hired", i18nKey: "pipeline.stages.hired", color: "green" },
-  { type: "rejected", i18nKey: "pipeline.stages.rejected", color: "red" },
+  { type: "applied", i18nKey: "pipeline.stages.applied", color: "#64748B" },
+  { type: "screening", i18nKey: "pipeline.stages.screening", color: "#3B82F6" },
+  { type: "interview", i18nKey: "pipeline.stages.interview", color: "#F59E0B" },
+  { type: "offer", i18nKey: "pipeline.stages.offer", color: "#8B5CF6" },
+  { type: "hired", i18nKey: "pipeline.stages.hired", color: "#22C55E" },
+  { type: "rejected", i18nKey: "pipeline.stages.rejected", color: "#EF4444" },
 ];
 
 export const STAGE_TYPE_ORDER = CANONICAL_STAGE_TYPES.reduce((acc, stage, index) => {
@@ -21,55 +25,59 @@ export const STAGE_TYPE_ORDER = CANONICAL_STAGE_TYPES.reduce((acc, stage, index)
   return acc;
 }, {});
 
+const STAGE_TYPE_COLOR_FALLBACK = CANONICAL_STAGE_TYPES.reduce((acc, stage) => {
+  acc[stage.type] = stage.color;
+  return acc;
+}, { custom: "#6B7280" });
+
 export function getStageTypeMeta(stageType) {
   return (
-    CANONICAL_STAGE_TYPES.find((s) => s.type === stageType) ||
-    CANONICAL_STAGE_TYPES.find((s) => s.type === "custom") || {
+    CANONICAL_STAGE_TYPES.find((s) => s.type === stageType) || {
       type: stageType || "custom",
       i18nKey: "pipeline.stages.custom",
-      color: "gray",
+      color: STAGE_TYPE_COLOR_FALLBACK.custom,
     }
   );
 }
 
-export const STAGE_COLOR_CLASSES = {
-  blue: {
-    badge: "bg-blue-50 text-blue-700 border-blue-200",
-    dot: "bg-blue-500",
-    header: "border-blue-300",
-  },
-  amber: {
-    badge: "bg-amber-50 text-amber-700 border-amber-200",
-    dot: "bg-amber-500",
-    header: "border-amber-300",
-  },
-  purple: {
-    badge: "bg-purple-50 text-purple-700 border-purple-200",
-    dot: "bg-purple-500",
-    header: "border-purple-300",
-  },
-  teal: {
-    badge: "bg-teal-50 text-teal-700 border-teal-200",
-    dot: "bg-teal-500",
-    header: "border-teal-300",
-  },
-  green: {
-    badge: "bg-green-50 text-green-700 border-green-200",
-    dot: "bg-green-500",
-    header: "border-green-300",
-  },
-  red: {
-    badge: "bg-red-50 text-red-700 border-red-200",
-    dot: "bg-red-500",
-    header: "border-red-300",
-  },
-  gray: {
-    badge: "bg-gray-50 text-gray-700 border-gray-200",
-    dot: "bg-gray-400",
-    header: "border-gray-300",
-  },
-};
+/**
+ * Resolve the display color for a stage/column: prefer the explicit hex
+ * color coming from the backend (`stage.color`), falling back to the
+ * canonical color for its `stage_type` (e.g. freshly created custom stages
+ * have `color: null` until the recruiter picks one).
+ */
+export function resolveStageColor(stageOrColumn) {
+  return (
+    stageOrColumn?.color ||
+    STAGE_TYPE_COLOR_FALLBACK[stageOrColumn?.stage_type] ||
+    STAGE_TYPE_COLOR_FALLBACK.custom
+  );
+}
 
-export function getStageColorClasses(color) {
-  return STAGE_COLOR_CLASSES[color] || STAGE_COLOR_CLASSES.gray;
+function hexToRgba(hex, alpha) {
+  const clean = (hex || "").replace("#", "");
+  const isShort = clean.length === 3;
+  const r = parseInt(isShort ? clean[0] + clean[0] : clean.substring(0, 2), 16);
+  const g = parseInt(isShort ? clean[1] + clean[1] : clean.substring(2, 4), 16);
+  const b = parseInt(isShort ? clean[2] + clean[2] : clean.substring(4, 6), 16);
+
+  if ([r, g, b].some((n) => Number.isNaN(n))) return `rgba(107, 114, 128, ${alpha})`;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+/**
+ * Build inline-style objects for the common stage color treatments used
+ * across the pipeline UI (dot indicator, soft badge, column header accent).
+ */
+export function getStageColorStyles(color) {
+  const resolved = color || STAGE_TYPE_COLOR_FALLBACK.custom;
+  return {
+    dot: { backgroundColor: resolved },
+    badge: {
+      backgroundColor: hexToRgba(resolved, 0.12),
+      color: resolved,
+      borderColor: hexToRgba(resolved, 0.35),
+    },
+    header: { borderColor: hexToRgba(resolved, 0.5) },
+  };
 }

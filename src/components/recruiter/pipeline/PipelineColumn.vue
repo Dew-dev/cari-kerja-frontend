@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import PipelineCard from "./PipelineCard.vue";
-import { getStageColorClasses } from "@/constants/pipeline";
+import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
 
 const { t } = useI18n();
 
@@ -26,13 +26,14 @@ function onDrop(e) {
   emit("move", { applicationId, column: props.column });
 }
 
-const colorClasses = getStageColorClasses(props.column.color);
+const colorStyles = getStageColorStyles(resolveStageColor(props.column));
 </script>
 
 <template>
   <div
-    class="w-72 shrink-0 flex flex-col bg-gray-50 rounded-lg border transition-colors"
-    :class="isDragOver ? colorClasses.header + ' bg-blue-50/40' : 'border-gray-200'"
+    class="w-72 shrink-0 flex flex-col bg-gray-50 rounded-lg border-2 transition-colors"
+    :style="isDragOver ? colorStyles.header : {}"
+    :class="isDragOver ? 'bg-blue-50/40' : 'border-gray-200'"
     @dragover.prevent="isDragOver = true"
     @dragleave="isDragOver = false"
     @drop="onDrop"
@@ -40,7 +41,7 @@ const colorClasses = getStageColorClasses(props.column.color);
     <!-- Column header -->
     <div class="flex items-center justify-between px-3 py-2.5 border-b border-gray-200">
       <div class="flex items-center gap-2 min-w-0">
-        <span class="w-2.5 h-2.5 rounded-full shrink-0" :class="colorClasses.dot"></span>
+        <span class="w-2.5 h-2.5 rounded-full shrink-0" :style="colorStyles.dot"></span>
         <span class="text-sm font-semibold text-gray-800 truncate">
           {{ column.name || t(column.i18nKey) }}
         </span>

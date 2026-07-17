@@ -2,7 +2,7 @@
 import { ref, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
-import { CANONICAL_STAGE_TYPES, getStageColorClasses } from "@/constants/pipeline";
+import { CANONICAL_STAGE_TYPES, getStageColorStyles } from "@/constants/pipeline";
 
 const { t } = useI18n();
 
@@ -96,11 +96,8 @@ const hasActiveFilters = computed(
         :key="stage.type"
         @click="toggleStageType(stage.type)"
         class="px-3 py-1.5 rounded-full text-xs font-medium border transition-colors"
-        :class="
-          stageTypeFilter === stage.type
-            ? getStageColorClasses(stage.color).badge + ' ring-2 ring-offset-1 ring-current'
-            : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
-        "
+        :style="stageTypeFilter === stage.type ? getStageColorStyles(stage.color).badge : {}"
+        :class="stageTypeFilter === stage.type ? 'ring-2 ring-offset-1 ring-current' : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'"
       >
         {{ t(stage.i18nKey) }}
       </button>

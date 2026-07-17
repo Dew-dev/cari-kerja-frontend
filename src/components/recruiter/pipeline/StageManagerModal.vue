@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { usePipelineStore } from "@/stores/pipelineStore";
-import { getStageColorClasses } from "@/constants/pipeline";
+import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
 
 const { t } = useI18n();
 const pipelineStore = usePipelineStore();
@@ -135,7 +135,7 @@ function onDrop(e, targetIndex) {
             </svg>
             <span v-else class="w-4 h-4 shrink-0"></span>
 
-            <span class="w-2 h-2 rounded-full shrink-0" :class="getStageColorClasses(stage.color).dot"></span>
+            <span class="w-2 h-2 rounded-full shrink-0" :style="getStageColorStyles(resolveStageColor(stage)).dot"></span>
 
             <input
               v-if="editingId === stage.id"
