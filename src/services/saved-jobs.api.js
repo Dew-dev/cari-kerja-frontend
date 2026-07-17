@@ -16,11 +16,15 @@ export async function removeSavedJob(jobId) {
   return res.data;
 }
 
-export async function getSavedJobs() {
-  const res = await api.get(
-    `/saved-jobs`,
-    { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-  );
+export async function getSavedJobs(params = {}) {
+  const res = await api.get(`/workers/saved-jobs/self`, {
+    params: {
+      page: 1,
+      limit: 100,
+      ...params,
+    },
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
   return res.data;
 }
 
