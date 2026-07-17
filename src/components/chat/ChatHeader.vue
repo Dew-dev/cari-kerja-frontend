@@ -44,7 +44,7 @@ function goToProfile() {
 </script>
 
 <template>
-  <div class="flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-100 shrink-0">
+  <div class="flex items-center gap-3 px-4 py-3 bg-white/95 backdrop-blur-sm border-b border-gray-100 shrink-0">
     <!-- Back button (mobile) -->
     <button
       v-if="showBack"

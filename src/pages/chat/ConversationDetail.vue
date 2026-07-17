@@ -11,6 +11,7 @@ import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/authStore'
 import { useChatStore } from '@/stores/chatStore'
 import { useSocket } from '@/composables/useSocket'
+import { getSenderKey } from '@/utils/chatIdentity'
 import { push } from 'notivue'
 
 import ChatHeader from '@/components/chat/ChatHeader.vue'
@@ -156,7 +157,14 @@ function handleReceiveMessage(message) {
 
 function handleTyping({ conversationId, userId }) {
   if (conversationId !== props.conversationId) return
-  if (userId === auth.user?.user_id || userId === auth.user?.id) return
+  const me = auth.user
+  if (
+    userId &&
+    me &&
+    (String(userId) === String(me.user_id) || String(userId) === String(me.id))
+  ) {
+    return
+  }
   chatStore.setTyping(conversationId, userId, true)
 }
 
@@ -214,15 +222,11 @@ function showDateSeparator(messages, index) {
   return curr !== prev
 }
 
-function getSenderId(message) {
-  return message.sender?.id || message.sender_id
-}
-
 function showAvatar(messages, index) {
   if (index === messages.length - 1) return true
   const curr = messages[index]
   const next = messages[index + 1]
-  return getSenderId(curr) !== getSenderId(next)
+  return getSenderKey(curr) !== getSenderKey(next)
 }
 
 // ─── Lifecycle ────────────────────────────────────────────────────────────────
@@ -298,27 +302,27 @@ watch(someoneTyping, async (val) => {
 </script>
 
 <template>
-  <div class="flex flex-col h-full bg-gray-50">
-    <!-- Header -->
-    <ChatHeader
-      :name="participant?.name || '...'"
-      :avatar-url="participant?.avatar_url"
-      :profile-id="participant?.id"
-      :profile-role="participant?.role || (auth.user?.role === 'recruiter' ? 'worker' : 'recruiter')"
-      show-back
-      @back="emit('back')"
-    />
+  <div class="flex flex-col h-full min-h-0 overflow-hidden bg-[#f0f2f5]">
+    <!-- Sticky header -->
+    <div class="shrink-0 z-20">
+      <ChatHeader
+        :name="participant?.name || participant?.company_name || '...'"
+        :avatar-url="participant?.avatar_url"
+        :profile-id="participant?.id"
+        :profile-role="participant?.role || (auth.user?.role === 'recruiter' ? 'worker' : 'recruiter')"
+        show-back
+        @back="emit('back')"
+      />
+    </div>
 
-    <!-- Messages area -->
+    <!-- Scrollable messages only -->
     <div
       ref="messagesRef"
-      class="flex-1 overflow-y-auto px-3 py-2"
+      class="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-3"
       @scroll="onScroll"
     >
-      <!-- Sentinel for infinite scroll (load older messages) -->
       <div ref="sentinelRef" class="h-1" />
 
-      <!-- Loading older indicator -->
       <div v-if="loadingOlder" class="flex justify-center py-2">
         <svg class="w-4 h-4 animate-spin text-blue-400" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
@@ -326,10 +330,8 @@ watch(someoneTyping, async (val) => {
         </svg>
       </div>
 
-      <!-- Skeleton while first loading -->
       <MessageSkeleton v-if="loading" />
 
-      <!-- Empty state -->
       <EmptyState
         v-else-if="!loading && messages.length === 0"
         :title="$t('chat.noMessages')"
@@ -338,39 +340,37 @@ watch(someoneTyping, async (val) => {
         class="h-full"
       />
 
-      <!-- Messages -->
       <template v-else>
-        <template v-for="(message, index) in messages" :key="message.id">
-          <!-- Date separator -->
-          <div
-            v-if="showDateSeparator(messages, index)"
-            class="flex items-center gap-3 my-4"
-          >
-            <div class="flex-1 h-px bg-gray-200" />
-            <span class="text-[10px] text-gray-400 font-medium whitespace-nowrap">
-              {{ formatDateLabel(message.created_at) }}
-            </span>
-            <div class="flex-1 h-px bg-gray-200" />
+        <div class="max-w-3xl mx-auto">
+          <template v-for="(message, index) in messages" :key="message.id">
+            <div
+              v-if="showDateSeparator(messages, index)"
+              class="flex items-center gap-3 my-4"
+            >
+              <div class="flex-1 h-px bg-gray-200/80" />
+              <span class="text-[10px] text-gray-500 font-medium whitespace-nowrap bg-white/70 px-2.5 py-0.5 rounded-full">
+                {{ formatDateLabel(message.created_at) }}
+              </span>
+              <div class="flex-1 h-px bg-gray-200/80" />
+            </div>
+
+            <ChatBubble
+              :message="message"
+              :show-avatar="showAvatar(messages, index)"
+              :participant-name="participant?.name"
+              :participant-avatar="participant?.avatar_url"
+              :class="index === messages.length - 1 ? 'mb-1' : ''"
+            />
+          </template>
+
+          <div v-if="someoneTyping" class="pl-2 pb-1">
+            <TypingIndicator :name="participant?.name" />
           </div>
-
-          <!-- Bubble -->
-          <ChatBubble
-            :message="message"
-            :show-avatar="showAvatar(messages, index)"
-            :participant-name="participant?.name"
-            :participant-avatar="participant?.avatar_url"
-            :class="index === messages.length - 1 ? 'mb-2' : ''"
-          />
-        </template>
-
-        <!-- Typing indicator -->
-        <div v-if="someoneTyping" class="pl-2 pb-1">
-          <TypingIndicator :name="participant?.name" />
         </div>
       </template>
     </div>
 
-    <!-- Input -->
+    <!-- Sticky input (outside scroll) -->
     <ChatInput
       v-model="messageText"
       :sending="sending"

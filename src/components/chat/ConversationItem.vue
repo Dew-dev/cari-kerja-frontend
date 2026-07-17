@@ -76,7 +76,7 @@ function truncate(str, len = 42) {
 <template>
   <button
     class="w-full flex items-center gap-3 px-4 py-3 text-left transition hover:bg-gray-50 focus:outline-none"
-    :class="active ? 'bg-blue-50 border-r-2 border-blue-600' : ''"
+    :class="active ? 'bg-blue-50/80 border-r-2 border-blue-600' : 'border-r-2 border-transparent'"
     @click="emit('click', conversation)"
   >
     <!-- Avatar -->
@@ -104,7 +104,7 @@ function truncate(str, len = 42) {
           class="text-sm font-semibold truncate"
           :class="(conversation.unread_count || 0) > 0 ? 'text-gray-900' : 'text-gray-700'"
         >
-          {{ participant?.name || '...' }}
+          {{ participant?.name || participant?.company_name || '...' }}
         </p>
         <span class="text-[10px] text-gray-400 shrink-0">
           {{ formatTime(lastMessageAt) }}

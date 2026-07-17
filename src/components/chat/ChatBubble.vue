@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
+import { isOwnMessage } from '@/utils/chatIdentity'
 
 const auth = useAuthStore()
 const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || ''
@@ -24,16 +25,7 @@ const props = defineProps({
   },
 })
 
-const senderId = computed(
-  () => props.message.sender?.id || props.message.sender_id,
-)
-
-const isMine = computed(() => {
-  const myId = auth.user?.user_id || auth.user?.id
-  const sid = senderId.value
-  if (!myId || !sid) return false
-  return String(sid) === String(myId)
-})
+const isMine = computed(() => isOwnMessage(props.message, auth.user))
 
 const displayName = computed(
   () => props.message.sender?.name || props.participantName || '',
@@ -54,12 +46,12 @@ function formatTime(dateStr) {
 
 <template>
   <div
-    class="flex gap-2 mb-1 w-full"
+    class="flex gap-2 mb-1.5 w-full"
     :class="isMine ? 'justify-end' : 'justify-start'"
   >
     <!-- Avatar (theirs) -->
     <div v-if="!isMine && showAvatar" class="shrink-0 self-end">
-      <div class="w-7 h-7 rounded-full overflow-hidden bg-blue-100">
+      <div class="w-7 h-7 rounded-full overflow-hidden bg-blue-100 ring-1 ring-black/5">
         <img
           v-if="avatarSrc"
           :src="avatarSrc"
@@ -74,30 +66,29 @@ function formatTime(dateStr) {
         </span>
       </div>
     </div>
-    <!-- Avatar placeholder to keep alignment when not shown -->
     <div v-else-if="!isMine && !showAvatar" class="w-7 shrink-0" />
 
     <!-- Bubble -->
-    <div class="flex flex-col max-w-[70%]" :class="isMine ? 'items-end' : 'items-start'">
+    <div class="flex flex-col max-w-[78%] sm:max-w-[70%]" :class="isMine ? 'items-end' : 'items-start'">
       <div
-        class="px-3.5 py-2 rounded-2xl text-sm leading-relaxed break-words"
+        class="px-3.5 py-2 rounded-2xl text-sm leading-relaxed break-words shadow-sm"
         :class="[
           isMine
-            ? 'bg-blue-600 text-white rounded-tr-sm'
-            : 'bg-gray-100 text-gray-800 rounded-tl-sm',
+            ? 'bg-blue-600 text-white rounded-br-md'
+            : 'bg-white text-gray-800 rounded-bl-md border border-gray-100',
           message._pending ? 'opacity-70' : 'opacity-100',
         ]"
       >
         {{ message.message || message.content }}
       </div>
 
-      <!-- Timestamp + Read status -->
-      <div class="flex items-center gap-1 mt-0.5 px-1">
+      <div
+        class="flex items-center gap-1 mt-0.5 px-1"
+        :class="isMine ? 'flex-row-reverse' : 'flex-row'"
+      >
         <span class="text-[10px] text-gray-400">{{ formatTime(message.created_at) }}</span>
 
-        <!-- Read status (only for my messages) -->
         <template v-if="isMine">
-          <!-- Pending (optimistic) -->
           <svg
             v-if="message._pending"
             class="w-3 h-3 text-gray-300"
@@ -110,10 +101,9 @@ function formatTime(dateStr) {
               clip-rule="evenodd"
             />
           </svg>
-          <!-- Read -->
           <svg
             v-else-if="message.is_read"
-            class="w-3 h-3 text-blue-400"
+            class="w-3 h-3 text-blue-500"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -123,7 +113,6 @@ function formatTime(dateStr) {
               clip-rule="evenodd"
             />
           </svg>
-          <!-- Delivered (sent, not yet read) -->
           <svg
             v-else
             class="w-3 h-3 text-gray-400"
