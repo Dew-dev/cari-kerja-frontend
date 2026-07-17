@@ -57,3 +57,12 @@ export function moveApplicationStage(applicationId, stageId) {
 export function getApplicationTimeline(applicationId) {
   return api.get(`/job-applications/${applicationId}/timeline`);
 }
+
+// ── Notes (feedback) — reuses the existing notes endpoints ────────────────
+export function getApplicationNotes(applicationId) {
+  return api.get(`/job-applications/${applicationId}/notes`);
+}
+
+export function addApplicationNote(applicationId, note) {
+  return api.post(`/job-applications/${applicationId}/notes`, { note });
+}
