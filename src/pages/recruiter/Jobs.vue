@@ -128,8 +128,8 @@
 
               <button
                 v-if="activeTab === 'active'"
-                title="View applicants"
-                @click="$router.push(`/recruiter/jobs/${job.id}/applicants`)"
+                :title="t('pipeline.navLabel')"
+                @click="$router.push(`/recruiter/jobs/${job.id}/pipeline`)"
                 class="px-3 py-2 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-all duration-150"
               >
                 <i class="pi pi-users text-base"></i>
@@ -351,10 +351,10 @@
                       <i class="pi pi-pencil text-base"></i>
                     </router-link>
 
-                    <!-- APPLICANTS -->
+                    <!-- CANDIDATE PIPELINE -->
                     <button
-                      title="View applicants"
-                      @click="$router.push(`/recruiter/jobs/${job.id}/applicants`)"
+                      :title="t('pipeline.navLabel')"
+                      @click="$router.push(`/recruiter/jobs/${job.id}/pipeline`)"
                       class="p-2 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-100 rounded-lg transition-all duration-150 transform hover:scale-110"
                     >
                       <i class="pi pi-users text-base"></i>
