@@ -2171,5 +2171,73 @@
       "backPricing": "Tariflarga qaytish",
       "support": "Yordam xizmati bilan bog'lanish"
     }
+  },
+  "pipeline": {
+    "navLabel": "Pipeline",
+    "title": "Nomzodlar Pipeline",
+    "subtitle": "Ishga qabul qilishning har bir bosqichida nomzodlar jarayonini kuzatib boring va boshqaring",
+    "stages": {
+      "applied": "Ariza topshirdi",
+      "screening": "Skrining",
+      "interview": "Suhbat",
+      "offer": "Taklif",
+      "hired": "Ishga qabul qilindi",
+      "rejected": "Rad etildi",
+      "custom": "Maxsus bosqich"
+    },
+    "filters": {
+      "searchPlaceholder": "Nomzod ismini qidirish...",
+      "allPositions": "Barcha lavozimlar",
+      "reset": "Filtrlarni tozalash"
+    },
+    "analytics": {
+      "stageCounts": "Bosqichlar bo'yicha nomzodlar",
+      "total": "Jami {count} nomzod",
+      "conversionRate": "Konversiya darajasi",
+      "estimated": "taxminiy",
+      "estimatedHint": "Backend tahlili mavjud bo'lguncha joriy bosqich taqsimotidan taxminan hisoblangan"
+    },
+    "board": {
+      "emptyColumn": "Nomzodlar yo'q",
+      "noStages": "Hali bosqichlar sozlanmagan",
+      "moveFailed": "Nomzodni ko'chirish muvaffaqiyatsiz tugadi"
+    },
+    "card": {
+      "moveTo": "Ko'chirish",
+      "today": "Bugun ariza topshirdi",
+      "daysAgo": "{count} kun oldin ariza topshirdi"
+    },
+    "drawer": {
+      "title": "Nomzod tafsilotlari"
+    },
+    "timeline": {
+      "title": "Faoliyat vaqt jadvali",
+      "empty": "Hozircha faoliyat yo'q",
+      "addNotePlaceholder": "Ichki eslatma yoki fikr-mulohaza qo'shing...",
+      "addNote": "Eslatma qo'shish",
+      "saving": "Saqlanmoqda...",
+      "noteAdded": "Eslatma qo'shildi",
+      "noteFailed": "Eslatma qo'shilmadi",
+      "fallbackHint": "To'liq faoliyat tarixi ulanmaguncha soddalashtirilgan vaqt jadvali ko'rsatilmoqda.",
+      "events": {
+        "applied": "Shu lavozimga ariza topshirdi",
+        "note": "Eslatma qo'shildi"
+      }
+    },
+    "stageManager": {
+      "manageButton": "Bosqichlarni boshqarish",
+      "selectOneJobHint": "Bosqichlarini moslashtirish uchun bitta lavozimni tanlang",
+      "title": "Pipeline bosqichlarini boshqarish",
+      "hint": "Tartibni o'zgartirish uchun torting. Nomini o'zgartirish uchun bosqich nomini ikki marta bosing.",
+      "system": "Standart",
+      "newStagePlaceholder": "Yangi bosqich nomi...",
+      "add": "Qo'shish",
+      "created": "Bosqich yaratildi",
+      "renamed": "Bosqich nomi o'zgartirildi",
+      "deleted": "Bosqich o'chirildi",
+      "confirmDelete": "\"{name}\" bosqichini o'chirasizmi? Bu bosqichdagi nomzodlar avval ko'chirilishi kerak.",
+      "actionFailed": "Amal bajarilmadi",
+      "deleteFailed": "Bosqichni o'chirish muvaffaqiyatsiz tugadi"
+    }
   }
 }

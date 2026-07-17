@@ -1884,5 +1884,73 @@
       "backPricing": "Kembali ke Paket",
       "support": "Hubungi Bantuan"
     }
+  },
+  "pipeline": {
+    "navLabel": "Pipeline",
+    "title": "Candidate Pipeline",
+    "subtitle": "Lacak dan kelola progres kandidat di setiap tahap proses rekrutmen",
+    "stages": {
+      "applied": "Applied",
+      "screening": "Screening",
+      "interview": "Interview",
+      "offer": "Offer",
+      "hired": "Hired",
+      "rejected": "Rejected",
+      "custom": "Kustom"
+    },
+    "filters": {
+      "searchPlaceholder": "Cari nama kandidat...",
+      "allPositions": "Semua Posisi",
+      "reset": "Reset filter"
+    },
+    "analytics": {
+      "stageCounts": "Jumlah Kandidat per Tahap",
+      "total": "{count} total kandidat",
+      "conversionRate": "Conversion Rate",
+      "estimated": "estimasi",
+      "estimatedHint": "Diperkirakan dari distribusi tahap saat ini sampai analitik dari backend tersedia"
+    },
+    "board": {
+      "emptyColumn": "Tidak ada kandidat",
+      "noStages": "Belum ada tahapan yang dikonfigurasi",
+      "moveFailed": "Gagal memindahkan kandidat"
+    },
+    "card": {
+      "moveTo": "Pindahkan ke",
+      "today": "Melamar hari ini",
+      "daysAgo": "Melamar {count} hari yang lalu"
+    },
+    "drawer": {
+      "title": "Detail Kandidat"
+    },
+    "timeline": {
+      "title": "Timeline Aktivitas",
+      "empty": "Belum ada aktivitas",
+      "addNotePlaceholder": "Tambahkan catatan internal atau feedback...",
+      "addNote": "Tambah Catatan",
+      "saving": "Menyimpan...",
+      "noteAdded": "Catatan ditambahkan",
+      "noteFailed": "Gagal menambahkan catatan",
+      "fallbackHint": "Menampilkan timeline sederhana sementara riwayat aktivitas lengkap sedang disambungkan.",
+      "events": {
+        "applied": "Melamar posisi ini",
+        "note": "Catatan ditambahkan"
+      }
+    },
+    "stageManager": {
+      "manageButton": "Kelola Tahapan",
+      "selectOneJobHint": "Pilih satu posisi untuk mengustomisasi tahapannya",
+      "title": "Kelola Tahapan Pipeline",
+      "hint": "Seret untuk mengurutkan ulang. Klik dua kali nama tahapan untuk mengubahnya.",
+      "system": "Default",
+      "newStagePlaceholder": "Nama tahapan baru...",
+      "add": "Tambah",
+      "created": "Tahapan dibuat",
+      "renamed": "Tahapan diubah namanya",
+      "deleted": "Tahapan dihapus",
+      "confirmDelete": "Hapus tahapan \"{name}\"? Kandidat di tahapan ini harus dipindahkan terlebih dahulu.",
+      "actionFailed": "Aksi gagal",
+      "deleteFailed": "Gagal menghapus tahapan"
+    }
   }
 }
