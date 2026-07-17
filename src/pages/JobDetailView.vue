@@ -737,10 +737,11 @@ const jobQuestions = ref([]);
 const skills = ref([]);
 
 // Application Form
+// NOTE: application_status_id is no longer sent — the backend now always
+// auto-resolves new applications to the job post's own 'applied' stage.
 const applicationForm = ref({
   resume_id: "",
   cover_letter: "",
-  application_status_id: 1,
   answers: [],
 });
 
@@ -1074,7 +1075,6 @@ const closeApplicationModal = () => {
   applicationForm.value = {
     resume_id: "",
     cover_letter: "",
-    application_status_id: 1,
     answers: jobQuestions.value.map((q) => ({
       question_id: q.id,
       answer: "",
@@ -1103,7 +1103,6 @@ const submitApplication = async () => {
     const payload = {
       resume_id: applicationForm.value.resume_id,
       cover_letter: applicationForm.value.cover_letter,
-      application_status_id: 1,
       answers: applicationForm.value.answers.filter(
         (a) => a.answer && a.answer.trim() !== "",
       ),
