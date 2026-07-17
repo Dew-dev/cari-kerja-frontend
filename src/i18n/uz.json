@@ -1757,7 +1757,7 @@
     "yourName": "Ismingiz",
     "fullNamePlaceholder": "To'liq ism",
     "email": "Email",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "you{'@'}example.com",
     "phone": "Telefon",
     "phonePlaceholder": "+62 812 3456 7890",
     "optional": "ixtiyoriy",

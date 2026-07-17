@@ -1776,7 +1776,7 @@
     "yourName": "Your name",
     "fullNamePlaceholder": "Full name",
     "email": "Email",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "you{'@'}example.com",
     "phone": "Phone",
     "phonePlaceholder": "+62 812 3456 7890",
     "optional": "optional",

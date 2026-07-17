@@ -1513,7 +1513,7 @@
     "yourName": "Nama Anda",
     "fullNamePlaceholder": "Nama lengkap",
     "email": "Email",
-    "emailPlaceholder": "anda@contoh.com",
+    "emailPlaceholder": "anda{'@'}contoh.com",
     "phone": "Telepon",
     "phonePlaceholder": "+62 812 3456 7890",
     "optional": "opsional",

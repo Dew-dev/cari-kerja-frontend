@@ -1758,7 +1758,7 @@
     "yourName": "Ваше имя",
     "fullNamePlaceholder": "Полное имя",
     "email": "Email",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "you{'@'}example.com",
     "phone": "Телефон",
     "phonePlaceholder": "+62 812 3456 7890",
     "optional": "необязательно",
