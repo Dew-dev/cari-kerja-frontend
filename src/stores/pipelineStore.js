@@ -5,17 +5,55 @@ import {
   getPipelineAnalytics,
   getRecruiterJobPosts,
   getJobStages,
+  getJobApplicants,
   createJobStage,
   updateJobStage,
   reorderJobStages,
   deleteJobStage,
   moveApplicationStage,
 } from "@/services/pipeline.api";
-import { CANONICAL_STAGE_TYPES } from "@/constants/pipeline";
+import { CANONICAL_STAGE_TYPES, resolveStageTypeFromStatusName } from "@/constants/pipeline";
 
 // Backend caps `limit` at 100 per request (see candidate_pipeline query_model).
 const CANDIDATES_PAGE_LIMIT = 100;
 const MAX_CANDIDATE_PAGES = 20; // safety net: up to 2000 candidates on the board
+
+function buildFallbackStages() {
+  return CANONICAL_STAGE_TYPES.map((meta, index) => ({
+    id: `fallback-${meta.type}`,
+    name: meta.type.charAt(0).toUpperCase() + meta.type.slice(1),
+    stage_type: meta.type,
+    position: index,
+    is_system: true,
+    color: meta.color,
+    isFallback: true,
+  }));
+}
+
+function mapApplicantToCandidate(applicant, jobPostId, stages) {
+  const stageType = resolveStageTypeFromStatusName(applicant.status);
+  const stage =
+    stages.find((s) => s.stage_type === stageType) ||
+    stages.find((s) => s.stage_type === "applied") ||
+    stages[0];
+
+  return {
+    application_id: applicant.application_id,
+    worker_id: applicant.id || applicant.worker_id || applicant.user_id,
+    name: applicant.name,
+    email: applicant.email,
+    avatar_url: applicant.avatar_url || null,
+    job_post_id: jobPostId,
+    job_post_title: null,
+    stage_id: stage?.id ?? null,
+    stage_name: stage?.name || applicant.status,
+    stage_type: stage?.stage_type || stageType,
+    applied_at: applicant.applied_at,
+    updated_at: applicant.applied_at,
+    resume_url: applicant.resume_url,
+    cover_letter: applicant.cover_letter,
+  };
+}
 
 function sortStages(stages) {
   // Rejected (or any stage explicitly flagged) always rendered last,
@@ -71,6 +109,7 @@ export const usePipelineStore = defineStore("pipeline", () => {
         color: stage.color,
         is_system: !!stage.is_system,
         isVirtual: false,
+        isFallback: !!stage.isFallback,
       }));
     }
 
@@ -83,8 +122,17 @@ export const usePipelineStore = defineStore("pipeline", () => {
       color: meta.color,
       is_system: true,
       isVirtual: true,
+      isFallback: false,
     }));
   });
+
+  const usingApplicantsFallback = computed(
+    () => !!candidatesError.value && candidates.value.length > 0,
+  );
+
+  const usingStagesFallback = computed(() =>
+    activeJobStages.value.some((s) => s.isFallback),
+  );
 
   const filteredCandidates = computed(() => {
     const query = search.value.trim().toLowerCase();
@@ -129,6 +177,14 @@ export const usePipelineStore = defineStore("pipeline", () => {
       const key = isSingleJobMode.value ? String(row.stage_id) : row.stage_type;
       map[key] = (map[key] || 0) + row.count;
     }
+
+    // When analytics is unavailable (or empty), derive counts from the board
+    // so the summary strip matches the visible cards.
+    if (!Object.keys(map).length) {
+      for (const [key, list] of Object.entries(candidatesByColumn.value)) {
+        map[key] = list.length;
+      }
+    }
     return map;
   });
 
@@ -156,11 +212,16 @@ export const usePipelineStore = defineStore("pipeline", () => {
       const res = await getJobStages(jobPostId);
       const stages = res.data?.data || [];
       stagesByJobPost.value = { ...stagesByJobPost.value, [jobPostId]: stages };
+      stagesError.value = null;
       return stages;
     } catch (err) {
       console.error("[Pipeline] Failed to fetch stages for job post:", jobPostId, err);
       stagesError.value = err;
-      return stagesByJobPost.value[jobPostId] || [];
+      // Staging / older backends may not expose /stages yet — fall back to the
+      // canonical 6-column board so candidates can still be displayed.
+      const fallback = buildFallbackStages();
+      stagesByJobPost.value = { ...stagesByJobPost.value, [jobPostId]: fallback };
+      return fallback;
     } finally {
       loadingStages.value = { ...loadingStages.value, [jobPostId]: false };
     }
@@ -172,6 +233,13 @@ export const usePipelineStore = defineStore("pipeline", () => {
     if (search.value.trim()) params.search = search.value.trim();
     if (stageTypeFilter.value) params.stage_type = stageTypeFilter.value;
     return params;
+  }
+
+  async function fetchCandidatesFromApplicantsFallback(jobPostId) {
+    const stages = await fetchStagesForJobPost(jobPostId);
+    const res = await getJobApplicants(jobPostId);
+    const applicants = res.data?.data || [];
+    return applicants.map((a) => mapApplicantToCandidate(a, jobPostId, stages));
   }
 
   async function fetchCandidates() {
@@ -187,14 +255,28 @@ export const usePipelineStore = defineStore("pipeline", () => {
       let page = 1;
       let totalPage = 1;
 
-      do {
-        const res = await getPipelineCandidates({ ...filters, page, limit: CANDIDATES_PAGE_LIMIT });
-        allCandidates.push(...(res.data?.data || []));
-        totalPage = res.data?.meta?.totalPage || res.data?.meta?.total_page || 1;
-        page += 1;
-      } while (page <= totalPage && page <= MAX_CANDIDATE_PAGES);
+      try {
+        do {
+          const res = await getPipelineCandidates({ ...filters, page, limit: CANDIDATES_PAGE_LIMIT });
+          allCandidates.push(...(res.data?.data || []));
+          totalPage = res.data?.meta?.totalPage || res.data?.meta?.total_page || 1;
+          page += 1;
+        } while (page <= totalPage && page <= MAX_CANDIDATE_PAGES);
 
-      candidates.value = allCandidates;
+        candidates.value = allCandidates;
+      } catch (pipelineErr) {
+        // Dedicated pipeline endpoint is missing on some hosts (e.g. staging
+        // 404). Fall back to the per-job applicants list that already works.
+        console.warn("[Pipeline] pipeline/candidates unavailable, using applicants fallback:", pipelineErr);
+        candidatesError.value = pipelineErr;
+
+        if (isSingleJobMode.value && activeJobPostId.value) {
+          candidates.value = await fetchCandidatesFromApplicantsFallback(activeJobPostId.value);
+        } else {
+          candidates.value = [];
+          throw pipelineErr;
+        }
+      }
 
       // Warm the stage cache for every job post present in the result set —
       // needed to resolve drag & drop targets in global (cross-job) mode.
@@ -207,6 +289,7 @@ export const usePipelineStore = defineStore("pipeline", () => {
     } catch (err) {
       console.error("[Pipeline] Failed to fetch candidates:", err);
       candidatesError.value = err;
+      candidates.value = [];
     } finally {
       loadingCandidates.value = false;
     }
@@ -241,6 +324,13 @@ export const usePipelineStore = defineStore("pipeline", () => {
   async function moveCandidate(candidate, column) {
     const targetStageId = resolveTargetStageId(candidate, column);
     if (!targetStageId || targetStageId === candidate.stage_id) return;
+
+    // Fallback stages (used when /stages is unavailable) are not real DB ids.
+    if (String(targetStageId).startsWith("fallback-") || column.isFallback) {
+      const err = new Error("Pipeline stages API is unavailable on this environment");
+      err.code = "PIPELINE_STAGES_UNAVAILABLE";
+      throw err;
+    }
 
     const previous = {
       stage_id: candidate.stage_id,
@@ -330,6 +420,8 @@ export const usePipelineStore = defineStore("pipeline", () => {
     candidatesByColumn,
     stageCountsMap,
     isMoving,
+    usingApplicantsFallback,
+    usingStagesFallback,
     // Actions
     fetchJobPosts,
     fetchStagesForJobPost,

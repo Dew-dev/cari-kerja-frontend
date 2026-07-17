@@ -41,6 +41,36 @@ export function getStageTypeMeta(stageType) {
 }
 
 /**
+ * Map legacy global status names (APPLIED / IN_REVIEW / …) and the newer
+ * seeded display names (Applied / Screening / …) onto a canonical stage_type.
+ * Used when falling back to GET /job-posts/:id/applicants which only returns
+ * `status` as a name string.
+ */
+export function resolveStageTypeFromStatusName(statusName) {
+  const normalized = String(statusName || "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "_");
+
+  const legacyMap = {
+    APPLIED: "applied",
+    IN_REVIEW: "screening",
+    SCREENING: "screening",
+    SHORTLISTED: "interview",
+    INTERVIEW: "interview",
+    OFFER: "offer",
+    HIRED: "hired",
+    REJECTED: "rejected",
+  };
+
+  if (legacyMap[normalized]) return legacyMap[normalized];
+
+  const lower = String(statusName || "").trim().toLowerCase();
+  const byCanonical = CANONICAL_STAGE_TYPES.find((s) => s.type === lower);
+  return byCanonical?.type || "applied";
+}
+
+/**
  * Resolve the display color for a stage/column: prefer the explicit hex
  * color coming from the backend (`stage.color`), falling back to the
  * canonical color for its `stage_type` (e.g. freshly created custom stages

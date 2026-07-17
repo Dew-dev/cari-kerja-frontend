@@ -1913,7 +1913,8 @@
     "board": {
       "emptyColumn": "Tidak ada kandidat",
       "noStages": "Belum ada tahapan yang dikonfigurasi",
-      "moveFailed": "Gagal memindahkan kandidat"
+      "moveFailed": "Gagal memindahkan kandidat",
+      "fallbackHint": "API Pipeline belum tersedia di lingkungan ini — menampilkan pelamar lewat endpoint lama. Drag-and-drop dan kelola tahap membutuhkan modul pipeline backend yang sudah di-deploy."
     },
     "card": {
       "moveTo": "Pindahkan ke",

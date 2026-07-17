@@ -152,6 +152,13 @@ async function handleChat(candidate) {
         @reset="resetFilters"
       />
 
+      <div
+        v-if="pipelineStore.usingApplicantsFallback || pipelineStore.usingStagesFallback"
+        class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+      >
+        {{ t("pipeline.board.fallbackHint") }}
+      </div>
+
       <!-- Analytics -->
       <PipelineAnalytics
         :columns="pipelineStore.boardColumns"

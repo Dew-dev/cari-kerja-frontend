@@ -2200,7 +2200,8 @@
     "board": {
       "emptyColumn": "Nomzodlar yo'q",
       "noStages": "Hali bosqichlar sozlanmagan",
-      "moveFailed": "Nomzodni ko'chirish muvaffaqiyatsiz tugadi"
+      "moveFailed": "Nomzodni ko'chirish muvaffaqiyatsiz tugadi",
+      "fallbackHint": "Pipeline API ushbu muhitda hali mavjud emas — arizachilar eski endpoint orqali ko'rsatilmoqda. Drag-and-drop va bosqichlarni boshqarish uchun backend pipeline moduli deploy qilinishi kerak."
     },
     "card": {
       "moveTo": "Ko'chirish",

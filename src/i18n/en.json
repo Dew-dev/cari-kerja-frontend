@@ -2218,7 +2218,8 @@
     "board": {
       "emptyColumn": "No candidates",
       "noStages": "No stages configured yet",
-      "moveFailed": "Failed to move candidate"
+      "moveFailed": "Failed to move candidate",
+      "fallbackHint": "Pipeline API is not available on this environment yet — showing applicants via the legacy endpoint. Drag-and-drop and stage management need the backend pipeline module deployed."
     },
     "card": {
       "moveTo": "Move to",

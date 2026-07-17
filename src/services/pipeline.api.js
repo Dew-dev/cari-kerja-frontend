@@ -13,6 +13,14 @@ export function getPipelineCandidates(params = {}) {
   return api.get("/recruiter/pipeline/candidates", { params });
 }
 
+/**
+ * Legacy applicants list for a single job post. Used as a fallback when the
+ * dedicated pipeline candidates endpoint is not yet available on the API host.
+ */
+export function getJobApplicants(jobPostId) {
+  return api.get(`/job-posts/${jobPostId}/applicants`);
+}
+
 // ── Analytics ─────────────────────────────────────────────────────────────
 export function getPipelineAnalytics(params = {}) {
   return api.get("/recruiter/pipeline/analytics", { params });
