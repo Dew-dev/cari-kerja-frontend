@@ -5,6 +5,8 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import api from "@/services/api";
 import { startConversation } from "@/services/chat.api";
+import { getJobStages, moveApplicationStage } from "@/services/pipeline.api";
+import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
 import { resolveWorkerProfileId } from "@/utils/chatIdentity";
 
 const { t } = useI18n();
@@ -15,16 +17,12 @@ const applicants = ref([]);
 const title = ref("");
 const loading = ref(false);
 
-const APPLICATION_STATUSES = [
-  { id: 1, name: "APPLIED", color: "bg-blue-50 text-blue-700" },
-  { id: 2, name: "IN REVIEW", color: "bg-yellow-50 text-yellow-700" },
-  { id: 3, name: "SHORTLISTED", color: "bg-purple-50 text-purple-700" },
-  { id: 4, name: "REJECTED", color: "bg-red-50 text-red-700" },
-  { id: 5, name: "HIRED", color: "bg-green-50 text-green-700" },
-];
+// Stages are customizable per job post — fetched dynamically instead of
+// relying on a hardcoded/global status list (see GET /job-posts/:id/stages).
+const stages = ref([]);
 
-function getStatusMeta(statusName) {
-  return APPLICATION_STATUSES.find((s) => s.name === statusName);
+function getStageMeta(statusName) {
+  return stages.value.find((s) => s.name === statusName);
 }
 const openStatusDropdown = ref(null); // application_id
 const dropdownRef = ref(null);
@@ -47,39 +45,34 @@ onBeforeUnmount(() => {
   document.removeEventListener("click", handleClickOutside);
 });
 
-async function updateApplicantStatus(applicant, status) {
+async function updateApplicantStatus(applicant, stage) {
   try {
-    if (["HIRED", "REJECTED"].includes(applicant.status)) return;
+    const currentStage = getStageMeta(applicant.status);
+    if (currentStage && ["hired", "rejected"].includes(currentStage.stage_type)) return;
 
-    await api.put(
-      `/job-applications/${applicant.application_id}/status`,
-      {
-        application_status_id: status.id,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      },
-    );
+    await moveApplicationStage(applicant.application_id, stage.id);
 
     // optimistic update
-    applicant.status = status.name;
+    applicant.status = stage.name;
     openStatusDropdown.value = null;
   } catch (err) {
     console.error("Failed to update applicant status", err);
-    push.error(t("failedToUpdateStatus"));
+    push.error(err?.response?.data?.message || t("failedToUpdateStatus"));
   }
 }
 
 async function fetchApplicants() {
   try {
     loading.value = true;
-    const res = await api.get(`/job-posts/${route.params.id}/applicants`);
-    const job = await api.get(`/job-posts/${route.params.id}`);
+    const [res, job, stagesRes] = await Promise.all([
+      api.get(`/job-posts/${route.params.id}/applicants`),
+      api.get(`/job-posts/${route.params.id}`),
+      getJobStages(route.params.id),
+    ]);
     document.title = `Applicants for ${job.data?.data.title} - Recruiter`;
     applicants.value = res.data?.data || [];
     title.value = job.data?.data.title || "";
+    stages.value = stagesRes.data?.data || [];
   } catch (err) {
     console.error("Failed to fetch applicants", err);
   } finally {
@@ -206,7 +199,7 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
                 <!-- BADGE -->
                 <span
                   class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md cursor-pointer"
-                  :class="getStatusMeta(a.status)?.color"
+                  :style="getStageColorStyles(resolveStageColor(getStageMeta(a.status))).badge"
                   @click.stop="openStatusDropdown = a.application_id"
                 >
                   {{ a.status }}
@@ -219,13 +212,13 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
                   class="absolute left-0 top-0 mt-2 w-44 z-[9999] bg-white shadow-lg rounded-md z-50 overflow-auto max-h-25"
                 >
                   <div
-                    v-for="status in APPLICATION_STATUSES"
-                    :key="status.id"
-                    @click="updateApplicantStatus(a, status)"
+                    v-for="stage in stages"
+                    :key="stage.id"
+                    @click="updateApplicantStatus(a, stage)"
                     class="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer "
-                    :class="status.name === a.status && 'font-semibold'"
+                    :class="stage.name === a.status && 'font-semibold'"
                   >
-                    {{ status.name.replace("_", " ") }}
+                    {{ stage.name }}
                   </div>
                 </div>
               </td>

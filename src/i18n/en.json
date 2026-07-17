@@ -2189,5 +2189,74 @@
       "backPricing": "Back to Plans",
       "support": "Contact Support"
     }
+  },
+  "pipeline": {
+    "navLabel": "Pipeline",
+    "title": "Candidate Pipeline",
+    "subtitle": "Track and manage candidate progress across every stage of your hiring process",
+    "stages": {
+      "applied": "Applied",
+      "screening": "Screening",
+      "interview": "Interview",
+      "offer": "Offer",
+      "hired": "Hired",
+      "rejected": "Rejected",
+      "custom": "Custom"
+    },
+    "filters": {
+      "searchPlaceholder": "Search candidate name...",
+      "allPositions": "All Positions",
+      "reset": "Reset filters"
+    },
+    "analytics": {
+      "stageCounts": "Candidates per Stage",
+      "total": "{count} total candidates",
+      "conversionRate": "Conversion Rate",
+      "estimated": "estimated",
+      "estimatedHint": "Approximated from the current stage distribution until backend analytics are available"
+    },
+    "board": {
+      "emptyColumn": "No candidates",
+      "noStages": "No stages configured yet",
+      "moveFailed": "Failed to move candidate",
+      "fallbackHint": "Pipeline API is not available on this environment yet — showing applicants via the legacy endpoint. Drag-and-drop and stage management need the backend pipeline module deployed."
+    },
+    "card": {
+      "moveTo": "Move to",
+      "today": "Applied today",
+      "daysAgo": "Applied {count} day(s) ago"
+    },
+    "drawer": {
+      "title": "Candidate Detail"
+    },
+    "timeline": {
+      "title": "Activity Timeline",
+      "empty": "No activity yet",
+      "addNotePlaceholder": "Add an internal note or feedback...",
+      "addNote": "Add Note",
+      "saving": "Saving...",
+      "noteAdded": "Note added",
+      "noteFailed": "Failed to add note",
+      "fallbackHint": "Showing a simplified timeline while the full activity history is being connected.",
+      "events": {
+        "applied": "Applied for this position",
+        "note": "Note added"
+      }
+    },
+    "stageManager": {
+      "manageButton": "Manage Stages",
+      "selectOneJobHint": "Select a single position to customize its stages",
+      "title": "Manage Pipeline Stages",
+      "hint": "Drag to reorder. Double-click a stage name to rename it.",
+      "system": "Default",
+      "newStagePlaceholder": "New stage name...",
+      "add": "Add",
+      "created": "Stage created",
+      "renamed": "Stage renamed",
+      "deleted": "Stage deleted",
+      "confirmDelete": "Delete stage \"{name}\"? Candidates in this stage must be moved first.",
+      "actionFailed": "Action failed",
+      "deleteFailed": "Failed to delete stage"
+    }
   }
 }

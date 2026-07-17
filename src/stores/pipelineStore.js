@@ -1,0 +1,440 @@
+import { defineStore } from "pinia";
+import { ref, computed } from "vue";
+import {
+  getPipelineCandidates,
+  getPipelineAnalytics,
+  getRecruiterJobPosts,
+  getJobStages,
+  getJobApplicants,
+  createJobStage,
+  updateJobStage,
+  reorderJobStages,
+  deleteJobStage,
+  moveApplicationStage,
+} from "@/services/pipeline.api";
+import { CANONICAL_STAGE_TYPES, resolveStageTypeFromStatusName } from "@/constants/pipeline";
+
+// Backend caps `limit` at 100 per request (see candidate_pipeline query_model).
+const CANDIDATES_PAGE_LIMIT = 100;
+const MAX_CANDIDATE_PAGES = 20; // safety net: up to 2000 candidates on the board
+
+function buildFallbackStages() {
+  return CANONICAL_STAGE_TYPES.map((meta, index) => ({
+    id: `fallback-${meta.type}`,
+    name: meta.type.charAt(0).toUpperCase() + meta.type.slice(1),
+    stage_type: meta.type,
+    position: index,
+    is_system: true,
+    color: meta.color,
+    isFallback: true,
+  }));
+}
+
+function mapApplicantToCandidate(applicant, jobPostId, stages) {
+  const stageType = resolveStageTypeFromStatusName(applicant.status);
+  const stage =
+    stages.find((s) => s.stage_type === stageType) ||
+    stages.find((s) => s.stage_type === "applied") ||
+    stages[0];
+
+  return {
+    application_id: applicant.application_id,
+    worker_id: applicant.id || applicant.worker_id || applicant.user_id,
+    name: applicant.name,
+    email: applicant.email,
+    avatar_url: applicant.avatar_url || null,
+    job_post_id: jobPostId,
+    job_post_title: null,
+    stage_id: stage?.id ?? null,
+    stage_name: stage?.name || applicant.status,
+    stage_type: stage?.stage_type || stageType,
+    applied_at: applicant.applied_at,
+    updated_at: applicant.applied_at,
+    resume_url: applicant.resume_url,
+    cover_letter: applicant.cover_letter,
+  };
+}
+
+function sortStages(stages) {
+  // Rejected (or any stage explicitly flagged) always rendered last,
+  // everything else follows its own `position`.
+  const isRejected = (s) => s.stage_type === "rejected";
+  return [...stages].sort((a, b) => {
+    if (isRejected(a) !== isRejected(b)) return isRejected(a) ? 1 : -1;
+    return (a.position ?? 0) - (b.position ?? 0);
+  });
+}
+
+export const usePipelineStore = defineStore("pipeline", () => {
+  // ── State ──────────────────────────────────────────────────────────────
+  const jobPosts = ref([]);
+  const loadingJobPosts = ref(false);
+
+  const selectedJobPostIds = ref([]); // empty => global (all jobs)
+  const search = ref("");
+  const stageTypeFilter = ref(null);
+
+  const candidates = ref([]);
+  const loadingCandidates = ref(false);
+  const candidatesError = ref(null);
+
+  const stagesByJobPost = ref({}); // { [jobPostId]: Stage[] }
+  const loadingStages = ref({}); // { [jobPostId]: boolean }
+  const stagesError = ref(null);
+
+  const analytics = ref({ stage_counts: [], conversion_rates: [] });
+  const loadingAnalytics = ref(false);
+
+  const movingApplicationIds = ref(new Set());
+
+  // ── Getters ────────────────────────────────────────────────────────────
+  const isSingleJobMode = computed(() => selectedJobPostIds.value.length === 1);
+  const activeJobPostId = computed(() => (isSingleJobMode.value ? selectedJobPostIds.value[0] : null));
+
+  const activeJobStages = computed(() => {
+    if (!isSingleJobMode.value) return [];
+    return sortStages(stagesByJobPost.value[activeJobPostId.value] || []);
+  });
+
+  // Columns rendered on the board — either the canonical cross-job
+  // categories (global mode) or the real, custom stages of the single
+  // selected job post (per-job mode).
+  const boardColumns = computed(() => {
+    if (isSingleJobMode.value) {
+      return activeJobStages.value.map((stage) => ({
+        key: String(stage.id),
+        id: stage.id,
+        name: stage.name,
+        stage_type: stage.stage_type,
+        color: stage.color,
+        is_system: !!stage.is_system,
+        isVirtual: false,
+        isFallback: !!stage.isFallback,
+      }));
+    }
+
+    return CANONICAL_STAGE_TYPES.map((meta) => ({
+      key: meta.type,
+      id: null,
+      name: null,
+      stage_type: meta.type,
+      i18nKey: meta.i18nKey,
+      color: meta.color,
+      is_system: true,
+      isVirtual: true,
+      isFallback: false,
+    }));
+  });
+
+  const usingApplicantsFallback = computed(
+    () => !!candidatesError.value && candidates.value.length > 0,
+  );
+
+  const usingStagesFallback = computed(() =>
+    activeJobStages.value.some((s) => s.isFallback),
+  );
+
+  const filteredCandidates = computed(() => {
+    const query = search.value.trim().toLowerCase();
+    if (!query) return candidates.value;
+    return candidates.value.filter((c) => (c.name || "").toLowerCase().includes(query));
+  });
+
+  const candidatesByColumn = computed(() => {
+    const map = {};
+    for (const col of boardColumns.value) map[col.key] = [];
+
+    // In per-job mode, a candidate's `stage_id` should always match one of
+    // this job's own stages. It can fail to match for legacy applications
+    // that still carry the old global status template id (from before
+    // stages became per-job) — without a fallback those candidates would
+    // silently vanish from every column. Reconcile by `stage_type` first,
+    // then fall back to the job's first (lowest position) stage.
+    const columnKeyByStageType = {};
+    if (isSingleJobMode.value) {
+      for (const col of boardColumns.value) {
+        if (!(col.stage_type in columnKeyByStageType)) columnKeyByStageType[col.stage_type] = col.key;
+      }
+    }
+
+    for (const candidate of filteredCandidates.value) {
+      let key = isSingleJobMode.value ? String(candidate.stage_id) : candidate.stage_type;
+
+      if (isSingleJobMode.value && !(key in map)) {
+        key = columnKeyByStageType[candidate.stage_type] ?? boardColumns.value[0]?.key;
+      }
+
+      if (key === undefined || key === null) continue;
+      if (!map[key]) map[key] = [];
+      map[key].push(candidate);
+    }
+    return map;
+  });
+
+  const stageCountsMap = computed(() => {
+    const map = {};
+    for (const row of analytics.value?.stage_counts || []) {
+      const key = isSingleJobMode.value ? String(row.stage_id) : row.stage_type;
+      map[key] = (map[key] || 0) + row.count;
+    }
+
+    // When analytics is unavailable (or empty), derive counts from the board
+    // so the summary strip matches the visible cards.
+    if (!Object.keys(map).length) {
+      for (const [key, list] of Object.entries(candidatesByColumn.value)) {
+        map[key] = list.length;
+      }
+    }
+    return map;
+  });
+
+  const isMoving = computed(() => (applicationId) => movingApplicationIds.value.has(applicationId));
+
+  // ── Actions ────────────────────────────────────────────────────────────
+  async function fetchJobPosts() {
+    try {
+      loadingJobPosts.value = true;
+      const res = await getRecruiterJobPosts({ limit: 100 });
+      jobPosts.value = res.data?.data || [];
+    } catch (err) {
+      console.error("[Pipeline] Failed to fetch job posts:", err);
+    } finally {
+      loadingJobPosts.value = false;
+    }
+  }
+
+  async function fetchStagesForJobPost(jobPostId, { force = false } = {}) {
+    if (!jobPostId) return [];
+    if (!force && stagesByJobPost.value[jobPostId]) return stagesByJobPost.value[jobPostId];
+
+    try {
+      loadingStages.value = { ...loadingStages.value, [jobPostId]: true };
+      const res = await getJobStages(jobPostId);
+      const stages = res.data?.data || [];
+      stagesByJobPost.value = { ...stagesByJobPost.value, [jobPostId]: stages };
+      stagesError.value = null;
+      return stages;
+    } catch (err) {
+      console.error("[Pipeline] Failed to fetch stages for job post:", jobPostId, err);
+      stagesError.value = err;
+      // Staging / older backends may not expose /stages yet — fall back to the
+      // canonical 6-column board so candidates can still be displayed.
+      const fallback = buildFallbackStages();
+      stagesByJobPost.value = { ...stagesByJobPost.value, [jobPostId]: fallback };
+      return fallback;
+    } finally {
+      loadingStages.value = { ...loadingStages.value, [jobPostId]: false };
+    }
+  }
+
+  function buildFilterParams() {
+    const params = {};
+    if (selectedJobPostIds.value.length) params.job_post_id = selectedJobPostIds.value.join(",");
+    if (search.value.trim()) params.search = search.value.trim();
+    if (stageTypeFilter.value) params.stage_type = stageTypeFilter.value;
+    return params;
+  }
+
+  async function fetchCandidatesFromApplicantsFallback(jobPostId) {
+    const stages = await fetchStagesForJobPost(jobPostId);
+    const res = await getJobApplicants(jobPostId);
+    const applicants = res.data?.data || [];
+    return applicants.map((a) => mapApplicantToCandidate(a, jobPostId, stages));
+  }
+
+  async function fetchCandidates() {
+    try {
+      loadingCandidates.value = true;
+      candidatesError.value = null;
+
+      // The backend caps `limit` at 100 per request, so the board is
+      // populated by walking through pages until everything is fetched
+      // (bounded by MAX_CANDIDATE_PAGES as a sane safety net).
+      const filters = buildFilterParams();
+      const allCandidates = [];
+      let page = 1;
+      let totalPage = 1;
+
+      try {
+        do {
+          const res = await getPipelineCandidates({ ...filters, page, limit: CANDIDATES_PAGE_LIMIT });
+          allCandidates.push(...(res.data?.data || []));
+          totalPage = res.data?.meta?.totalPage || res.data?.meta?.total_page || 1;
+          page += 1;
+        } while (page <= totalPage && page <= MAX_CANDIDATE_PAGES);
+
+        candidates.value = allCandidates;
+      } catch (pipelineErr) {
+        // Dedicated pipeline endpoint is missing on some hosts (e.g. staging
+        // 404). Fall back to the per-job applicants list that already works.
+        console.warn("[Pipeline] pipeline/candidates unavailable, using applicants fallback:", pipelineErr);
+        candidatesError.value = pipelineErr;
+
+        if (isSingleJobMode.value && activeJobPostId.value) {
+          candidates.value = await fetchCandidatesFromApplicantsFallback(activeJobPostId.value);
+        } else {
+          candidates.value = [];
+          throw pipelineErr;
+        }
+      }
+
+      // Warm the stage cache for every job post present in the result set —
+      // needed to resolve drag & drop targets in global (cross-job) mode.
+      const uniqueJobPostIds = [...new Set(candidates.value.map((c) => c.job_post_id).filter(Boolean))];
+      await Promise.all(uniqueJobPostIds.map((id) => fetchStagesForJobPost(id)));
+
+      if (isSingleJobMode.value) {
+        await fetchStagesForJobPost(activeJobPostId.value);
+      }
+    } catch (err) {
+      console.error("[Pipeline] Failed to fetch candidates:", err);
+      candidatesError.value = err;
+      candidates.value = [];
+    } finally {
+      loadingCandidates.value = false;
+    }
+  }
+
+  async function fetchAnalytics() {
+    try {
+      loadingAnalytics.value = true;
+      const res = await getPipelineAnalytics(buildFilterParams());
+      analytics.value = res.data?.data || { stage_counts: [], conversion_rates: [] };
+    } catch (err) {
+      console.error("[Pipeline] Failed to fetch analytics:", err);
+    } finally {
+      loadingAnalytics.value = false;
+    }
+  }
+
+  async function refreshBoard() {
+    await Promise.all([fetchCandidates(), fetchAnalytics()]);
+  }
+
+  function resolveTargetStageId(candidate, column) {
+    if (!column.isVirtual) return column.id;
+
+    // Global mode: find the equivalent stage (by stage_type) within the
+    // candidate's own job post pipeline.
+    const jobStages = stagesByJobPost.value[candidate.job_post_id] || [];
+    const match = jobStages.find((s) => s.stage_type === column.stage_type);
+    return match ? match.id : null;
+  }
+
+  async function moveCandidate(candidate, column) {
+    const targetStageId = resolveTargetStageId(candidate, column);
+    if (!targetStageId || targetStageId === candidate.stage_id) return;
+
+    // Fallback stages (used when /stages is unavailable) are not real DB ids.
+    if (String(targetStageId).startsWith("fallback-") || column.isFallback) {
+      const err = new Error("Pipeline stages API is unavailable on this environment");
+      err.code = "PIPELINE_STAGES_UNAVAILABLE";
+      throw err;
+    }
+
+    const previous = {
+      stage_id: candidate.stage_id,
+      stage_name: candidate.stage_name,
+      stage_type: candidate.stage_type,
+    };
+
+    // Optimistic update
+    candidate.stage_id = targetStageId;
+    candidate.stage_type = column.stage_type;
+    if (!column.isVirtual) candidate.stage_name = column.name;
+
+    movingApplicationIds.value.add(candidate.application_id);
+    try {
+      await moveApplicationStage(candidate.application_id, targetStageId);
+      fetchAnalytics(); // refresh counts/conversion rate in the background
+    } catch (err) {
+      console.error("[Pipeline] Failed to move candidate:", err);
+      candidate.stage_id = previous.stage_id;
+      candidate.stage_name = previous.stage_name;
+      candidate.stage_type = previous.stage_type;
+      throw err;
+    } finally {
+      movingApplicationIds.value.delete(candidate.application_id);
+    }
+  }
+
+  async function createStage(jobPostId, payload) {
+    const res = await createJobStage(jobPostId, payload);
+    await fetchStagesForJobPost(jobPostId, { force: true });
+    return res.data?.data;
+  }
+
+  async function renameStage(jobPostId, stageId, payload) {
+    const res = await updateJobStage(jobPostId, stageId, payload);
+    await fetchStagesForJobPost(jobPostId, { force: true });
+    return res.data?.data;
+  }
+
+  async function persistStageOrder(jobPostId, orderedStages) {
+    // Optimistic reorder in cache before the request resolves.
+    stagesByJobPost.value = { ...stagesByJobPost.value, [jobPostId]: orderedStages };
+    await reorderJobStages(
+      jobPostId,
+      orderedStages.map((s, index) => ({ id: s.id, position: index })),
+    );
+    await fetchStagesForJobPost(jobPostId, { force: true });
+  }
+
+  async function removeStage(jobPostId, stageId) {
+    await deleteJobStage(jobPostId, stageId);
+    await fetchStagesForJobPost(jobPostId, { force: true });
+  }
+
+  function setSelectedJobPostIds(ids) {
+    selectedJobPostIds.value = ids;
+  }
+
+  function setSearch(value) {
+    search.value = value;
+  }
+
+  function setStageTypeFilter(value) {
+    stageTypeFilter.value = value;
+  }
+
+  return {
+    // State
+    jobPosts,
+    loadingJobPosts,
+    selectedJobPostIds,
+    search,
+    stageTypeFilter,
+    candidates,
+    loadingCandidates,
+    candidatesError,
+    stagesByJobPost,
+    loadingStages,
+    analytics,
+    loadingAnalytics,
+    // Getters
+    isSingleJobMode,
+    activeJobPostId,
+    activeJobStages,
+    boardColumns,
+    filteredCandidates,
+    candidatesByColumn,
+    stageCountsMap,
+    isMoving,
+    usingApplicantsFallback,
+    usingStagesFallback,
+    // Actions
+    fetchJobPosts,
+    fetchStagesForJobPost,
+    fetchCandidates,
+    fetchAnalytics,
+    refreshBoard,
+    moveCandidate,
+    createStage,
+    renameStage,
+    persistStageOrder,
+    removeStage,
+    setSelectedJobPostIds,
+    setSearch,
+    setStageTypeFilter,
+  };
+});
