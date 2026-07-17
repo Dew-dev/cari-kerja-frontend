@@ -1379,89 +1379,106 @@
     }
   },
   "privacyPolicy": {
+    "pageTitle": "Cari Kerja - Kebijakan Privasi",
     "title": "Kebijakan Privasi",
-    "lastUpdated": "Terakhir diperbarui: 4 Februari 2026",
+    "subtitle": "Cara kami mengumpulkan, menggunakan, dan melindungi data pribadi Anda saat menggunakan Cari Kerja.",
+    "lastUpdated": "Terakhir diperbarui: 17 Juli 2026",
+    "onThisPage": "Di halaman ini",
+    "toc": {
+      "introduction": "Pendahuluan",
+      "informationCollection": "Informasi yang dikumpulkan",
+      "useOfData": "Penggunaan data",
+      "security": "Keamanan data",
+      "cookies": "Cookie",
+      "thirdPartyAccess": "Pihak ketiga",
+      "disclosure": "Pengungkapan",
+      "retention": "Retensi data",
+      "rights": "Hak Anda",
+      "changes": "Perubahan kebijakan",
+      "contact": "Hubungi kami"
+    },
     "introduction": {
       "title": "1. Pendahuluan",
-      "content": "Cari Kerja menjelaskan kebijakan terkait pengumpulan, penggunaan, dan pengungkapan data pribadi saat Anda menggunakan layanan kami."
+      "content": "Cari Kerja (\"kami\") mengoperasikan portal lowongan kerja Cari Kerja. Halaman ini menjelaskan kebijakan terkait pengumpulan, penggunaan, dan pengungkapan data pribadi saat Anda menggunakan layanan kami, serta pilihan yang Anda miliki terkait data tersebut."
     },
     "informationCollection": {
       "title": "2. Pengumpulan & Penggunaan Informasi",
-      "intro": "Kami mengumpulkan beberapa jenis informasi:",
+      "intro": "Kami mengumpulkan beberapa jenis informasi untuk menyediakan dan meningkatkan layanan:",
       "items": {
-        "accountTitle": "Informasi Akun:",
-        "account": "nama, email, telepon, dan kata sandi",
-        "profileTitle": "Informasi Profil:",
-        "profile": "CV, pengalaman kerja, pendidikan, dan keahlian",
-        "applicationTitle": "Data Lamaran:",
-        "application": "lamaran kerja, surat lamaran, dan riwayat",
-        "technicalTitle": "Data Teknis:",
-        "technical": "alamat IP, jenis browser, halaman yang dikunjungi",
-        "communicationTitle": "Data Komunikasi:",
+        "accountTitle": "Informasi akun:",
+        "account": "nama, alamat email, nomor telepon, dan kata sandi",
+        "profileTitle": "Informasi profil:",
+        "profile": "CV, pengalaman kerja, pendidikan, keterampilan, dan kualifikasi",
+        "applicationTitle": "Data lamaran:",
+        "application": "lamaran kerja, surat lamaran, dan riwayat lamaran",
+        "technicalTitle": "Data teknis:",
+        "technical": "alamat IP, jenis browser, halaman yang dikunjungi, dan waktu di halaman",
+        "communicationTitle": "Data komunikasi:",
         "communication": "pesan antara pencari kerja dan perekrut"
       }
     },
     "useOfData": {
       "title": "3. Penggunaan Data",
-      "content": "Kami menggunakan data untuk menyediakan layanan, memberi notifikasi, dukungan pelanggan, dan peningkatan layanan.",
+      "content": "Kami menggunakan data yang dikumpulkan untuk berbagai tujuan, termasuk menyediakan dan memelihara layanan, memberi notifikasi perubahan, dukungan pelanggan, menganalisis dan meningkatkan layanan, memantau penggunaan, serta menangani masalah teknis.",
       "items": {
         "provide": "Menyediakan dan memelihara layanan",
-        "notify": "Memberi notifikasi perubahan",
-        "support": "Dukungan pelanggan",
-        "analysis": "Analisis dan peningkatan layanan",
-        "monitor": "Memantau penggunaan",
-        "technical": "Mendeteksi masalah teknis",
-        "marketing": "Komunikasi promosi (dengan persetujuan)"
+        "notify": "Memberi notifikasi tentang perubahan layanan",
+        "support": "Memberikan dukungan pelanggan",
+        "analysis": "Mengumpulkan analisis untuk meningkatkan layanan",
+        "monitor": "Memantau penggunaan layanan",
+        "technical": "Mendeteksi, mencegah, dan menangani masalah teknis",
+        "marketing": "Mengirim komunikasi promosi (dengan persetujuan Anda)"
       }
     },
     "security": {
       "title": "4. Keamanan Data",
-      "content": "Keamanan data Anda penting bagi kami. Tidak ada metode transmisi yang 100% aman."
+      "content": "Keamanan data Anda penting bagi kami. Meskipun kami berupaya menggunakan cara yang wajar secara komersial untuk melindungi data pribadi Anda, tidak ada metode transmisi melalui Internet atau penyimpanan elektronik yang 100% aman."
     },
     "cookies": {
       "title": "5. Cookie",
-      "content": "Kami menggunakan cookie untuk meningkatkan pengalaman. Beberapa fitur mungkin tidak berfungsi tanpa cookie."
+      "content": "Kami menggunakan cookie untuk meningkatkan pengalaman Anda di platform. Anda dapat mengatur browser untuk menolak semua cookie atau memberi tahu saat cookie dikirim. Jika cookie tidak diterima, beberapa bagian layanan mungkin tidak berfungsi."
     },
     "thirdPartyAccess": {
       "title": "6. Akses Pihak Ketiga",
-      "content": "Kami tidak menjual atau menyewakan data pribadi Anda kepada pihak ketiga."
+      "content": "Kami dapat membagikan informasi Anda kepada pihak ketiga hanya dengan cara yang dijelaskan dalam kebijakan privasi ini. Kami tidak menjual, menukar, atau menyewakan data pribadi Anda kepada pihak ketiga. Data agregat dan anonim dapat dibagikan dengan mitra untuk penelitian dan pemasaran."
     },
     "disclosure": {
       "title": "7. Pengungkapan Data",
-      "intro": "Kami dapat mengungkapkan data dalam keadaan berikut:",
+      "intro": "Kami dapat mengungkapkan data pribadi Anda dalam keadaan berikut:",
       "items": {
-        "byLaw": "Berdasarkan hukum",
-        "protect": "Melindungi hak perusahaan",
-        "merger": "Kasus merger atau akuisisi",
-        "consent": "Dengan persetujuan Anda"
+        "byLaw": "Berdasarkan hukum atau proses hukum yang berlaku",
+        "protect": "Untuk melindungi hak, privasi, keamanan, atau properti perusahaan kami",
+        "merger": "Dalam kasus merger, akuisisi, atau penjualan aset",
+        "consent": "Dengan persetujuan eksplisit Anda untuk tujuan lain"
       }
     },
     "retention": {
       "title": "8. Retensi Data",
-      "content": "Kami menyimpan data hanya selama diperlukan. Anda bisa meminta penghapusan akun kapan saja."
+      "content": "Kami menyimpan data pribadi Anda hanya selama diperlukan untuk menyediakan layanan dan memenuhi tujuan yang diuraikan dalam kebijakan ini. Anda dapat meminta penghapusan akun dan data terkait kapan saja."
     },
     "rights": {
       "title": "9. Hak Data Anda",
-      "intro": "Hak Anda terkait data pribadi:",
+      "intro": "Anda memiliki hak berikut terkait data pribadi Anda:",
       "items": {
-        "access": "Mengakses data pribadi",
-        "correct": "Memperbaiki data tidak akurat",
-        "delete": "Meminta penghapusan data",
-        "optOut": "Menolak komunikasi pemasaran",
-        "portable": "Meminta salinan dalam format portabel"
+        "access": "Hak untuk mengakses data pribadi Anda",
+        "correct": "Hak untuk memperbaiki data yang tidak akurat",
+        "delete": "Hak untuk meminta penghapusan data Anda",
+        "optOut": "Hak untuk menolak komunikasi pemasaran",
+        "portable": "Hak untuk meminta salinan data dalam format portabel"
       }
     },
     "changes": {
       "title": "10. Perubahan Kebijakan",
-      "content": "Kami dapat memperbarui kebijakan ini dan akan memberi tahu tentang perubahan signifikan."
+      "content": "Kami dapat memperbarui kebijakan privasi ini dari waktu ke waktu. Perubahan signifikan akan diumumkan dengan memublikasikan kebijakan baru di halaman ini dan memperbarui tanggal \"Terakhir diperbarui\"."
     },
     "contact": {
       "title": "11. Hubungi Kami",
-      "intro": "Pertanyaan tentang kebijakan privasi:",
+      "intro": "Jika Anda memiliki pertanyaan tentang kebijakan privasi ini, silakan hubungi kami di:",
       "emailLabel": "Email",
-      "email": "privacy@cari-kerja.id",
+      "email": "privacy{'@'}cari-kerja.co.id",
       "addressLabel": "Alamat",
-      "address": "Jakarta, Indonesia"
+      "address": "Jakarta, Indonesia",
+      "contactPageLink": "Kunjungi halaman kontak kami"
     }
   },
   "termsOfService": {
