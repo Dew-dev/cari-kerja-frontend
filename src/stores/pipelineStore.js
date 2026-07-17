@@ -13,6 +13,10 @@ import {
 } from "@/services/pipeline.api";
 import { CANONICAL_STAGE_TYPES } from "@/constants/pipeline";
 
+// Backend caps `limit` at 100 per request (see candidate_pipeline query_model).
+const CANDIDATES_PAGE_LIMIT = 100;
+const MAX_CANDIDATE_PAGES = 20; // safety net: up to 2000 candidates on the board
+
 function sortStages(stages) {
   // Rejected (or any stage explicitly flagged) always rendered last,
   // everything else follows its own `position`.
@@ -155,9 +159,23 @@ export const usePipelineStore = defineStore("pipeline", () => {
     try {
       loadingCandidates.value = true;
       candidatesError.value = null;
-      const params = { ...buildFilterParams(), limit: 500 };
-      const res = await getPipelineCandidates(params);
-      candidates.value = res.data?.data || [];
+
+      // The backend caps `limit` at 100 per request, so the board is
+      // populated by walking through pages until everything is fetched
+      // (bounded by MAX_CANDIDATE_PAGES as a sane safety net).
+      const filters = buildFilterParams();
+      const allCandidates = [];
+      let page = 1;
+      let totalPage = 1;
+
+      do {
+        const res = await getPipelineCandidates({ ...filters, page, limit: CANDIDATES_PAGE_LIMIT });
+        allCandidates.push(...(res.data?.data || []));
+        totalPage = res.data?.meta?.totalPage || res.data?.meta?.total_page || 1;
+        page += 1;
+      } while (page <= totalPage && page <= MAX_CANDIDATE_PAGES);
+
+      candidates.value = allCandidates;
 
       // Warm the stage cache for every job post present in the result set —
       // needed to resolve drag & drop targets in global (cross-job) mode.
