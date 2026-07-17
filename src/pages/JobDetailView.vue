@@ -711,7 +711,12 @@ import {
   getJobPosts,
 } from "../services/jobposts.api";
 // import api from "../services/api";
-import { saveJob, removeSavedJob } from "../services/saved-jobs.api";
+import {
+  saveJob,
+  removeSavedJob,
+  removeSavedJobByJobPostId,
+  isSavedJobId,
+} from "../services/saved-jobs.api";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { useAuthStore } from "../stores/authStore";
@@ -746,6 +751,7 @@ const applicationForm = ref({
 });
 
 const isSaved = ref(false);
+const savedJobId = ref(null);
 const isSavingJob = ref(false);
 
 // Computed
@@ -962,8 +968,15 @@ const loadJobDetail = async () => {
     const response = await jobDetailService.fetchJobDetail(jobId.value);
     job.value = response.data;
 
-    // Check if saved dari response data
-    isSaved.value = job.value?.saved_id || false;
+    // saved_id seharusnya UUID saved_jobs.id; backend saat ini bisa kirim boolean EXISTS
+    const rawSavedId = job.value?.saved_id;
+    if (isSavedJobId(rawSavedId)) {
+      savedJobId.value = rawSavedId;
+      isSaved.value = true;
+    } else {
+      savedJobId.value = null;
+      isSaved.value = Boolean(rawSavedId);
+    }
     console.log("Job detail loaded:", job.value);
     // Check if user has already applied
     if (auth.isLoggedIn && auth.role === "user") {
@@ -1183,15 +1196,21 @@ const handleSaveJob = async () => {
 
   try {
     isSavingJob.value = true;
-    
+
     if (isSaved.value) {
-      // Remove from saved jobs
-      await removeSavedJob(jobId.value);
+      // DELETE butuh saved_jobs.id, bukan job_post_id
+      if (savedJobId.value) {
+        await removeSavedJob(savedJobId.value);
+      } else {
+        await removeSavedJobByJobPostId(jobId.value);
+      }
+      savedJobId.value = null;
       isSaved.value = false;
       push.success(t("jobRemovedFromSaved"));
     } else {
-      // Save job
-      await saveJob(jobId.value);
+      // POST pakai job_post_id; response.data.id = saved_jobs.id
+      const res = await saveJob(jobId.value);
+      savedJobId.value = res?.data?.id ?? null;
       isSaved.value = true;
       push.success(t("jobSavedSuccessfully"));
     }
@@ -1207,11 +1226,8 @@ const handleSaveJob = async () => {
 const checkIfSaved = async () => {
   if (!auth.isLoggedIn) {
     isSaved.value = false;
-    return;
+    savedJobId.value = null;
   }
-
-  // Sudah di-set dari job.saved saat load job detail
-  // Jadi tidak perlu API call lagi
 };
 
 const viewCompanyProfile = () => {

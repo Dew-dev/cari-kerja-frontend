@@ -875,19 +875,19 @@ async function loadSavedJobs() {
 }
 
 async function handleRemoveSaved(job) {
-  const jobId = job?.id || job?.job_id || job?.job_post_id;
-  if (!jobId) return;
+  // Dari GET /workers/saved-jobs/self: id = saved_jobs.id, job_post_id = job post
+  // DELETE /saved-jobs/:id butuh saved_jobs.id
+  const savedJobId = job?.id;
+  if (!savedJobId) return;
 
   try {
-    await removeSavedJob(jobId);
-    savedJobs.value = savedJobs.value.filter((item) => {
-      const itemJob = item?.job || item?.job_post || item;
-      const itemId = itemJob?.id || itemJob?.job_id || itemJob?.job_post_id;
-      return itemId !== jobId;
-    });
-       push.success(t('profile.removedFromSavedJobs'));
+    await removeSavedJob(savedJobId);
+    savedJobs.value = savedJobs.value.filter((item) => item?.id !== savedJobId);
+    push.success(t("profile.removedFromSavedJobs"));
   } catch (err) {
-       push.error(err?.response?.data?.message || t('profile.failedToRemoveSavedJob'));
+    push.error(
+      err?.response?.data?.message || t("profile.failedToRemoveSavedJob"),
+    );
   }
 }
 
