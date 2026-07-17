@@ -1,10 +1,11 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { usePipelineStore } from "@/stores/pipelineStore";
 import { startConversation } from "@/services/chat.api";
+import api from "@/services/api";
 
 import PipelineFilters from "@/components/recruiter/pipeline/PipelineFilters.vue";
 import PipelineAnalytics from "@/components/recruiter/pipeline/PipelineAnalytics.vue";
@@ -13,34 +14,50 @@ import CandidateDetailDrawer from "@/components/recruiter/pipeline/CandidateDeta
 import StageManagerModal from "@/components/recruiter/pipeline/StageManagerModal.vue";
 
 const { t } = useI18n();
+const route = useRoute();
 const router = useRouter();
 const pipelineStore = usePipelineStore();
+
+// This page always lives under a specific job post (Vacancies > Active Jobs
+// > Candidate Pipeline), so the board is permanently scoped to that job —
+// there is no cross-job/global view here.
+const jobPostId = computed(() => route.params.id);
+const jobTitle = ref("");
+const loadingJob = ref(false);
 
 const drawerCandidate = ref(null);
 const drawerOpen = ref(false);
 const stageManagerOpen = ref(false);
 const chattingId = ref(null);
 
-onMounted(async () => {
-  document.title = `${t("pipeline.title")} - Recruiter`;
-  await pipelineStore.fetchJobPosts();
-  await pipelineStore.refreshBoard();
-});
+async function loadJob() {
+  try {
+    loadingJob.value = true;
+    const res = await api.get(`/job-posts/${jobPostId.value}`);
+    jobTitle.value = res.data?.data?.title || "";
+    document.title = `${t("pipeline.title")} - ${jobTitle.value} - Recruiter`;
+  } catch (err) {
+    console.error("[Pipeline] Failed to fetch job post:", err);
+  } finally {
+    loadingJob.value = false;
+  }
+}
 
-watch(
-  () => [pipelineStore.selectedJobPostIds.slice(), pipelineStore.stageTypeFilter],
-  () => pipelineStore.refreshBoard(),
-  { deep: true },
-);
+async function loadForJob() {
+  pipelineStore.setSelectedJobPostIds([jobPostId.value]);
+  await Promise.all([loadJob(), pipelineStore.refreshBoard()]);
+}
+
+onMounted(loadForJob);
+
+watch(jobPostId, loadForJob);
+
+watch(() => pipelineStore.stageTypeFilter, () => pipelineStore.refreshBoard());
 
 watch(() => pipelineStore.search, () => pipelineStore.fetchCandidates());
 
 function handleSearchUpdate(value) {
   pipelineStore.setSearch(value);
-}
-
-function handlePositionUpdate(ids) {
-  pipelineStore.setSelectedJobPostIds(ids);
 }
 
 function handleStageTypeUpdate(type) {
@@ -49,7 +66,6 @@ function handleStageTypeUpdate(type) {
 
 function resetFilters() {
   pipelineStore.setSearch("");
-  pipelineStore.setSelectedJobPostIds([]);
   pipelineStore.setStageTypeFilter(null);
 }
 
@@ -93,7 +109,6 @@ async function handleChat(candidate) {
   }
 }
 
-const showManageStagesButton = computed(() => pipelineStore.isSingleJobMode);
 </script>
 
 <template>
@@ -102,12 +117,20 @@ const showManageStagesButton = computed(() => pipelineStore.isSingleJobMode);
       <!-- Header -->
       <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div>
+          <button
+            @click="router.push('/recruiter/jobs')"
+            class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mb-1"
+          >
+            <i class="pi pi-arrow-left text-xs"></i>
+            {{ t("vacancies") }}
+          </button>
           <h1 class="text-2xl font-bold text-gray-900">{{ t("pipeline.title") }}</h1>
-          <p class="text-sm text-gray-600 mt-1">{{ t("pipeline.subtitle") }}</p>
+          <p class="text-sm text-gray-600 mt-1">
+            {{ loadingJob ? t("pipeline.subtitle") : jobTitle }}
+          </p>
         </div>
 
         <button
-          v-if="showManageStagesButton"
           @click="stageManagerOpen = true"
           class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors w-full sm:w-auto justify-center"
         >
@@ -117,20 +140,14 @@ const showManageStagesButton = computed(() => pipelineStore.isSingleJobMode);
           </svg>
           {{ t("pipeline.stageManager.manageButton") }}
         </button>
-        <p v-else class="text-xs text-gray-400 italic">
-          {{ t("pipeline.stageManager.selectOneJobHint") }}
-        </p>
       </div>
 
-      <!-- Filters -->
+      <!-- Filters (scoped to this job — no cross-job position picker) -->
       <PipelineFilters
-        :job-posts="pipelineStore.jobPosts"
-        :selected-job-post-ids="pipelineStore.selectedJobPostIds"
+        locked-position
         :search="pipelineStore.search"
         :stage-type-filter="pipelineStore.stageTypeFilter"
-        :loading-job-posts="pipelineStore.loadingJobPosts"
         @update:search="handleSearchUpdate"
-        @update:selected-job-post-ids="handlePositionUpdate"
         @update:stage-type-filter="handleStageTypeUpdate"
         @reset="resetFilters"
       />

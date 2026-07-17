@@ -12,6 +12,10 @@ const props = defineProps({
   search: { type: String, default: "" },
   stageTypeFilter: { type: String, default: null },
   loadingJobPosts: { type: Boolean, default: false },
+  // The pipeline board now always lives inside a single job post (Vacancies
+  // > Active Jobs > Candidate Pipeline), so the cross-job position picker
+  // is hidden in that context.
+  lockedPosition: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(["update:search", "update:selectedJobPostIds", "update:stageTypeFilter", "reset"]);
@@ -50,7 +54,7 @@ function toggleStageType(type) {
 }
 
 const hasActiveFilters = computed(
-  () => !!props.search || props.selectedJobPostIds.length > 0 || !!props.stageTypeFilter,
+  () => !!props.search || (!props.lockedPosition && props.selectedJobPostIds.length > 0) || !!props.stageTypeFilter,
 );
 </script>
 
@@ -70,8 +74,8 @@ const hasActiveFilters = computed(
         />
       </div>
 
-      <!-- Position filter -->
-      <div class="w-full sm:w-64">
+      <!-- Position filter (hidden when scoped to a single job) -->
+      <div v-if="!lockedPosition" class="w-full sm:w-64">
         <SearchableSelect
           :options="positionOptions"
           :value="selectedPositionValue"
