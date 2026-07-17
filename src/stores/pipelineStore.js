@@ -96,8 +96,27 @@ export const usePipelineStore = defineStore("pipeline", () => {
     const map = {};
     for (const col of boardColumns.value) map[col.key] = [];
 
+    // In per-job mode, a candidate's `stage_id` should always match one of
+    // this job's own stages. It can fail to match for legacy applications
+    // that still carry the old global status template id (from before
+    // stages became per-job) — without a fallback those candidates would
+    // silently vanish from every column. Reconcile by `stage_type` first,
+    // then fall back to the job's first (lowest position) stage.
+    const columnKeyByStageType = {};
+    if (isSingleJobMode.value) {
+      for (const col of boardColumns.value) {
+        if (!(col.stage_type in columnKeyByStageType)) columnKeyByStageType[col.stage_type] = col.key;
+      }
+    }
+
     for (const candidate of filteredCandidates.value) {
-      const key = isSingleJobMode.value ? String(candidate.stage_id) : candidate.stage_type;
+      let key = isSingleJobMode.value ? String(candidate.stage_id) : candidate.stage_type;
+
+      if (isSingleJobMode.value && !(key in map)) {
+        key = columnKeyByStageType[candidate.stage_type] ?? boardColumns.value[0]?.key;
+      }
+
+      if (key === undefined || key === null) continue;
       if (!map[key]) map[key] = [];
       map[key].push(candidate);
     }
