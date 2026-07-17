@@ -276,6 +276,11 @@ const routes = [
         component: () => import("../pages/recruiter/Applicants.vue"),
       },
       {
+        path: "pipeline",
+        name: "recruiter-pipeline",
+        component: () => import("../pages/recruiter/CandidatePipeline.vue"),
+      },
+      {
         path: "jobs/:jobId/applicants/:applicationId",
         name: "recruiter-applicant-detail",
         component: () => import("../pages/recruiter/ApplicantDetail.vue"),
