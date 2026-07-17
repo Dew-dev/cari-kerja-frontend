@@ -94,12 +94,12 @@ watch(activeConversationId, (id) => {
     - Mobile: either list OR detail (based on mobileShowDetail)
   -->
   <div
-    class="flex bg-gray-50"
+    class="flex bg-gray-50 overflow-hidden"
     style="height: calc(100vh - 64px)"
   >
     <!-- ─── LEFT SIDEBAR: Conversation List ─────────────────────────────────── -->
     <aside
-      class="flex flex-col bg-white border-r border-gray-100"
+      class="flex flex-col bg-white border-r border-gray-100 min-h-0"
       :class="[
         'md:w-80 md:flex md:shrink-0',
         mobileShowDetail ? 'hidden' : 'flex w-full',
@@ -139,7 +139,7 @@ watch(activeConversationId, (id) => {
       </div>
 
       <!-- List -->
-      <div class="flex-1 overflow-y-auto">
+      <div class="flex-1 min-h-0 overflow-y-auto">
         <!-- Skeleton -->
         <ConversationSkeleton v-if="chatStore.loadingConversations" />
 
@@ -166,7 +166,7 @@ watch(activeConversationId, (id) => {
 
     <!-- ─── RIGHT PANEL: Detail or Empty State ────────────────────────────── -->
     <main
-      class="flex-1 flex flex-col min-w-0"
+      class="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden"
       :class="mobileShowDetail ? 'flex' : 'hidden md:flex'"
     >
       <!-- Conversation detail -->

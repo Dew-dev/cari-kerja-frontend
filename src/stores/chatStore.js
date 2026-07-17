@@ -7,15 +7,10 @@ import {
   markAsRead as markAsReadApi,
 } from '@/services/chat.api'
 import { useAuthStore } from '@/stores/authStore'
-
-function getSenderId(message) {
-  return message?.sender?.id || message?.sender_id
-}
-
-function isSameUser(a, b) {
-  if (!a || !b) return false
-  return String(a) === String(b)
-}
+import {
+  isOwnMessage as matchOwnMessage,
+  isSameId,
+} from '@/utils/chatIdentity'
 
 /** Normalize message / last_message text from various API shapes */
 export function getMessageText(message) {
@@ -32,21 +27,13 @@ export function getMessageText(message) {
 }
 
 function isOwnMessage(message) {
-  const auth = useAuthStore()
-  const me = auth.user
-  if (!me) return false
-  const senderId = getSenderId(message)
-  // auth.user.id is often profile id; chat sender uses user_id
-  return isSameUser(senderId, me.user_id) || isSameUser(senderId, me.id)
+  return matchOwnMessage(message, useAuthStore().user)
 }
 
 function findOwnPendingIndex(list, message) {
   const text = getMessageText(message)
   return list.findIndex(
-    (m) =>
-      m._pending &&
-      isOwnMessage(m) &&
-      getMessageText(m) === text,
+    (m) => m._pending && isOwnMessage(m) && getMessageText(m) === text,
   )
 }
 
@@ -56,14 +43,15 @@ function findDuplicateIndex(list, message) {
     const byId = list.findIndex((m) => m.id === message.id)
     if (byId !== -1) return byId
   }
-  // Socket echo can arrive after optimistic was already replaced by REST
   const text = getMessageText(message)
   if (!text || !isOwnMessage(message)) return -1
   return list.findIndex(
     (m) =>
       isOwnMessage(m) &&
       getMessageText(m) === text &&
-      Math.abs(new Date(m.created_at) - new Date(message.created_at || Date.now())) < 15000,
+      Math.abs(
+        new Date(m.created_at) - new Date(message.created_at || Date.now()),
+      ) < 15000,
   )
 }
 
@@ -186,16 +174,17 @@ export const useChatStore = defineStore('chat', () => {
         [conversationId]: nextMessages,
       }
 
-      // Keep list preview in sync with latest message
+      // Preview only — never bump updated_at on open (that re-sorts the sidebar)
       if (page === 1 && nextMessages.length > 0) {
-        const latest = nextMessages[nextMessages.length - 1]
+        const latest = nextMessages.reduce((a, b) =>
+          new Date(a.created_at || 0) >= new Date(b.created_at || 0) ? a : b,
+        )
         const conv = conversations.value.find((c) => c.id === conversationId)
         if (conv) {
           conv.last_message = {
             message: getMessageText(latest),
             created_at: latest.created_at,
           }
-          conv.updated_at = latest.created_at || conv.updated_at
         }
       }
 
@@ -244,7 +233,9 @@ export const useChatStore = defineStore('chat', () => {
       created_at: new Date().toISOString(),
       sender: me
         ? {
-            id: me.user_id || me.id,
+            // Match API: id = profile (workers/recruiters), user_id = users.id
+            id: me.id,
+            user_id: me.user_id,
             username: me.username,
             name: me.name,
             avatar_url: me.avatar_url,
@@ -365,9 +356,12 @@ export const useChatStore = defineStore('chat', () => {
     if (messages.value[conversation_id]) {
       messages.value = {
         ...messages.value,
-        [conversation_id]: messages.value[conversation_id].map((m) =>
-          isSameUser(getSenderId(m), reader_id) ? m : { ...m, is_read: true },
-        ),
+        [conversation_id]: messages.value[conversation_id].map((m) => {
+          const sender = m.sender || { id: m.sender_id, user_id: m.sender_id }
+          const isReader =
+            isSameId(sender.id, reader_id) || isSameId(sender.user_id, reader_id)
+          return isReader ? m : { ...m, is_read: true }
+        }),
       }
     }
   }

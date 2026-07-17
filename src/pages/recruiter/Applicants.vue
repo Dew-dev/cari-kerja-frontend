@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import api from "@/services/api";
 import { startConversation } from "@/services/chat.api";
+import { resolveWorkerProfileId } from "@/utils/chatIdentity";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -99,7 +100,12 @@ function formatDate(date) {
 const chattingId = ref(null); // track which applicant is loading chat
 
 async function startChat(applicant) {
-  const workerId = applicant.worker_id || applicant.user_id || applicant.id;
+  // API expects workers.id (profile), not users.id
+  const workerId =
+    resolveWorkerProfileId(applicant) ||
+    applicant.worker_id ||
+    applicant.worker?.id ||
+    applicant.id;
   if (!workerId) {
     push.error(t("chat.cannotStartChat") || "Cannot identify worker");
     return;
