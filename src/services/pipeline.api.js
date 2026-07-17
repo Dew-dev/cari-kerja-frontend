@@ -3,10 +3,9 @@ import api from "./api";
 /**
  * Candidate Pipeline API service.
  *
- * NOTE: These endpoints are new and expected to be implemented by the backend
- * following the contract described in the "Instruksi untuk Agen Backend"
- * handoff. Until then, calls will fail with 404/501 — the store/UI handle
- * that gracefully (loading/error states) without crashing the page.
+ * Backed by the `candidate_pipeline` module (see `018_candidate_pipeline.sql`
+ * migration): per-job-post customizable stages, cross-job pipeline board,
+ * stage-distribution analytics and application activity timeline.
  */
 
 // ── Candidates ───────────────────────────────────────────────────────────
