@@ -12,12 +12,6 @@ function getSenderId(message) {
   return message?.sender?.id || message?.sender_id
 }
 
-function getCurrentUserId() {
-  const auth = useAuthStore()
-  const me = auth.user
-  return me?.user_id || me?.id
-}
-
 function isSameUser(a, b) {
   if (!a || !b) return false
   return String(a) === String(b)
@@ -38,7 +32,39 @@ export function getMessageText(message) {
 }
 
 function isOwnMessage(message) {
-  return isSameUser(getSenderId(message), getCurrentUserId())
+  const auth = useAuthStore()
+  const me = auth.user
+  if (!me) return false
+  const senderId = getSenderId(message)
+  // auth.user.id is often profile id; chat sender uses user_id
+  return isSameUser(senderId, me.user_id) || isSameUser(senderId, me.id)
+}
+
+function findOwnPendingIndex(list, message) {
+  const text = getMessageText(message)
+  return list.findIndex(
+    (m) =>
+      m._pending &&
+      isOwnMessage(m) &&
+      getMessageText(m) === text,
+  )
+}
+
+function findDuplicateIndex(list, message) {
+  if (!message) return -1
+  if (message.id) {
+    const byId = list.findIndex((m) => m.id === message.id)
+    if (byId !== -1) return byId
+  }
+  // Socket echo can arrive after optimistic was already replaced by REST
+  const text = getMessageText(message)
+  if (!text || !isOwnMessage(message)) return -1
+  return list.findIndex(
+    (m) =>
+      isOwnMessage(m) &&
+      getMessageText(m) === text &&
+      Math.abs(new Date(m.created_at) - new Date(message.created_at || Date.now())) < 15000,
+  )
 }
 
 function extractList(payload) {
@@ -243,14 +269,16 @@ export const useChatStore = defineStore('chat', () => {
       const res = await sendMessageApi(conversationId, { message: content, type: 'text' })
       const sent = res.data?.data || res.data
       const list = messages.value[conversationId] || []
-      const idx = list.findIndex((m) => m.id === tempId)
+      const tempIdx = list.findIndex((m) => m.id === tempId)
+      const dupIdx = tempIdx === -1 ? findDuplicateIndex(list, sent) : -1
+      const replaceIdx = tempIdx !== -1 ? tempIdx : dupIdx
 
       messages.value = {
         ...messages.value,
         [conversationId]:
-          idx !== -1
-            ? list.map((m, i) => (i === idx ? sent : m))
-            : [...list, sent],
+          replaceIdx !== -1
+            ? list.map((m, i) => (i === replaceIdx ? { ...sent, _pending: false } : m))
+            : [...list, { ...sent, _pending: false }],
       }
 
       return sent
@@ -287,31 +315,27 @@ export const useChatStore = defineStore('chat', () => {
 
   function handleIncomingMessage(message) {
     const { conversation_id } = message
-    const myId = getCurrentUserId()
     const ownMessage = isOwnMessage(message)
 
     const list = messages.value[conversation_id]
     if (list) {
-      const existingIdx = list.findIndex((m) => m.id === message.id)
+      const existingIdx = findDuplicateIndex(list, message)
+      const pendingIdx = ownMessage ? findOwnPendingIndex(list, message) : -1
       let next = list
 
       if (existingIdx !== -1) {
         next = list.map((m, i) =>
-          i === existingIdx ? { ...m, ...message } : m,
+          i === existingIdx ? { ...m, ...message, _pending: false } : m,
         )
-      } else if (ownMessage) {
-        const pendingIdx = list.findIndex(
-          (m) =>
-            m._pending &&
-            isSameUser(getSenderId(m), myId) &&
-            getMessageText(m) === getMessageText(message),
+      } else if (pendingIdx !== -1) {
+        // Replace optimistic bubble with socket/REST payload
+        next = list.map((m, i) =>
+          i === pendingIdx ? { ...message, _pending: false } : m,
         )
-        if (pendingIdx !== -1) {
-          next = list.map((m, i) => (i === pendingIdx ? message : m))
-        }
-      } else {
+      } else if (!ownMessage) {
         next = [...list, message]
       }
+      // Own socket echo with no pending/dup: ignore — REST send already owns the UI
 
       if (next !== list) {
         messages.value = {

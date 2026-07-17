@@ -51,8 +51,15 @@ function goBack() {
   router.push({ name: 'chat' })
 }
 
-// ─── Real-time: update conversation list on new messages ─────────────────────
+// ─── Real-time: update list; skip if detail already handles this conversation ─
 function handleIncomingMessage(message) {
+  // ConversationDetail also listens — avoid processing the same event twice
+  if (
+    activeConversationId.value &&
+    message?.conversation_id === activeConversationId.value
+  ) {
+    return
+  }
   chatStore.handleIncomingMessage(message)
 }
 
