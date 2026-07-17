@@ -203,7 +203,7 @@
                     </svg>
                   </span>
                   <span class="pt-1.5 text-sm font-medium underline-offset-2 group-hover:underline">
-                    +62 21 3062 9515
+                    +62 2130629515
                   </span>
                 </a>
               </li>
@@ -255,8 +255,8 @@
           </div>
           <p class="text-sm text-slate-500">
             {{ t("contactPage.urgentPrefix") }}
-            <a href="tel:+622130629515" class="text-[#0a9cf5] hover:underline font-medium">
-              +62 21 3062 9515
+            <a href="tel:+62 2130629515" class="text-[#0a9cf5] hover:underline font-medium">
+              +62 2130629515
             </a>
           </p>
         </div>
