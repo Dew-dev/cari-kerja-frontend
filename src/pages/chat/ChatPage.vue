@@ -40,7 +40,9 @@ const filteredConversations = computed(() => {
 
 // ─── Navigation ───────────────────────────────────────────────────────────────
 function selectConversation(conversation) {
-  router.push({ name: 'chat-detail', params: { conversationId: conversation.id } })
+  const conversationId = conversation.id || conversation.conversation_id
+  if (!conversationId) return
+  router.push({ name: 'chat-detail', params: { conversationId } })
   mobileShowDetail.value = true
 }
 

@@ -7,7 +7,7 @@ import {
   onBeforeUnmount,
   nextTick,
 } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/authStore'
 import { useChatStore } from '@/stores/chatStore'
 import { useSocket } from '@/composables/useSocket'
@@ -33,9 +33,13 @@ const emit = defineEmits(['back'])
 // ─── Composables ──────────────────────────────────────────────────────────────
 const auth = useAuthStore()
 const chatStore = useChatStore()
+const {
+  conversations,
+  messages: messagesMap,
+  messagePagination,
+  loadingMessages,
+} = storeToRefs(chatStore)
 const { on, off, emit: socketEmit, connected } = useSocket()
-const route = useRoute()
-const router = useRouter()
 
 // ─── State ────────────────────────────────────────────────────────────────────
 const messageText = ref('')
@@ -48,16 +52,12 @@ const initializing = ref(true)
 
 // ─── Computed ─────────────────────────────────────────────────────────────────
 const conversation = computed(() =>
-  chatStore.conversations.find((c) => c.id === props.conversationId),
+  conversations.value.find((c) => c.id === props.conversationId),
 )
 
-const messages = computed(() =>
-  chatStore.getConversationMessages(props.conversationId),
-)
+const messages = computed(() => messagesMap.value[props.conversationId] || [])
 
-const pagination = computed(
-  () => chatStore.messagePagination[props.conversationId],
-)
+const pagination = computed(() => messagePagination.value[props.conversationId])
 
 const participant = computed(() => {
   const me = auth.user
@@ -75,7 +75,7 @@ const typingUsersList = computed(() =>
 const someoneTyping = computed(() => typingUsersList.value.length > 0)
 
 const loading = computed(
-  () => chatStore.loadingMessages && messages.value.length === 0,
+  () => loadingMessages.value && messages.value.length === 0,
 )
 
 // ─── Scroll helpers ────────────────────────────────────────────────────────────
