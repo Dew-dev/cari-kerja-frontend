@@ -2096,8 +2096,16 @@
     "draftSaved": "Job saved as draft",
     "close": "Close"
   },
+  "authError": {
+    "pageTitle": "Sign-in Error",
+    "title": "Sign-in Failed",
+    "description": "Something went wrong while signing you in. The sign-in request was invalid or rejected. Please try again.",
+    "backToLogin": "Back to Login",
+    "backHome": "Back to Home"
+  },
   "notifications": {
     "sessionExpired": "Session expired, please login again",
+    "accountSuspended": "Your account has been suspended. Please contact support for assistance.",
     "jobDeletedSuccessfully": "Job deleted successfully",
     "actionFailed": "Action failed. Please try again.",
     "failedToUpdateJobStatus": "Failed to update job status",

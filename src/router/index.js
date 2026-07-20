@@ -336,6 +336,12 @@ const routes = [
     ],
   },
   {
+    // OAuth failure landing (backend redirects here on invalid role_id or provider error)
+    path: "/error",
+    name: "auth-error",
+    component: () => import("../pages/auth/AuthError.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "not-found",
     component: () => import("../pages/NotFound.vue"),

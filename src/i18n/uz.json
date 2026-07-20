@@ -2074,8 +2074,16 @@
     "draftSaved": "E'lon qoralama sifatida saqlandi",
     "close": "Yopish"
   },
+  "authError": {
+    "pageTitle": "Kirish xatosi",
+    "title": "Kirish muvaffaqiyatsiz tugadi",
+    "description": "Kirish jarayonida xatolik yuz berdi. Kirish so'rovi noto'g'ri yoki rad etildi. Iltimos, qayta urinib ko'ring.",
+    "backToLogin": "Kirish sahifasiga qaytish",
+    "backHome": "Bosh sahifaga qaytish"
+  },
   "notifications": {
     "sessionExpired": "Sessiya muddati tugadi, iltimos qayta kiring",
+    "accountSuspended": "Hisobingiz to'xtatilgan. Yordam uchun qo'llab-quvvatlash xizmatiga murojaat qiling.",
     "jobDeletedSuccessfully": "Ish muvaffaqiyatli o'chirildi",
     "actionFailed": "Amal muvaffaqiyatsiz tugadi. Iltimos qayta urinib ko'ring.",
     "failedToUpdateJobStatus": "Ish holatini yangilash muvaffaq bo'lmadi",

@@ -921,7 +921,12 @@ async function confirmAction() {
     page.value = 1; // reset to first page
   } catch (err) {
     console.error("Action failed", err);
-    push.error(t("notifications.actionFailed"));
+    // 403 saat duplicate = kuota posting penuh; tampilkan pesan backend
+    if (err?.response?.status === 403 && err?.response?.data?.message) {
+      push.error(err.response.data.message);
+    } else {
+      push.error(t("notifications.actionFailed"));
+    }
   } finally {
     actionLoading.value = false;
   }
@@ -1077,7 +1082,11 @@ async function duplicateJob(jobId) {
     router.push(`/recruiter/jobs/${newId}/edit`);
   } catch (err) {
     console.error("Duplicate failed", err);
-    push.error(t("notifications.failedToDuplicateJob"));
+    if (err?.response?.status === 403 && err?.response?.data?.message) {
+      push.error(err.response.data.message);
+    } else {
+      push.error(t("notifications.failedToDuplicateJob"));
+    }
   }
 }
 

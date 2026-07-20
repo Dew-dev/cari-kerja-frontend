@@ -1,6 +1,7 @@
 import { ref, onUnmounted } from 'vue'
 import { io } from 'socket.io-client'
 import { useAuthStore } from '@/stores/authStore'
+import { handleAccountSuspended } from '@/services/api'
 
 // Singleton socket instance shared across all components
 let _socket = null
@@ -30,6 +31,13 @@ function createSocket(token) {
 
   socket.on('connect_error', (err) => {
     console.warn('[Socket] Connection error:', err.message)
+
+    // Backend rejects suspended accounts with "Forbidden: account is suspended"
+    if (String(err?.message || '').toLowerCase().includes('suspended')) {
+      const auth = useAuthStore()
+      // logout() calls disconnectSocket(), which also stops the reconnection loop
+      handleAccountSuspended(auth)
+    }
   })
 
   return socket

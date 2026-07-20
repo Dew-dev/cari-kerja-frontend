@@ -12,6 +12,7 @@ const api = axios.create({
 let isRefreshing = false;
 let queue = [];
 let hasShownSessionExpiredToast = false;
+let hasShownSuspendedToast = false;
 
 function logoutAndRedirectToLogin(auth, { notifySessionExpired = false } = {}) {
   auth.logout();
@@ -19,6 +20,29 @@ function logoutAndRedirectToLogin(auth, { notifySessionExpired = false } = {}) {
   if (notifySessionExpired && !hasShownSessionExpiredToast) {
     push.warning(i18n.global.t("notifications.sessionExpired"));
     hasShownSessionExpiredToast = true;
+  }
+
+  if (router.currentRoute.value.path !== "/login") {
+    router.push("/login");
+  }
+}
+
+function isAccountSuspendedError(error) {
+  const status = error?.response?.status;
+  const message = String(error?.response?.data?.message || "").toLowerCase();
+  return status === 403 && message.includes("suspended");
+}
+
+export function handleAccountSuspended(auth) {
+  auth.logout();
+
+  if (!hasShownSuspendedToast) {
+    push.error(i18n.global.t("notifications.accountSuspended"));
+    hasShownSuspendedToast = true;
+    // Allow the banner to appear again on a future (different) suspension
+    setTimeout(() => {
+      hasShownSuspendedToast = false;
+    }, 10000);
   }
 
   if (router.currentRoute.value.path !== "/login") {
@@ -66,6 +90,13 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const auth = useAuthStore();
+
+    // 403 Account is suspended → force logout + banner (only when logged in;
+    // login failures are handled by the login page itself)
+    if (isAccountSuspendedError(error) && auth.isLoggedIn) {
+      handleAccountSuspended(auth);
+      return Promise.reject(error);
+    }
 
     if (isSessionExpiredError(error)) {
       logoutAndRedirectToLogin(auth, { notifySessionExpired: true });
