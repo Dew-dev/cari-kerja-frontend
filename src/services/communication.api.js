@@ -3,8 +3,7 @@ import api from "./api";
 /**
  * Bulk Communication API (recruiter email campaigns + worker preferences).
  *
- * Contract expected from the backend `communication` module. Until deployed,
- * callers should handle 404/501 gracefully in the UI.
+ * Merge fields in subject/body: {{candidate_name}}, {{job_title}}
  */
 
 // ── Templates ─────────────────────────────────────────────────────────────
@@ -55,4 +54,9 @@ export function getCommunicationPreferences() {
 export function updateCommunicationPreferences(payload) {
   // { email_opt_out: boolean }
   return api.put("/workers/me/communication-preferences", payload);
+}
+
+// ── Public unsubscribe (GDPR) ─────────────────────────────────────────────
+export function unsubscribeByToken(token) {
+  return api.get(`/communication/unsubscribe/${token}`);
 }

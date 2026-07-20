@@ -12,12 +12,16 @@ import {
   updateCommunicationPreferences,
 } from "@/services/communication.api";
 
-/** Replace {{name}}, {{job_title}}, etc. for preview. */
+/** Replace {{candidate_name}}, {{job_title}}, etc. for client-side preview. */
 export function applyMergeFields(text, candidate = {}, extras = {}) {
+  const candidateName = candidate.name || candidate.worker_name || "";
+  const jobTitle = candidate.job_post_title || extras.job_title || "";
   const map = {
-    name: candidate.name || "",
+    candidate_name: candidateName,
+    job_title: jobTitle,
+    // Legacy aliases for older templates
+    name: candidateName,
     email: candidate.email || "",
-    job_title: candidate.job_post_title || extras.job_title || "",
     company_name: extras.company_name || "",
   };
   return String(text || "").replace(/\{\{\s*(\w+)\s*\}\}/g, (_, key) =>
@@ -25,10 +29,36 @@ export function applyMergeFields(text, candidate = {}, extras = {}) {
   );
 }
 
+function normalizePreferencesPayload(res) {
+  return res.data?.data ?? res.data ?? { email_opt_out: false };
+}
+
+const LOCAL_TEMPLATES_KEY = "ck_communication_templates";
+
+function readLocalTemplates() {
+  try {
+    const raw = localStorage.getItem(LOCAL_TEMPLATES_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalTemplates(list) {
+  localStorage.setItem(LOCAL_TEMPLATES_KEY, JSON.stringify(list));
+}
+
+function makeLocalId() {
+  return `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
 export const useCommunicationStore = defineStore("communication", () => {
   const templates = ref([]);
   const loadingTemplates = ref(false);
   const templatesError = ref(null);
+  /** true when API unavailable and we persist templates in localStorage */
+  const usingLocalTemplates = ref(false);
 
   const campaigns = ref([]);
   const loadingCampaigns = ref(false);
@@ -51,33 +81,93 @@ export const useCommunicationStore = defineStore("communication", () => {
       templatesError.value = null;
       const res = await getCommunicationTemplates();
       templates.value = res.data?.data || [];
+      usingLocalTemplates.value = false;
     } catch (err) {
-      console.error("[Communication] Failed to fetch templates:", err);
-      templatesError.value = err;
-      templates.value = [];
+      console.warn("[Communication] Templates API unavailable, using local storage:", err);
+      templatesError.value = null;
+      usingLocalTemplates.value = true;
+      templates.value = readLocalTemplates();
     } finally {
       loadingTemplates.value = false;
     }
   }
 
   async function createTemplate(payload) {
-    const res = await createCommunicationTemplate({
+    const body = {
       channel: "email",
-      ...payload,
-    });
-    await fetchTemplates();
-    return res.data?.data;
+      name: payload.name,
+      subject: payload.subject,
+      body: payload.body,
+    };
+
+    if (!usingLocalTemplates.value) {
+      try {
+        const res = await createCommunicationTemplate(body);
+        await fetchTemplates();
+        return res.data?.data;
+      } catch (err) {
+        console.warn("[Communication] Create template API failed, falling back to local:", err);
+        usingLocalTemplates.value = true;
+      }
+    }
+
+    const now = new Date().toISOString();
+    const created = {
+      id: makeLocalId(),
+      ...body,
+      created_at: now,
+      updated_at: now,
+    };
+    const next = [created, ...readLocalTemplates()];
+    writeLocalTemplates(next);
+    templates.value = next;
+    return created;
   }
 
   async function updateTemplate(id, payload) {
-    const res = await updateCommunicationTemplate(id, payload);
-    await fetchTemplates();
-    return res.data?.data;
+    const body = {
+      name: payload.name,
+      subject: payload.subject,
+      body: payload.body,
+      channel: payload.channel || "email",
+    };
+
+    if (!usingLocalTemplates.value && !String(id).startsWith("local-")) {
+      try {
+        const res = await updateCommunicationTemplate(id, body);
+        await fetchTemplates();
+        return res.data?.data;
+      } catch (err) {
+        console.warn("[Communication] Update template API failed, falling back to local:", err);
+        usingLocalTemplates.value = true;
+      }
+    }
+
+    const next = readLocalTemplates().map((tpl) =>
+      String(tpl.id) === String(id)
+        ? { ...tpl, ...body, updated_at: new Date().toISOString() }
+        : tpl,
+    );
+    writeLocalTemplates(next);
+    templates.value = next;
+    return next.find((tpl) => String(tpl.id) === String(id));
   }
 
   async function removeTemplate(id) {
-    await deleteCommunicationTemplate(id);
-    await fetchTemplates();
+    if (!usingLocalTemplates.value && !String(id).startsWith("local-")) {
+      try {
+        await deleteCommunicationTemplate(id);
+        await fetchTemplates();
+        return;
+      } catch (err) {
+        console.warn("[Communication] Delete template API failed, falling back to local:", err);
+        usingLocalTemplates.value = true;
+      }
+    }
+
+    const next = readLocalTemplates().filter((tpl) => String(tpl.id) !== String(id));
+    writeLocalTemplates(next);
+    templates.value = next;
   }
 
   async function sendBulk(payload) {
@@ -95,12 +185,18 @@ export const useCommunicationStore = defineStore("communication", () => {
     }
   }
 
-  async function fetchCampaigns({ page = 1, limit = 20 } = {}) {
+  async function fetchCampaigns({ page = 1, limit = 20, job_post_id } = {}) {
     try {
       loadingCampaigns.value = true;
-      const res = await getCommunicationCampaigns({ page, limit });
+      const params = { page, limit };
+      if (job_post_id) params.job_post_id = job_post_id;
+      const res = await getCommunicationCampaigns(params);
       campaigns.value = res.data?.data || [];
-      campaignsMeta.value = res.data?.meta || { page, totalPage: 1, total: campaigns.value.length };
+      campaignsMeta.value = res.data?.meta || {
+        page,
+        totalPage: 1,
+        total: campaigns.value.length,
+      };
     } catch (err) {
       console.error("[Communication] Failed to fetch campaigns:", err);
       campaigns.value = [];
@@ -128,7 +224,7 @@ export const useCommunicationStore = defineStore("communication", () => {
     try {
       loadingPreferences.value = true;
       const res = await getCommunicationPreferences();
-      preferences.value = res.data?.data || { email_opt_out: false };
+      preferences.value = normalizePreferencesPayload(res);
     } catch (err) {
       console.error("[Communication] Failed to fetch preferences:", err);
       // Soft default when endpoint is not yet available
@@ -142,7 +238,7 @@ export const useCommunicationStore = defineStore("communication", () => {
     try {
       savingPreferences.value = true;
       const res = await updateCommunicationPreferences(payload);
-      preferences.value = res.data?.data || { ...preferences.value, ...payload };
+      preferences.value = normalizePreferencesPayload(res) || { ...preferences.value, ...payload };
       return preferences.value;
     } finally {
       savingPreferences.value = false;
@@ -153,6 +249,7 @@ export const useCommunicationStore = defineStore("communication", () => {
     templates,
     loadingTemplates,
     templatesError,
+    usingLocalTemplates,
     campaigns,
     loadingCampaigns,
     campaignsMeta,
