@@ -5,6 +5,11 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { useAuthStore } from "@/stores/authStore";
 import { linkTelegram } from "@/services/auth.api";
+import {
+  clearOAuthLinkIntent,
+  isTelegramLinkIntent,
+  restoreSessionBackup,
+} from "@/utils/oauthIntent";
 
 const route = useRoute();
 const router = useRouter();
@@ -14,15 +19,46 @@ const { t } = useI18n();
 const status = ref("loading");
 const errorMessage = ref("");
 
+function ensureSessionFromBackup() {
+  if (auth.isLoggedIn) return true;
+  const backup = restoreSessionBackup();
+  if (!backup?.token) return false;
+
+  auth.token = backup.token;
+  auth.$patch({ refreshToken: backup.refreshToken || null });
+  auth.user = backup.user || null;
+  localStorage.setItem("token", backup.token);
+  if (backup.refreshToken) {
+    localStorage.setItem("refreshToken", backup.refreshToken);
+  }
+  if (backup.user) {
+    localStorage.setItem("user", JSON.stringify(backup.user));
+  }
+  return true;
+}
+
 onMounted(async () => {
+  const hadLinkIntent = isTelegramLinkIntent();
+  ensureSessionFromBackup();
+
   if (!auth.isLoggedIn) {
+    clearOAuthLinkIntent();
     push.warning(t("auth.banners.loginRequiredForLink"));
     router.replace("/login");
     return;
   }
 
+  const error = route.query.error;
+  if (error) {
+    clearOAuthLinkIntent();
+    status.value = "error";
+    errorMessage.value = String(error);
+    return;
+  }
+
   const code = route.query.code;
   if (!code) {
+    clearOAuthLinkIntent();
     status.value = "error";
     errorMessage.value = t("auth.banners.missingTelegramCode");
     return;
@@ -35,15 +71,31 @@ onMounted(async () => {
       requires_telegram_link: data.requires_telegram_link ?? false,
     });
     auth.markTelegramLinked();
+    clearOAuthLinkIntent();
     status.value = "success";
     push.success(t("auth.banners.telegramLinked"));
     setTimeout(() => {
-      router.replace(auth.role === "recruiter" ? "/recruiter/jobs" : "/jobposts");
+      router.replace(
+        auth.role === "recruiter" ? "/recruiter/jobs" : "/profile/edit",
+      );
     }, 1200);
   } catch (err) {
     status.value = "error";
-    errorMessage.value =
-      err?.response?.data?.message || t("auth.banners.failedLinkTelegram");
+    const apiMessage = err?.response?.data?.message || "";
+    // Telegram sudah dipakai sebagai metode login akun lain
+    if (/already used as a login method/i.test(apiMessage)) {
+      errorMessage.value = t("auth.banners.telegramAlreadyLoginAccount");
+    } else if (/already linked/i.test(apiMessage)) {
+      errorMessage.value = t("auth.banners.telegramAlreadyLinked");
+    } else {
+      errorMessage.value = apiMessage || t("auth.banners.failedLinkTelegram");
+    }
+
+    // Restore dulu, baru clear — clear menghapus backup di sessionStorage
+    if (hadLinkIntent) {
+      ensureSessionFromBackup();
+    }
+    clearOAuthLinkIntent();
   }
 });
 </script>
@@ -64,7 +116,7 @@ onMounted(async () => {
         <button
           type="button"
           class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm"
-          @click="router.replace('/jobposts')"
+          @click="router.replace('/profile/edit')"
         >
           {{ t("auth.banners.backToApp") }}
         </button>
