@@ -21,6 +21,23 @@
       <!-- ACTIVE PLAN BANNER -->
       <ActivePlanBanner />
 
+      <!-- UNVERIFIED COMPANY BANNER -->
+      <div
+        v-if="isUnverified"
+        class="mb-6 flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3"
+      >
+        <i class="pi pi-shield text-amber-600"></i>
+        <p class="text-sm text-amber-800 flex-1">
+          {{ t("verification.banner") }}
+        </p>
+        <RouterLink
+          to="/contact"
+          class="text-sm font-semibold text-amber-700 hover:text-amber-900 underline whitespace-nowrap"
+        >
+          {{ t("verification.cta") }}
+        </RouterLink>
+      </div>
+
       <!-- TABS -->
       <div class="mb-6 border-b border-gray-200">
         <div class="flex flex-wrap gap-4 text-sm font-semibold">
@@ -698,6 +715,12 @@
     @success="fetchJobs"
   />
 
+  <!-- VERIFICATION REQUIRED MODAL -->
+  <VerificationRequiredModal
+    :show="showVerificationModal"
+    @close="showVerificationModal = false"
+  />
+
 </template>
 
 <script setup>
@@ -710,17 +733,22 @@ import api from "@/services/api";
 import ActivePlanBanner from "@/components/recruiter/ActivePlanBanner.vue";
 import BoostJobModal from "@/components/recruiter/BoostJobModal.vue";
 import SinglePostModal from "@/components/recruiter/SinglePostModal.vue";
+import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
+import { isVerificationRequiredError } from "@/utils/apiErrors";
+import { useAuthStore } from "@/stores/authStore";
 import { getAllPlans, getPaymentOrders } from "@/services/payments.api.js";
 
 const activeTab = ref("active"); // active | archived
 
 const router = useRouter();
 const { t } = useI18n();
+const auth = useAuthStore();
 const jobs = ref([]);
 const loading = ref(false);
 const showConfirmModal = ref(false);
 const selectedJob = ref(null);
 const nextStatus = ref(null);
+const showVerificationModal = ref(false);
 const jobCounter = ref(0);
 const archivedJobCounter = ref(0);
 const countit = ref(false);
@@ -940,10 +968,29 @@ async function archivedJobs() {
   }
 }
 
+// Proaktif: tampilkan banner bila backend melaporkan perusahaan belum terverifikasi.
+// Banner hanya muncul jika field is_verified tersedia di response (bernilai false).
+const isUnverified = ref(false);
+
+async function checkCompanyVerification() {
+  try {
+    const userId = auth.user?.user_id || auth.user?.id;
+    if (!userId) return;
+    const res = await api.get(`/users/${userId}/recruiters`);
+    const recruiter = res.data?.data;
+    if (recruiter && Object.prototype.hasOwnProperty.call(recruiter, "is_verified")) {
+      isUnverified.value = recruiter.is_verified === false;
+    }
+  } catch (err) {
+    console.error("Failed to check company verification", err);
+  }
+}
+
 onMounted(async () => {
   await loadBoostMetadata();
   fetchJobs();
   archivedJobs();
+  checkCompanyVerification();
 });
 
 function formatSalary(job) {
@@ -1007,7 +1054,12 @@ async function confirmUpdateStatus() {
     selectedJob.value.status = arr[nextStatus.value - 1];
   } catch (err) {
     console.error("Failed to update job status", err);
-    push.error(t("notifications.failedToUpdateJobStatus"));
+    // Recruiter belum diverifikasi → CTA verifikasi, bukan toast generik
+    if (isVerificationRequiredError(err)) {
+      showVerificationModal.value = true;
+    } else {
+      push.error(t("notifications.failedToUpdateJobStatus"));
+    }
   } finally {
     showConfirmModal.value = false;
     selectedJob.value = null;

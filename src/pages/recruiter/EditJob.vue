@@ -8,10 +8,13 @@ const auth = useAuthStore();
 import api from "@/services/api"; // axios instance
 import { updateJob } from "@/services/jobposts.api";
 import { useRouter, useRoute } from "vue-router";
+import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
+import { isVerificationRequiredError } from "@/utils/apiErrors";
 const router = useRouter();
 const route = useRoute();
 const loading = ref(false);
 const buttonLoading = ref(false);
+const showVerificationModal = ref(false);
 
 
 /* ======================
@@ -696,7 +699,7 @@ function selectCity(city) {
 /* ======================
    SUBMIT
 ====================== */
-async function submit() {
+async function submit(statusId = 1) {
   buttonLoading.value = true;
   const payload = {
     recruiter_id: auth.user?.recruiter_id,
@@ -705,7 +708,7 @@ async function submit() {
     employment_type_id: form.employment_type_id,
     experience_level_id: form.experience_level_id,
     salary_type_id: form.salary_type_id || 1,
-    job_post_status_id: 1,
+    job_post_status_id: statusId,
     location: form.is_remote ? "Remote" : `${form.city}, ${form.province}`,
     salary_min: form.salary_min,
     salary_max: form.salary_max,
@@ -723,17 +726,33 @@ async function submit() {
     is_remote: form.is_remote,
   };
 
-  // console.log("CREATE JOB PAYLOAD:", payload);
-  // TODO: POST /jobs
-  const res = await updateJob(route.params.id, payload)
+  try {
+    const res = await updateJob(route.params.id, payload)
 
-  // console.log(res);
-  if (!res?.data?.success) {
-    return;
+    if (!res?.data?.success) {
+      return;
+    }
+    push.success(
+      statusId === 3
+        ? t("verification.draftSaved")
+        : t("notifications.jobUpdatedSuccessfully"),
+    );
+    // router.push("/recruiter/jobs")
+  } catch (err) {
+    // Recruiter belum diverifikasi → tawarkan simpan draft alih-alih gagal diam-diam
+    if (isVerificationRequiredError(err)) {
+      showVerificationModal.value = true;
+      return;
+    }
+    push.error(err?.response?.data?.message || t("notifications.actionFailed"));
+  } finally {
+    buttonLoading.value = false;
   }
-  buttonLoading.value = false;
-  push.success(t("notifications.jobUpdatedSuccessfully"));
-  // router.push("/recruiter/jobs")
+}
+
+function saveAsDraft() {
+  showVerificationModal.value = false;
+  submit(3);
 }
 </script>
 
@@ -748,7 +767,7 @@ async function submit() {
         {{ t("editJobSubtitle") }}
       </p>
 
-      <form @submit.prevent="submit" class="space-y-6">
+      <form @submit.prevent="submit(1)" class="space-y-6">
         <!-- JOB TITLE -->
         <div>
           <label class="block text-sm font-medium text-gray-700">
@@ -1316,6 +1335,14 @@ async function submit() {
       </form>
     </div>
   </div>
+
+  <!-- VERIFICATION REQUIRED MODAL -->
+  <VerificationRequiredModal
+    :show="showVerificationModal"
+    :allow-save-draft="true"
+    @close="showVerificationModal = false"
+    @save-draft="saveAsDraft"
+  />
 
   <!-- Skills Modal -->
   <div
