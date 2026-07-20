@@ -68,13 +68,19 @@ export const useAuthStore = defineStore("auth", {
       localStorage.removeItem("user");
     },
 
-    async refreshToken() {
+    async refreshToken({ logoutOnFail = true } = {}) {
       try {
         const res = await refreshApi();
-        const { token, user } = res.data.data;
+        const { token, user, refreshToken: newRefreshToken } = res.data.data;
 
         this.token = token;
         localStorage.setItem("token", token);
+
+        // Jangan assign this.refreshToken (= action). Update state lewat $patch.
+        if (newRefreshToken) {
+          this.$patch({ refreshToken: newRefreshToken });
+          localStorage.setItem("refreshToken", newRefreshToken);
+        }
 
         if (user) {
           const role =
@@ -103,7 +109,9 @@ export const useAuthStore = defineStore("auth", {
 
         return token;
       } catch (err) {
-        this.logout();
+        if (logoutOnFail) {
+          this.logout();
+        }
         throw err;
       }
     },

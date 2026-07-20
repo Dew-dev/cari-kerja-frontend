@@ -14,13 +14,14 @@ export function login(payload) {
 }
 
 /**
- * Backend: PUT /users/refresh-token (basic auth + refreshToken cookie).
- * Response berisi access token baru dengan worker_id/recruiter_id lengkap.
+ * Backend: PUT /users/refresh-token (basic auth).
+ * Prefer cookie; juga kirim refreshToken dari localStorage (OAuth cross-origin).
  */
 export function refreshToken() {
+  const storedRefreshToken = localStorage.getItem("refreshToken");
   return api.put(
     "/users/refresh-token",
-    {},
+    storedRefreshToken ? { refreshToken: storedRefreshToken } : {},
     {
       headers: {
         authorization: basicAuthHeader,
