@@ -721,6 +721,14 @@
     @close="showVerificationModal = false"
   />
 
+  <!-- CONTENT FLAGGED (PENDING REVIEW) MODAL -->
+  <ContentFlaggedModal
+    :show="showContentFlaggedModal"
+    :moderation="moderationInfo"
+    :show-view-jobs="false"
+    @close="showContentFlaggedModal = false"
+  />
+
 </template>
 
 <script setup>
@@ -734,7 +742,11 @@ import ActivePlanBanner from "@/components/recruiter/ActivePlanBanner.vue";
 import BoostJobModal from "@/components/recruiter/BoostJobModal.vue";
 import SinglePostModal from "@/components/recruiter/SinglePostModal.vue";
 import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
-import { isVerificationRequiredError } from "@/utils/apiErrors";
+import ContentFlaggedModal from "@/components/recruiter/ContentFlaggedModal.vue";
+import {
+  isContentFlaggedResponse,
+  isVerificationRequiredError,
+} from "@/utils/apiErrors";
 import { useAuthStore } from "@/stores/authStore";
 import { getAllPlans, getPaymentOrders } from "@/services/payments.api.js";
 
@@ -749,6 +761,8 @@ const showConfirmModal = ref(false);
 const selectedJob = ref(null);
 const nextStatus = ref(null);
 const showVerificationModal = ref(false);
+const showContentFlaggedModal = ref(false);
+const moderationInfo = ref(null);
 const jobCounter = ref(0);
 const archivedJobCounter = ref(0);
 const countit = ref(false);
@@ -817,6 +831,10 @@ function statusClass(status) {
     case "DRAFT":
       return "bg-yellow-100 text-yellow-800";
     case "CLOSED":
+      return "bg-red-100 text-red-800";
+    case "PENDING":
+      return "bg-blue-100 text-blue-800";
+    case "REJECTED":
       return "bg-red-100 text-red-800";
     default:
       return "bg-gray-100 text-gray-800";
@@ -1048,14 +1066,23 @@ function openConfirmModal(job, status) {
 
 async function confirmUpdateStatus() {
   try {
-    await api.post(`/job-posts/status/${selectedJob.value.id}`, {
+    const res = await api.post(`/job-posts/status/${selectedJob.value.id}`, {
       status_id: nextStatus.value,
     });
+
+    // Konten ditahan untuk review — status jadi PENDING, bukan OPEN
+    if (isContentFlaggedResponse(res)) {
+      selectedJob.value.status_id = 4;
+      selectedJob.value.status = "PENDING";
+      moderationInfo.value = res.data?.data?.moderation || null;
+      showContentFlaggedModal.value = true;
+      return;
+    }
 
     // optimistic update
     selectedJob.value.status_id = nextStatus.value;
 
-    const arr = ["OPEN", "CLOSED", "DRAFT", "ARCHIVED"];
+    const arr = ["OPEN", "CLOSED", "DRAFT", "PENDING", "REJECTED", "ARCHIVED"];
     selectedJob.value.status = arr[nextStatus.value - 1];
   } catch (err) {
     console.error("Failed to update job status", err);

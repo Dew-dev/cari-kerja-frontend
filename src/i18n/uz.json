@@ -2075,6 +2075,14 @@
     "draftSaved": "E'lon qoralama sifatida saqlandi",
     "close": "Yopish"
   },
+  "moderation": {
+    "title": "E'lon kontent tekshiruvi uchun ushlab turildi",
+    "description": "E'loningiz darhol chop etilmadi. Tizimimiz uning mazmunini tekshirish uchun belgiladi, shuning uchun holati endi Pending. Tekshiruv tugagach e'lon chop etiladi — sizdan hech qanday harakat talab qilinmaydi.",
+    "flagsLabel": "Aniqlangan signallar",
+    "riskScore": "Xavf bahosi",
+    "viewJobs": "E'lonlarimni ko'rish",
+    "close": "Yopish"
+  },
   "authError": {
     "pageTitle": "Kirish xatosi",
     "title": "Kirish muvaffaqiyatsiz tugadi",

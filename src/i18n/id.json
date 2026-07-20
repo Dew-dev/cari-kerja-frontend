@@ -1791,6 +1791,14 @@
     "draftSaved": "Lowongan disimpan sebagai draft",
     "close": "Tutup"
   },
+  "moderation": {
+    "title": "Lowongan Ditahan untuk Review Konten",
+    "description": "Lowongan Anda tidak langsung dipublikasikan. Sistem kami menandai kontennya untuk direview terlebih dahulu, sehingga statusnya sekarang Pending. Lowongan akan tayang setelah review selesai — Anda tidak perlu melakukan apa pun.",
+    "flagsLabel": "Sinyal terdeteksi",
+    "riskScore": "Skor risiko",
+    "viewJobs": "Lihat Daftar Lowongan",
+    "close": "Tutup"
+  },
   "authError": {
     "pageTitle": "Gagal Masuk",
     "title": "Gagal Masuk",

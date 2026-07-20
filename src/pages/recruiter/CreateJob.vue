@@ -9,11 +9,18 @@ import { push } from "notivue";
 import api from "@/services/api"; // axios instance
 import { useRouter } from "vue-router";
 import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
-import { isRateLimitedError, isVerificationRequiredError } from "@/utils/apiErrors";
+import ContentFlaggedModal from "@/components/recruiter/ContentFlaggedModal.vue";
+import {
+  isContentFlaggedResponse,
+  isRateLimitedError,
+  isVerificationRequiredError,
+} from "@/utils/apiErrors";
 const router = useRouter();
 
 const showVerificationModal = ref(false);
 const isSubmitting = ref(false);
+const showContentFlaggedModal = ref(false);
+const moderationInfo = ref(null);
 /* ======================
    TAG SEARCH STATE
 ====================== */
@@ -640,6 +647,14 @@ async function submit(statusId = 1) {
         ),
       );
     }
+
+    // Konten ditahan untuk review (status PENDING) — sukses, bukan failure
+    if (isContentFlaggedResponse(res)) {
+      moderationInfo.value = data?.moderation || null;
+      showContentFlaggedModal.value = true;
+      return;
+    }
+
     if (statusId === 3) {
       push.success(t("verification.draftSaved"));
     }
@@ -665,6 +680,11 @@ async function submit(statusId = 1) {
 function saveAsDraft() {
   showVerificationModal.value = false;
   submit(3);
+}
+
+function closeContentFlaggedModal() {
+  showContentFlaggedModal.value = false;
+  router.push("/recruiter/jobs");
 }
 </script>
 
@@ -1271,6 +1291,13 @@ function saveAsDraft() {
     :allow-save-draft="true"
     @close="showVerificationModal = false"
     @save-draft="saveAsDraft"
+  />
+
+  <!-- CONTENT FLAGGED (PENDING REVIEW) MODAL -->
+  <ContentFlaggedModal
+    :show="showContentFlaggedModal"
+    :moderation="moderationInfo"
+    @close="closeContentFlaggedModal"
   />
 
   <!-- Skills Modal -->

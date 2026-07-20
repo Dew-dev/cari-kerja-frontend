@@ -31,3 +31,12 @@ export function isVerificationRequiredError(err) {
     responseMessage(err).startsWith("VERIFICATION_REQUIRED")
   );
 }
+
+/**
+ * Response SUKSES dengan message "CONTENT_FLAGGED: ..." — job ditahan
+ * ke status PENDING untuk review konten (bukan failure).
+ * Detail ada di response.data.data.moderation ({ risk_score, flags }).
+ */
+export function isContentFlaggedResponse(response) {
+  return String(response?.data?.message || "").startsWith("CONTENT_FLAGGED");
+}

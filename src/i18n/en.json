@@ -2098,6 +2098,14 @@
     "draftSaved": "Job saved as draft",
     "close": "Close"
   },
+  "moderation": {
+    "title": "Job Held for Content Review",
+    "description": "Your job post was not published immediately. Our system flagged its content for a quick review, so its status is now Pending. It will go live once the review is complete — no further action is needed from you.",
+    "flagsLabel": "Detected signals",
+    "riskScore": "Risk score",
+    "viewJobs": "View My Jobs",
+    "close": "Close"
+  },
   "authError": {
     "pageTitle": "Sign-in Error",
     "title": "Sign-in Failed",
