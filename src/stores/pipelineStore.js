@@ -115,6 +115,9 @@ export const usePipelineStore = defineStore("pipeline", () => {
 
   const movingApplicationIds = ref(new Set());
 
+  // Multi-select for bulk communication (application_ids)
+  const selectedApplicationIds = ref([]);
+
   // ── Getters ────────────────────────────────────────────────────────────
   const isSingleJobMode = computed(() => selectedJobPostIds.value.length === 1);
   const activeJobPostId = computed(() => (isSingleJobMode.value ? selectedJobPostIds.value[0] : null));
@@ -217,6 +220,73 @@ export const usePipelineStore = defineStore("pipeline", () => {
   });
 
   const isMoving = computed(() => (applicationId) => movingApplicationIds.value.has(applicationId));
+
+  const selectedCandidates = computed(() => {
+    const idSet = new Set(selectedApplicationIds.value.map(String));
+    return filteredCandidates.value.filter((c) => idSet.has(String(c.application_id)));
+  });
+
+  const selectedCount = computed(() => selectedApplicationIds.value.length);
+
+  const selectedStageTypes = computed(() => {
+    const types = new Set(selectedCandidates.value.map((c) => c.stage_type).filter(Boolean));
+    return [...types];
+  });
+
+  /** True when every selected candidate shares the same stage (required for bulk send). */
+  const selectionIsSingleStage = computed(() => selectedStageTypes.value.length <= 1);
+
+  function isCandidateSelected(applicationId) {
+    return selectedApplicationIds.value.some((id) => String(id) === String(applicationId));
+  }
+
+  function toggleCandidateSelection(applicationId) {
+    const key = String(applicationId);
+    if (isCandidateSelected(key)) {
+      selectedApplicationIds.value = selectedApplicationIds.value.filter((id) => String(id) !== key);
+    } else {
+      selectedApplicationIds.value = [...selectedApplicationIds.value, applicationId];
+    }
+  }
+
+  function selectCandidatesInColumn(columnKey) {
+    const list = candidatesByColumn.value[columnKey] || [];
+    const ids = list.map((c) => c.application_id);
+    const idSet = new Set(selectedApplicationIds.value.map(String));
+    for (const id of ids) idSet.add(String(id));
+    // Preserve original id types from candidates where possible
+    const byId = new Map(filteredCandidates.value.map((c) => [String(c.application_id), c.application_id]));
+    selectedApplicationIds.value = [...idSet].map((k) => byId.get(k) ?? k);
+  }
+
+  function clearCandidateSelection() {
+    selectedApplicationIds.value = [];
+  }
+
+  function setColumnSelection(columnKey, selected) {
+    const list = candidatesByColumn.value[columnKey] || [];
+    const columnIds = new Set(list.map((c) => String(c.application_id)));
+    if (selected) {
+      selectCandidatesInColumn(columnKey);
+    } else {
+      selectedApplicationIds.value = selectedApplicationIds.value.filter(
+        (id) => !columnIds.has(String(id)),
+      );
+    }
+  }
+
+  function isColumnFullySelected(columnKey) {
+    const list = candidatesByColumn.value[columnKey] || [];
+    if (!list.length) return false;
+    return list.every((c) => isCandidateSelected(c.application_id));
+  }
+
+  function isColumnPartiallySelected(columnKey) {
+    const list = candidatesByColumn.value[columnKey] || [];
+    if (!list.length) return false;
+    const count = list.filter((c) => isCandidateSelected(c.application_id)).length;
+    return count > 0 && count < list.length;
+  }
 
   // ── Actions ────────────────────────────────────────────────────────────
   async function fetchJobPosts() {
@@ -386,6 +456,36 @@ export const usePipelineStore = defineStore("pipeline", () => {
     }
   }
 
+  /**
+   * Move every selected candidate into the given board column.
+   * Candidates already in that stage are skipped.
+   */
+  async function moveSelectedCandidates(column) {
+    const list = selectedCandidates.value.slice();
+    if (!list.length || !column) return { moved: 0, skipped: 0, failed: 0 };
+
+    let moved = 0;
+    let skipped = 0;
+    let failed = 0;
+
+    for (const candidate of list) {
+      const targetStageId = resolveTargetStageId(candidate, column);
+      if (!targetStageId || String(targetStageId) === String(candidate.stage_id)) {
+        skipped += 1;
+        continue;
+      }
+      try {
+        await moveCandidate(candidate, column);
+        moved += 1;
+      } catch {
+        failed += 1;
+      }
+    }
+
+    clearCandidateSelection();
+    return { moved, skipped, failed };
+  }
+
   async function createStage(jobPostId, payload) {
     const res = await createJobStage(jobPostId, payload);
     await fetchStagesForJobPost(jobPostId, { force: true });
@@ -415,6 +515,7 @@ export const usePipelineStore = defineStore("pipeline", () => {
 
   function setSelectedJobPostIds(ids) {
     selectedJobPostIds.value = ids;
+    clearCandidateSelection();
   }
 
   function setSearch(value) {
@@ -439,6 +540,7 @@ export const usePipelineStore = defineStore("pipeline", () => {
     loadingStages,
     analytics,
     loadingAnalytics,
+    selectedApplicationIds,
     // Getters
     isSingleJobMode,
     activeJobPostId,
@@ -450,6 +552,10 @@ export const usePipelineStore = defineStore("pipeline", () => {
     isMoving,
     usingApplicantsFallback,
     usingStagesFallback,
+    selectedCandidates,
+    selectedCount,
+    selectedStageTypes,
+    selectionIsSingleStage,
     // Actions
     fetchJobPosts,
     fetchStagesForJobPost,
@@ -457,6 +563,7 @@ export const usePipelineStore = defineStore("pipeline", () => {
     fetchAnalytics,
     refreshBoard,
     moveCandidate,
+    moveSelectedCandidates,
     createStage,
     renameStage,
     persistStageOrder,
@@ -464,5 +571,12 @@ export const usePipelineStore = defineStore("pipeline", () => {
     setSelectedJobPostIds,
     setSearch,
     setStageTypeFilter,
+    isCandidateSelected,
+    toggleCandidateSelection,
+    selectCandidatesInColumn,
+    clearCandidateSelection,
+    setColumnSelection,
+    isColumnFullySelected,
+    isColumnPartiallySelected,
   };
 });

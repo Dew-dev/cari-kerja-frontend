@@ -600,7 +600,7 @@ import { ref, onMounted, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../stores/authStore";
 import HeroSearch from "../components/home/HeroSearch.vue";
-import { getJobPosts } from "../services/jobposts.api";
+import { getJobPosts, getHotJobPosts } from "../services/jobposts.api";
 import { getCategoriesWithJobcount } from "../services/categories.api";
 import api from "../services/api";
 import { useRoute, useRouter } from "vue-router";
@@ -1242,9 +1242,8 @@ const loadingHot = ref(false);
 async function fetchHotJobs() {
   loadingHot.value = true;
   try {
-    const res = await getJobPosts({ limit: 100 });
-    const all = res.data?.data || [];
-    hotJobs.value = all.filter(j => j.boost_type === "hot").slice(0, 5);
+    const res = await getHotJobPosts({ limit: 5, page: 1 });
+    hotJobs.value = res.data?.data || [];
   } catch (err) {
     console.error("Error loading hot jobs:", err);
   } finally {

@@ -140,8 +140,13 @@ const routes = [
   {
     path: "/auth/callback",
     name: "auth-callback",
-    meta: { guestOnly: true },
     component: () => import("../pages/auth/Callback.vue"),
+  },
+  {
+    path: "/auth/telegram-link",
+    name: "auth-telegram-link",
+    meta: { requiresAuth: true },
+    component: () => import("../pages/auth/TelegramLinkCallback.vue"),
   },
   {
     path: "/recruiter-login",
@@ -226,6 +231,12 @@ const routes = [
   {
     path: "/verify-email",
     component: () => import("@/pages/auth/VerifyEmail.vue"),
+  },
+  {
+    path: "/unsubscribe",
+    name: "unsubscribe",
+    meta: { public: true },
+    component: () => import("@/pages/communication/Unsubscribe.vue"),
   },
   {
     path: "/search-workers",

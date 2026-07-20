@@ -5,8 +5,13 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import api from "@/services/api";
 import { getSavedJobs, removeSavedJob } from "@/services/saved-jobs.api";
+import { changeEmail } from "@/services/auth.api";
 import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
+import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
+import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
+import NotificationChannelsCard from "@/components/profile/NotificationChannelsCard.vue";
+import { displayEmail } from "@/utils/authFlags";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -15,10 +20,16 @@ const { t } = useI18n();
 const activeTab = ref(localStorage.getItem("profileActiveTab") || "profile");
 const loadingProfile = ref(false);
 const savingProfile = ref(false);
+const savingEmail = ref(false);
 const loadingApplied = ref(false);
 const loadingSaved = ref(false);
 const appliedError = ref("");
 const savedError = ref("");
+
+const isTelegramLogin = computed(() => auth.loginProvider === "telegram");
+const canEditEmail = computed(
+  () => auth.loginProvider === "telegram" || auth.loginProvider === "local",
+);
 
 const form = reactive({
   id: "",
@@ -165,7 +176,8 @@ async function loadProfile() {
     const data = res.data?.data || res.data || {};
     form.id = data.id ?? "";
     form.name = data.name ?? "";
-    form.email = data.email ?? "";
+    // Email kosong / placeholder Telegram = normal (bukan error)
+    form.email = displayEmail(data.email);
     form.telephone = data.telephone ?? "";
     form.address = data.address ?? "";
     form.headline = data.headline ?? "";
@@ -258,6 +270,35 @@ async function saveProfile() {
      push.error(err?.response?.data?.message || t('profile.failedToUpdateProfile'));
   } finally {
     savingProfile.value = false;
+  }
+}
+
+async function saveEmailForNotifications() {
+  const email = String(form.email || "").trim().toLowerCase();
+  if (!email) {
+    push.warning(t("auth.banners.emailRequired"));
+    return;
+  }
+
+  try {
+    savingEmail.value = true;
+    const res = await changeEmail(email);
+    const data = res.data?.data || {};
+
+    if (data.token) {
+      auth.token = data.token;
+      localStorage.setItem("token", data.token);
+    }
+
+    auth.mergeUser({ email });
+    auth.applyNotificationFlags(data);
+    push.success(t("auth.banners.verificationEmailSent"));
+  } catch (err) {
+    push.error(
+      err?.response?.data?.message || t("auth.banners.failedChangeEmail"),
+    );
+  } finally {
+    savingEmail.value = false;
   }
 }
 
@@ -1367,8 +1408,9 @@ watch(activeTab, (newTab) => {
       <!-- PERSONAL INFO TAB -->
       <div
         v-if="activeTab === 'profile'"
-        class="bg-white rounded-2xl shadow-sm p-6"
+        class="space-y-6"
       >
+        <div class="bg-white rounded-2xl shadow-sm p-6">
         <div v-if="loadingProfile" class="text-sm text-gray-500">
           {{ $t('profile.loadingProfile') }}
         </div>
@@ -1425,14 +1467,30 @@ watch(activeTab, (newTab) => {
             </div>
 
             <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.email') }} <span class="text-red-500">*</span></label>
+              <label class="text-xs md:text-sm font-medium text-gray-700">
+                {{ $t('profile.email') }}
+                <span v-if="!isTelegramLogin" class="text-red-500">*</span>
+              </label>
               <input
                 v-model="form.email"
                 type="email"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm bg-gray-50 min-h-10"
-                :placeholder="$t('profile.email')"
-                readonly
+                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm min-h-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'bg-gray-50': !canEditEmail }"
+                :placeholder="isTelegramLogin ? $t('profile.emailNotificationPlaceholder') : $t('profile.email')"
+                :readonly="!canEditEmail"
               />
+              <p v-if="isTelegramLogin" class="text-xs text-gray-500 mt-1">
+                {{ $t('profile.emailTelegramHint') }}
+              </p>
+              <button
+                v-if="canEditEmail"
+                type="button"
+                class="mt-2 text-xs md:text-sm px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                :disabled="savingEmail"
+                @click="saveEmailForNotifications"
+              >
+                {{ savingEmail ? $t('auth.buttons.sending') : $t('profile.updateEmail') }}
+              </button>
             </div>
 
             <div>
@@ -1453,6 +1511,7 @@ watch(activeTab, (newTab) => {
                 v-model="form.date_of_birth"
                 type="date"
                 class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 md:py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
+                required
               />
             </div>
 
@@ -1471,7 +1530,9 @@ watch(activeTab, (newTab) => {
 
             <div>
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.nationality') }}</label
+                >{{ $t('profile.nationality') }}
+                <span class="text-red-500">*</span>
+                </label
               >
               <SearchableSelect
                 :options="nationalityOptions"
@@ -1483,7 +1544,9 @@ watch(activeTab, (newTab) => {
             </div>
 
             <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.religion') }}</label>
+              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.religion') }}
+                <span class="text-red-500">*</span>
+              </label>
               <select
                 v-model="form.religion_id"
                 class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
@@ -1497,7 +1560,7 @@ watch(activeTab, (newTab) => {
 
             <div>
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.maritalStatus') }}</label
+                >{{ $t('profile.maritalStatus') }} <span class="text-red-500">*</span></label
               >
               <select
                 v-model="form.marriage_status_id"
@@ -1512,7 +1575,9 @@ watch(activeTab, (newTab) => {
 
             <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.currentSalary') }}</label
+                >{{ $t('profile.currentSalary') }}
+                <span class="text-red-500">*</span>
+                </label
               >
               <div class="grid grid-cols-2 gap-2">
                 <input
@@ -1551,7 +1616,9 @@ watch(activeTab, (newTab) => {
 
             <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.expectedSalary') }}</label
+                >{{ $t('profile.expectedSalary') }}
+                <span class="text-red-500">*</span>
+                </label
               >
               <div class="grid grid-cols-2 gap-2">
                 <input
@@ -1600,7 +1667,9 @@ watch(activeTab, (newTab) => {
 
             <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.profileSummary') }}</label
+                >{{ $t('profile.profileSummary') }}
+                <span class="text-red-500">*</span>
+                </label
               >
               <textarea
                 v-model="form.profile_summary"
@@ -1717,6 +1786,11 @@ watch(activeTab, (newTab) => {
             </button>
           </div>
         </form>
+        </div>
+
+        <NotificationChannelsCard />
+        <JobAlertsCard />
+        <CommunicationPreferencesCard />
       </div>
 
       <!-- RESUMES TAB -->

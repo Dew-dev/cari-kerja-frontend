@@ -15,6 +15,10 @@ import PipelineAnalytics from "@/components/recruiter/pipeline/PipelineAnalytics
 import PipelineBoard from "@/components/recruiter/pipeline/PipelineBoard.vue";
 import CandidateDetailDrawer from "@/components/recruiter/pipeline/CandidateDetailDrawer.vue";
 import StageManagerModal from "@/components/recruiter/pipeline/StageManagerModal.vue";
+import BulkActionBar from "@/components/recruiter/communication/BulkActionBar.vue";
+import BulkSendModal from "@/components/recruiter/communication/BulkSendModal.vue";
+import TemplateManagerModal from "@/components/recruiter/communication/TemplateManagerModal.vue";
+import CommunicationHistoryModal from "@/components/recruiter/communication/CommunicationHistoryModal.vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -22,9 +26,6 @@ const router = useRouter();
 const pipelineStore = usePipelineStore();
 const chatStore = useChatStore();
 
-// This page always lives under a specific job post (Vacancies > Active Jobs
-// > Candidate Pipeline), so the board is permanently scoped to that job —
-// there is no cross-job/global view here.
 const jobPostId = computed(() => route.params.id);
 const jobTitle = ref("");
 const loadingJob = ref(false);
@@ -33,6 +34,11 @@ const drawerCandidate = ref(null);
 const drawerOpen = ref(false);
 const stageManagerOpen = ref(false);
 const chattingId = ref(null);
+
+const bulkSendOpen = ref(false);
+const templateManagerOpen = ref(false);
+const historyOpen = ref(false);
+const bulkMoving = ref(false);
 
 async function loadJob() {
   try {
@@ -53,12 +59,7 @@ async function loadForJob() {
 }
 
 onMounted(loadForJob);
-
 watch(jobPostId, loadForJob);
-
-watch(() => pipelineStore.stageTypeFilter, () => pipelineStore.refreshBoard());
-
-watch(() => pipelineStore.search, () => pipelineStore.fetchCandidates());
 
 function handleSearchUpdate(value) {
   pipelineStore.setSearch(value);
@@ -121,6 +122,71 @@ async function resolveWorkerIds(candidate) {
     } catch (err) {
       console.error("[Pipeline] Failed to resolve worker user_id:", err);
     }
+function handleToggleSelect(candidate) {
+  pipelineStore.toggleCandidateSelection(candidate.application_id);
+}
+
+function handleToggleColumnSelect({ columnKey, selected }) {
+  pipelineStore.setColumnSelection(columnKey, selected);
+}
+
+function openBulkSend() {
+  if (!pipelineStore.selectionIsSingleStage) {
+    push.warning(t("communication.bulk.singleStageRequired"));
+    return;
+  }
+  templateManagerOpen.value = false;
+  historyOpen.value = false;
+  bulkSendOpen.value = true;
+}
+
+function openTemplateManager() {
+  bulkSendOpen.value = false;
+  historyOpen.value = false;
+  stageManagerOpen.value = false;
+  templateManagerOpen.value = true;
+}
+
+function openHistory() {
+  bulkSendOpen.value = false;
+  templateManagerOpen.value = false;
+  historyOpen.value = true;
+}
+
+function onBulkSent() {
+  pipelineStore.clearCandidateSelection();
+}
+
+async function handleBulkMove(column) {
+  if (!column || bulkMoving.value) return;
+  try {
+    bulkMoving.value = true;
+    const result = await pipelineStore.moveSelectedCandidates(column);
+    if (result.failed && !result.moved) {
+      push.error(t("communication.bulk.moveFailed"));
+      return;
+    }
+    push.success(
+      t("communication.bulk.moveSuccess", {
+        moved: result.moved,
+        stage: column.name || column.key,
+      }),
+    );
+    if (result.failed) {
+      push.warning(t("communication.bulk.movePartial", { failed: result.failed }));
+    }
+  } catch (err) {
+    push.error(err?.response?.data?.message || t("communication.bulk.moveFailed"));
+  } finally {
+    bulkMoving.value = false;
+  }
+}
+
+async function handleChat(candidate) {
+  const workerId = candidate.worker_id || candidate.id;
+  if (!workerId) {
+    push.error(t("chat.cannotStartChat") || "Cannot identify worker");
+    return;
   }
 
   return { userId, profileId };
@@ -151,18 +217,17 @@ async function handleChat(candidate) {
     chattingId.value = null;
   }
 }
-
 </script>
 
 <template>
-  <div class="bg-gray-50 min-h-screen py-8">
+  <div class="bg-gray-50 min-h-screen py-8 pb-28">
     <div class="max-w-7xl mx-auto px-4 space-y-5">
-      <!-- Header -->
       <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <button
-            @click="router.push('/recruiter/jobs')"
+            type="button"
             class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mb-1"
+            @click="router.push('/recruiter/jobs')"
           >
             <i class="pi pi-arrow-left text-xs"></i>
             {{ t("vacancies") }}
@@ -173,19 +238,35 @@ async function handleChat(candidate) {
           </p>
         </div>
 
-        <button
-          @click="stageManagerOpen = true"
-          class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors w-full sm:w-auto justify-center"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          {{ t("pipeline.stageManager.manageButton") }}
-        </button>
+        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors justify-center"
+            @click="openHistory"
+          >
+            {{ t("communication.history.title") }}
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors justify-center"
+            @click="openTemplateManager"
+          >
+            {{ t("communication.templates.manage") }}
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors justify-center"
+            @click="stageManagerOpen = true"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {{ t("pipeline.stageManager.manageButton") }}
+          </button>
+        </div>
       </div>
 
-      <!-- Filters (scoped to this job — no cross-job position picker) -->
       <PipelineFilters
         locked-position
         :search="pipelineStore.search"
@@ -202,7 +283,6 @@ async function handleChat(candidate) {
         {{ t("pipeline.board.fallbackHint") }}
       </div>
 
-      <!-- Analytics -->
       <PipelineAnalytics
         :columns="pipelineStore.boardColumns"
         :stage-counts-map="pipelineStore.stageCountsMap"
@@ -210,23 +290,54 @@ async function handleChat(candidate) {
         :loading="pipelineStore.loadingAnalytics"
       />
 
-      <!-- Board -->
       <PipelineBoard
         :columns="pipelineStore.boardColumns"
         :candidates-by-column="pipelineStore.candidatesByColumn"
         :is-moving="pipelineStore.isMoving"
         :loading="pipelineStore.loadingCandidates"
         :show-job-title="!pipelineStore.isSingleJobMode"
+        :is-selected="pipelineStore.isCandidateSelected"
+        :is-column-fully-selected="pipelineStore.isColumnFullySelected"
+        :is-column-partially-selected="pipelineStore.isColumnPartiallySelected"
         @move="handleMove"
         @open="handleOpenCandidate"
         @chat="handleChat"
+        @toggle-select="handleToggleSelect"
+        @toggle-column-select="handleToggleColumnSelect"
       />
     </div>
 
-    <!-- Candidate detail drawer -->
+    <BulkActionBar
+      v-if="pipelineStore.selectedCount > 0"
+      :count="pipelineStore.selectedCount"
+      :single-stage="pipelineStore.selectionIsSingleStage"
+      :columns="pipelineStore.boardColumns"
+      :moving="bulkMoving"
+      @clear="pipelineStore.clearCandidateSelection()"
+      @send="openBulkSend"
+      @move="handleBulkMove"
+    />
+
+    <BulkSendModal
+      :open="bulkSendOpen"
+      :candidates="pipelineStore.selectedCandidates"
+      :job-post-id="pipelineStore.activeJobPostId"
+      :job-title="jobTitle"
+      @close="bulkSendOpen = false"
+      @sent="onBulkSent"
+      @manage-templates="openTemplateManager"
+    />
+
+    <TemplateManagerModal :open="templateManagerOpen" @close="templateManagerOpen = false" />
+
+    <CommunicationHistoryModal
+      :open="historyOpen"
+      :job-post-id="jobPostId"
+      @close="historyOpen = false"
+    />
+
     <CandidateDetailDrawer :open="drawerOpen" :candidate="drawerCandidate" @close="closeDrawer" @chat="handleChat" />
 
-    <!-- Stage manager -->
     <StageManagerModal
       :open="stageManagerOpen"
       :job-post-id="pipelineStore.activeJobPostId"

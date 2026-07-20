@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { getJobPosts } from "@/services/jobposts.api";
+import { getHotJobPosts } from "@/services/jobposts.api";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -14,10 +14,8 @@ const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
 
 onMounted(async () => {
   try {
-    // Fetch a larger page size to filter HOT jobs locally if backend doesn't filter yet
-    const res = await getJobPosts({ limit: 100 });
-    const all = res.data?.data || [];
-    jobs.value = all.filter(j => j.boost_type === "hot");
+    const res = await getHotJobPosts({ limit: 50, page: 1 });
+    jobs.value = res.data?.data || [];
   } catch (err) {
     console.error("Failed to load hot jobs", err);
   } finally {

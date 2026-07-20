@@ -77,10 +77,10 @@
                 class="w-full h-full object-cover"
               />
               <span v-else class="text-sm font-semibold text-gray-700">
-                {{ auth.user?.name?.charAt(0)?.toUpperCase() }}
+                {{ (auth.user?.name || auth.user?.email || "?").charAt(0)?.toUpperCase() }}
               </span>
             </div>
-            <span class="text-sm">{{ auth.user?.name }}</span>
+            <span class="text-sm">{{ auth.user?.name || auth.user?.email || "" }}</span>
           </div>
 
           <button
@@ -193,11 +193,11 @@
                   class="w-full h-full object-cover"
                 />
                 <span v-else class="text-sm font-semibold text-gray-700">
-                  {{ auth.user?.name?.charAt(0)?.toUpperCase() }}
+                  {{ (auth.user?.name || auth.user?.email || "?").charAt(0)?.toUpperCase() }}
                 </span>
-              </button>
-              <div class="flex-1 min-w-0">
-                <div class="font-semibold truncate">{{ auth.user?.name }}</div>
+              </div>
+              <div class="flex-1">
+                <div class="font-semibold">{{ auth.user?.name || auth.user?.email || "" }}</div>
                 <button
                   class="mt-2 text-sm px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 font-semibold"
                   @click="logout"

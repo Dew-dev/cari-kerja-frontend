@@ -3,10 +3,12 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import api from "@/services/api";
+import { useAuthStore } from "@/stores/authStore";
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const auth = useAuthStore();
 
 const loading = ref(true);
 const success = ref(false);
@@ -18,7 +20,25 @@ onMounted(async () => {
     const result = await api.get("/auth/verify-email", { params: { token } });
     if (!result.err) {
       success.value = true;
-      if (result.data.role === "recruiter") {
+      // Setelah email terverifikasi, hilangkan banner setup email
+      if (auth.isLoggedIn) {
+        auth.markEmailSetupDone();
+        auth.applyNotificationFlags({ requires_email_setup: false });
+        try {
+          await auth.refreshToken({ logoutOnFail: false });
+        } catch {
+          /* ignore */
+        }
+        setTimeout(() => {
+          router.push(
+            auth.role === "recruiter" ? "/recruiter/jobs" : "/profile/edit",
+          );
+        }, 2000);
+        return;
+      }
+
+      const role = result.data?.data?.role || result.data?.role;
+      if (role === "recruiter") {
         setTimeout(() => router.push("/recruiter-login"), 2000);
       } else {
         setTimeout(() => router.push("/login"), 2000);
