@@ -7,6 +7,7 @@ import api from "@/services/api";
 import { getSavedJobs, removeSavedJob } from "@/services/saved-jobs.api";
 import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
+import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -1367,8 +1368,9 @@ watch(activeTab, (newTab) => {
       <!-- PERSONAL INFO TAB -->
       <div
         v-if="activeTab === 'profile'"
-        class="bg-white rounded-2xl shadow-sm p-6"
+        class="space-y-6"
       >
+        <div class="bg-white rounded-2xl shadow-sm p-6">
         <div v-if="loadingProfile" class="text-sm text-gray-500">
           {{ $t('profile.loadingProfile') }}
         </div>
@@ -1717,6 +1719,9 @@ watch(activeTab, (newTab) => {
             </button>
           </div>
         </form>
+        </div>
+
+        <CommunicationPreferencesCard />
       </div>
 
       <!-- RESUMES TAB -->
