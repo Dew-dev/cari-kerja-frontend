@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { useAuthStore } from "@/stores/authStore";
@@ -22,6 +22,15 @@ watch(
   },
 );
 
+onMounted(async () => {
+  // Sinkronkan flag channel dari backend (email sudah diverifikasi tapi localStorage masih stale)
+  try {
+    await auth.refreshToken({ logoutOnFail: false });
+  } catch {
+    /* ignore — tampilan tetap pakai state lokal */
+  }
+});
+
 const loginProvider = computed(() => auth.loginProvider || "local");
 
 const loginProviderLabel = computed(() => {
@@ -35,22 +44,30 @@ const loginProviderLabel = computed(() => {
 
 const emailValue = computed(() => displayEmail(auth.user?.email));
 
+/** @returns {{ state: 'connected'|'pending'|'disconnected', label: string, badge: string, hint?: string }} */
 const emailStatus = computed(() => {
-  if (loginProvider.value === "telegram") {
-    if (auth.requiresEmailSetup || !emailValue.value) {
-      return {
-        connected: false,
-        label: t("profile.notificationChannels.emailNotSet"),
-      };
-    }
+  if (!emailValue.value) {
     return {
-      connected: true,
-      label: emailValue.value,
+      state: "disconnected",
+      label: t("profile.notificationChannels.emailNotSet"),
+      badge: t("profile.notificationChannels.notConnected"),
     };
   }
+
+  // Login Telegram: email tersimpan tapi belum diverifikasi → pending, bukan "not connected"
+  if (loginProvider.value === "telegram" && auth.requiresEmailSetup) {
+    return {
+      state: "pending",
+      label: emailValue.value,
+      badge: t("profile.notificationChannels.pendingVerification"),
+      hint: t("profile.notificationChannels.pendingVerificationHint"),
+    };
+  }
+
   return {
-    connected: Boolean(emailValue.value),
-    label: emailValue.value || t("profile.notificationChannels.emailNotSet"),
+    state: "connected",
+    label: emailValue.value,
+    badge: t("profile.notificationChannels.connected"),
   };
 });
 
@@ -163,21 +180,20 @@ function connectTelegram() {
         </div>
         <span
           class="inline-flex self-start items-center px-2.5 py-1 rounded-full text-xs font-medium"
-          :class="
-            emailStatus.connected
-              ? 'bg-emerald-100 text-emerald-800'
-              : 'bg-amber-100 text-amber-800'
-          "
+          :class="{
+            'bg-emerald-100 text-emerald-800': emailStatus.state === 'connected',
+            'bg-sky-100 text-sky-800': emailStatus.state === 'pending',
+            'bg-amber-100 text-amber-800': emailStatus.state === 'disconnected',
+          }"
         >
-          {{
-            emailStatus.connected
-              ? t("profile.notificationChannels.connected")
-              : t("profile.notificationChannels.notConnected")
-          }}
+          {{ emailStatus.badge }}
         </span>
       </div>
 
       <p class="text-sm text-gray-700 break-all">{{ emailStatus.label }}</p>
+      <p v-if="emailStatus.hint" class="text-xs text-sky-700">
+        {{ emailStatus.hint }}
+      </p>
 
       <div v-if="canManageEmail" class="flex flex-col sm:flex-row gap-2">
         <input

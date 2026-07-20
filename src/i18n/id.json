@@ -479,6 +479,8 @@
       "telegramChannelHint": "Notifikasi lowongan real-time di Telegram.",
       "connected": "Terhubung",
       "notConnected": "Belum terhubung",
+      "pendingVerification": "Menunggu verifikasi",
+      "pendingVerificationHint": "Cek inbox Anda dan buka tautan verifikasi untuk menyelesaikan koneksi email.",
       "emailNotSet": "Belum ada email notifikasi",
       "saveEmail": "Simpan & verifikasi email",
       "emailManagedByGoogle": "Email berasal dari akun Google dan tidak dapat diubah di sini.",

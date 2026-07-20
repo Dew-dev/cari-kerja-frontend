@@ -463,6 +463,8 @@
       "telegramChannelHint": "Telegramda real vaqtda ish bildirishnomalari.",
       "connected": "Ulangan",
       "notConnected": "Ulanmagan",
+      "pendingVerification": "Tasdiqlash kutilmoqda",
+      "pendingVerificationHint": "Inboxni tekshiring va emailni ulashni yakunlash uchun tasdiqlash havolasini oching.",
       "emailNotSet": "Bildirishnoma emaili hali yo'q",
       "saveEmail": "Saqlash va emailni tasdiqlash",
       "emailManagedByGoogle": "Email Google akkauntingizdan olinadi va bu yerda o'zgartirib bo'lmaydi.",
