@@ -5,24 +5,12 @@ import { useAuthStore } from "@/stores/authStore";
 import { push } from "notivue";
 import { useI18n } from "vue-i18n";
 import api from "@/services/api";
+import { decodeAccessToken } from "@/utils/jwt";
 
 const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
 const { t } = useI18n();
-
-function decodeJwt(token) {
-  try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    return JSON.parse(jsonPayload);
-  } catch (e) {
-    return null;
-  }
-}
 
 onMounted(async () => {
   const token = route.query.token;
@@ -42,13 +30,20 @@ onMounted(async () => {
     localStorage.setItem("token", token);
     localStorage.setItem("refreshToken", refreshToken);
 
+    // OAuth token (Google/Telegram) bisa belum memuat worker_id.
+    // Refresh token mengembalikan JWT lengkap via cookie refreshToken.
+    try {
+      await auth.refreshToken();
+    } catch (refreshError) {
+      console.warn("OAuth token refresh failed, continuing with initial token:", refreshError);
+    }
+
     let user = null;
     if (userStr && userStr !== "undefined") {
       user = JSON.parse(decodeURIComponent(userStr));
     } else {
-      // Decode JWT to find role
-      const decoded = decodeJwt(token);
-      if (decoded && decoded.role_id === 2) {
+      const decoded = decodeAccessToken(auth.token || token);
+      if (decoded && Number(decoded.role_id) === 2) {
         // Fetch recruiter profile
         const profileRes = await api.get(`/users/${decoded.id}/recruiters`);
         const recruiterData = profileRes.data.data;

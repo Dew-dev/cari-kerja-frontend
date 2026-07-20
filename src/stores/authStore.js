@@ -70,18 +70,36 @@ export const useAuthStore = defineStore("auth", {
 
     async refreshToken() {
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (!refreshToken) throw new Error("No refresh token");
-
-        const res = await refreshApi(refreshToken);
-
-        const { token, refreshToken: newRefreshToken } = res.data.data;
+        const res = await refreshApi();
+        const { token, user } = res.data.data;
 
         this.token = token;
-        this.refreshToken = newRefreshToken;
-
         localStorage.setItem("token", token);
-        localStorage.setItem("refreshToken", newRefreshToken);
+
+        if (user) {
+          const role =
+            Number(user.role_id) === 2
+              ? "recruiter"
+              : Number(user.role_id) === 1
+                ? "user"
+                : this.user?.role;
+
+          this.user = {
+            ...(this.user || {}),
+            id:
+              Number(user.role_id) === 1
+                ? user.worker_id
+                : Number(user.role_id) === 2
+                  ? user.recruiter_id
+                  : user.id,
+            user_id: user.user_id || user.id,
+            name: user.name || this.user?.name,
+            email: user.email || this.user?.email,
+            avatar_url: user.avatar_url ?? this.user?.avatar_url,
+            role,
+          };
+          localStorage.setItem("user", JSON.stringify(this.user));
+        }
 
         return token;
       } catch (err) {
