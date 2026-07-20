@@ -858,16 +858,20 @@ async function loadSavedJobs() {
     const data = res?.data ?? [];
     savedJobs.value = Array.isArray(data) ? data : [];
   } catch (err) {
-    const message = err?.response?.data?.message || "";
+    const message = err?.response?.data?.message || err?.message || "";
     const status = err?.response?.status;
+    const messageText =
+      typeof message === "string" ? message : message?.message || "";
+
+    // Backend: list kosong atau join gagal sering jadi 404 / "not found"
     if (
       status === 404 ||
-      /not found|tidak ditemukan/i.test(String(message))
+      /not found|tidak ditemukan|can not find/i.test(String(messageText))
     ) {
       savedJobs.value = [];
       return;
     }
-    savedError.value = message || "Failed to load saved jobs";
+    savedError.value = messageText || "Failed to load saved jobs";
     savedJobs.value = [];
   } finally {
     loadingSaved.value = false;

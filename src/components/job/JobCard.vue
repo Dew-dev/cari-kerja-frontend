@@ -54,9 +54,10 @@ import { useRouter } from "vue-router"
 import { useAuthStore } from "@/stores/authStore.js"
 import {
   saveJob,
-  removeSavedJob,
-  removeSavedJobByJobPostId,
+  unsaveJob,
   isSavedJobId,
+  recallSavedJobId,
+  rememberSavedJobId,
 } from "@/services/saved-jobs.api"
 import { push } from "notivue"
 import { useI18n } from "vue-i18n"
@@ -71,13 +72,15 @@ const savedJobId = ref(null)
 const isSavingJob = ref(false)
 
 onMounted(() => {
+  const jobPostId = props.job?.id
   const rawSavedId = props.job?.saved_id
   if (isSavedJobId(rawSavedId)) {
     savedJobId.value = rawSavedId
     isSaved.value = true
+    rememberSavedJobId(jobPostId, rawSavedId)
   } else {
-    savedJobId.value = null
-    isSaved.value = Boolean(props.job?.saved || rawSavedId)
+    savedJobId.value = recallSavedJobId(jobPostId)
+    isSaved.value = Boolean(props.job?.saved || rawSavedId || savedJobId.value)
   }
 })
 
@@ -101,17 +104,14 @@ const handleSaveJob = async () => {
     isSavingJob.value = true
 
     if (isSaved.value) {
-      // DELETE butuh saved_jobs.id, bukan job_post_id
-      if (savedJobId.value) {
-        await removeSavedJob(savedJobId.value)
-      } else {
-        await removeSavedJobByJobPostId(jobPostId)
-      }
+      await unsaveJob({
+        savedJobId: savedJobId.value,
+        jobPostId,
+      })
       savedJobId.value = null
       isSaved.value = false
       push.success(t("notifications.jobRemovedFromSaved"))
     } else {
-      // POST pakai job_post_id
       const res = await saveJob(jobPostId)
       savedJobId.value = res?.data?.id ?? null
       isSaved.value = true

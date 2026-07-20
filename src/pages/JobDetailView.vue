@@ -713,9 +713,10 @@ import {
 // import api from "../services/api";
 import {
   saveJob,
-  removeSavedJob,
-  removeSavedJobByJobPostId,
+  unsaveJob,
   isSavedJobId,
+  recallSavedJobId,
+  rememberSavedJobId,
 } from "../services/saved-jobs.api";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
@@ -968,14 +969,15 @@ const loadJobDetail = async () => {
     const response = await jobDetailService.fetchJobDetail(jobId.value);
     job.value = response.data;
 
-    // saved_id seharusnya UUID saved_jobs.id; backend saat ini bisa kirim boolean EXISTS
+    // saved_id idealnya UUID; backend saat ini sering kirim boolean EXISTS
     const rawSavedId = job.value?.saved_id;
     if (isSavedJobId(rawSavedId)) {
       savedJobId.value = rawSavedId;
       isSaved.value = true;
+      rememberSavedJobId(jobId.value, rawSavedId);
     } else {
-      savedJobId.value = null;
-      isSaved.value = Boolean(rawSavedId);
+      savedJobId.value = recallSavedJobId(jobId.value);
+      isSaved.value = Boolean(rawSavedId) || Boolean(savedJobId.value);
     }
     console.log("Job detail loaded:", job.value);
     // Check if user has already applied
@@ -1198,17 +1200,16 @@ const handleSaveJob = async () => {
     isSavingJob.value = true;
 
     if (isSaved.value) {
-      // DELETE butuh saved_jobs.id, bukan job_post_id
-      if (savedJobId.value) {
-        await removeSavedJob(savedJobId.value);
-      } else {
-        await removeSavedJobByJobPostId(jobId.value);
-      }
+      // Selalu DELETE /saved-jobs/:savedJobId — jangan GET self dulu
+      await unsaveJob({
+        savedJobId: savedJobId.value,
+        jobPostId: jobId.value,
+      });
       savedJobId.value = null;
       isSaved.value = false;
       push.success(t("jobRemovedFromSaved"));
     } else {
-      // POST pakai job_post_id; response.data.id = saved_jobs.id
+      // POST /saved-jobs/:job_post_id; response.data.id = saved_jobs.id
       const res = await saveJob(jobId.value);
       savedJobId.value = res?.data?.id ?? null;
       isSaved.value = true;
@@ -1216,7 +1217,10 @@ const handleSaveJob = async () => {
     }
   } catch (error) {
     console.error("Error saving job:", error);
-    const errorMsg = error.response?.data?.message || t("errorSavingJob");
+    const errorMsg =
+      error?.code === "SAVED_JOB_ID_MISSING"
+        ? t("errorSavingJob")
+        : error.response?.data?.message || t("errorSavingJob");
     push.error(errorMsg);
   } finally {
     isSavingJob.value = false;
