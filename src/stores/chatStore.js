@@ -5,6 +5,7 @@ import {
   getMessages,
   sendMessage as sendMessageApi,
   markAsRead as markAsReadApi,
+  startConversation as startConversationApi,
 } from '@/services/chat.api'
 import { useAuthStore } from '@/stores/authStore'
 import {
@@ -104,9 +105,19 @@ export const useChatStore = defineStore('chat', () => {
   )
 
   const sortedConversations = computed(() =>
-    [...conversations.value].sort(
-      (a, b) => new Date(b.updated_at) - new Date(a.updated_at),
-    ),
+    [...conversations.value].sort((a, b) => {
+      const ta = new Date(
+        a.last_message_at || a.updated_at || a.created_at || 0,
+      ).getTime()
+      const tb = new Date(
+        b.last_message_at || b.updated_at || b.created_at || 0,
+      ).getTime()
+      const aTime = Number.isFinite(ta) ? ta : 0
+      const bTime = Number.isFinite(tb) ? tb : 0
+      if (bTime !== aTime) return bTime - aTime
+      // Stable tie-breaker — opening a chat must not reshuffle equals
+      return String(a.id || '').localeCompare(String(b.id || ''))
+    }),
   )
 
   function getConversationMessages(conversationId) {
@@ -119,6 +130,161 @@ export const useChatStore = defineStore('chat', () => {
 
   function getTypingUsers(conversationId) {
     return Object.keys(typingUsers.value[conversationId] || {})
+  }
+
+  /** Find existing 1:1 conversation with a worker or recruiter (profile and/or users.id). */
+  function findConversationWith({
+    workerId,
+    workerUserId,
+    recruiterId,
+    recruiterUserId,
+  } = {}) {
+    if (
+      workerId == null &&
+      workerUserId == null &&
+      recruiterId == null &&
+      recruiterUserId == null
+    ) {
+      return null
+    }
+
+    const matches = conversations.value.filter((c) => {
+      if (workerId != null || workerUserId != null) {
+        const ids = [
+          c.worker?.id,
+          c.worker?.user_id,
+          c.worker_id,
+          c.participant?.id,
+          c.participant?.user_id,
+        ]
+        if (workerId != null && ids.some((id) => isSameId(id, workerId))) {
+          return true
+        }
+        if (
+          workerUserId != null &&
+          ids.some((id) => isSameId(id, workerUserId))
+        ) {
+          return true
+        }
+      }
+      if (recruiterId != null || recruiterUserId != null) {
+        const ids = [
+          c.recruiter?.id,
+          c.recruiter?.user_id,
+          c.recruiter_id,
+          c.participant?.id,
+          c.participant?.user_id,
+        ]
+        if (
+          recruiterId != null &&
+          ids.some((id) => isSameId(id, recruiterId))
+        ) {
+          return true
+        }
+        if (
+          recruiterUserId != null &&
+          ids.some((id) => isSameId(id, recruiterUserId))
+        ) {
+          return true
+        }
+      }
+      return false
+    })
+
+    if (!matches.length) return null
+
+    // Prefer most recently active thread if duplicates exist
+    return [...matches].sort(
+      (a, b) =>
+        new Date(b.last_message_at || b.updated_at || 0) -
+        new Date(a.last_message_at || a.updated_at || 0),
+    )[0]
+  }
+
+  function upsertConversation(raw) {
+    if (!raw) return null
+    const normalized = normalizeConversation(raw)
+    if (!normalized?.id) return null
+
+    const idx = conversations.value.findIndex((c) => isSameId(c.id, normalized.id))
+    if (idx === -1) {
+      conversations.value = [normalized, ...conversations.value]
+    } else {
+      const next = [...conversations.value]
+      next[idx] = { ...next[idx], ...normalized }
+      conversations.value = next
+    }
+    return normalized
+  }
+
+  /**
+   * Open an existing conversation with the participant, or start a new one.
+   * Returns the conversation id to navigate to.
+   *
+   * One thread per recruiter↔worker pair (job_id is ignored for lookup/create).
+   *
+   * @param {{
+   *   worker_id?: string|number,
+   *   worker_profile_id?: string|number,
+   *   recruiter_id?: string|number,
+   *   recruiter_profile_id?: string|number,
+   *   job_id?: string|number,
+   * }} payload
+   *   worker_id / recruiter_id = users.id (required by POST /chat/start)
+   *   *_profile_id = workers.id / recruiters.id (for local list matching)
+   */
+  async function startOrOpenConversation(payload = {}) {
+    const workerUserId = payload.worker_id
+    const workerProfileId = payload.worker_profile_id
+    const recruiterUserId = payload.recruiter_id
+    const recruiterProfileId = payload.recruiter_profile_id
+
+    if (workerUserId == null && recruiterUserId == null) {
+      throw new Error('worker_id or recruiter_id (users.id) is required')
+    }
+
+    // Always refresh — store may be empty if user never opened /chat
+    await fetchConversations()
+
+    const existing = findConversationWith({
+      workerId: workerProfileId,
+      workerUserId,
+      recruiterId: recruiterProfileId,
+      recruiterUserId,
+    })
+    if (existing?.id) return existing.id
+
+    // Omit job_id so backend looks up / creates the pair-scoped thread
+    // (job-scoped uniqueness would spawn duplicate chats per vacancy)
+    const apiPayload = {}
+    if (workerUserId != null) apiPayload.worker_id = workerUserId
+    if (recruiterUserId != null) apiPayload.recruiter_id = recruiterUserId
+
+    const res = await startConversationApi(apiPayload)
+    const data = res.data?.data ?? res.data
+    const conversation =
+      data && typeof data === 'object' && !Array.isArray(data) ? data : null
+    const conversationId =
+      conversation?.id ||
+      conversation?.conversation_id ||
+      data?.id ||
+      data?.conversation_id
+
+    if (!conversationId) throw new Error('No conversation ID returned')
+
+    if (conversation) {
+      upsertConversation(conversation)
+    } else {
+      await fetchConversations()
+    }
+
+    const matched = findConversationWith({
+      workerId: workerProfileId,
+      workerUserId,
+      recruiterId: recruiterProfileId,
+      recruiterUserId,
+    })
+    return matched?.id || conversationId
   }
 
   // ─── Actions ──────────────────────────────────────────────────────────────
@@ -174,19 +340,8 @@ export const useChatStore = defineStore('chat', () => {
         [conversationId]: nextMessages,
       }
 
-      // Preview only — never bump updated_at on open (that re-sorts the sidebar)
-      if (page === 1 && nextMessages.length > 0) {
-        const latest = nextMessages.reduce((a, b) =>
-          new Date(a.created_at || 0) >= new Date(b.created_at || 0) ? a : b,
-        )
-        const conv = conversations.value.find((c) => c.id === conversationId)
-        if (conv) {
-          conv.last_message = {
-            message: getMessageText(latest),
-            created_at: latest.created_at,
-          }
-        }
-      }
+      // Do not touch conversation list fields on open — mutating them
+      // re-runs sidebar sort and makes the order jump.
 
       messagePagination.value = {
         ...messagePagination.value,
@@ -288,7 +443,10 @@ export const useChatStore = defineStore('chat', () => {
     try {
       await markAsReadApi(conversationId)
       const conv = conversations.value.find((c) => c.id === conversationId)
-      if (conv) conv.unread_count = 0
+      // Only mutate when needed — avoids pointless sidebar re-sorts
+      if (conv && (conv.unread_count || 0) > 0) {
+        conv.unread_count = 0
+      }
 
       if (messages.value[conversationId]) {
         messages.value = {
@@ -409,6 +567,8 @@ export const useChatStore = defineStore('chat', () => {
     isTyping,
     getTypingUsers,
     // Actions
+    findConversationWith,
+    startOrOpenConversation,
     fetchConversations,
     fetchMessages,
     loadMoreMessages,

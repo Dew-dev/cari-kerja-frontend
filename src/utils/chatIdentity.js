@@ -1,11 +1,14 @@
 /**
  * Chat identity helpers.
  *
- * API shape:
+ * API / login shape:
  *   worker/recruiter/sender.id      → workers.id | recruiters.id (profile)
  *   worker/recruiter/sender.user_id → users.id
  *
- * auth.user typically mirrors that: id = profile, user_id = users.id
+ * auth.user: id = profile, user_id = users.id
+ *
+ * Chat tables (conversations.worker_id / recruiter_id) store users.id.
+ * POST /chat/start { worker_id } therefore expects users.id, not workers.id.
  */
 
 export function isSameId(a, b) {
@@ -57,7 +60,7 @@ export function getSenderKey(message) {
   )
 }
 
-/** Worker profile id for POST /chat/start { worker_id }. */
+/** Worker profile id (workers.id) — for matching conversation.worker.id in the list. */
 export function resolveWorkerProfileId(source) {
   if (!source) return null
 
@@ -79,6 +82,31 @@ export function resolveWorkerProfileId(source) {
     if (source.application_id && isSameId(id, source.application_id)) continue
     // Never send users.id when we have a distinct profile id available
     if (source.user_id && isSameId(id, source.user_id) && source.worker?.id) continue
+    return id
+  }
+
+  return null
+}
+
+/**
+ * users.id for POST /chat/start { worker_id }.
+ * Chat DB FKs reference users.id (same as JWT userMeta.id).
+ */
+export function resolveWorkerUserId(source) {
+  if (!source) return null
+
+  const candidates = [
+    source.worker?.user_id,
+    source.user_id,
+    source.worker_user_id,
+  ]
+
+  for (const id of candidates) {
+    if (id == null || id === '') continue
+    if (source.application_id && isSameId(id, source.application_id)) continue
+    // Don't confuse workers.id with users.id
+    const profileId = resolveWorkerProfileId(source)
+    if (profileId && isSameId(id, profileId)) continue
     return id
   }
 

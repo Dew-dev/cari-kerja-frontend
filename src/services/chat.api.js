@@ -2,8 +2,8 @@ import api from './api'
 
 /**
  * Start a conversation (or retrieve existing one).
- * - Recruiter sends: { worker_id, job_id? }
- * - Worker sends:    { recruiter_id, job_id? }
+ * - Recruiter sends: { worker_id, job_id? } where worker_id = users.id
+ * - Worker sends:    { recruiter_id, job_id? } where recruiter_id = users.id
  */
 export const startConversation = (data) => api.post('/chat/start', data)
 

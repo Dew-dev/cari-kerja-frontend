@@ -46,6 +46,7 @@ function mapApplicantToCandidate(applicant, jobPostId, stages) {
   return {
     application_id: applicant.application_id,
     worker_id: workerId,
+    user_id: applicant.user_id || applicant.worker?.user_id || null,
     name: applicant.name,
     email: applicant.email,
     avatar_url: applicant.avatar_url || null,
@@ -75,6 +76,7 @@ function normalizePipelineCandidate(raw) {
     ...raw,
     application_id: applicationId,
     worker_id: workerId,
+    user_id: raw.user_id || raw.worker?.user_id || null,
     job_post_id: raw.job_post_id || raw.job_post?.id || null,
     name: raw.name || raw.worker?.name || raw.applicant_name,
     avatar_url: raw.avatar_url || raw.worker?.avatar_url || null,

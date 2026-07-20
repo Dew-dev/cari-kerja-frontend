@@ -4,14 +4,16 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import api from "@/services/api";
-import { startConversation } from "@/services/chat.api";
 import { getJobStages, moveApplicationStage } from "@/services/pipeline.api";
 import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
-import { resolveWorkerProfileId } from "@/utils/chatIdentity";
+import { resolveWorkerProfileId, resolveWorkerUserId } from "@/utils/chatIdentity";
+import { useChatStore } from "@/stores/chatStore";
+import { getWorkerById } from "@/services/workers.api";
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const chatStore = useChatStore();
 
 const applicants = ref([]);
 const title = ref("");
@@ -93,22 +95,30 @@ function formatDate(date) {
 const chattingId = ref(null); // track which applicant is loading chat
 
 async function startChat(applicant) {
-  // API expects workers.id (profile), not users.id
-  const workerId =
-    resolveWorkerProfileId(applicant) ||
-    applicant.worker_id ||
-    applicant.worker?.id ||
-    applicant.id;
-  if (!workerId) {
+  // POST /chat/start expects users.id; list matching uses workers.id
+  const workerProfileId = resolveWorkerProfileId(applicant);
+  let workerUserId = resolveWorkerUserId(applicant);
+
+  if (!workerUserId && workerProfileId) {
+    try {
+      const res = await getWorkerById(workerProfileId);
+      workerUserId = res?.data?.user_id || res?.user_id;
+    } catch (err) {
+      console.error("[Chat] Failed to resolve worker user_id:", err);
+    }
+  }
+
+  if (!workerUserId) {
     push.error(t("chat.cannotStartChat") || "Cannot identify worker");
     return;
   }
 
   try {
     chattingId.value = applicant.application_id;
-    const res = await startConversation({ worker_id: workerId });
-    const conversationId = res.data?.data?.id || res.data?.id;
-    if (!conversationId) throw new Error("No conversation ID returned");
+    const conversationId = await chatStore.startOrOpenConversation({
+      worker_id: workerUserId,
+      worker_profile_id: workerProfileId,
+    });
     router.push(`/chat/${conversationId}`);
   } catch (err) {
     push.error(err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation");
