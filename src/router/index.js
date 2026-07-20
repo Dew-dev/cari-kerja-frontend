@@ -242,7 +242,7 @@ const routes = [
     path: "/search-workers",
     name: "search-workers",
     component: () => import("../pages/recruiter/SearchWorkers.vue"),
-    // meta: { requiresAuth: true, role: "recruiter" },
+    meta: { requiresAuth: true, role: "recruiter" },
   },
   {
     path: "/cv-reader-demo",
