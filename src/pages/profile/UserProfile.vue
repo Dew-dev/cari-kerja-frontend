@@ -9,6 +9,7 @@ import { changeEmail } from "@/services/auth.api";
 import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
 import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
+import NotificationChannelsCard from "@/components/profile/NotificationChannelsCard.vue";
 import { displayEmail } from "@/utils/authFlags";
 
 const router = useRouter();
@@ -1775,6 +1776,7 @@ watch(activeTab, (newTab) => {
         </form>
         </div>
 
+        <NotificationChannelsCard />
         <CommunicationPreferencesCard />
       </div>
 
