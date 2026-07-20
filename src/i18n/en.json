@@ -1,4 +1,4 @@
-﻿{
+{
   "jobs": "Jobs",
   "companies": "Companies",
   "jobsByCompany": "Jobs by Company",
@@ -81,6 +81,27 @@
     "forEmployers": "For employers",
     "signIn": "Sign in",
     "language": "Language"
+  },
+  "chat": {
+    "title": "Messages",
+    "searchPlaceholder": "Search conversations...",
+    "typeMessage": "Type a message...",
+    "send": "Send",
+    "noConversations": "No conversations yet",
+    "noConversationsSubtitle": "Your messages with recruiters will appear here",
+    "noResults": "No conversations found",
+    "selectConversation": "Select a conversation",
+    "selectConversationSubtitle": "Choose a conversation from the list to start chatting",
+    "noMessages": "No messages yet",
+    "startConversation": "Say hello to get the conversation started!",
+    "online": "Online",
+    "offline": "Offline",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "failedToSend": "Failed to send message",
+    "chatButton": "Chat",
+    "failedToStartChat": "Failed to start conversation",
+    "cannotStartChat": "Cannot identify worker"
   },
   "home": {
     "title": "Indonesia's #1 job portal",
@@ -445,6 +466,34 @@
     "jpgOrPngMax2MB": "JPG or PNG, max 2MB",
     "fullName": "Full Name",
     "email": "Email",
+    "emailNotificationPlaceholder": "email{'@'}example.com (optional)",
+    "emailTelegramHint": "Empty email is normal for Telegram login. Email is for notifications only, not a login method.",
+    "updateEmail": "Save notification email",
+    "notificationChannels": {
+      "title": "Notification channels",
+      "subtitle": "Manage how you receive job alerts. Login method stays separate from notification channels.",
+      "loginMethod": "Login method",
+      "loginOnly": "Login only",
+      "providerLocal": "Email & password",
+      "providerGoogle": "Google",
+      "providerTelegram": "Telegram",
+      "emailChannel": "Email",
+      "emailChannelHint": "Newsletters, password reset, and job updates by email.",
+      "telegramChannel": "Telegram",
+      "telegramChannelHint": "Real-time job notifications on Telegram.",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "pendingVerification": "Pending verification",
+      "pendingVerificationHint": "Check your inbox and open the verification link to finish connecting email.",
+      "emailNotSet": "No notification email yet",
+      "saveEmail": "Save & verify email",
+      "emailManagedByGoogle": "Email comes from your Google account and cannot be changed here.",
+      "telegramAsLogin": "Used as your login method",
+      "telegramLinked": "Connected for notifications",
+      "telegramNotLinked": "Not linked for notifications",
+      "connectTelegram": "Connect Telegram",
+      "telegramLoginHint": "You already sign in with Telegram. No extra link is needed for notifications."
+    },
     "phone": "Phone",
     "dateOfBirth": "Date of Birth",
     "gender": "Gender",
@@ -571,10 +620,57 @@
     "createSkill": "Create",
     "loadingSkills": "Loading skills...",
     "done": "Done",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "languages": "Languages",
+    "noLanguagesAdded": "No languages added.",
+    "addLanguageButton": "Add Language",
+    "editLanguage": "Edit Language",
+    "languageName": "Language",
+    "searchOrTypeLanguage": "Search or type a language...",
+    "loadingLanguages": "Loading languages...",
+    "proficiencyLevel": "Proficiency Level",
+    "selectProficiency": "Select proficiency",
+    "setAsPrimaryLanguage": "Set as primary language",
+    "primaryLanguage": "Primary",
+    "languageFormIncomplete": "Please fill in the language and proficiency level",
+    "languageAlreadyAdded": "Language already added",
+    "languageAdded": "Language added",
+    "languageUpdated": "Language updated",
+    "languageRemoved": "Language removed",
+    "failedToSaveLanguage": "Failed to save language",
+    "failedToDeleteLanguage": "Failed to delete language",
+    "proficiency": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "fluent": "Fluent",
+      "native": "Native"
+    },
     "failedtoaddskill": "Failed to add skill",
     "failedtoremoveskill": "Failed to remove skill",
     "skilladded": "Skill added",
-    "skillremoved": "Skill removed"
+    "skillremoved": "Skill removed",
+    "cvParser": {
+      "tab": "CV Parser",
+      "title": "Parse Your CV",
+      "subtitle": "Upload your CV to automatically detect and fill in your profile data. Review each section before saving.",
+      "uploadLabel": "Upload CV (PDF or DOCX)",
+      "acceptedFormats": "Accepted: PDF, DOCX – Max 10MB",
+      "parseButton": "Parse CV",
+      "parsing": "Parsing...",
+      "selectFile": "Please select a CV file",
+      "invalidType": "Only PDF or DOCX files are allowed",
+      "failedToParse": "Failed to parse CV",
+      "parseSuccess": "CV parsed successfully – review and apply the data below",
+      "foundInCV": "Found in your CV",
+      "applyToProfile": "Apply to Profile",
+      "apply": "Apply",
+      "applyAll": "Apply All",
+      "appliedPersonalInfo": "Personal info applied to profile. Review and save when ready.",
+      "appliedSection": "Applied to profile. Go to the tab and save each entry.",
+      "applyHint": "Entries are not saved yet. Go to the tab and click Save on each entry.",
+      "skillsHint": "Skills found in your CV. Add them manually via the Profile tab."
+    }
   },
   "about": {
     "pageTitle": "About",
@@ -1530,31 +1626,47 @@
     }
   },
   "privacyPolicy": {
+    "pageTitle": "Cari Kerja - Privacy Policy",
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: February 4, 2026",
+    "subtitle": "How we collect, use, and protect your personal data when you use Cari Kerja.",
+    "lastUpdated": "Last updated: July 17, 2026",
+    "onThisPage": "On this page",
+    "toc": {
+      "introduction": "Introduction",
+      "informationCollection": "Information we collect",
+      "useOfData": "How we use data",
+      "security": "Data security",
+      "cookies": "Cookies",
+      "thirdPartyAccess": "Third parties",
+      "disclosure": "Disclosure",
+      "retention": "Data retention",
+      "rights": "Your rights",
+      "changes": "Policy changes",
+      "contact": "Contact us"
+    },
     "introduction": {
       "title": "1. Introduction",
-      "content": "Cari Kerja (\"we\" or \"us\" or \"our\") operates the Cari Kerja website. This page explains our policies regarding the collection, use, and disclosure of personal data when you use our service and the choices you have associated with that data."
+      "content": "Cari Kerja (\"we\", \"us\", or \"our\") operates the Cari Kerja job portal. This page explains our policies regarding the collection, use, and disclosure of personal data when you use our service, and the choices you have associated with that data."
     },
     "informationCollection": {
       "title": "2. Information Collection and Use",
-      "intro": "We collect several different types of information for various purposes to provide and improve our service to you:",
+      "intro": "We collect several types of information to provide and improve our service:",
       "items": {
-        "accountTitle": "Account Information:",
+        "accountTitle": "Account information:",
         "account": "name, email address, phone number, and password",
-        "profileTitle": "Profile Information:",
+        "profileTitle": "Profile information:",
         "profile": "resume, work experience, education, skills, and qualifications",
-        "applicationTitle": "Application Data:",
+        "applicationTitle": "Application data:",
         "application": "job applications, cover letters, and application history",
-        "technicalTitle": "Technical Data:",
+        "technicalTitle": "Technical data:",
         "technical": "IP address, browser type, pages visited, and time spent on pages",
-        "communicationTitle": "Communication Data:",
+        "communicationTitle": "Communication data:",
         "communication": "messages between job seekers and recruiters"
       }
     },
     "useOfData": {
       "title": "3. Use of Data",
-      "content": "We use the collected data for various purposes including providing and maintaining the service, notifying you about changes, offering customer support, analyzing and improving the service, monitoring usage, and addressing technical issues.",
+      "content": "We use the collected data for various purposes, including providing and maintaining the service, notifying you about changes, offering customer support, analyzing and improving the service, monitoring usage, and addressing technical issues.",
       "items": {
         "provide": "To provide and maintain the service",
         "notify": "To notify you about changes to our service",
@@ -1598,7 +1710,7 @@
         "access": "The right to access your personal data",
         "correct": "The right to correct inaccurate data",
         "delete": "The right to request deletion of your data",
-        "optOut": "The right to opt-out of marketing communications",
+        "optOut": "The right to opt out of marketing communications",
         "portable": "The right to request a copy of your data in a portable format"
       }
     },
@@ -1610,9 +1722,10 @@
       "title": "11. Contact Us",
       "intro": "If you have any questions about this privacy policy, please contact us at:",
       "emailLabel": "Email",
-      "email": "privacy@Cari Kerja",
+      "email": "privacy{'@'}cari-kerja.co.id",
       "addressLabel": "Address",
-      "address": "Jakarta, Indonesia"
+      "address": "Jakarta, Indonesia",
+      "contactPageLink": "Visit our contact page"
     }
   },
   "termsOfService": {
@@ -1688,8 +1801,8 @@
     "title": "Contact Us",
     "subtitle": "Have a question or need help? Reach out to our team — we are here to help employers and job seekers alike.",
     "mainOffice": "Main office",
-    "officeAddressLine1": "123 Jobs Street",
-    "officeAddressLine2": "Cityname, Country 10001",
+    "officeAddressLine1": "Oscorp Building, Jl. Darmawangsa Raya No.16, RT.6/RW.1, Pulo, Kebayoran Baru, South Jakarta City, Jakarta 12160",
+    "officeAddressLine2": "",
     "workingHours": "Working hours",
     "workingHoursWeekdays": "Mon — Fri: 9:00 — 18:00",
     "workingHoursSat": "Sat: 10:00 — 14:00",
@@ -1704,10 +1817,14 @@
     "emailLabel": "Email:",
     "phoneLabel": "Phone:",
     "sendMessage": "Send us a message",
+    "formHint": "Fill in the form below and our team will get back to you as soon as possible.",
     "yourName": "Your name",
     "fullNamePlaceholder": "Full name",
     "email": "Email",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "you{'@'}example.com",
+    "phone": "Phone",
+    "phonePlaceholder": "+62 812 3456 7890",
+    "optional": "optional",
     "subject": "Subject",
     "subjectPlaceholder": "Subject",
     "message": "Message",
@@ -1716,11 +1833,21 @@
     "sendMessageButton": "Send message",
     "messageSent": "Your message was sent successfully.",
     "sendFailed": "Failed to send message. Please try again.",
+    "validation": {
+      "nameRequired": "Name is required.",
+      "nameMax": "Name must be at most 100 characters.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "phoneInvalid": "Please enter a valid phone number.",
+      "subjectRequired": "Subject is required.",
+      "subjectMax": "Subject must be at most 255 characters.",
+      "messageRequired": "Message is required."
+    },
     "ourLocation": "Our location",
     "mapPlaceholderTitle": "Map placeholder",
     "mapPlaceholderSubtitle": "Add Google Maps iframe or a static map here",
     "postalAddress": "Postal address",
-    "postalAddressLine": "Oscorp Building, Jl. TB Simatupang, Jakarta Selatan, 12430",
+    "postalAddressLine": "Oscorp Building, Jl. Darmawangsa Raya No.16, RT.6/RW.1, Pulo, Kebayoran Baru, South Jakarta City, Jakarta 12160",
     "urgentPrefix": "For urgent inquiries call",
     "urgentSuffix": "For other matters use the form above or email one of our departments directly."
   },
@@ -1860,6 +1987,10 @@
     "goBack": "Go Back"
   },
   "auth": {
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google",
+    "signInWithTelegram": "Sign in with Telegram",
+    "signUpWithTelegram": "Sign up with Telegram",
     "emailLabel": "Email Address",
     "usernameLabel": "Username",
     "passwordLabel": "Password",
@@ -1889,11 +2020,11 @@
     "phonePlaceholder": "+62 (XX) XXXX-XXXX",
     "passwordRequirements": "Min 8 chars, uppercase, lowercase, number & symbol",
     "placeholders": {
-      "email": "you@example.com",
+      "email": "you{'@'}example.com",
       "name": "John Doe",
       "username": "johndoe123",
       "companyUsername": "company123",
-      "recruiterEmail": "recruiter@company.com",
+      "recruiterEmail": "recruiter{'@'}company.com",
       "company": "Your Company Ltd.",
       "contactName": "John Manager"
     },
@@ -1906,24 +2037,50 @@
       "sending": "Sending...",
       "resendVerification": "Resend verification email",
       "verify": "Verifying...",
-      "redirecting": "Redirecting to login…"
+      "redirecting": "Redirecting to login…",
+      "redirectingToApp": "Signing you in…"
     },
     "messages": {
       "emailNotVerified": "Your email is not verified.",
       "verificationSent": "Verification email sent",
       "failedToSendVerification": "Failed to send verification email",
-      "verificationSuccess": "Email verified. Redirecting to login…",
+      "verificationSuccess": "Email verified. Redirecting…",
       "invalidToken": "Invalid or expired verification link",
       "passwordResetSuccess": "Password reset successfully.",
       "noPassword": "Password is required",
       "passwordMismatch": "Password confirmation does not match",
-      "failedReset": "Failed to reset password"
+      "failedReset": "Failed to reset password",
+      "loginSuccess": "Login successful!",
+      "signInError": "An error occurred during sign in."
     },
     "sendResetLinkSubtitle": "Enter your email and we'll send you a reset link.",
     "newPassword": "New Password",
     "enterNewPassword": "Enter your new password below.",
     "ifEmailExists": "If the email exists, a reset link has been sent.",
-    "resendIn": "Resend in"
+    "resendIn": "Resend in",
+    "banners": {
+      "linkTelegram": "Connect your Telegram account to receive the latest job notifications in real time.",
+      "linkTelegramAction": "Connect Telegram",
+      "setupEmail": "Add and verify an email to receive newsletters, password resets, and job updates by email.",
+      "setupEmailAction": "Add email",
+      "setupEmailTitle": "Add notification email",
+      "setupEmailHint": "Email is only used for notifications. You still log in with Telegram.",
+      "saveEmail": "Save & send verification",
+      "emailRequired": "Email is required",
+      "verificationEmailSent": "Verification email sent. Please check your inbox.",
+      "failedChangeEmail": "Failed to update email",
+      "dismiss": "Dismiss",
+      "cancel": "Cancel",
+      "linkingTelegram": "Connecting Telegram...",
+      "telegramLinked": "Telegram connected for notifications.",
+      "failedLinkTelegram": "Failed to connect Telegram",
+      "missingTelegramCode": "Telegram OAuth code is missing.",
+      "loginRequiredForLink": "Please sign in first to connect Telegram.",
+      "backToApp": "Back to app",
+      "linkInterrupted": "Telegram connect was interrupted and did not switch your account. Please try Connect Telegram again from Profile.",
+      "telegramAlreadyLoginAccount": "This Telegram is already used as a login account. Use a different Telegram for notifications, or keep using Telegram login for that account.",
+      "telegramAlreadyLinked": "This Telegram is already linked for notifications on another account."
+    }
   },
   "notifications": {
     "sessionExpired": "Session expired, please login again",
@@ -1951,5 +2108,348 @@
   "noAddressProvided": "Address not provided",
   "noContactNameProvided": "Contact name not provided",
   "noContactPhoneProvided": "Contact phone not provided",
-  "noWebsiteProvided": "Website not provided"
+  "noWebsiteProvided": "Website not provided",
+  "notFound": {
+    "pageTitle": "Page Not Found",
+    "title": "404",
+    "subtitle": "Oops! Page not found",
+    "description": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
+    "backHome": "Back to Home",
+    "findJobs": "Find Jobs"
+  },
+  "payment": {
+    "pricing": "Plans & Pricing",
+    "pricingTitle": "Boost Recruitment",
+    "pricingTitleAccent": " Without Limits",
+    "pricingSubtitle": "Choose a plan that fits your business needs — from free to enterprise.",
+    "activePlan": "Active plan",
+    "maxPosts": "max active jobs",
+    "singleSlots": "single slots",
+    "loadingPlans": "Loading plans...",
+    "tabs": {
+      "subscription": "Subscription",
+      "singlePost": "Single Post",
+      "boost": "Boost Job"
+    },
+    "planName": {
+      "free": "Free",
+      "starter": "Starter",
+      "pro": "Pro",
+      "business": "Business"
+    },
+    "features": {
+      "free": ["1 active job post", "No fees", "Basic access"],
+      "starter": ["5 active job posts", "Valid for 30 days", "All standard features"],
+      "pro": ["15 active job posts", "Valid for 30 days", "Priority support"],
+      "business": ["25 active job posts", "Valid for 30 days", "Premium support"],
+      "activePosts": "active job posts simultaneously",
+      "durationDays": "days since activation",
+      "secureXendit": "Secure payment processed by Xendit"
+    },
+    "priceFormat": {
+      "free": "Free",
+      "days": "days"
+    },
+    "cta": {
+      "default": "Default Plan",
+      "active": "Active Plan",
+      "select": "Choose Plan",
+      "details": "View Details & Buy",
+      "boost": "Boost via Jobs Page"
+    },
+    "singlePostDesc": "Buy single postings without a subscription. Perfect for occasional recruitment needs.",
+    "slots": {
+      "available": "Available Single Slots",
+      "expires": "Expires",
+      "hint": "Apply this slot when posting a job vacancy on the Jobs page."
+    },
+    "boostTitle": "Boost Job",
+    "boostSubtitle": "Increase your job posting's visibility to get more applicants.",
+    "boostTypes": {
+      "top10Title": "Boost Top-10",
+      "top10Desc": "Your job stays in the top 10 positions every day for the boost duration.",
+      "hotTitle": "Boost Hot (Top Position)",
+      "hotDesc": "Your job stands out at the absolute top position — maximum exposure."
+    },
+    "boostModal": {
+      "title": "Boost Job",
+      "info": "Choose a boost plan, and you will be redirected to the checkout page for pricing details and payment options.",
+      "hot": "HOT — Top Position",
+      "hotDesc": "Top position",
+      "top10": "Top-10 Daily",
+      "top10Desc": "Top 10 daily",
+      "selectPay": "Select",
+      "empty": "No boost plans available",
+      "footer": "Secure via Xendit · Activated automatically after payment"
+    },
+    "history": "View my transaction history",
+    "checkout": {
+      "backToPlans": "Back to Plans",
+      "backToDetails": "Back to Details",
+      "stepPlanDetail": "Plan Details",
+      "stepMethod": "Payment Method",
+      "priceDetails": "Price Breakdown",
+      "planPrice": "Plan price",
+      "ppn": "VAT",
+      "subtotal": "Subtotal",
+      "totalPay": "Total Payment",
+      "vatHint": "Prices include 11% VAT in compliance with Indonesian tax laws.",
+      "feeHint": "Payment method fee will be displayed in the next step.",
+      "continue": "Continue",
+      "selectedPlan": "Selected plan",
+      "qrisDesc": "GoPay, OVO, Dana, ShopeePay, etc.",
+      "vaTitle": "Transfer Virtual Account",
+      "vaDesc": "BCA, BNI, BRI, Mandiri, Permata, BSI",
+      "vaSelect": "Select bank to generate Virtual Account:",
+      "cardTitle": "Credit / Debit Card",
+      "cardDesc": "Visa, Mastercard, JCB",
+      "cardName": "Cardholder Name",
+      "cardNamePlaceholder": "As printed on the card",
+      "cardNumber": "Card Number",
+      "cardExpiry": "Expiration Date",
+      "cardCvv": "CVV / CVC",
+      "cardCvvHint": "(3-4 digits)",
+      "cardSecureHint": "Your card details are verified on encrypted Xendit payment checkout (PCI DSS).",
+      "totalCharged": "Total Charged",
+      "payButton": "Generate Invoice",
+      "secureTransaction": "Payments are processed securely by Xendit · PCI DSS Compliant",
+      "errors": {
+        "invalidParams": "Invalid plan parameters",
+        "planNotFound": "Plan not found",
+        "fetchFailed": "Failed to load plan details",
+        "selectMethod": "Please select a payment method first",
+        "nameRequired": "Cardholder name is required",
+        "cardNumberInvalid": "Invalid card number",
+        "cardExpiryInvalid": "Invalid format (MM/YY)",
+        "cardCvvInvalid": "CVV must be at least 3 digits"
+      }
+    },
+    "orders": {
+      "title": "Transaction History",
+      "subtitle": "All billing and transaction records of your account",
+      "buyPlan": "Purchase Plan",
+      "allStatus": "All Statuses",
+      "allTypes": "All Types",
+      "empty": "No transactions yet",
+      "emptyDesc": "Get started by purchasing a plan to speed up your recruitment.",
+      "table": {
+        "date": "Date",
+        "type": "Type",
+        "plan": "Plan",
+        "amount": "Amount",
+        "status": "Status",
+        "action": "Action"
+      },
+      "status": {
+        "pending": "Pending Payment",
+        "paid": "Paid",
+        "expired": "Expired",
+        "failed": "Failed"
+      },
+      "types": {
+        "subscription": "Subscription",
+        "singlePost": "Single Post",
+        "boost": "Boost"
+      },
+      "actionPay": "Pay",
+      "totalOrders": "total transactions"
+    },
+    "success": {
+      "title": "Payment Successful!",
+      "desc": "Your package will be activated automatically in a few moments.",
+      "currentPlan": "Current Active Plan",
+      "maxPosts": "Max Active Posts",
+      "expiresAt": "Valid Until",
+      "activeProcess": "Your package is currently being activated. Please check back shortly or review your transaction history.",
+      "manageJobs": "Manage My Jobs",
+      "history": "Transaction History",
+      "amountPaid": "Amount Paid"
+    },
+    "failure": {
+      "title": "Payment Failed",
+      "desc": "We are sorry, your transaction could not be processed or was cancelled.",
+      "reason": "Reason for Failure",
+      "reasonDesc": "The payment could not be completed. Please try another payment method or contact your bank.",
+      "tryAgain": "Try Again",
+      "backPricing": "Back to Plans",
+      "support": "Contact Support"
+    }
+  },
+  "pipeline": {
+    "navLabel": "Pipeline",
+    "title": "Candidate Pipeline",
+    "subtitle": "Track and manage candidate progress across every stage of your hiring process",
+    "stages": {
+      "applied": "Applied",
+      "screening": "Screening",
+      "interview": "Interview",
+      "offer": "Offer",
+      "hired": "Hired",
+      "rejected": "Rejected",
+      "custom": "Custom"
+    },
+    "filters": {
+      "searchPlaceholder": "Search candidate name...",
+      "allPositions": "All Positions",
+      "reset": "Reset filters"
+    },
+    "analytics": {
+      "stageCounts": "Candidates per Stage",
+      "total": "{count} total candidates",
+      "conversionRate": "Conversion Rate",
+      "estimated": "estimated",
+      "estimatedHint": "Approximated from the current stage distribution until backend analytics are available"
+    },
+    "board": {
+      "emptyColumn": "No candidates",
+      "noStages": "No stages configured yet",
+      "moveFailed": "Failed to move candidate",
+      "fallbackHint": "Pipeline API is not available on this environment yet — showing applicants via the legacy endpoint. Drag-and-drop and stage management need the backend pipeline module deployed."
+    },
+    "card": {
+      "moveTo": "Move to",
+      "today": "Applied today",
+      "daysAgo": "Applied {count} day(s) ago"
+    },
+    "drawer": {
+      "title": "Candidate Detail"
+    },
+    "timeline": {
+      "title": "Activity Timeline",
+      "empty": "No activity yet",
+      "addNotePlaceholder": "Add an internal note or feedback...",
+      "addNote": "Add Note",
+      "saving": "Saving...",
+      "noteAdded": "Note added",
+      "noteFailed": "Failed to add note",
+      "fallbackHint": "Showing a simplified timeline while the full activity history is being connected.",
+      "events": {
+        "applied": "Applied for this position",
+        "note": "Note added"
+      }
+    },
+    "stageManager": {
+      "manageButton": "Manage Stages",
+      "selectOneJobHint": "Select a single position to customize its stages",
+      "title": "Manage Pipeline Stages",
+      "hint": "Drag to reorder. Double-click a stage name to rename it.",
+      "system": "Default",
+      "newStagePlaceholder": "New stage name...",
+      "add": "Add",
+      "created": "Stage created",
+      "renamed": "Stage renamed",
+      "deleted": "Stage deleted",
+      "confirmDelete": "Delete stage \"{name}\"? Candidates in this stage must be moved first.",
+      "actionFailed": "Action failed",
+      "deleteFailed": "Failed to delete stage"
+    }
+  },
+  "communication": {
+    "bulk": {
+      "selected": "{count} candidate(s) selected",
+      "hint": "Select candidates in the same pipeline stage to email them together.",
+      "moveHint": "Move all selected candidates to another pipeline stage at once.",
+      "moveToPlaceholder": "Move to stage…",
+      "moveSelected": "Move selected",
+      "moving": "Moving…",
+      "moveSuccess": "Moved {moved} candidate(s) to {stage}",
+      "movePartial": "{failed} candidate(s) could not be moved",
+      "moveFailed": "Failed to move selected candidates",
+      "singleStageRequired": "Bulk email requires all selected candidates to be in the same stage.",
+      "clear": "Clear",
+      "sendEmail": "Send email",
+      "sendTitle": "Bulk email",
+      "recipientCount": "{count} recipient(s)",
+      "subject": "Subject",
+      "subjectPlaceholder": "e.g. Next steps for {'{'}{'{'}job_title{'}'}{'}'}",
+      "body": "Message",
+      "defaultBody": "Hi {'{'}{'{'}candidate_name{'}'}{'}'},\n\nThank you for applying to {'{'}{'{'}job_title{'}'}{'}'}.\n\nBest regards",
+      "mergeFieldsHint": "Available fields: {'{'}{'{'}candidate_name{'}'}{'}'}, {'{'}{'{'}job_title{'}'}{'}'}",
+      "preview": "Preview (first recipient)",
+      "gdprNotice": "Candidates who opted out of recruiter emails will be skipped automatically.",
+      "validationRequired": "Subject and message are required",
+      "noRecipients": "No recipients selected",
+      "sending": "Sending...",
+      "sendSuccess": "Queued {queued} email(s). Skipped: {skipped}.",
+      "sendFailed": "Failed to send bulk email. The communication API may not be deployed yet.",
+      "selectCandidate": "Select candidate",
+      "selectColumn": "Select all candidates in this stage"
+    },
+    "templates": {
+      "title": "Email templates",
+      "manage": "Templates",
+      "label": "Template",
+      "none": "No template (compose manually)",
+      "unavailable": "Template API is not available yet. You can still compose a message manually.",
+      "popupHint": "Create reusable message templates for bulk emails to candidates.",
+      "localHint": "Saved in this browser until the server template API is available.",
+      "create": "Create template",
+      "edit": "Edit template",
+      "list": "Saved templates",
+      "empty": "No templates yet — create your first one above.",
+      "namePlaceholder": "Template name (e.g. Interview invite)",
+      "subjectPlaceholder": "Email subject",
+      "bodyPlaceholder": "Email body...",
+      "save": "Save template",
+      "saving": "Saving...",
+      "cancelEdit": "Cancel edit",
+      "editAction": "Edit",
+      "deleteAction": "Delete",
+      "validationRequired": "Name, subject, and body are required",
+      "created": "Template created",
+      "updated": "Template updated",
+      "deleted": "Template deleted",
+      "confirmDelete": "Delete template \"{name}\"?",
+      "saveFailed": "Failed to save template",
+      "deleteFailed": "Failed to delete template"
+    },
+    "history": {
+      "title": "Communication history",
+      "subtitle": "Who was contacted, when, and delivery status",
+      "empty": "No campaigns yet",
+      "campaign": "Campaign",
+      "backToList": "Back to list",
+      "recipient": "Recipient",
+      "email": "Email",
+      "statusLabel": "Status",
+      "sentAt": "Sent at",
+      "recipientCount": "{count} recipient(s)",
+      "status": {
+        "queued": "Queued",
+        "sent": "Sent",
+        "failed": "Failed",
+        "skipped_opt_out": "Skipped (opt-out)",
+        "skipped_no_email": "Skipped (no email)",
+        "completed": "Completed",
+        "processing": "Processing"
+      }
+    },
+    "preferences": {
+      "title": "Email preferences",
+      "subtitle": "Control whether recruiters can contact you with bulk emails about applications.",
+      "emailOptOut": "Opt out of recruiter bulk emails",
+      "emailOptOutHint": "Transactional emails (account, password, application status) may still be sent.",
+      "optOutEnabled": "You have opted out of recruiter bulk emails",
+      "optOutDisabled": "You can receive recruiter bulk emails again",
+      "saveFailed": "Failed to save preferences"
+    },
+    "unsubscribe": {
+      "title": "Email preferences",
+      "processing": "Processing your unsubscribe request...",
+      "successDefault": "You have been unsubscribed from recruitment emails",
+      "missingToken": "Invalid or missing unsubscribe link",
+      "failed": "Could not process unsubscribe request. The link may have expired.",
+      "backHome": "Back to home"
+    }
+  },
+  "jobAlerts": {
+    "title": "Job alerts",
+    "subtitle": "Get email notifications when new jobs match your profile.",
+    "enableLabel": "Enable job alerts",
+    "enableHint": "We will email you relevant openings. Links open the job detail page.",
+    "addEmailFirst": "Add an email address first to enable job alerts.",
+    "enabledSuccess": "Job alerts enabled",
+    "disabledSuccess": "Job alerts disabled",
+    "saveFailed": "Failed to update job alerts"
+  }
 }

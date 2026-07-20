@@ -52,21 +52,28 @@
 import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { useAuthStore } from "@/stores/authStore.js"
-import { saveJob, removeSavedJob } from "@/services/saved-jobs.api"
+import {
+  saveJob,
+  unsaveJob,
+  syncSavedState,
+} from "@/services/saved-jobs.api"
 import { push } from "notivue"
+import { useI18n } from "vue-i18n"
 
 const props = defineProps({ job: Object })
 const router = useRouter()
 const auth = useAuthStore()
+const { t } = useI18n()
 
 const isSaved = ref(false)
+const savedJobId = ref(null)
 const isSavingJob = ref(false)
 
 onMounted(() => {
-  // Check dari job data
-  if (props.job?.saved) {
-    isSaved.value = true
-  }
+  const jobPostId = props.job?.id
+  const savedState = syncSavedState(jobPostId, props.job)
+  savedJobId.value = savedState.savedJobId
+  isSaved.value = savedState.isSaved
 })
 
 const handleSaveJob = async () => {
@@ -83,15 +90,22 @@ const handleSaveJob = async () => {
     return
   }
 
+  const jobPostId = props.job.id
+
   try {
     isSavingJob.value = true
-    
+
     if (isSaved.value) {
-      await removeSavedJob(props.job.id)
+      await unsaveJob({
+        savedJobId: savedJobId.value,
+        jobPostId,
+      })
+      savedJobId.value = null
       isSaved.value = false
       push.success(t("notifications.jobRemovedFromSaved"))
     } else {
-      await saveJob(props.job.id)
+      const res = await saveJob(jobPostId)
+      savedJobId.value = res?.data?.id ?? null
       isSaved.value = true
       push.success(t("notifications.jobSavedSuccessfully"))
     }

@@ -5,12 +5,20 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getWorkerByApplication } from "@/services/applications";
 import api from "@/services/api";
+import { startConversation } from "@/services/chat.api";
+import { getJobStages, moveApplicationStage } from "@/services/pipeline.api";
+import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
+import { resolveWorkerProfileId } from "@/utils/chatIdentity";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
 const loading = ref(false);
 const worker = ref(null);
+
+// Stages are customizable per job post — fetched dynamically instead of
+// relying on a hardcoded/global status list (see GET /job-posts/:id/stages).
+const stages = ref([]);
 
 const notes = ref([]);
 const noteInput = ref("");
@@ -28,8 +36,12 @@ async function fetchWorker() {
     loading.value = true;
     const res = await getWorkerByApplication(route.params.applicationId);
     worker.value = res.data?.data;
-    console.log("Worker data:", worker.value);
-    console.log("Answers:", worker.value?.answers);
+
+    const jobPostId = worker.value?.job_post?.id;
+    if (jobPostId) {
+      const stagesRes = await getJobStages(jobPostId);
+      stages.value = stagesRes.data?.data || [];
+    }
   } catch (err) {
     console.error("Failed to fetch worker detail", err);
   } finally {
@@ -37,46 +49,28 @@ async function fetchWorker() {
   }
 }
 
-const APPLICATION_STATUSES = [
-  { id: 1, name: "APPLIED", color: "bg-blue-100 shadow-sm text-blue-700" },
-  {
-    id: 2,
-    name: "IN REVIEW",
-    color: "bg-yellow-100 shadow-sm text-yellow-700",
-  },
-  {
-    id: 3,
-    name: "SHORTLISTED",
-    color: "bg-purple-100 shadow-sm text-purple-700",
-  },
-  { id: 4, name: "REJECTED", color: "bg-red-100 shadow-sm text-red-700" },
-  { id: 5, name: "HIRED", color: "bg-green-100 shadow-sm text-green-700" },
-];
-
 function getStatusMeta(name) {
-  return APPLICATION_STATUSES.find((s) => s.name === name);
+  return stages.value.find((s) => s.name === name);
 }
 
 const showStatusDropdown = ref(false);
 const updatingStatus = ref(false);
 
-async function changeStatus(status) {
+async function changeStatus(stage) {
   if (updatingStatus.value) return;
 
   try {
     updatingStatus.value = true;
     showStatusDropdown.value = false;
 
-    await api.put(`/job-applications/${route.params.applicationId}/status`, {
-      application_status_id: status.id,
-    });
+    await moveApplicationStage(route.params.applicationId, stage.id);
 
     // optimistic update
-    worker.value.status = status.name;
+    worker.value.status = stage.name;
     push.success(t("notifications.statusUpdatedSuccessfully") || "Status updated successfully");
   } catch (err) {
     console.error("Failed to update status", err);
-    push.error(t("failedToUpdateStatus") || "Failed to update status");
+    push.error(err?.response?.data?.message || t("failedToUpdateStatus") || "Failed to update status");
   } finally {
     updatingStatus.value = false;
   }
@@ -103,6 +97,26 @@ async function addNote() {
 
 onMounted(fetchNotes);
 onMounted(fetchWorker);
+
+const startingChat = ref(false);
+
+async function startChat() {
+  const workerId = resolveWorkerProfileId(worker.value);
+  if (!workerId) return;
+  try {
+    startingChat.value = true;
+    const res = await startConversation({
+      worker_id: workerId,
+    });
+    const conversationId = res.data?.data?.id || res.data?.id;
+    if (!conversationId) throw new Error("No conversation ID");
+    router.push(`/chat/${conversationId}`);
+  } catch (err) {
+    push.error(err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation");
+  } finally {
+    startingChat.value = false;
+  }
+}
 </script>
 
 <template>
@@ -153,8 +167,8 @@ onMounted(fetchWorker);
                 <button
                   @click.stop="showStatusDropdown = !showStatusDropdown"
                   :disabled="updatingStatus"
-                  class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-                  :class="getStatusMeta(worker.status)?.color"
+                  class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg shadow-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                  :style="getStageColorStyles(resolveStageColor(getStatusMeta(worker.status))).badge"
                 >
                   <!-- Loading Spinner -->
                   <svg v-if="updatingStatus" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -177,16 +191,16 @@ onMounted(fetchWorker);
                 >
                   <div class="py-1">
                     <button
-                      v-for="status in APPLICATION_STATUSES"
-                      :key="status.id"
-                      @click="changeStatus(status)"
+                      v-for="stage in stages"
+                      :key="stage.id"
+                      @click="changeStatus(stage)"
                       class="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors flex items-center justify-between"
-                      :class="status.name === worker.status && 'bg-blue-50'"
+                      :class="stage.name === worker.status && 'bg-blue-50'"
                     >
-                      <span :class="status.name === worker.status && 'font-semibold text-blue-700'">
-                        {{ status.name.replace('_', ' ') }}
+                      <span :class="stage.name === worker.status && 'font-semibold text-blue-700'">
+                        {{ stage.name }}
                       </span>
-                      <span v-if="status.name === worker.status" class="text-blue-600">
+                      <span v-if="stage.name === worker.status" class="text-blue-600">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                           <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                         </svg>
@@ -246,6 +260,18 @@ onMounted(fetchWorker);
                     </svg>
                     {{ $t('contactActions.whatsapp') }}
                   </a>
+
+                  <!-- Chat button -->
+                  <button
+                    @click="startChat"
+                    :disabled="startingChat"
+                    class="flex items-center justify-center gap-2 text-blue-700 hover:text-blue-800 font-medium text-sm transition-colors disabled:opacity-60"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    {{ startingChat ? '...' : $t('chat.chatButton') }}
+                  </button>
                 </div>
               </div>
             </div>
