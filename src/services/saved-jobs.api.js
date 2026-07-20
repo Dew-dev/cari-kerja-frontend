@@ -45,6 +45,62 @@ export function forgetSavedJobId(jobPostId) {
 }
 
 /**
+ * Tentukan status saved dari response API (bukan cache).
+ * Cache hanya dipakai jika API konfirmasi saved tapi belum kirim UUID.
+ */
+export function resolveSavedStateFromJob(job) {
+  if (!job) {
+    return { isSaved: false, savedJobId: null };
+  }
+
+  const jobPostId = job.id || job.job_post_id;
+  const rawSavedId = job.saved_id;
+
+  if (isSavedJobId(rawSavedId)) {
+    return { isSaved: true, savedJobId: rawSavedId };
+  }
+
+  // API eksplisit: belum disimpan
+  if (rawSavedId === false || rawSavedId === null || rawSavedId === undefined) {
+    return { isSaved: false, savedJobId: null };
+  }
+
+  // Backend kirim boolean true (EXISTS) — saved tapi tanpa UUID
+  if (rawSavedId === true) {
+    return {
+      isSaved: true,
+      savedJobId: recallSavedJobId(jobPostId),
+    };
+  }
+
+  // Field `saved` dari job list
+  if (job.saved === true) {
+    return {
+      isSaved: true,
+      savedJobId: recallSavedJobId(jobPostId),
+    };
+  }
+
+  if (job.saved === false) {
+    return { isSaved: false, savedJobId: null };
+  }
+
+  return { isSaved: false, savedJobId: null };
+}
+
+export function syncSavedState(jobPostId, job) {
+  const state = resolveSavedStateFromJob({ ...job, id: jobPostId });
+
+  if (state.isSaved && state.savedJobId) {
+    rememberSavedJobId(jobPostId, state.savedJobId);
+  } else if (!state.isSaved) {
+    forgetSavedJobId(jobPostId);
+  }
+
+  return state;
+}
+
+/**
  * OAuth JWT kadang tanpa worker_id. Refresh mengisi ulang.
  * Soft: gagal refresh tidak logout (cookie cross-origin sering absen).
  */
