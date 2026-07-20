@@ -1,4 +1,4 @@
-{
+﻿{
   "jobs": "Lowongan",
   "companies": "Perusahaan",
   "jobsByCompany": "Lowongan per Perusahaan",
@@ -81,27 +81,6 @@
     "forEmployers": "Untuk perusahaan",
     "signIn": "Masuk",
     "language": "Bahasa"
-  },
-  "chat": {
-    "title": "Pesan",
-    "searchPlaceholder": "Cari percakapan...",
-    "typeMessage": "Ketik pesan...",
-    "send": "Kirim",
-    "noConversations": "Belum ada percakapan",
-    "noConversationsSubtitle": "Pesan Anda dengan rekruter akan muncul di sini",
-    "noResults": "Percakapan tidak ditemukan",
-    "selectConversation": "Pilih percakapan",
-    "selectConversationSubtitle": "Pilih percakapan dari daftar untuk mulai mengobrol",
-    "noMessages": "Belum ada pesan",
-    "startConversation": "Ucapkan halo untuk memulai percakapan!",
-    "online": "Online",
-    "offline": "Offline",
-    "today": "Hari ini",
-    "yesterday": "Kemarin",
-    "failedToSend": "Gagal mengirim pesan",
-    "chatButton": "Chat",
-    "failedToStartChat": "Gagal memulai percakapan",
-    "cannotStartChat": "Tidak dapat mengidentifikasi pekerja"
   },
   "home": {
     "title": "Portal lowongan #1 di Indonesia",
@@ -462,34 +441,6 @@
     "jpgOrPngMax2MB": "JPG atau PNG, maks 2MB",
     "fullName": "Nama Lengkap",
     "email": "Email",
-    "emailNotificationPlaceholder": "email{'@'}contoh.com (opsional)",
-    "emailTelegramHint": "Email kosong wajar untuk login Telegram. Email hanya untuk notifikasi, bukan metode login.",
-    "updateEmail": "Simpan email notifikasi",
-    "notificationChannels": {
-      "title": "Channel notifikasi",
-      "subtitle": "Atur cara Anda menerima update lowongan. Metode login terpisah dari channel notifikasi.",
-      "loginMethod": "Metode login",
-      "loginOnly": "Hanya login",
-      "providerLocal": "Email & kata sandi",
-      "providerGoogle": "Google",
-      "providerTelegram": "Telegram",
-      "emailChannel": "Email",
-      "emailChannelHint": "Newsletter, reset password, dan update lowongan lewat email.",
-      "telegramChannel": "Telegram",
-      "telegramChannelHint": "Notifikasi lowongan real-time di Telegram.",
-      "connected": "Terhubung",
-      "notConnected": "Belum terhubung",
-      "pendingVerification": "Menunggu verifikasi",
-      "pendingVerificationHint": "Cek inbox Anda dan buka tautan verifikasi untuk menyelesaikan koneksi email.",
-      "emailNotSet": "Belum ada email notifikasi",
-      "saveEmail": "Simpan & verifikasi email",
-      "emailManagedByGoogle": "Email berasal dari akun Google dan tidak dapat diubah di sini.",
-      "telegramAsLogin": "Digunakan sebagai metode login",
-      "telegramLinked": "Terhubung untuk notifikasi",
-      "telegramNotLinked": "Belum dihubungkan untuk notifikasi",
-      "connectTelegram": "Hubungkan Telegram",
-      "telegramLoginHint": "Anda sudah login dengan Telegram. Tidak perlu menghubungkan lagi untuk notifikasi."
-    },
     "phone": "Telepon",
     "dateOfBirth": "Tanggal Lahir",
     "gender": "Jenis Kelamin",
@@ -612,57 +563,10 @@
     "createSkill": "Buat",
     "loadingSkills": "Memuat keahlian...",
     "done": "Selesai",
-    "edit": "Ubah",
-    "cancel": "Batal",
-    "languages": "Bahasa",
-    "noLanguagesAdded": "Belum ada bahasa yang ditambahkan.",
-    "addLanguageButton": "Tambah Bahasa",
-    "editLanguage": "Ubah Bahasa",
-    "languageName": "Bahasa",
-    "searchOrTypeLanguage": "Cari atau ketik bahasa...",
-    "loadingLanguages": "Memuat bahasa...",
-    "proficiencyLevel": "Tingkat Kemahiran",
-    "selectProficiency": "Pilih tingkat kemahiran",
-    "setAsPrimaryLanguage": "Jadikan bahasa utama",
-    "primaryLanguage": "Utama",
-    "languageFormIncomplete": "Harap isi bahasa dan tingkat kemahiran",
-    "languageAlreadyAdded": "Bahasa sudah ditambahkan",
-    "languageAdded": "Bahasa ditambahkan",
-    "languageUpdated": "Bahasa diperbarui",
-    "languageRemoved": "Bahasa dihapus",
-    "failedToSaveLanguage": "Gagal menyimpan bahasa",
-    "failedToDeleteLanguage": "Gagal menghapus bahasa",
-    "proficiency": {
-      "beginner": "Pemula",
-      "intermediate": "Menengah",
-      "fluent": "Fasih",
-      "native": "Penutur Asli"
-    },
     "failedtoaddskill": "Gagal menambah keahlian",
     "failedtoremoveskill": "Gagal menghapus keahlian",
     "skilladded": "Keahlian ditambahkan",
-    "skillremoved": "Keahlian dihapus",
-    "cvParser": {
-      "tab": "Parse CV",
-      "title": "Parser CV",
-      "subtitle": "Unggah CV Anda untuk mendeteksi dan mengisi data profil secara otomatis. Tinjau setiap bagian sebelum menyimpan.",
-      "uploadLabel": "Unggah CV (PDF atau DOCX)",
-      "acceptedFormats": "Format diterima: PDF, DOCX – Maks 10MB",
-      "parseButton": "Parse CV",
-      "parsing": "Memproses...",
-      "selectFile": "Silakan pilih file CV",
-      "invalidType": "Hanya file PDF atau DOCX yang diizinkan",
-      "failedToParse": "Gagal memproses CV",
-      "parseSuccess": "CV berhasil diproses – tinjau dan terapkan data di bawah ini",
-      "foundInCV": "Ditemukan di CV Anda",
-      "applyToProfile": "Terapkan ke Profil",
-      "apply": "Terapkan",
-      "applyAll": "Terapkan Semua",
-      "appliedPersonalInfo": "Info personal diterapkan ke profil. Tinjau dan simpan jika sudah sesuai.",
-      "appliedSection": "Diterapkan ke profil. Buka tab terkait dan simpan setiap entri.",
-      "applyHint": "Data belum disimpan. Buka tab terkait dan klik Simpan pada setiap entri.",
-      "skillsHint": "Keahlian yang ditemukan di CV Anda. Tambahkan secara manual melalui tab Profil."
-    }
+    "skillremoved": "Keahlian dihapus"
   },
   "about": {
     "pageTitle": "Tentang",
@@ -1407,106 +1311,89 @@
     }
   },
   "privacyPolicy": {
-    "pageTitle": "Cari Kerja - Kebijakan Privasi",
     "title": "Kebijakan Privasi",
-    "subtitle": "Cara kami mengumpulkan, menggunakan, dan melindungi data pribadi Anda saat menggunakan Cari Kerja.",
-    "lastUpdated": "Terakhir diperbarui: 17 Juli 2026",
-    "onThisPage": "Di halaman ini",
-    "toc": {
-      "introduction": "Pendahuluan",
-      "informationCollection": "Informasi yang dikumpulkan",
-      "useOfData": "Penggunaan data",
-      "security": "Keamanan data",
-      "cookies": "Cookie",
-      "thirdPartyAccess": "Pihak ketiga",
-      "disclosure": "Pengungkapan",
-      "retention": "Retensi data",
-      "rights": "Hak Anda",
-      "changes": "Perubahan kebijakan",
-      "contact": "Hubungi kami"
-    },
+    "lastUpdated": "Terakhir diperbarui: 4 Februari 2026",
     "introduction": {
       "title": "1. Pendahuluan",
-      "content": "Cari Kerja (\"kami\") mengoperasikan portal lowongan kerja Cari Kerja. Halaman ini menjelaskan kebijakan terkait pengumpulan, penggunaan, dan pengungkapan data pribadi saat Anda menggunakan layanan kami, serta pilihan yang Anda miliki terkait data tersebut."
+      "content": "Cari Kerja menjelaskan kebijakan terkait pengumpulan, penggunaan, dan pengungkapan data pribadi saat Anda menggunakan layanan kami."
     },
     "informationCollection": {
       "title": "2. Pengumpulan & Penggunaan Informasi",
-      "intro": "Kami mengumpulkan beberapa jenis informasi untuk menyediakan dan meningkatkan layanan:",
+      "intro": "Kami mengumpulkan beberapa jenis informasi:",
       "items": {
-        "accountTitle": "Informasi akun:",
-        "account": "nama, alamat email, nomor telepon, dan kata sandi",
-        "profileTitle": "Informasi profil:",
-        "profile": "CV, pengalaman kerja, pendidikan, keterampilan, dan kualifikasi",
-        "applicationTitle": "Data lamaran:",
-        "application": "lamaran kerja, surat lamaran, dan riwayat lamaran",
-        "technicalTitle": "Data teknis:",
-        "technical": "alamat IP, jenis browser, halaman yang dikunjungi, dan waktu di halaman",
-        "communicationTitle": "Data komunikasi:",
+        "accountTitle": "Informasi Akun:",
+        "account": "nama, email, telepon, dan kata sandi",
+        "profileTitle": "Informasi Profil:",
+        "profile": "CV, pengalaman kerja, pendidikan, dan keahlian",
+        "applicationTitle": "Data Lamaran:",
+        "application": "lamaran kerja, surat lamaran, dan riwayat",
+        "technicalTitle": "Data Teknis:",
+        "technical": "alamat IP, jenis browser, halaman yang dikunjungi",
+        "communicationTitle": "Data Komunikasi:",
         "communication": "pesan antara pencari kerja dan perekrut"
       }
     },
     "useOfData": {
       "title": "3. Penggunaan Data",
-      "content": "Kami menggunakan data yang dikumpulkan untuk berbagai tujuan, termasuk menyediakan dan memelihara layanan, memberi notifikasi perubahan, dukungan pelanggan, menganalisis dan meningkatkan layanan, memantau penggunaan, serta menangani masalah teknis.",
+      "content": "Kami menggunakan data untuk menyediakan layanan, memberi notifikasi, dukungan pelanggan, dan peningkatan layanan.",
       "items": {
         "provide": "Menyediakan dan memelihara layanan",
-        "notify": "Memberi notifikasi tentang perubahan layanan",
-        "support": "Memberikan dukungan pelanggan",
-        "analysis": "Mengumpulkan analisis untuk meningkatkan layanan",
-        "monitor": "Memantau penggunaan layanan",
-        "technical": "Mendeteksi, mencegah, dan menangani masalah teknis",
-        "marketing": "Mengirim komunikasi promosi (dengan persetujuan Anda)"
+        "notify": "Memberi notifikasi perubahan",
+        "support": "Dukungan pelanggan",
+        "analysis": "Analisis dan peningkatan layanan",
+        "monitor": "Memantau penggunaan",
+        "technical": "Mendeteksi masalah teknis",
+        "marketing": "Komunikasi promosi (dengan persetujuan)"
       }
     },
     "security": {
       "title": "4. Keamanan Data",
-      "content": "Keamanan data Anda penting bagi kami. Meskipun kami berupaya menggunakan cara yang wajar secara komersial untuk melindungi data pribadi Anda, tidak ada metode transmisi melalui Internet atau penyimpanan elektronik yang 100% aman."
+      "content": "Keamanan data Anda penting bagi kami. Tidak ada metode transmisi yang 100% aman."
     },
     "cookies": {
       "title": "5. Cookie",
-      "content": "Kami menggunakan cookie untuk meningkatkan pengalaman Anda di platform. Anda dapat mengatur browser untuk menolak semua cookie atau memberi tahu saat cookie dikirim. Jika cookie tidak diterima, beberapa bagian layanan mungkin tidak berfungsi."
+      "content": "Kami menggunakan cookie untuk meningkatkan pengalaman. Beberapa fitur mungkin tidak berfungsi tanpa cookie."
     },
     "thirdPartyAccess": {
       "title": "6. Akses Pihak Ketiga",
-      "content": "Kami dapat membagikan informasi Anda kepada pihak ketiga hanya dengan cara yang dijelaskan dalam kebijakan privasi ini. Kami tidak menjual, menukar, atau menyewakan data pribadi Anda kepada pihak ketiga. Data agregat dan anonim dapat dibagikan dengan mitra untuk penelitian dan pemasaran."
+      "content": "Kami tidak menjual atau menyewakan data pribadi Anda kepada pihak ketiga."
     },
     "disclosure": {
       "title": "7. Pengungkapan Data",
-      "intro": "Kami dapat mengungkapkan data pribadi Anda dalam keadaan berikut:",
+      "intro": "Kami dapat mengungkapkan data dalam keadaan berikut:",
       "items": {
-        "byLaw": "Berdasarkan hukum atau proses hukum yang berlaku",
-        "protect": "Untuk melindungi hak, privasi, keamanan, atau properti perusahaan kami",
-        "merger": "Dalam kasus merger, akuisisi, atau penjualan aset",
-        "consent": "Dengan persetujuan eksplisit Anda untuk tujuan lain"
+        "byLaw": "Berdasarkan hukum",
+        "protect": "Melindungi hak perusahaan",
+        "merger": "Kasus merger atau akuisisi",
+        "consent": "Dengan persetujuan Anda"
       }
     },
     "retention": {
       "title": "8. Retensi Data",
-      "content": "Kami menyimpan data pribadi Anda hanya selama diperlukan untuk menyediakan layanan dan memenuhi tujuan yang diuraikan dalam kebijakan ini. Anda dapat meminta penghapusan akun dan data terkait kapan saja."
+      "content": "Kami menyimpan data hanya selama diperlukan. Anda bisa meminta penghapusan akun kapan saja."
     },
     "rights": {
       "title": "9. Hak Data Anda",
-      "intro": "Anda memiliki hak berikut terkait data pribadi Anda:",
+      "intro": "Hak Anda terkait data pribadi:",
       "items": {
-        "access": "Hak untuk mengakses data pribadi Anda",
-        "correct": "Hak untuk memperbaiki data yang tidak akurat",
-        "delete": "Hak untuk meminta penghapusan data Anda",
-        "optOut": "Hak untuk menolak komunikasi pemasaran",
-        "portable": "Hak untuk meminta salinan data dalam format portabel"
+        "access": "Mengakses data pribadi",
+        "correct": "Memperbaiki data tidak akurat",
+        "delete": "Meminta penghapusan data",
+        "optOut": "Menolak komunikasi pemasaran",
+        "portable": "Meminta salinan dalam format portabel"
       }
     },
     "changes": {
       "title": "10. Perubahan Kebijakan",
-      "content": "Kami dapat memperbarui kebijakan privasi ini dari waktu ke waktu. Perubahan signifikan akan diumumkan dengan memublikasikan kebijakan baru di halaman ini dan memperbarui tanggal \"Terakhir diperbarui\"."
+      "content": "Kami dapat memperbarui kebijakan ini dan akan memberi tahu tentang perubahan signifikan."
     },
     "contact": {
       "title": "11. Hubungi Kami",
-      "intro": "Jika Anda memiliki pertanyaan tentang kebijakan privasi ini, silakan hubungi kami di:",
+      "intro": "Pertanyaan tentang kebijakan privasi:",
       "emailLabel": "Email",
-      "email": "privacy{'@'}cari-kerja.co.id",
+      "email": "privacy@cari-kerja.id",
       "addressLabel": "Alamat",
-      "address": "Jakarta, Indonesia",
-      "contactPageLink": "Kunjungi halaman kontak kami"
+      "address": "Jakarta, Indonesia"
     }
   },
   "termsOfService": {
@@ -1538,8 +1425,8 @@
     "title": "Hubungi Kami",
     "subtitle": "Ada pertanyaan? Tim kami siap membantu.",
     "mainOffice": "Kantor utama",
-    "officeAddressLine1": "Oscorp Building, Jl. Darmawangsa Raya No.16, RT.6/RW.1, Pulo, Kebayoran Baru, South Jakarta City, Jakarta 12160",
-    "officeAddressLine2": "",
+    "officeAddressLine1": "Jl. Sudirman No. 123",
+    "officeAddressLine2": "Jakarta, Indonesia 10220",
     "workingHours": "Jam kerja",
     "workingHoursWeekdays": "Sen — Jum: 09.00 — 18.00",
     "workingHoursSat": "Sab: 10.00 — 14.00",
@@ -1554,14 +1441,10 @@
     "emailLabel": "Email:",
     "phoneLabel": "Telepon:",
     "sendMessage": "Kirim pesan",
-    "formHint": "Isi formulir di bawah ini dan tim kami akan menghubungi Anda sesegera mungkin.",
     "yourName": "Nama Anda",
     "fullNamePlaceholder": "Nama lengkap",
     "email": "Email",
-    "emailPlaceholder": "anda{'@'}contoh.com",
-    "phone": "Telepon",
-    "phonePlaceholder": "+62 812 3456 7890",
-    "optional": "opsional",
+    "emailPlaceholder": "anda@contoh.com",
     "subject": "Subjek",
     "subjectPlaceholder": "Subjek",
     "message": "Pesan",
@@ -1570,21 +1453,11 @@
     "sendMessageButton": "Kirim pesan",
     "messageSent": "Pesan berhasil terkirim.",
     "sendFailed": "Gagal mengirim. Coba lagi.",
-    "validation": {
-      "nameRequired": "Nama wajib diisi.",
-      "nameMax": "Nama maksimal 100 karakter.",
-      "emailRequired": "Email wajib diisi.",
-      "emailInvalid": "Masukkan alamat email yang valid.",
-      "phoneInvalid": "Masukkan nomor telepon yang valid.",
-      "subjectRequired": "Subjek wajib diisi.",
-      "subjectMax": "Subjek maksimal 255 karakter.",
-      "messageRequired": "Pesan wajib diisi."
-    },
     "ourLocation": "Lokasi kami",
     "mapPlaceholderTitle": "Placeholder peta",
     "mapPlaceholderSubtitle": "Tambahkan Google Maps di sini",
     "postalAddress": "Alamat pos",
-    "postalAddressLine": "Oscorp Building, Oscorp Building, Jl. Darmawangsa Raya No.16, RT.6/RW.1, Pulo, Kebayoran Baru, South Jakarta City, Jakarta 12160",
+    "postalAddressLine": "Oscorp Building, Jl. TB Simatupang, Jakarta Selatan, 12430",
     "urgentPrefix": "Untuk pertanyaan mendesak hubungi",
     "urgentSuffix": "Untuk hal lain gunakan formulir di atas."
   },
@@ -1682,10 +1555,6 @@
     "goBack": "Kembali"
   },
   "auth": {
-    "signInWithGoogle": "Masuk dengan Google",
-    "signUpWithGoogle": "Daftar dengan Google",
-    "signInWithTelegram": "Masuk dengan Telegram",
-    "signUpWithTelegram": "Daftar dengan Telegram",
     "emailLabel": "Alamat Email",
     "usernameLabel": "Nama Pengguna",
     "passwordLabel": "Kata Sandi",
@@ -1715,11 +1584,11 @@
     "phonePlaceholder": "+62 (XX) XXXX-XXXX",
     "passwordRequirements": "Min 8 karakter, huruf besar, huruf kecil, angka & simbol",
     "placeholders": {
-      "email": "anda{'@'}contoh.com",
+      "email": "anda@contoh.com",
       "name": "Budi Santoso",
       "username": "budisantoso123",
       "companyUsername": "perusahaan123",
-      "recruiterEmail": "perekrut{'@'}perusahaan.com",
+      "recruiterEmail": "perekrut@perusahaan.com",
       "company": "PT Perusahaan Anda",
       "contactName": "Budi Manajer"
     },
@@ -1732,8 +1601,7 @@
       "sending": "Mengirim...",
       "resendVerification": "Kirim ulang email verifikasi",
       "verify": "Memverifikasi...",
-      "redirecting": "Mengalihkan ke login…",
-      "redirectingToApp": "Sedang masuk ke akun Anda…"
+      "redirecting": "Mengalihkan ke login…"
     },
     "messages": {
       "emailNotVerified": "Email Anda belum diverifikasi.",
@@ -1750,30 +1618,7 @@
     "newPassword": "Kata Sandi Baru",
     "enterNewPassword": "Masukkan kata sandi baru di bawah.",
     "ifEmailExists": "Jika email ada, tautan reset telah dikirim.",
-    "resendIn": "Kirim ulang dalam",
-    "banners": {
-      "linkTelegram": "Hubungkan akun Telegram untuk menerima notifikasi lowongan terbaru secara real-time.",
-      "linkTelegramAction": "Hubungkan Telegram",
-      "setupEmail": "Tambahkan dan verifikasi email agar dapat menerima newsletter, reset password, dan update lowongan melalui email.",
-      "setupEmailAction": "Tambah email",
-      "setupEmailTitle": "Tambah email notifikasi",
-      "setupEmailHint": "Email hanya dipakai untuk notifikasi. Login tetap memakai Telegram.",
-      "saveEmail": "Simpan & kirim verifikasi",
-      "emailRequired": "Email wajib diisi",
-      "verificationEmailSent": "Email verifikasi telah dikirim. Silakan cek kotak masuk Anda.",
-      "failedChangeEmail": "Gagal mengubah email",
-      "dismiss": "Tutup",
-      "cancel": "Batal",
-      "linkingTelegram": "Menghubungkan Telegram...",
-      "telegramLinked": "Telegram berhasil dihubungkan untuk notifikasi.",
-      "failedLinkTelegram": "Gagal menghubungkan Telegram",
-      "missingTelegramCode": "Kode OAuth Telegram tidak ditemukan.",
-      "loginRequiredForLink": "Silakan login terlebih dahulu untuk menghubungkan Telegram.",
-      "backToApp": "Kembali ke aplikasi",
-      "linkInterrupted": "Proses hubungkan Telegram terputus dan akun Anda tidak diganti. Coba lagi dari Profil → Channel notifikasi.",
-      "telegramAlreadyLoginAccount": "Telegram ini sudah dipakai sebagai akun login. Pakai Telegram lain untuk notifikasi, atau login dengan Telegram untuk akun tersebut.",
-      "telegramAlreadyLinked": "Telegram ini sudah terhubung untuk notifikasi di akun lain."
-    }
+    "resendIn": "Kirim ulang dalam"
   },
   "notifications": {
     "sessionExpired": "Sesi berakhir, silakan masuk kembali",
@@ -1801,348 +1646,5 @@
   "noAddressProvided": "Alamat tidak tersedia",
   "noContactNameProvided": "Nama kontak tidak tersedia",
   "noContactPhoneProvided": "Telepon kontak tidak tersedia",
-  "noWebsiteProvided": "Website tidak tersedia",
-  "notFound": {
-    "pageTitle": "Halaman Tidak Ditemukan",
-    "title": "404",
-    "subtitle": "Oops! Halaman tidak ditemukan",
-    "description": "Halaman yang Anda cari mungkin telah dihapus, mengalami perubahan nama, atau sedang tidak tersedia untuk sementara waktu.",
-    "backHome": "Kembali ke Beranda",
-    "findJobs": "Cari Lowongan"
-  },
-  "payment": {
-    "pricing": "Paket & Harga",
-    "pricingTitle": "Tingkatkan Rekrutmen",
-    "pricingTitleAccent": " Tanpa Batas",
-    "pricingSubtitle": "Pilih paket yang sesuai kebutuhan bisnis Anda — dari gratis hingga enterprise.",
-    "activePlan": "Paket aktif",
-    "maxPosts": "iklan maks.",
-    "singleSlots": "slot satuan",
-    "loadingPlans": "Memuat paket...",
-    "tabs": {
-      "subscription": "Langganan",
-      "singlePost": "Iklan Satuan",
-      "boost": "Boost Iklan"
-    },
-    "planName": {
-      "free": "Free",
-      "starter": "Starter",
-      "pro": "Pro",
-      "business": "Business"
-    },
-    "features": {
-      "free": ["1 iklan aktif", "Tanpa biaya", "Akses dasar"],
-      "starter": ["5 iklan aktif", "Berlaku 30 hari", "Semua fitur standar"],
-      "pro": ["15 iklan aktif", "Berlaku 30 hari", "Prioritas dukungan"],
-      "business": ["25 iklan aktif", "Berlaku 30 hari", "Dukungan premium"],
-      "activePosts": "iklan aktif bersamaan",
-      "durationDays": "hari sejak aktivasi",
-      "secureXendit": "Pembayaran aman via Xendit"
-    },
-    "priceFormat": {
-      "free": "Gratis",
-      "days": "hari"
-    },
-    "cta": {
-      "default": "Paket Default",
-      "active": "Paket Aktif",
-      "select": "Pilih Paket",
-      "details": "Lihat Detail & Beli",
-      "boost": "Boost via Halaman Jobs"
-    },
-    "singlePostDesc": "Beli iklan satuan tanpa berlangganan. Cocok untuk kebutuhan rekrutmen sesekali.",
-    "slots": {
-      "available": "Slot Satuan Tersedia",
-      "expires": "Kadaluarsa",
-      "hint": "Gunakan slot ini saat memposting lowongan via halaman Jobs."
-    },
-    "boostTitle": "Boost Iklan",
-    "boostSubtitle": "Tingkatkan visibilitas iklan Anda agar dilihat lebih banyak pencari kerja.",
-    "boostTypes": {
-      "top10Title": "Boost Top-10",
-      "top10Desc": "Iklan Anda muncul di 10 posisi teratas setiap hari dalam durasi paket.",
-      "hotTitle": "Boost Hot (Paling Atas)",
-      "hotDesc": "Iklan Anda tampil paling atas dari semua iklan lainnya — visibilitas maksimal."
-    },
-    "boostModal": {
-      "title": "Boost Iklan",
-      "info": "Pilih paket boost, lalu Anda akan diarahkan ke halaman detail harga dan pilihan metode pembayaran.",
-      "hot": "HOT — Paling Atas",
-      "hotDesc": "Posisi teratas",
-      "top10": "Top-10 Harian",
-      "top10Desc": "10 besar harian",
-      "selectPay": "Pilih",
-      "empty": "Paket boost belum tersedia",
-      "footer": "Aman via Xendit · Aktif otomatis setelah bayar"
-    },
-    "history": "Lihat riwayat transaksi saya",
-    "checkout": {
-      "backToPlans": "Kembali ke Paket",
-      "backToDetails": "Kembali ke Detail",
-      "stepPlanDetail": "Detail Paket",
-      "stepMethod": "Metode Pembayaran",
-      "priceDetails": "Rincian Harga",
-      "planPrice": "Harga paket",
-      "ppn": "PPN",
-      "subtotal": "Subtotal",
-      "totalPay": "Total Pembayaran",
-      "vatHint": "Harga sudah termasuk PPN 11% sesuai peraturan perpajakan Indonesia.",
-      "feeHint": "Biaya metode pembayaran akan ditampilkan di langkah berikutnya.",
-      "continue": "Lanjutkan",
-      "selectedPlan": "Paket dipilih",
-      "qrisDesc": "GoPay, OVO, Dana, ShopeePay, dll.",
-      "vaTitle": "Transfer Virtual Account",
-      "vaDesc": "BCA, BNI, BRI, Mandiri, Permata, BSI",
-      "vaSelect": "Pilih bank untuk generate Virtual Account:",
-      "cardTitle": "Kartu Kredit / Debit",
-      "cardDesc": "Visa, Mastercard, JCB",
-      "cardName": "Nama Pemegang Kartu",
-      "cardNamePlaceholder": "Sesuai yang tercetak di kartu",
-      "cardNumber": "Nomor Kartu",
-      "cardExpiry": "Masa Berlaku",
-      "cardCvv": "CVV / CVC",
-      "cardCvvHint": "(3–4 digit)",
-      "cardSecureHint": "Detail kartu diverifikasi di halaman Xendit yang terenkripsi (PCI DSS).",
-      "totalCharged": "Total yang dibayarkan",
-      "payButton": "Buat Tagihan Pembayaran",
-      "secureTransaction": "Transaksi diproses aman oleh Xendit · PCI DSS Compliant",
-      "errors": {
-        "invalidParams": "Parameter paket tidak valid",
-        "planNotFound": "Paket tidak ditemukan",
-        "fetchFailed": "Gagal memuat detail paket",
-        "selectMethod": "Pilih metode pembayaran terlebih dahulu",
-        "nameRequired": "Nama pemegang kartu wajib diisi",
-        "cardNumberInvalid": "Nomor kartu tidak valid",
-        "cardExpiryInvalid": "Format MM/YY tidak valid",
-        "cardCvvInvalid": "CVV minimal 3 digit"
-      }
-    },
-    "orders": {
-      "title": "Riwayat Transaksi",
-      "subtitle": "Semua riwayat pembayaran akun Anda",
-      "buyPlan": "Beli Paket",
-      "allStatus": "Semua Status",
-      "allTypes": "Semua Tipe",
-      "empty": "Belum ada transaksi",
-      "emptyDesc": "Mulai dengan membeli paket untuk meningkatkan rekrutmen Anda.",
-      "table": {
-        "date": "Tanggal",
-        "type": "Tipe",
-        "plan": "Paket",
-        "amount": "Jumlah",
-        "status": "Status",
-        "action": "Aksi"
-      },
-      "status": {
-        "pending": "Menunggu Bayar",
-        "paid": "Lunas",
-        "expired": "Kadaluarsa",
-        "failed": "Gagal"
-      },
-      "types": {
-        "subscription": "Langganan",
-        "singlePost": "Iklan Satuan",
-        "boost": "Boost"
-      },
-      "actionPay": "Bayar",
-      "totalOrders": "transaksi total"
-    },
-    "success": {
-      "title": "Pembayaran Berhasil!",
-      "desc": "Paket Anda akan segera diaktifkan secara otomatis.",
-      "currentPlan": "Paket Aktif Sekarang",
-      "maxPosts": "Maks. Iklan Aktif",
-      "expiresAt": "Berlaku Hingga",
-      "activeProcess": "Paket Anda sedang dalam proses aktivasi. Cek kembali dalam beberapa saat atau lihat riwayat transaksi.",
-      "manageJobs": "Kelola Iklan Saya",
-      "history": "Riwayat Transaksi",
-      "amountPaid": "Jumlah yang Dibayarkan"
-    },
-    "failure": {
-      "title": "Pembayaran Gagal",
-      "desc": "Mohon maaf, transaksi Anda tidak dapat diproses atau telah dibatalkan.",
-      "reason": "Alasan Kegagalan",
-      "reasonDesc": "Pembayaran tidak dapat diselesaikan. Silakan coba metode pembayaran lain atau hubungi bank Anda.",
-      "tryAgain": "Coba Lagi",
-      "backPricing": "Kembali ke Paket",
-      "support": "Hubungi Bantuan"
-    }
-  },
-  "pipeline": {
-    "navLabel": "Pipeline",
-    "title": "Candidate Pipeline",
-    "subtitle": "Lacak dan kelola progres kandidat di setiap tahap proses rekrutmen",
-    "stages": {
-      "applied": "Applied",
-      "screening": "Screening",
-      "interview": "Interview",
-      "offer": "Offer",
-      "hired": "Hired",
-      "rejected": "Rejected",
-      "custom": "Kustom"
-    },
-    "filters": {
-      "searchPlaceholder": "Cari nama kandidat...",
-      "allPositions": "Semua Posisi",
-      "reset": "Reset filter"
-    },
-    "analytics": {
-      "stageCounts": "Jumlah Kandidat per Tahap",
-      "total": "{count} total kandidat",
-      "conversionRate": "Conversion Rate",
-      "estimated": "estimasi",
-      "estimatedHint": "Diperkirakan dari distribusi tahap saat ini sampai analitik dari backend tersedia"
-    },
-    "board": {
-      "emptyColumn": "Tidak ada kandidat",
-      "noStages": "Belum ada tahapan yang dikonfigurasi",
-      "moveFailed": "Gagal memindahkan kandidat",
-      "fallbackHint": "API Pipeline belum tersedia di lingkungan ini — menampilkan pelamar lewat endpoint lama. Drag-and-drop dan kelola tahap membutuhkan modul pipeline backend yang sudah di-deploy."
-    },
-    "card": {
-      "moveTo": "Pindahkan ke",
-      "today": "Melamar hari ini",
-      "daysAgo": "Melamar {count} hari yang lalu"
-    },
-    "drawer": {
-      "title": "Detail Kandidat"
-    },
-    "timeline": {
-      "title": "Timeline Aktivitas",
-      "empty": "Belum ada aktivitas",
-      "addNotePlaceholder": "Tambahkan catatan internal atau feedback...",
-      "addNote": "Tambah Catatan",
-      "saving": "Menyimpan...",
-      "noteAdded": "Catatan ditambahkan",
-      "noteFailed": "Gagal menambahkan catatan",
-      "fallbackHint": "Menampilkan timeline sederhana sementara riwayat aktivitas lengkap sedang disambungkan.",
-      "events": {
-        "applied": "Melamar posisi ini",
-        "note": "Catatan ditambahkan"
-      }
-    },
-    "stageManager": {
-      "manageButton": "Kelola Tahapan",
-      "selectOneJobHint": "Pilih satu posisi untuk mengustomisasi tahapannya",
-      "title": "Kelola Tahapan Pipeline",
-      "hint": "Seret untuk mengurutkan ulang. Klik dua kali nama tahapan untuk mengubahnya.",
-      "system": "Default",
-      "newStagePlaceholder": "Nama tahapan baru...",
-      "add": "Tambah",
-      "created": "Tahapan dibuat",
-      "renamed": "Tahapan diubah namanya",
-      "deleted": "Tahapan dihapus",
-      "confirmDelete": "Hapus tahapan \"{name}\"? Kandidat di tahapan ini harus dipindahkan terlebih dahulu.",
-      "actionFailed": "Aksi gagal",
-      "deleteFailed": "Gagal menghapus tahapan"
-    }
-  },
-  "communication": {
-    "bulk": {
-      "selected": "{count} kandidat dipilih",
-      "hint": "Pilih kandidat dalam tahap pipeline yang sama untuk mengirim email sekaligus.",
-      "moveHint": "Pindahkan semua kandidat terpilih ke tahap pipeline lain sekaligus.",
-      "moveToPlaceholder": "Pindah ke tahap…",
-      "moveSelected": "Pindahkan",
-      "moving": "Memindahkan…",
-      "moveSuccess": "{moved} kandidat dipindah ke {stage}",
-      "movePartial": "{failed} kandidat gagal dipindah",
-      "moveFailed": "Gagal memindahkan kandidat terpilih",
-      "singleStageRequired": "Email massal hanya untuk kandidat di tahap yang sama.",
-      "clear": "Bersihkan",
-      "sendEmail": "Kirim email",
-      "sendTitle": "Email massal",
-      "recipientCount": "{count} penerima",
-      "subject": "Subjek",
-      "subjectPlaceholder": "mis. Langkah berikutnya untuk {'{'}{'{'}job_title{'}'}{'}'}",
-      "body": "Pesan",
-      "defaultBody": "Hai {'{'}{'{'}candidate_name{'}'}{'}'},\n\nTerima kasih telah melamar {'{'}{'{'}job_title{'}'}{'}'}.\n\nSalam",
-      "mergeFieldsHint": "Field tersedia: {'{'}{'{'}candidate_name{'}'}{'}'}, {'{'}{'{'}job_title{'}'}{'}'}",
-      "preview": "Pratinjau (penerima pertama)",
-      "gdprNotice": "Kandidat yang menolak email massal recruiter akan dilewati otomatis.",
-      "validationRequired": "Subjek dan pesan wajib diisi",
-      "noRecipients": "Tidak ada penerima yang dipilih",
-      "sending": "Mengirim...",
-      "sendSuccess": "{queued} email diantrekan. Dilewati: {skipped}.",
-      "sendFailed": "Gagal mengirim email massal. API komunikasi mungkin belum di-deploy.",
-      "selectCandidate": "Pilih kandidat",
-      "selectColumn": "Pilih semua kandidat di tahap ini"
-    },
-    "templates": {
-      "title": "Template email",
-      "manage": "Template",
-      "label": "Template",
-      "none": "Tanpa template (tulis manual)",
-      "unavailable": "API template belum tersedia. Anda tetap bisa menulis pesan manual.",
-      "popupHint": "Buat template pesan yang bisa dipakai berulang untuk email massal ke kandidat.",
-      "localHint": "Disimpan di browser ini sampai API template server tersedia.",
-      "create": "Buat template",
-      "edit": "Edit template",
-      "list": "Template tersimpan",
-      "empty": "Belum ada template — buat yang pertama di atas.",
-      "namePlaceholder": "Nama template (mis. Undangan interview)",
-      "subjectPlaceholder": "Subjek email",
-      "bodyPlaceholder": "Isi email...",
-      "save": "Simpan template",
-      "saving": "Menyimpan...",
-      "cancelEdit": "Batal edit",
-      "editAction": "Edit",
-      "deleteAction": "Hapus",
-      "validationRequired": "Nama, subjek, dan isi wajib diisi",
-      "created": "Template dibuat",
-      "updated": "Template diperbarui",
-      "deleted": "Template dihapus",
-      "confirmDelete": "Hapus template \"{name}\"?",
-      "saveFailed": "Gagal menyimpan template",
-      "deleteFailed": "Gagal menghapus template"
-    },
-    "history": {
-      "title": "Riwayat komunikasi",
-      "subtitle": "Siapa dihubungi, kapan, dan status pengiriman",
-      "empty": "Belum ada kampanye",
-      "campaign": "Kampanye",
-      "backToList": "Kembali ke daftar",
-      "recipient": "Penerima",
-      "email": "Email",
-      "statusLabel": "Status",
-      "sentAt": "Dikirim pada",
-      "recipientCount": "{count} penerima",
-      "status": {
-        "queued": "Dalam antrean",
-        "sent": "Terkirim",
-        "failed": "Gagal",
-        "skipped_opt_out": "Dilewati (opt-out)",
-        "skipped_no_email": "Dilewati (tanpa email)",
-        "completed": "Selesai",
-        "processing": "Diproses"
-      }
-    },
-    "preferences": {
-      "title": "Preferensi email",
-      "subtitle": "Atur apakah recruiter boleh mengirim email massal terkait lamaran Anda.",
-      "emailOptOut": "Tolak email massal dari recruiter",
-      "emailOptOutHint": "Email transaksi (akun, password, status lamaran) tetap dapat dikirim.",
-      "optOutEnabled": "Anda telah menolak email massal recruiter",
-      "optOutDisabled": "Anda dapat menerima email massal recruiter lagi",
-      "saveFailed": "Gagal menyimpan preferensi"
-    },
-    "unsubscribe": {
-      "title": "Preferensi email",
-      "processing": "Memproses permintaan berhenti berlangganan...",
-      "successDefault": "Anda telah berhenti berlangganan email rekrutmen",
-      "missingToken": "Tautan berhenti berlangganan tidak valid atau tidak ada",
-      "failed": "Tidak dapat memproses permintaan. Tautan mungkin sudah kedaluwarsa.",
-      "backHome": "Kembali ke beranda"
-    }
-  },
-  "jobAlerts": {
-    "title": "Peringatan lowongan",
-    "subtitle": "Terima notifikasi email saat ada lowongan baru yang cocok dengan profil Anda.",
-    "enableLabel": "Aktifkan peringatan lowongan",
-    "enableHint": "Kami akan mengirim email lowongan relevan. Tautan membuka halaman detail lowongan.",
-    "addEmailFirst": "Tambahkan email dulu untuk mengaktifkan peringatan lowongan.",
-    "enabledSuccess": "Peringatan lowongan diaktifkan",
-    "disabledSuccess": "Peringatan lowongan dinonaktifkan",
-    "saveFailed": "Gagal memperbarui peringatan lowongan"
-  }
+  "noWebsiteProvided": "Website tidak tersedia"
 }
