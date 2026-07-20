@@ -23,9 +23,15 @@ onMounted(async () => {
       // Setelah email terverifikasi, hilangkan banner setup email
       if (auth.isLoggedIn) {
         auth.markEmailSetupDone();
+        auth.applyNotificationFlags({ requires_email_setup: false });
+        try {
+          await auth.refreshToken({ logoutOnFail: false });
+        } catch {
+          /* ignore */
+        }
         setTimeout(() => {
           router.push(
-            auth.role === "recruiter" ? "/recruiter/jobs" : "/jobposts",
+            auth.role === "recruiter" ? "/recruiter/jobs" : "/profile/edit",
           );
         }, 2000);
         return;

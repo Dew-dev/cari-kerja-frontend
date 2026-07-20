@@ -464,6 +464,8 @@
       "telegramChannelHint": "Уведомления о вакансиях в Telegram в реальном времени.",
       "connected": "Подключено",
       "notConnected": "Не подключено",
+      "pendingVerification": "Ожидает подтверждения",
+      "pendingVerificationHint": "Проверьте почту и откройте ссылку подтверждения, чтобы завершить подключение email.",
       "emailNotSet": "Email для уведомлений ещё не указан",
       "saveEmail": "Сохранить и подтвердить email",
       "emailManagedByGoogle": "Email берётся из аккаунта Google и здесь изменить нельзя.",

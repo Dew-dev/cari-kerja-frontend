@@ -483,6 +483,8 @@
       "telegramChannelHint": "Real-time job notifications on Telegram.",
       "connected": "Connected",
       "notConnected": "Not connected",
+      "pendingVerification": "Pending verification",
+      "pendingVerificationHint": "Check your inbox and open the verification link to finish connecting email.",
       "emailNotSet": "No notification email yet",
       "saveEmail": "Save & verify email",
       "emailManagedByGoogle": "Email comes from your Google account and cannot be changed here.",
