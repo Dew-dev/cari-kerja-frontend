@@ -98,6 +98,7 @@ export const useChatStore = defineStore('chat', () => {
 
   const loadingConversations = ref(false)
   const loadingMessages = ref(false)
+  const sending = ref(false)
 
   // ─── Getters ──────────────────────────────────────────────────────────────
   const totalUnread = computed(() =>
@@ -375,6 +376,10 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   async function sendMessage(conversationId, content) {
+    // Lock: cegah double-send saat request sebelumnya belum selesai
+    if (sending.value) return null
+    sending.value = true
+
     const auth = useAuthStore()
     const me = auth.user
     const tempId = `temp_${Date.now()}`
@@ -436,6 +441,8 @@ export const useChatStore = defineStore('chat', () => {
         ),
       }
       throw err
+    } finally {
+      sending.value = false
     }
   }
 
@@ -560,6 +567,7 @@ export const useChatStore = defineStore('chat', () => {
     messagePagination,
     loadingConversations,
     loadingMessages,
+    sending,
     // Getters
     totalUnread,
     sortedConversations,

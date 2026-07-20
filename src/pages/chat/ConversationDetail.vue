@@ -12,7 +12,9 @@ import { useAuthStore } from '@/stores/authStore'
 import { useChatStore } from '@/stores/chatStore'
 import { useSocket } from '@/composables/useSocket'
 import { getSenderKey } from '@/utils/chatIdentity'
+import { isRateLimitedError } from '@/utils/apiErrors'
 import { push } from 'notivue'
+import { useI18n } from 'vue-i18n'
 
 import ChatHeader from '@/components/chat/ChatHeader.vue'
 import ChatBubble from '@/components/chat/ChatBubble.vue'
@@ -39,12 +41,13 @@ const {
   messages: messagesMap,
   messagePagination,
   loadingMessages,
+  sending,
 } = storeToRefs(chatStore)
 const { on, off, emit: socketEmit, connected } = useSocket()
+const { t } = useI18n()
 
 // ─── State ────────────────────────────────────────────────────────────────────
 const messageText = ref('')
-const sending = ref(false)
 const messagesRef = ref(null)
 const chatInputRef = ref(null)
 const sentinelRef = ref(null)
@@ -191,18 +194,21 @@ function onStopTyping() {
 // ─── Send message ─────────────────────────────────────────────────────────────
 async function handleSend() {
   const content = messageText.value.trim()
-  if (!content) return
+  if (!content || sending.value) return
 
   messageText.value = ''
-  sending.value = true
 
   try {
     await chatStore.sendMessage(props.conversationId, content)
     await scrollToBottom('smooth')
   } catch (err) {
-    push.error('Failed to send message')
-  } finally {
-    sending.value = false
+    // Kembalikan teks agar user tidak kehilangan pesan yang gagal terkirim
+    if (!messageText.value) messageText.value = content
+    if (isRateLimitedError(err)) {
+      push.warning(t('captcha.rateLimited'))
+    } else {
+      push.error(t('chat.failedToSendMessage'))
+    }
   }
 }
 
