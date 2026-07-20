@@ -9,6 +9,7 @@ import { changeEmail } from "@/services/auth.api";
 import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
 import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
+import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
 import NotificationChannelsCard from "@/components/profile/NotificationChannelsCard.vue";
 import { displayEmail } from "@/utils/authFlags";
 
@@ -1788,6 +1789,7 @@ watch(activeTab, (newTab) => {
         </div>
 
         <NotificationChannelsCard />
+        <JobAlertsCard />
         <CommunicationPreferencesCard />
       </div>
 

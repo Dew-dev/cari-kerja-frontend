@@ -2441,5 +2441,15 @@
       "failed": "Could not process unsubscribe request. The link may have expired.",
       "backHome": "Back to home"
     }
+  },
+  "jobAlerts": {
+    "title": "Job alerts",
+    "subtitle": "Get email notifications when new jobs match your profile.",
+    "enableLabel": "Enable job alerts",
+    "enableHint": "We will email you relevant openings. Links open the job detail page.",
+    "addEmailFirst": "Add an email address first to enable job alerts.",
+    "enabledSuccess": "Job alerts enabled",
+    "disabledSuccess": "Job alerts disabled",
+    "saveFailed": "Failed to update job alerts"
   }
 }
