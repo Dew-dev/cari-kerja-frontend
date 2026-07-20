@@ -9,12 +9,18 @@ import api from "@/services/api"; // axios instance
 import { updateJob } from "@/services/jobposts.api";
 import { useRouter, useRoute } from "vue-router";
 import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
-import { isVerificationRequiredError } from "@/utils/apiErrors";
+import ContentFlaggedModal from "@/components/recruiter/ContentFlaggedModal.vue";
+import {
+  isContentFlaggedResponse,
+  isVerificationRequiredError,
+} from "@/utils/apiErrors";
 const router = useRouter();
 const route = useRoute();
 const loading = ref(false);
 const buttonLoading = ref(false);
 const showVerificationModal = ref(false);
+const showContentFlaggedModal = ref(false);
+const moderationInfo = ref(null);
 
 
 /* ======================
@@ -734,6 +740,14 @@ async function submit(statusId = 1) {
     if (!res?.data?.success) {
       return;
     }
+
+    // Konten ditahan untuk review (status PENDING) — sukses, bukan failure
+    if (isContentFlaggedResponse(res)) {
+      moderationInfo.value = res.data?.data?.moderation || null;
+      showContentFlaggedModal.value = true;
+      return;
+    }
+
     push.success(
       statusId === 3
         ? t("verification.draftSaved")
@@ -1344,6 +1358,13 @@ function saveAsDraft() {
     :allow-save-draft="true"
     @close="showVerificationModal = false"
     @save-draft="saveAsDraft"
+  />
+
+  <!-- CONTENT FLAGGED (PENDING REVIEW) MODAL -->
+  <ContentFlaggedModal
+    :show="showContentFlaggedModal"
+    :moderation="moderationInfo"
+    @close="showContentFlaggedModal = false"
   />
 
   <!-- Skills Modal -->
