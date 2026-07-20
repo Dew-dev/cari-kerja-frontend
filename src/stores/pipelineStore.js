@@ -428,6 +428,36 @@ export const usePipelineStore = defineStore("pipeline", () => {
     }
   }
 
+  /**
+   * Move every selected candidate into the given board column.
+   * Candidates already in that stage are skipped.
+   */
+  async function moveSelectedCandidates(column) {
+    const list = selectedCandidates.value.slice();
+    if (!list.length || !column) return { moved: 0, skipped: 0, failed: 0 };
+
+    let moved = 0;
+    let skipped = 0;
+    let failed = 0;
+
+    for (const candidate of list) {
+      const targetStageId = resolveTargetStageId(candidate, column);
+      if (!targetStageId || String(targetStageId) === String(candidate.stage_id)) {
+        skipped += 1;
+        continue;
+      }
+      try {
+        await moveCandidate(candidate, column);
+        moved += 1;
+      } catch {
+        failed += 1;
+      }
+    }
+
+    clearCandidateSelection();
+    return { moved, skipped, failed };
+  }
+
   async function createStage(jobPostId, payload) {
     const res = await createJobStage(jobPostId, payload);
     await fetchStagesForJobPost(jobPostId, { force: true });
@@ -505,6 +535,7 @@ export const usePipelineStore = defineStore("pipeline", () => {
     fetchAnalytics,
     refreshBoard,
     moveCandidate,
+    moveSelectedCandidates,
     createStage,
     renameStage,
     persistStageOrder,
