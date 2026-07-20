@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -14,6 +14,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  autofocus: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['update:modelValue', 'send', 'typing', 'stop-typing'])
@@ -23,6 +27,12 @@ const textareaRef = ref(null)
 const canSend = computed(() => props.modelValue.trim().length > 0 && !props.sending)
 
 let typingTimer = null
+
+function focus() {
+  nextTick(() => {
+    textareaRef.value?.focus()
+  })
+}
 
 function onInput(e) {
   emit('update:modelValue', e.target.value)
@@ -58,7 +68,18 @@ function handleSend() {
   if (textareaRef.value) {
     textareaRef.value.style.height = 'auto'
   }
+  focus()
 }
+
+watch(
+  () => [props.autofocus, props.disabled],
+  ([shouldFocus, isDisabled]) => {
+    if (shouldFocus && !isDisabled) focus()
+  },
+  { immediate: true },
+)
+
+defineExpose({ focus })
 </script>
 
 <template>

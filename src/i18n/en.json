@@ -80,7 +80,8 @@
     "postResume": "Post resume",
     "forEmployers": "For employers",
     "signIn": "Sign in",
-    "language": "Language"
+    "language": "Language",
+    "menu": "Menu"
   },
   "chat": {
     "title": "Messages",

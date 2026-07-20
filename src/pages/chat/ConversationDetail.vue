@@ -46,6 +46,7 @@ const { on, off, emit: socketEmit, connected } = useSocket()
 const messageText = ref('')
 const sending = ref(false)
 const messagesRef = ref(null)
+const chatInputRef = ref(null)
 const sentinelRef = ref(null)
 const isAtBottom = ref(true)
 const loadingOlder = ref(false)
@@ -87,11 +88,12 @@ async function scrollToBottom(behavior = 'auto') {
   const el = messagesRef.value
   if (!el) return
 
+  // Scroll fully to end so latest messages sit above the sticky input
+  const top = el.scrollHeight
   if (behavior === 'smooth') {
-    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+    el.scrollTo({ top, behavior: 'smooth' })
   } else {
-    // Instant jump — avoid CSS scroll-smooth fighting the initial open
-    el.scrollTop = el.scrollHeight
+    el.scrollTop = top
   }
   isAtBottom.value = true
 }
@@ -244,6 +246,7 @@ async function init() {
   initializing.value = false
   await nextTick()
   setupIntersectionObserver()
+  chatInputRef.value?.focus()
 }
 
 onMounted(() => {
@@ -295,6 +298,11 @@ watch(
   { deep: false },
 )
 
+// Focus composer once socket is ready
+watch(connected, (val) => {
+  if (val && !initializing.value) chatInputRef.value?.focus()
+})
+
 // Scroll when typing indicator appears
 watch(someoneTyping, async (val) => {
   if (val && isAtBottom.value) await scrollToBottom('smooth')
@@ -318,7 +326,7 @@ watch(someoneTyping, async (val) => {
     <!-- Scrollable messages only -->
     <div
       ref="messagesRef"
-      class="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-3"
+      class="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 pt-3 pb-4"
       @scroll="onScroll"
     >
       <div ref="sentinelRef" class="h-1" />
@@ -372,9 +380,11 @@ watch(someoneTyping, async (val) => {
 
     <!-- Sticky input (outside scroll) -->
     <ChatInput
+      ref="chatInputRef"
       v-model="messageText"
       :sending="sending"
       :disabled="!connected"
+      autofocus
       @send="handleSend"
       @typing="onTyping"
       @stop-typing="onStopTyping"

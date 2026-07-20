@@ -5,13 +5,15 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getWorkerByApplication } from "@/services/applications";
 import api from "@/services/api";
-import { startConversation } from "@/services/chat.api";
 import { getJobStages, moveApplicationStage } from "@/services/pipeline.api";
 import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
-import { resolveWorkerProfileId } from "@/utils/chatIdentity";
+import { resolveWorkerProfileId, resolveWorkerUserId } from "@/utils/chatIdentity";
+import { useChatStore } from "@/stores/chatStore";
+import { getWorkerById } from "@/services/workers.api";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const chatStore = useChatStore();
 
 const loading = ref(false);
 const worker = ref(null);
@@ -101,15 +103,29 @@ onMounted(fetchWorker);
 const startingChat = ref(false);
 
 async function startChat() {
-  const workerId = resolveWorkerProfileId(worker.value);
-  if (!workerId) return;
+  const workerProfileId = resolveWorkerProfileId(worker.value);
+  let workerUserId = resolveWorkerUserId(worker.value);
+
+  if (!workerUserId && workerProfileId) {
+    try {
+      const res = await getWorkerById(workerProfileId);
+      workerUserId = res?.data?.user_id || res?.user_id;
+    } catch (err) {
+      console.error("[Chat] Failed to resolve worker user_id:", err);
+    }
+  }
+
+  if (!workerUserId) {
+    push.error(t("chat.cannotStartChat") || "Cannot identify worker");
+    return;
+  }
+
   try {
     startingChat.value = true;
-    const res = await startConversation({
-      worker_id: workerId,
+    const conversationId = await chatStore.startOrOpenConversation({
+      worker_id: workerUserId,
+      worker_profile_id: workerProfileId,
     });
-    const conversationId = res.data?.data?.id || res.data?.id;
-    if (!conversationId) throw new Error("No conversation ID");
     router.push(`/chat/${conversationId}`);
   } catch (err) {
     push.error(err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation");
