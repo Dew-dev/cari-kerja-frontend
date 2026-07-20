@@ -122,6 +122,12 @@
               <p v-if="errors.message" class="contact-error">{{ errors.message }}</p>
             </div>
 
+            <TurnstileWidget
+              ref="turnstileRef"
+              @verified="onCaptchaVerified"
+              @expired="onCaptchaExpired"
+            />
+
             <div class="flex flex-col sm:flex-row sm:items-center gap-4 pt-2">
               <button
                 type="submit"
@@ -283,6 +289,8 @@ import { computed, onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { createContactMessage } from "../services/contact-us.api";
+import TurnstileWidget from "../components/common/TurnstileWidget.vue";
+import { isCaptchaError, isRateLimitedError } from "../utils/apiErrors";
 
 const { t } = useI18n();
 
@@ -308,6 +316,17 @@ const errors = reactive({
 const loading = ref(false);
 const sent = ref(false);
 const submitError = ref("");
+
+const captchaToken = ref("");
+const turnstileRef = ref(null);
+
+function onCaptchaVerified(token) {
+  captchaToken.value = token;
+}
+
+function onCaptchaExpired() {
+  captchaToken.value = "";
+}
 
 const departments = computed(() => [
   {
@@ -428,16 +447,29 @@ async function onSubmit() {
       subject: form.subject.trim(),
       message: form.message.trim(),
       phone: form.phone.trim() || null,
+      captcha_token: captchaToken.value || null,
     });
 
     sent.value = true;
     push.success(t("contactPage.messageSent"));
     resetForm();
+    turnstileRef.value?.reset();
 
     setTimeout(() => {
       sent.value = false;
     }, 4000);
   } catch (err) {
+    if (isRateLimitedError(err)) {
+      submitError.value = t("captcha.rateLimited");
+      push.warning(submitError.value);
+      return;
+    }
+    if (isCaptchaError(err)) {
+      turnstileRef.value?.reset();
+      submitError.value = t("captcha.required");
+      push.warning(submitError.value);
+      return;
+    }
     const message =
       err?.response?.data?.message || t("contactPage.sendFailed");
     submitError.value = message;

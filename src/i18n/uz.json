@@ -2061,6 +2061,19 @@
       "telegramAlreadyLinked": "Bu Telegram boshqa akkauntga bildirishnoma uchun allaqachon ulangan."
     }
   },
+  "captcha": {
+    "required": "Iltimos, xavfsizlik tekshiruvini yakunlang va qaytadan yuboring.",
+    "rateLimited": "Juda ko'p urinish. Taxminan 15 daqiqa kutib, qayta urinib ko'ring."
+  },
+  "verification": {
+    "title": "Kompaniya tasdiqlanishi talab qilinadi",
+    "description": "Ish e'lonlarini chop etishdan oldin kompaniyangiz tasdiqlanishi kerak. E'lonni qoralama sifatida saqlashingiz mumkin, so'ngra kompaniyani tasdiqlash uchun biz bilan bog'laning.",
+    "banner": "Kompaniyangiz hali tasdiqlanmagan. Qoralama e'lonlar tayyorlashingiz mumkin, ammo tasdiqlash tugagunga qadar chop etish o'chirilgan.",
+    "cta": "Tasdiqlash uchun biz bilan bog'laning",
+    "saveDraft": "Qoralama sifatida saqlash",
+    "draftSaved": "E'lon qoralama sifatida saqlandi",
+    "close": "Yopish"
+  },
   "authError": {
     "pageTitle": "Kirish xatosi",
     "title": "Kirish muvaffaqiyatsiz tugadi",

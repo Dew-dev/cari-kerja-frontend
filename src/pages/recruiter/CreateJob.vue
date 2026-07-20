@@ -8,7 +8,11 @@ const auth = useAuthStore();
 import { push } from "notivue";
 import api from "@/services/api"; // axios instance
 import { useRouter } from "vue-router";
+import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
+import { isVerificationRequiredError } from "@/utils/apiErrors";
 const router = useRouter();
+
+const showVerificationModal = ref(false);
 /* ======================
    TAG SEARCH STATE
 ====================== */
@@ -581,7 +585,7 @@ function selectCity(city) {
 /* ======================
    SUBMIT
 ====================== */
-async function submit() {
+async function submit(statusId = 1) {
   const authHeaders = {
     headers: {
       Authorization: `Bearer ${auth.token}`,
@@ -595,7 +599,7 @@ async function submit() {
     employment_type_id: form.employment_type_id,
     experience_level_id: form.experience_level_id,
     salary_type_id: form.salary_type_id || 1,
-    job_post_status_id: 1,
+    job_post_status_id: statusId,
     location: form.is_remote ? "Remote" : `${form.city}, ${form.province}`,
     salary_min: form.salary_min,
     salary_max: form.salary_max,
@@ -619,7 +623,7 @@ async function submit() {
     const jobId = data?.id || data?.data?.id;
     console.log("CREATE JOB POST RES:", res.data.code);
     if (res.data.code !== 201) {
-      push.error(err.response?.data?.message || t("notifications.failedToCreateJobPost"));
+      push.error(message || t("notifications.failedToCreateJobPost"));
       return;
     }
 
@@ -631,12 +635,25 @@ async function submit() {
         ),
       );
     }
+    if (statusId === 3) {
+      push.success(t("verification.draftSaved"));
+    }
     console.log("Job post created successfully with ID:", jobId);
     console.log("Redirecting to recruiter jobs page...");
     router.push("/recruiter/jobs");
   } catch (err) {
+    // Recruiter belum diverifikasi → tawarkan simpan draft alih-alih toast generik
+    if (isVerificationRequiredError(err)) {
+      showVerificationModal.value = true;
+      return;
+    }
     push.error(err.response?.data?.message || t("notifications.failedToCreateJobPost"));
   }
+}
+
+function saveAsDraft() {
+  showVerificationModal.value = false;
+  submit(3);
 }
 </script>
 
@@ -651,7 +668,7 @@ async function submit() {
         {{ t("createJobSubtitle") }}
       </p>
 
-      <form @submit.prevent="submit" class="space-y-6">
+      <form @submit.prevent="submit(1)" class="space-y-6">
         <!-- JOB TITLE -->
         <div>
           <label class="block text-sm font-medium text-gray-700">
@@ -1235,6 +1252,14 @@ async function submit() {
       </form>
     </div>
   </div>
+
+  <!-- VERIFICATION REQUIRED MODAL -->
+  <VerificationRequiredModal
+    :show="showVerificationModal"
+    :allow-save-draft="true"
+    @close="showVerificationModal = false"
+    @save-draft="saveAsDraft"
+  />
 
   <!-- Skills Modal -->
   <div

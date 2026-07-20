@@ -4,6 +4,8 @@ import { useRouter } from "vue-router"
 import { register } from "@/services/auth.api"
 import api from "@/services/api"
 import { useAuthStore } from "@/stores/authStore"
+import TurnstileWidget from "@/components/common/TurnstileWidget.vue"
+import { isCaptchaError, isRateLimitedError } from "@/utils/apiErrors"
 
 import { useI18n } from "vue-i18n"
 import { push } from "notivue"
@@ -31,6 +33,17 @@ const state = reactive({
   loading: false,
   serverError: null,
 })
+
+const captchaToken = ref("")
+const turnstileRef = ref(null)
+
+function onCaptchaVerified(token) {
+  captchaToken.value = token
+}
+
+function onCaptchaExpired() {
+  captchaToken.value = ""
+}
 
 function validate() {
   let valid = true
@@ -78,16 +91,30 @@ async function submit() {
 
   state.loading = true
   try {
-    const response = await register(form)
+    const response = await register({
+      ...form,
+      captcha_token: captchaToken.value || null,
+    })
     if (response && response.data && response.data.message) {
       push.success(response.data.message)
       router.push("/login")
     }
     // setelah register → login
   } catch (err) {
-    state.error =
+    if (isRateLimitedError(err)) {
+      state.serverError = t("captcha.rateLimited")
+      push.warning(state.serverError)
+      return
+    }
+    if (isCaptchaError(err)) {
+      turnstileRef.value?.reset()
+      state.serverError = t("captcha.required")
+      push.warning(state.serverError)
+      return
+    }
+    state.serverError =
       err.response?.data?.message || "Registration failed"
-    push.error(state.error)
+    push.error(state.serverError)
   } finally {
     state.loading = false
   }
@@ -195,6 +222,13 @@ function loginWithTelegram() {
           <div v-if="state.serverError" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
             <p class="text-red-700 text-sm">{{ state.serverError }}</p>
           </div>
+
+          <!-- CAPTCHA -->
+          <TurnstileWidget
+            ref="turnstileRef"
+            @verified="onCaptchaVerified"
+            @expired="onCaptchaExpired"
+          />
 
           <!-- Sign Up Button -->
           <button

@@ -195,7 +195,7 @@
                 <span v-else class="text-sm font-semibold text-gray-700">
                   {{ (auth.user?.name || auth.user?.email || "?").charAt(0)?.toUpperCase() }}
                 </span>
-              </div>
+              </button>
               <div class="flex-1">
                 <div class="font-semibold">{{ auth.user?.name || auth.user?.email || "" }}</div>
                 <button

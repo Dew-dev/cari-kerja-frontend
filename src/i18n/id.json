@@ -1776,6 +1776,19 @@
       "telegramAlreadyLinked": "Telegram ini sudah terhubung untuk notifikasi di akun lain."
     }
   },
+  "captcha": {
+    "required": "Silakan selesaikan pemeriksaan keamanan lalu kirim ulang.",
+    "rateLimited": "Terlalu banyak percobaan. Silakan tunggu sekitar 15 menit lalu coba lagi."
+  },
+  "verification": {
+    "title": "Verifikasi Perusahaan Diperlukan",
+    "description": "Perusahaan Anda harus terverifikasi sebelum dapat mempublikasikan lowongan. Anda tetap bisa menyimpan lowongan sebagai draft, lalu hubungi kami untuk verifikasi perusahaan.",
+    "banner": "Perusahaan Anda belum terverifikasi. Anda bisa menyiapkan draft lowongan, tetapi publikasi dinonaktifkan sampai verifikasi selesai.",
+    "cta": "Hubungi Kami untuk Verifikasi",
+    "saveDraft": "Simpan sebagai Draft",
+    "draftSaved": "Lowongan disimpan sebagai draft",
+    "close": "Tutup"
+  },
   "authError": {
     "pageTitle": "Gagal Masuk",
     "title": "Gagal Masuk",
