@@ -2134,5 +2134,15 @@
       "failed": "Tidak dapat memproses permintaan. Tautan mungkin sudah kedaluwarsa.",
       "backHome": "Kembali ke beranda"
     }
+  },
+  "jobAlerts": {
+    "title": "Peringatan lowongan",
+    "subtitle": "Terima notifikasi email saat ada lowongan baru yang cocok dengan profil Anda.",
+    "enableLabel": "Aktifkan peringatan lowongan",
+    "enableHint": "Kami akan mengirim email lowongan relevan. Tautan membuka halaman detail lowongan.",
+    "addEmailFirst": "Tambahkan email dulu untuk mengaktifkan peringatan lowongan.",
+    "enabledSuccess": "Peringatan lowongan diaktifkan",
+    "disabledSuccess": "Peringatan lowongan dinonaktifkan",
+    "saveFailed": "Gagal memperbarui peringatan lowongan"
   }
 }

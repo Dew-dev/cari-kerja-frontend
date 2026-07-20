@@ -2421,5 +2421,15 @@
       "failed": "So'rovni qayta ishlash mumkin emas. Havola muddati tugagan bo'lishi mumkin.",
       "backHome": "Bosh sahifaga qaytish"
     }
+  },
+  "jobAlerts": {
+    "title": "Ish o'rinlari haqida ogohlantirishlar",
+    "subtitle": "Profilingizga mos yangi ish o'rinlari haqida email oling.",
+    "enableLabel": "Ish ogohlantirishlarini yoqish",
+    "enableHint": "Mos ish o'rinlarini email orqali yuboramiz. Havolalar ish tafsilotlari sahifasini ochadi.",
+    "addEmailFirst": "Ogohlantirishlarni yoqish uchun avval email qo'shing.",
+    "enabledSuccess": "Ish ogohlantirishlari yoqildi",
+    "disabledSuccess": "Ish ogohlantirishlari o'chirildi",
+    "saveFailed": "Ogohlantirishlarni yangilab bo'lmadi"
   }
 }
