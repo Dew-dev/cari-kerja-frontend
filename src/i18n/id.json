@@ -80,7 +80,8 @@
     "postResume": "Posting CV",
     "forEmployers": "Untuk perusahaan",
     "signIn": "Masuk",
-    "language": "Bahasa"
+    "language": "Bahasa",
+    "menu": "Menu"
   },
   "chat": {
     "title": "Pesan",

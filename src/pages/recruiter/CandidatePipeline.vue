@@ -5,6 +5,8 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { usePipelineStore } from "@/stores/pipelineStore";
 import { startConversation } from "@/services/chat.api";
+import { getWorkerByApplication } from "@/services/applications";
+import { resolveWorkerProfileId } from "@/utils/chatIdentity";
 import api from "@/services/api";
 
 import PipelineFilters from "@/components/recruiter/pipeline/PipelineFilters.vue";
@@ -89,21 +91,48 @@ function closeDrawer() {
   drawerOpen.value = false;
 }
 
-async function handleChat(candidate) {
-  const workerId = candidate.worker_id || candidate.id;
-  if (!workerId) {
-    push.error(t("chat.cannotStartChat") || "Cannot identify worker");
-    return;
+async function resolveWorkerId(candidate) {
+  // Prefer application detail — returns workers.id reliably
+  if (candidate?.application_id) {
+    try {
+      const res = await getWorkerByApplication(candidate.application_id);
+      const worker = res.data?.data;
+      const id = worker?.id || worker?.worker_id || worker?.worker?.id;
+      if (id) return id;
+    } catch (err) {
+      console.error("[Pipeline] Failed to resolve worker for chat:", err);
+    }
   }
 
+  return resolveWorkerProfileId({
+    ...candidate,
+    worker: candidate.worker,
+    worker_id: candidate.worker_id,
+  });
+}
+
+async function handleChat(candidate) {
   try {
     chattingId.value = candidate.application_id;
-    const res = await startConversation({ worker_id: workerId });
+
+    const workerId = await resolveWorkerId(candidate);
+    if (!workerId) {
+      push.error(t("chat.cannotStartChat") || "Cannot identify worker");
+      return;
+    }
+
+    const payload = { worker_id: workerId };
+    const jobId = candidate.job_post_id || jobPostId.value;
+    if (jobId) payload.job_id = jobId;
+
+    const res = await startConversation(payload);
     const conversationId = res.data?.data?.id || res.data?.id;
     if (!conversationId) throw new Error("No conversation ID returned");
     router.push(`/chat/${conversationId}`);
   } catch (err) {
-    push.error(err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation");
+    push.error(
+      err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation",
+    );
   } finally {
     chattingId.value = null;
   }

@@ -37,9 +37,15 @@ function mapApplicantToCandidate(applicant, jobPostId, stages) {
     stages.find((s) => s.stage_type === "applied") ||
     stages[0];
 
+  // Prefer explicit worker profile id — never fall back to user_id / application_id
+  const workerId =
+    applicant.worker?.id ||
+    applicant.worker_id ||
+    (applicant.id && applicant.id !== applicant.application_id ? applicant.id : null);
+
   return {
     application_id: applicant.application_id,
-    worker_id: applicant.id || applicant.worker_id || applicant.user_id,
+    worker_id: workerId,
     name: applicant.name,
     email: applicant.email,
     avatar_url: applicant.avatar_url || null,
@@ -52,6 +58,26 @@ function mapApplicantToCandidate(applicant, jobPostId, stages) {
     updated_at: applicant.applied_at,
     resume_url: applicant.resume_url,
     cover_letter: applicant.cover_letter,
+  };
+}
+
+function normalizePipelineCandidate(raw) {
+  if (!raw || typeof raw !== "object") return raw;
+
+  const applicationId = raw.application_id || raw.application?.id || null;
+  const workerId =
+    raw.worker?.id ||
+    raw.worker_id ||
+    raw.worker_profile_id ||
+    (raw.id && raw.id !== applicationId ? raw.id : null);
+
+  return {
+    ...raw,
+    application_id: applicationId,
+    worker_id: workerId,
+    job_post_id: raw.job_post_id || raw.job_post?.id || null,
+    name: raw.name || raw.worker?.name || raw.applicant_name,
+    avatar_url: raw.avatar_url || raw.worker?.avatar_url || null,
   };
 }
 
@@ -258,7 +284,7 @@ export const usePipelineStore = defineStore("pipeline", () => {
       try {
         do {
           const res = await getPipelineCandidates({ ...filters, page, limit: CANDIDATES_PAGE_LIMIT });
-          allCandidates.push(...(res.data?.data || []));
+          allCandidates.push(...(res.data?.data || []).map(normalizePipelineCandidate));
           totalPage = res.data?.meta?.totalPage || res.data?.meta?.total_page || 1;
           page += 1;
         } while (page <= totalPage && page <= MAX_CANDIDATE_PAGES);

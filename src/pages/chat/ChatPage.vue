@@ -93,10 +93,7 @@ watch(activeConversationId, (id) => {
     - Desktop (md+): sidebar (320px) + detail panel side by side
     - Mobile: either list OR detail (based on mobileShowDetail)
   -->
-  <div
-    class="flex bg-gray-50 overflow-hidden"
-    style="height: calc(100vh - 64px)"
-  >
+  <div class="flex h-full min-h-0 bg-gray-50 overflow-hidden">
     <!-- ─── LEFT SIDEBAR: Conversation List ─────────────────────────────────── -->
     <aside
       class="flex flex-col bg-white border-r border-gray-100 min-h-0"

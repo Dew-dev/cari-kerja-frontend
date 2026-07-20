@@ -77,7 +77,7 @@ watch(
 
           <div class="flex flex-wrap gap-2">
             <button
-              @click="emit('chat', candidate)"
+              @click="emit('chat', { ...candidate, worker_id: detail?.id || candidate.worker_id, worker: detail || candidate.worker })"
               class="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
