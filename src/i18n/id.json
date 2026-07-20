@@ -462,6 +462,9 @@
     "jpgOrPngMax2MB": "JPG atau PNG, maks 2MB",
     "fullName": "Nama Lengkap",
     "email": "Email",
+    "emailNotificationPlaceholder": "email@contoh.com (opsional)",
+    "emailTelegramHint": "Email kosong wajar untuk login Telegram. Email hanya untuk notifikasi, bukan metode login.",
+    "updateEmail": "Simpan email notifikasi",
     "phone": "Telepon",
     "dateOfBirth": "Tanggal Lahir",
     "gender": "Jenis Kelamin",
@@ -1721,7 +1724,27 @@
     "newPassword": "Kata Sandi Baru",
     "enterNewPassword": "Masukkan kata sandi baru di bawah.",
     "ifEmailExists": "Jika email ada, tautan reset telah dikirim.",
-    "resendIn": "Kirim ulang dalam"
+    "resendIn": "Kirim ulang dalam",
+    "banners": {
+      "linkTelegram": "Hubungkan akun Telegram untuk menerima notifikasi lowongan terbaru secara real-time.",
+      "linkTelegramAction": "Hubungkan Telegram",
+      "setupEmail": "Tambahkan dan verifikasi email agar dapat menerima newsletter, reset password, dan update lowongan melalui email.",
+      "setupEmailAction": "Tambah email",
+      "setupEmailTitle": "Tambah email notifikasi",
+      "setupEmailHint": "Email hanya dipakai untuk notifikasi. Login tetap memakai Telegram.",
+      "saveEmail": "Simpan & kirim verifikasi",
+      "emailRequired": "Email wajib diisi",
+      "verificationEmailSent": "Email verifikasi telah dikirim. Silakan cek kotak masuk Anda.",
+      "failedChangeEmail": "Gagal mengubah email",
+      "dismiss": "Tutup",
+      "cancel": "Batal",
+      "linkingTelegram": "Menghubungkan Telegram...",
+      "telegramLinked": "Telegram berhasil dihubungkan untuk notifikasi.",
+      "failedLinkTelegram": "Gagal menghubungkan Telegram",
+      "missingTelegramCode": "Kode OAuth Telegram tidak ditemukan.",
+      "loginRequiredForLink": "Silakan login terlebih dahulu untuk menghubungkan Telegram.",
+      "backToApp": "Kembali ke aplikasi"
+    }
   },
   "notifications": {
     "sessionExpired": "Sesi berakhir, silakan masuk kembali",
