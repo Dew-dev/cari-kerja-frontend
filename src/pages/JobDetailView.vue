@@ -524,9 +524,16 @@
             <textarea
               v-model="applicationForm.cover_letter"
               rows="4"
+              maxlength="5000"
               class="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="$t('coverLetterPlaceholder')"
             ></textarea>
+            <p
+              class="mt-1 text-xs text-right"
+              :class="(applicationForm.cover_letter || '').length >= 5000 ? 'text-red-500' : 'text-gray-400'"
+            >
+              {{ (applicationForm.cover_letter || '').length }}/5000
+            </p>
           </div>
 
           <!-- Questions Section -->
@@ -720,6 +727,9 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { useAuthStore } from "../stores/authStore";
 import api from "@/services/api";
+import { isRateLimitedError } from "@/utils/apiErrors";
+
+const COVER_LETTER_MAX = 5000;
 
 const { t } = useI18n();
 const route = useRoute();
@@ -1089,6 +1099,15 @@ const closeApplicationModal = () => {
 };
 
 const submitApplication = async () => {
+  // Lock: cegah double-submit sebelum response datang
+  if (isSubmitting.value) return;
+
+  // Backend menolak cover letter > 5000 karakter — validasi dulu di client
+  if ((applicationForm.value.cover_letter || "").length > COVER_LETTER_MAX) {
+    push.error(t("coverLetterTooLong", { max: COVER_LETTER_MAX }));
+    return;
+  }
+
   // Validate required questions
   for (let i = 0; i < jobQuestions.value.length; i++) {
     const question = jobQuestions.value[i];
@@ -1125,6 +1144,10 @@ const submitApplication = async () => {
     push.success(t("applicationSubmittedSuccess"));
   } catch (error) {
     console.error("Error submitting application:", error);
+    if (isRateLimitedError(error)) {
+      push.warning(t("captcha.rateLimited"));
+      return;
+    }
     const errorMsg =
       error.response?.data?.message || t("applicationSubmitFailed");
     push.error(errorMsg);
