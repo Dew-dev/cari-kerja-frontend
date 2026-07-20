@@ -2289,5 +2289,86 @@
       "actionFailed": "Action failed",
       "deleteFailed": "Failed to delete stage"
     }
+  },
+  "communication": {
+    "bulk": {
+      "selected": "{count} candidate(s) selected",
+      "hint": "Select candidates in the same pipeline stage to email them together.",
+      "singleStageRequired": "Bulk email requires all selected candidates to be in the same stage.",
+      "clear": "Clear",
+      "sendEmail": "Send email",
+      "sendTitle": "Bulk email",
+      "recipientCount": "{count} recipient(s)",
+      "subject": "Subject",
+      "subjectPlaceholder": "e.g. Next steps for {{job_title}}",
+      "body": "Message",
+      "defaultBody": "Hi {{name}},\n\nThank you for applying to {{job_title}}.\n\nBest regards",
+      "mergeFieldsHint": "Available fields: {{name}}, {{email}}, {{job_title}}, {{company_name}}",
+      "preview": "Preview (first recipient)",
+      "gdprNotice": "Candidates who opted out of recruiter emails will be skipped automatically.",
+      "validationRequired": "Subject and message are required",
+      "noRecipients": "No recipients selected",
+      "sending": "Sending...",
+      "sendSuccess": "Queued {queued} email(s). Skipped: {skipped}.",
+      "sendFailed": "Failed to send bulk email. The communication API may not be deployed yet.",
+      "selectCandidate": "Select candidate",
+      "selectColumn": "Select all candidates in this stage"
+    },
+    "templates": {
+      "title": "Email templates",
+      "manage": "Templates",
+      "label": "Template",
+      "none": "No template (compose manually)",
+      "unavailable": "Template API is not available yet. You can still compose a message manually.",
+      "create": "Create template",
+      "edit": "Edit template",
+      "list": "Saved templates",
+      "empty": "No templates yet",
+      "namePlaceholder": "Template name",
+      "subjectPlaceholder": "Email subject",
+      "bodyPlaceholder": "Email body...",
+      "save": "Save template",
+      "saving": "Saving...",
+      "cancelEdit": "Cancel edit",
+      "editAction": "Edit",
+      "deleteAction": "Delete",
+      "validationRequired": "Name, subject, and body are required",
+      "created": "Template created",
+      "updated": "Template updated",
+      "deleted": "Template deleted",
+      "confirmDelete": "Delete template \"{name}\"?",
+      "saveFailed": "Failed to save template",
+      "deleteFailed": "Failed to delete template"
+    },
+    "history": {
+      "title": "Communication history",
+      "subtitle": "Who was contacted, when, and delivery status",
+      "empty": "No campaigns yet",
+      "campaign": "Campaign",
+      "backToList": "Back to list",
+      "recipient": "Recipient",
+      "email": "Email",
+      "statusLabel": "Status",
+      "sentAt": "Sent at",
+      "recipientCount": "{count} recipient(s)",
+      "status": {
+        "queued": "Queued",
+        "sent": "Sent",
+        "failed": "Failed",
+        "skipped_opt_out": "Skipped (opt-out)",
+        "skipped_no_email": "Skipped (no email)",
+        "completed": "Completed",
+        "processing": "Processing"
+      }
+    },
+    "preferences": {
+      "title": "Email preferences",
+      "subtitle": "Control whether recruiters can contact you with bulk emails about applications.",
+      "emailOptOut": "Opt out of recruiter bulk emails",
+      "emailOptOutHint": "Transactional emails (account, password, application status) may still be sent.",
+      "optOutEnabled": "You have opted out of recruiter bulk emails",
+      "optOutDisabled": "You can receive recruiter bulk emails again",
+      "saveFailed": "Failed to save preferences"
+    }
   }
 }

@@ -2271,5 +2271,86 @@
       "actionFailed": "Amal bajarilmadi",
       "deleteFailed": "Bosqichni o'chirish muvaffaqiyatsiz tugadi"
     }
+  },
+  "communication": {
+    "bulk": {
+      "selected": "{count} ta nomzod tanlandi",
+      "hint": "Bir xil pipeline bosqichidagi nomzodlarni tanlab birga email yuboring.",
+      "singleStageRequired": "Ommaviy email faqat bir xil bosqichdagi nomzodlar uchun.",
+      "clear": "Tozalash",
+      "sendEmail": "Email yuborish",
+      "sendTitle": "Ommaviy email",
+      "recipientCount": "{count} ta qabul qiluvchi",
+      "subject": "Mavzu",
+      "subjectPlaceholder": "masalan: {{job_title}} bo'yicha keyingi qadamlar",
+      "body": "Xabar",
+      "defaultBody": "Salom {{name}},\n\n{{job_title}} ga ariza topshirganingiz uchun rahmat.\n\nHurmat bilan",
+      "mergeFieldsHint": "Maydonlar: {{name}}, {{email}}, {{job_title}}, {{company_name}}",
+      "preview": "Ko'rib chiqish (birinchi qabul qiluvchi)",
+      "gdprNotice": "Ommaviy emaildan voz kechgan nomzodlar avtomatik o'tkazib yuboriladi.",
+      "validationRequired": "Mavzu va xabar majburiy",
+      "noRecipients": "Qabul qiluvchilar tanlanmagan",
+      "sending": "Yuborilmoqda...",
+      "sendSuccess": "Navbatga qo'yildi: {queued}. O'tkazib yuborildi: {skipped}.",
+      "sendFailed": "Ommaviy email yuborilmadi. Communication API hali deploy qilinmagan bo'lishi mumkin.",
+      "selectCandidate": "Nomzodni tanlash",
+      "selectColumn": "Ushbu bosqichdagi barcha nomzodlarni tanlash"
+    },
+    "templates": {
+      "title": "Email shablonlari",
+      "manage": "Shablonlar",
+      "label": "Shablon",
+      "none": "Shablonsiz (qo'lda yozish)",
+      "unavailable": "Shablon API hali mavjud emas. Xabarni qo'lda yozishingiz mumkin.",
+      "create": "Shablon yaratish",
+      "edit": "Shablonni tahrirlash",
+      "list": "Saqlangan shablonlar",
+      "empty": "Hali shablonlar yo'q",
+      "namePlaceholder": "Shablon nomi",
+      "subjectPlaceholder": "Email mavzusi",
+      "bodyPlaceholder": "Email matni...",
+      "save": "Saqlash",
+      "saving": "Saqlanmoqda...",
+      "cancelEdit": "Bekor qilish",
+      "editAction": "Tahrirlash",
+      "deleteAction": "O'chirish",
+      "validationRequired": "Nom, mavzu va matn majburiy",
+      "created": "Shablon yaratildi",
+      "updated": "Shablon yangilandi",
+      "deleted": "Shablon o'chirildi",
+      "confirmDelete": "\"{name}\" shablonini o'chirasizmi?",
+      "saveFailed": "Shablon saqlanmadi",
+      "deleteFailed": "Shablon o'chirilmadi"
+    },
+    "history": {
+      "title": "Aloqa tarixi",
+      "subtitle": "Kimga, qachon va yuborish holati",
+      "empty": "Hali kampaniyalar yo'q",
+      "campaign": "Kampaniya",
+      "backToList": "Ro'yxatga qaytish",
+      "recipient": "Qabul qiluvchi",
+      "email": "Email",
+      "statusLabel": "Holat",
+      "sentAt": "Yuborilgan vaqt",
+      "recipientCount": "{count} ta qabul qiluvchi",
+      "status": {
+        "queued": "Navbatda",
+        "sent": "Yuborildi",
+        "failed": "Xato",
+        "skipped_opt_out": "O'tkazib yuborildi (opt-out)",
+        "skipped_no_email": "O'tkazib yuborildi (email yo'q)",
+        "completed": "Tugallandi",
+        "processing": "Jarayonda"
+      }
+    },
+    "preferences": {
+      "title": "Email sozlamalari",
+      "subtitle": "Rekruterlar ommaviy email yuborishi mumkinligini boshqaring.",
+      "emailOptOut": "Rekruter ommaviy emaillaridan voz kechish",
+      "emailOptOutHint": "Tranzaksiya emaillari (hisob, parol, ariza holati) hali ham yuborilishi mumkin.",
+      "optOutEnabled": "Siz rekruter ommaviy emaillaridan voz kechdingiz",
+      "optOutDisabled": "Siz yana rekruter ommaviy emaillarini qabul qilishingiz mumkin",
+      "saveFailed": "Sozlamalar saqlanmadi"
+    }
   }
 }
