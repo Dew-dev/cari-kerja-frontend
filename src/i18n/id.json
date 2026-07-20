@@ -1767,7 +1767,10 @@
       "failedLinkTelegram": "Gagal menghubungkan Telegram",
       "missingTelegramCode": "Kode OAuth Telegram tidak ditemukan.",
       "loginRequiredForLink": "Silakan login terlebih dahulu untuk menghubungkan Telegram.",
-      "backToApp": "Kembali ke aplikasi"
+      "backToApp": "Kembali ke aplikasi",
+      "linkInterrupted": "Proses hubungkan Telegram terputus dan akun Anda tidak diganti. Coba lagi dari Profil → Channel notifikasi.",
+      "telegramAlreadyLoginAccount": "Telegram ini sudah dipakai sebagai akun login. Pakai Telegram lain untuk notifikasi, atau login dengan Telegram untuk akun tersebut.",
+      "telegramAlreadyLinked": "Telegram ini sudah terhubung untuk notifikasi di akun lain."
     }
   },
   "notifications": {

@@ -2074,7 +2074,10 @@
       "failedLinkTelegram": "Failed to connect Telegram",
       "missingTelegramCode": "Telegram OAuth code is missing.",
       "loginRequiredForLink": "Please sign in first to connect Telegram.",
-      "backToApp": "Back to app"
+      "backToApp": "Back to app",
+      "linkInterrupted": "Telegram connect was interrupted and did not switch your account. Please try Connect Telegram again from Profile.",
+      "telegramAlreadyLoginAccount": "This Telegram is already used as a login account. Use a different Telegram for notifications, or keep using Telegram login for that account.",
+      "telegramAlreadyLinked": "This Telegram is already linked for notifications on another account."
     }
   },
   "notifications": {

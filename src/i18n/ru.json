@@ -2054,7 +2054,10 @@
       "failedLinkTelegram": "Не удалось подключить Telegram",
       "missingTelegramCode": "Код OAuth Telegram не найден.",
       "loginRequiredForLink": "Сначала войдите, чтобы подключить Telegram.",
-      "backToApp": "Вернуться в приложение"
+      "backToApp": "Вернуться в приложение",
+      "linkInterrupted": "Подключение Telegram прервалось, аккаунт не был сменён. Попробуйте снова в Профиле.",
+      "telegramAlreadyLoginAccount": "Этот Telegram уже используется как аккаунт входа. Используйте другой Telegram для уведомлений.",
+      "telegramAlreadyLinked": "Этот Telegram уже привязан для уведомлений к другому аккаунту."
     }
   },
   "notifications": {

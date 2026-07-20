@@ -2053,7 +2053,10 @@
       "failedLinkTelegram": "Telegramni ulash muvaffaqiyatsiz",
       "missingTelegramCode": "Telegram OAuth kodi topilmadi.",
       "loginRequiredForLink": "Telegramni ulash uchun avval tizimga kiring.",
-      "backToApp": "Ilovaga qaytish"
+      "backToApp": "Ilovaga qaytish",
+      "linkInterrupted": "Telegram ulash uzildi va akkauntingiz almashtirilmadi. Profil orqali qayta urinib ko'ring.",
+      "telegramAlreadyLoginAccount": "Bu Telegram allaqachon login akkaunti sifatida ishlatiladi. Bildirishnomalar uchun boshqa Telegram ishlating.",
+      "telegramAlreadyLinked": "Bu Telegram boshqa akkauntga bildirishnoma uchun allaqachon ulangan."
     }
   },
   "notifications": {

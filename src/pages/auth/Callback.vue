@@ -7,6 +7,11 @@ import { useI18n } from "vue-i18n";
 import api from "@/services/api";
 import { decodeAccessToken } from "@/utils/jwt";
 import { displayEmail, isFlagTruthy } from "@/utils/authFlags";
+import {
+  clearOAuthLinkIntent,
+  isTelegramLinkIntent,
+  restoreSessionBackup,
+} from "@/utils/oauthIntent";
 
 const route = useRoute();
 const router = useRouter();
@@ -29,7 +34,7 @@ function buildUserFromToken(token) {
     return {
       id: decoded.recruiter_id || decoded.id,
       user_id: decoded.id,
-      name: decoded.name || "Recruiter",
+      name: decoded.name || decoded.contact_name || "",
       email: displayEmail(decoded.email),
       avatar_url: decoded.avatar_url || null,
       role: "recruiter",
@@ -40,7 +45,7 @@ function buildUserFromToken(token) {
   return {
     id: decoded.worker_id || decoded.id,
     user_id: decoded.id,
-    name: decoded.name || "User",
+    name: decoded.name || "",
     email: displayEmail(decoded.email),
     avatar_url: decoded.avatar_url || null,
     role: "user",
@@ -65,6 +70,10 @@ async function enrichUserProfile(token) {
         email: displayEmail(decoded.email || recruiterData.email),
         avatar_url: recruiterData.avatar_url,
         role: "recruiter",
+        login_provider:
+          auth.user?.login_provider ||
+          decoded.login_provider ||
+          resolveLoginProvider(decoded),
       });
       return;
     }
@@ -75,10 +84,14 @@ async function enrichUserProfile(token) {
     auth.mergeUser({
       id: workerData.id,
       user_id: workerData.user_id,
-      name: workerData.name,
+      name: workerData.name || auth.user?.name,
       email: displayEmail(workerData.email),
       avatar_url: workerData.avatar_url,
       role: "user",
+      login_provider:
+        auth.user?.login_provider ||
+        decoded.login_provider ||
+        resolveLoginProvider(decoded),
     });
   } catch (error) {
     console.warn("Profile enrichment after OAuth failed:", error);
@@ -86,6 +99,27 @@ async function enrichUserProfile(token) {
 }
 
 onMounted(async () => {
+  // Link Telegram salah masuk ke callback login → jangan ganti akun
+  if (isTelegramLinkIntent()) {
+    const backup = restoreSessionBackup();
+    clearOAuthLinkIntent();
+    if (backup?.token) {
+      auth.token = backup.token;
+      auth.$patch({ refreshToken: backup.refreshToken || null });
+      auth.user = backup.user || auth.user;
+      localStorage.setItem("token", backup.token);
+      if (backup.refreshToken) {
+        localStorage.setItem("refreshToken", backup.refreshToken);
+      }
+      if (backup.user) {
+        localStorage.setItem("user", JSON.stringify(backup.user));
+      }
+    }
+    push.error(t("auth.banners.linkInterrupted"));
+    router.replace("/profile/edit");
+    return;
+  }
+
   const token = route.query.token;
   const refreshToken = route.query.refreshToken;
   const userStr = route.query.user;
@@ -100,7 +134,6 @@ onMounted(async () => {
   }
 
   try {
-    // 1) Simpan session dulu supaya user langsung dianggap login
     auth.token = token;
     auth.$patch({ refreshToken });
     localStorage.setItem("token", token);
@@ -112,7 +145,6 @@ onMounted(async () => {
       requires_telegram_link: route.query.requires_telegram_link,
     });
 
-    // 2) User minimal dari JWT / query — jangan block redirect
     let user = null;
     if (userStr && userStr !== "undefined") {
       try {
@@ -142,22 +174,26 @@ onMounted(async () => {
       auth.applyNotificationFlags({ requires_telegram_link: true });
     }
 
-    // 3) Redirect segera — jangan tunggu refresh/profile
+    // Ambil nama profil SEBELUM redirect (jangan biarkan header "User")
+    await enrichUserProfile(token);
+
     const destination =
       auth.user.role === "recruiter" ? "/recruiter/jobs" : "/jobposts";
     push.success(t("auth.messages.loginSuccess") || "Login successful!");
     await router.replace(destination);
 
-    // 4) Background: lengkapi worker_id di JWT + data profil
+    // Background: lengkapi JWT (worker_id) bila perlu
     try {
       await auth.refreshToken({ logoutOnFail: false });
+      if (!auth.user?.name) {
+        await enrichUserProfile(auth.token || token);
+      }
     } catch (refreshError) {
       console.warn(
         "OAuth token refresh failed, continuing with initial token:",
         refreshError,
       );
     }
-    await enrichUserProfile(auth.token || token);
   } catch (error) {
     console.error("Callback parsing error:", error);
     push.error(

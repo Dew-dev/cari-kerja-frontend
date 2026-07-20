@@ -1,4 +1,5 @@
 import api from "./api";
+import { beginTelegramLinkIntent } from "../utils/oauthIntent";
 
 const username = "testing123";
 const pass = "testing123";
@@ -72,12 +73,19 @@ export function linkTelegram(code) {
 
 /**
  * Mulai OAuth Telegram untuk link notifikasi (bukan login).
- * Backend harus redirect ke /auth/telegram-link?code=... saat purpose=link.
+ * Backup session agar jika OAuth salah masuk flow login, akun tidak diganti.
  */
 export function startTelegramLinkOAuth() {
   const apiBaseUrl =
     import.meta.env.VITE_API_BASE_URL ||
     `${import.meta.env.VITE_FILE_STORAGE_URL}/api/v1`;
   const origin = encodeURIComponent(window.location.origin);
+
+  beginTelegramLinkIntent({
+    token: localStorage.getItem("token"),
+    refreshToken: localStorage.getItem("refreshToken"),
+    user: JSON.parse(localStorage.getItem("user") || "null"),
+  });
+
   window.location.href = `${apiBaseUrl}/users/telegram?purpose=link&origin=${origin}`;
 }
