@@ -447,6 +447,9 @@
     "jpgOrPngMax2MB": "JPG или PNG, максимум 2МБ",
     "fullName": "Полное имя",
     "email": "Адрес электронной почты",
+    "emailNotificationPlaceholder": "email@example.com (необязательно)",
+    "emailTelegramHint": "Пустой email нормален при входе через Telegram. Email только для уведомлений.",
+    "updateEmail": "Сохранить email для уведомлений",
     "phone": "Телефон",
     "dateOfBirth": "Дата рождения",
     "gender": "Пол",
@@ -2008,7 +2011,27 @@
     "newPassword": "Новый пароль",
     "enterNewPassword": "Введите новый пароль ниже.",
     "ifEmailExists": "Если адрес электронной почты существует, ссылка сброса будет отправлена.",
-    "resendIn": "Повторно отправить через"
+    "resendIn": "Повторно отправить через",
+    "banners": {
+      "linkTelegram": "Подключите Telegram, чтобы получать уведомления о новых вакансиях в реальном времени.",
+      "linkTelegramAction": "Подключить Telegram",
+      "setupEmail": "Добавьте и подтвердите email, чтобы получать рассылки, сброс пароля и обновления вакансий по почте.",
+      "setupEmailAction": "Добавить email",
+      "setupEmailTitle": "Добавить email для уведомлений",
+      "setupEmailHint": "Email используется только для уведомлений. Вход по-прежнему через Telegram.",
+      "saveEmail": "Сохранить и отправить подтверждение",
+      "emailRequired": "Укажите email",
+      "verificationEmailSent": "Письмо с подтверждением отправлено. Проверьте входящие.",
+      "failedChangeEmail": "Не удалось изменить email",
+      "dismiss": "Закрыть",
+      "cancel": "Отмена",
+      "linkingTelegram": "Подключение Telegram...",
+      "telegramLinked": "Telegram подключён для уведомлений.",
+      "failedLinkTelegram": "Не удалось подключить Telegram",
+      "missingTelegramCode": "Код OAuth Telegram не найден.",
+      "loginRequiredForLink": "Сначала войдите, чтобы подключить Telegram.",
+      "backToApp": "Вернуться в приложение"
+    }
   },
   "notifications": {
     "sessionExpired": "Сеанс истек, пожалуйста, войдите снова",

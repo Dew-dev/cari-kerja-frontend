@@ -5,9 +5,11 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import api from "@/services/api";
 import { getSavedJobs, removeSavedJob } from "@/services/saved-jobs.api";
+import { changeEmail } from "@/services/auth.api";
 import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
 import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
+import { displayEmail } from "@/utils/authFlags";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -16,10 +18,16 @@ const { t } = useI18n();
 const activeTab = ref(localStorage.getItem("profileActiveTab") || "profile");
 const loadingProfile = ref(false);
 const savingProfile = ref(false);
+const savingEmail = ref(false);
 const loadingApplied = ref(false);
 const loadingSaved = ref(false);
 const appliedError = ref("");
 const savedError = ref("");
+
+const isTelegramLogin = computed(() => auth.loginProvider === "telegram");
+const canEditEmail = computed(
+  () => auth.loginProvider === "telegram" || auth.loginProvider === "local",
+);
 
 const form = reactive({
   id: "",
@@ -166,7 +174,8 @@ async function loadProfile() {
     const data = res.data?.data || res.data || {};
     form.id = data.id ?? "";
     form.name = data.name ?? "";
-    form.email = data.email ?? "";
+    // Email kosong / placeholder Telegram = normal (bukan error)
+    form.email = displayEmail(data.email);
     form.telephone = data.telephone ?? "";
     form.address = data.address ?? "";
     form.headline = data.headline ?? "";
@@ -259,6 +268,35 @@ async function saveProfile() {
      push.error(err?.response?.data?.message || t('profile.failedToUpdateProfile'));
   } finally {
     savingProfile.value = false;
+  }
+}
+
+async function saveEmailForNotifications() {
+  const email = String(form.email || "").trim().toLowerCase();
+  if (!email) {
+    push.warning(t("auth.banners.emailRequired"));
+    return;
+  }
+
+  try {
+    savingEmail.value = true;
+    const res = await changeEmail(email);
+    const data = res.data?.data || {};
+
+    if (data.token) {
+      auth.token = data.token;
+      localStorage.setItem("token", data.token);
+    }
+
+    auth.mergeUser({ email });
+    auth.applyNotificationFlags(data);
+    push.success(t("auth.banners.verificationEmailSent"));
+  } catch (err) {
+    push.error(
+      err?.response?.data?.message || t("auth.banners.failedChangeEmail"),
+    );
+  } finally {
+    savingEmail.value = false;
   }
 }
 
@@ -1427,14 +1465,30 @@ watch(activeTab, (newTab) => {
             </div>
 
             <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.email') }} <span class="text-red-500">*</span></label>
+              <label class="text-xs md:text-sm font-medium text-gray-700">
+                {{ $t('profile.email') }}
+                <span v-if="!isTelegramLogin" class="text-red-500">*</span>
+              </label>
               <input
                 v-model="form.email"
                 type="email"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm bg-gray-50 min-h-10"
-                :placeholder="$t('profile.email')"
-                readonly
+                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm min-h-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                :class="{ 'bg-gray-50': !canEditEmail }"
+                :placeholder="isTelegramLogin ? $t('profile.emailNotificationPlaceholder') : $t('profile.email')"
+                :readonly="!canEditEmail"
               />
+              <p v-if="isTelegramLogin" class="text-xs text-gray-500 mt-1">
+                {{ $t('profile.emailTelegramHint') }}
+              </p>
+              <button
+                v-if="canEditEmail"
+                type="button"
+                class="mt-2 text-xs md:text-sm px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                :disabled="savingEmail"
+                @click="saveEmailForNotifications"
+              >
+                {{ savingEmail ? $t('auth.buttons.sending') : $t('profile.updateEmail') }}
+              </button>
             </div>
 
             <div>

@@ -54,3 +54,30 @@ export function logout() {
   }
   return api.post("/users/logout", {}, { headers });
 }
+
+/**
+ * POST /auth/change-email — email untuk notifikasi (bukan ganti login provider).
+ */
+export function changeEmail(email) {
+  return api.post("/auth/change-email", { email });
+}
+
+/**
+ * POST /auth/link-telegram — hubungkan Telegram sebagai channel notifikasi.
+ * Body: { code } dari OAuth Telegram (bukan flow login Telegram).
+ */
+export function linkTelegram(code) {
+  return api.post("/auth/link-telegram", { code });
+}
+
+/**
+ * Mulai OAuth Telegram untuk link notifikasi (bukan login).
+ * Backend harus redirect ke /auth/telegram-link?code=... saat purpose=link.
+ */
+export function startTelegramLinkOAuth() {
+  const apiBaseUrl =
+    import.meta.env.VITE_API_BASE_URL ||
+    `${import.meta.env.VITE_FILE_STORAGE_URL}/api/v1`;
+  const origin = encodeURIComponent(window.location.origin);
+  window.location.href = `${apiBaseUrl}/users/telegram?purpose=link&origin=${origin}`;
+}

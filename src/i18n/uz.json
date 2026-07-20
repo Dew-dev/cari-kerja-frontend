@@ -446,6 +446,9 @@
     "jpgOrPngMax2MB": "JPG yoki PNG, maksimal 2MB",
     "fullName": "To'liq ism",
     "email": "Email manzili",
+    "emailNotificationPlaceholder": "email@example.com (ixtiyoriy)",
+    "emailTelegramHint": "Telegram login uchun bo'sh email normal. Email faqat bildirishnomalar uchun.",
+    "updateEmail": "Bildirishnoma emailini saqlash",
     "phone": "Telefon",
     "dateOfBirth": "Tug'ilgan sana",
     "gender": "Jins",
@@ -2007,7 +2010,27 @@
     "newPassword": "Yangi parol",
     "enterNewPassword": "Quyida yangi parolingizni kiriting.",
     "ifEmailExists": "Agar elektron pochta manzili mavjud bo'lsa, qayta o'rnatish havolasi yuboriladi.",
-    "resendIn": "Qayta yuboring"
+    "resendIn": "Qayta yuboring",
+    "banners": {
+      "linkTelegram": "Eng yangi ish o'rinlari haqida real vaqtda xabar olish uchun Telegram akkauntingizni ulang.",
+      "linkTelegramAction": "Telegramni ulash",
+      "setupEmail": "Newsletter, parolni tiklash va ish yangilanishlarini email orqali olish uchun email qo'shing va tasdiqlang.",
+      "setupEmailAction": "Email qo'shish",
+      "setupEmailTitle": "Bildirishnoma emaili qo'shish",
+      "setupEmailHint": "Email faqat bildirishnomalar uchun. Login Telegram orqali qoladi.",
+      "saveEmail": "Saqlash va tasdiqlash yuborish",
+      "emailRequired": "Email majburiy",
+      "verificationEmailSent": "Tasdiqlash xati yuborildi. Pochta qutingizni tekshiring.",
+      "failedChangeEmail": "Emailni o'zgartirish muvaffaqiyatsiz",
+      "dismiss": "Yopish",
+      "cancel": "Bekor qilish",
+      "linkingTelegram": "Telegram ulanmoqda...",
+      "telegramLinked": "Telegram bildirishnomalar uchun ulandi.",
+      "failedLinkTelegram": "Telegramni ulash muvaffaqiyatsiz",
+      "missingTelegramCode": "Telegram OAuth kodi topilmadi.",
+      "loginRequiredForLink": "Telegramni ulash uchun avval tizimga kiring.",
+      "backToApp": "Ilovaga qaytish"
+    }
   },
   "notifications": {
     "sessionExpired": "Sessiya muddati tugadi, iltimos qayta kiring",
