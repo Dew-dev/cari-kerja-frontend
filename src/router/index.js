@@ -228,6 +228,12 @@ const routes = [
     component: () => import("@/pages/auth/VerifyEmail.vue"),
   },
   {
+    path: "/unsubscribe",
+    name: "unsubscribe",
+    meta: { public: true },
+    component: () => import("@/pages/communication/Unsubscribe.vue"),
+  },
+  {
     path: "/search-workers",
     name: "search-workers",
     component: () => import("../pages/recruiter/SearchWorkers.vue"),
