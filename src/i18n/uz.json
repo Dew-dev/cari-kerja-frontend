@@ -371,6 +371,7 @@
   "chooseResume": "Rezyume tanlang",
   "noResumesAvailable": "Rezyume mavjud emas. Iltimos, avval rezyume yarating.",
   "coverLetterPlaceholder": "Ish beruvchiga nima uchun bu lavozim uchun juda mos ekanligingizni ayting...",
+  "coverLetterTooLong": "Motivatsiya xati ko'pi bilan {max} belgidan iborat bo'lishi kerak",
   "additionalQuestions": "Qo'shimcha savollar",
   "yourAnswer": "Sizning javobingiz...",
   "yes": "Ha",
@@ -2186,6 +2187,7 @@
     "history": "Tranzaksiyalarim tarixini ko'rish",
     "checkout": {
       "backToPlans": "Tariflarga qaytish",
+      "pendingCap": "Sizda kutilayotgan hisob-fakturalar juda ko'p. Yangisini yaratishdan oldin ularni to'lang yoki muddati tugashini kuting.",
       "backToDetails": "Tafsilotlarga qaytish",
       "stepPlanDetail": "Tarif tafsilotlari",
       "stepMethod": "To'lov usuli",

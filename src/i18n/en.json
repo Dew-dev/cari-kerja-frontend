@@ -88,6 +88,7 @@
     "searchPlaceholder": "Search conversations...",
     "typeMessage": "Type a message...",
     "send": "Send",
+    "failedToSendMessage": "Failed to send message",
     "noConversations": "No conversations yet",
     "noConversationsSubtitle": "Your messages with recruiters will appear here",
     "noResults": "No conversations found",
@@ -391,6 +392,7 @@
   "chooseResume": "Choose a resume",
   "noResumesAvailable": "No resumes available. Please create a resume first.",
   "coverLetterPlaceholder": "Tell the employer why you're a great fit for this position...",
+  "coverLetterTooLong": "Cover letter must be at most {max} characters",
   "additionalQuestions": "Additional Questions",
   "yourAnswer": "Your answer...",
   "yes": "Yes",
@@ -2207,6 +2209,7 @@
     "history": "View my transaction history",
     "checkout": {
       "backToPlans": "Back to Plans",
+      "pendingCap": "You have too many pending invoices. Please pay or wait for them to expire before creating a new one.",
       "backToDetails": "Back to Details",
       "stepPlanDetail": "Plan Details",
       "stepMethod": "Payment Method",

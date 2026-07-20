@@ -88,6 +88,7 @@
     "searchPlaceholder": "Cari percakapan...",
     "typeMessage": "Ketik pesan...",
     "send": "Kirim",
+    "failedToSendMessage": "Gagal mengirim pesan",
     "noConversations": "Belum ada percakapan",
     "noConversationsSubtitle": "Pesan Anda dengan rekruter akan muncul di sini",
     "noResults": "Percakapan tidak ditemukan",
@@ -388,6 +389,7 @@
   "chooseResume": "Pilih CV",
   "noResumesAvailable": "Belum ada CV. Buat CV terlebih dahulu.",
   "coverLetterPlaceholder": "Ceritakan mengapa Anda cocok untuk posisi ini...",
+  "coverLetterTooLong": "Surat lamaran maksimal {max} karakter",
   "additionalQuestions": "Pertanyaan Tambahan",
   "yourAnswer": "Jawaban Anda...",
   "yes": "Ya",
@@ -1900,6 +1902,7 @@
     "history": "Lihat riwayat transaksi saya",
     "checkout": {
       "backToPlans": "Kembali ke Paket",
+      "pendingCap": "Anda memiliki terlalu banyak tagihan pending. Bayar atau tunggu tagihan kedaluwarsa sebelum membuat yang baru.",
       "backToDetails": "Kembali ke Detail",
       "stepPlanDetail": "Detail Paket",
       "stepMethod": "Metode Pembayaran",
