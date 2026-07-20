@@ -700,6 +700,8 @@ function selectCity(city) {
    SUBMIT
 ====================== */
 async function submit(statusId = 1) {
+  // Lock: cegah double-submit sebelum response datang
+  if (buttonLoading.value) return;
   buttonLoading.value = true;
   const payload = {
     recruiter_id: auth.user?.recruiter_id,

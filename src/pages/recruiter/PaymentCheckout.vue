@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getAllPlans, createInvoice } from "@/services/payments.api.js";
+import { isRateLimitedError } from "@/utils/apiErrors";
 
 const route  = useRoute();
 const router = useRouter();
@@ -114,6 +115,17 @@ async function createBill() {
       push.error("Gagal membuat tagihan. Silakan coba lagi.");
     }
   } catch (err) {
+    if (isRateLimitedError(err)) {
+      const message = String(err?.response?.data?.message || "");
+      // Pending-cap: terlalu banyak invoice pending → arahkan ke daftar order
+      if (message.toLowerCase().includes("pending")) {
+        push.warning(t("payment.checkout.pendingCap"));
+        router.push("/recruiter/orders");
+      } else {
+        push.warning(t("captcha.rateLimited"));
+      }
+      return;
+    }
     push.error(err?.response?.data?.message || "Gagal membuat tagihan pembayaran");
   } finally {
     invoiceLoading.value = false;

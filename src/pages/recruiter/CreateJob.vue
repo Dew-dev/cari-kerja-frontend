@@ -9,10 +9,11 @@ import { push } from "notivue";
 import api from "@/services/api"; // axios instance
 import { useRouter } from "vue-router";
 import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
-import { isVerificationRequiredError } from "@/utils/apiErrors";
+import { isRateLimitedError, isVerificationRequiredError } from "@/utils/apiErrors";
 const router = useRouter();
 
 const showVerificationModal = ref(false);
+const isSubmitting = ref(false);
 /* ======================
    TAG SEARCH STATE
 ====================== */
@@ -586,6 +587,10 @@ function selectCity(city) {
    SUBMIT
 ====================== */
 async function submit(statusId = 1) {
+  // Lock: cegah double-submit (velocity / duplikat job post)
+  if (isSubmitting.value) return;
+  isSubmitting.value = true;
+
   const authHeaders = {
     headers: {
       Authorization: `Bearer ${auth.token}`,
@@ -647,7 +652,13 @@ async function submit(statusId = 1) {
       showVerificationModal.value = true;
       return;
     }
+    if (isRateLimitedError(err)) {
+      push.warning(t("captcha.rateLimited"));
+      return;
+    }
     push.error(err.response?.data?.message || t("notifications.failedToCreateJobPost"));
+  } finally {
+    isSubmitting.value = false;
   }
 }
 
@@ -1244,9 +1255,10 @@ function saveAsDraft() {
         <div class="pt-1 flex justify-end">
           <button
             type="submit"
-            class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-6 py-2.5 rounded-md"
+            :disabled="isSubmitting"
+            class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white text-sm font-medium px-6 py-2.5 rounded-md"
           >
-            {{ t("post_job") }}
+            {{ isSubmitting ? t("submitting") : t("post_job") }}
           </button>
         </div>
       </form>
