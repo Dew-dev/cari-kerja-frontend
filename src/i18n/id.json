@@ -1775,8 +1775,16 @@
       "telegramAlreadyLinked": "Telegram ini sudah terhubung untuk notifikasi di akun lain."
     }
   },
+  "authError": {
+    "pageTitle": "Gagal Masuk",
+    "title": "Gagal Masuk",
+    "description": "Terjadi kesalahan saat proses masuk. Permintaan masuk tidak valid atau ditolak. Silakan coba lagi.",
+    "backToLogin": "Kembali ke Halaman Masuk",
+    "backHome": "Kembali ke Beranda"
+  },
   "notifications": {
     "sessionExpired": "Sesi berakhir, silakan masuk kembali",
+    "accountSuspended": "Akun Anda telah ditangguhkan. Silakan hubungi dukungan untuk bantuan.",
     "jobDeletedSuccessfully": "Lowongan berhasil dihapus",
     "actionFailed": "Aksi gagal. Silakan coba lagi.",
     "failedToUpdateJobStatus": "Gagal memperbarui status lowongan",
