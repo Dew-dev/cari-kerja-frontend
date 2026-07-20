@@ -711,11 +711,7 @@ import {
   getJobPosts,
 } from "../services/jobposts.api";
 // import api from "../services/api";
-import {
-  saveJob,
-  unsaveJob,
-  syncSavedState,
-} from "../services/saved-jobs.api";
+import { saveJob, removeSavedJob } from "../services/saved-jobs.api";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { useAuthStore } from "../stores/authStore";
@@ -741,16 +737,14 @@ const jobQuestions = ref([]);
 const skills = ref([]);
 
 // Application Form
-// NOTE: application_status_id is no longer sent — the backend now always
-// auto-resolves new applications to the job post's own 'applied' stage.
 const applicationForm = ref({
   resume_id: "",
   cover_letter: "",
+  application_status_id: 1,
   answers: [],
 });
 
 const isSaved = ref(false);
-const savedJobId = ref(null);
 const isSavingJob = ref(false);
 
 // Computed
@@ -967,9 +961,8 @@ const loadJobDetail = async () => {
     const response = await jobDetailService.fetchJobDetail(jobId.value);
     job.value = response.data;
 
-    const savedState = syncSavedState(jobId.value, job.value);
-    savedJobId.value = savedState.savedJobId;
-    isSaved.value = savedState.isSaved;
+    // Check if saved dari response data
+    isSaved.value = job.value?.saved_id || false;
     console.log("Job detail loaded:", job.value);
     // Check if user has already applied
     if (auth.isLoggedIn && auth.role === "user") {
@@ -1081,6 +1074,7 @@ const closeApplicationModal = () => {
   applicationForm.value = {
     resume_id: "",
     cover_letter: "",
+    application_status_id: 1,
     answers: jobQuestions.value.map((q) => ({
       question_id: q.id,
       answer: "",
@@ -1109,6 +1103,7 @@ const submitApplication = async () => {
     const payload = {
       resume_id: applicationForm.value.resume_id,
       cover_letter: applicationForm.value.cover_letter,
+      application_status_id: 1,
       answers: applicationForm.value.answers.filter(
         (a) => a.answer && a.answer.trim() !== "",
       ),
@@ -1189,29 +1184,21 @@ const handleSaveJob = async () => {
 
   try {
     isSavingJob.value = true;
-
+    
     if (isSaved.value) {
-      // Selalu DELETE /saved-jobs/:savedJobId — jangan GET self dulu
-      await unsaveJob({
-        savedJobId: savedJobId.value,
-        jobPostId: jobId.value,
-      });
-      savedJobId.value = null;
+      // Remove from saved jobs
+      await removeSavedJob(jobId.value);
       isSaved.value = false;
       push.success(t("jobRemovedFromSaved"));
     } else {
-      // POST /saved-jobs/:job_post_id; response.data.id = saved_jobs.id
-      const res = await saveJob(jobId.value);
-      savedJobId.value = res?.data?.id ?? null;
+      // Save job
+      await saveJob(jobId.value);
       isSaved.value = true;
       push.success(t("jobSavedSuccessfully"));
     }
   } catch (error) {
     console.error("Error saving job:", error);
-    const errorMsg =
-      error?.code === "SAVED_JOB_ID_MISSING"
-        ? t("errorSavingJob")
-        : error.response?.data?.message || t("errorSavingJob");
+    const errorMsg = error.response?.data?.message || t("errorSavingJob");
     push.error(errorMsg);
   } finally {
     isSavingJob.value = false;
@@ -1221,8 +1208,11 @@ const handleSaveJob = async () => {
 const checkIfSaved = async () => {
   if (!auth.isLoggedIn) {
     isSaved.value = false;
-    savedJobId.value = null;
+    return;
   }
+
+  // Sudah di-set dari job.saved saat load job detail
+  // Jadi tidak perlu API call lagi
 };
 
 const viewCompanyProfile = () => {

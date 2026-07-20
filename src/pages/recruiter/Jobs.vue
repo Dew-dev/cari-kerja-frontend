@@ -18,9 +18,6 @@
           <span>{{ t("createjob") }}</span>
         </router-link>
       </div>
-      <!-- ACTIVE PLAN BANNER -->
-      <ActivePlanBanner />
-
       <!-- TABS -->
       <div class="mb-6 border-b border-gray-200">
         <div class="flex flex-wrap gap-4 text-sm font-semibold">
@@ -59,25 +56,12 @@
           <div
             v-for="(job, index) in jobs"
             :key="job.id"
-            :class="[
-              'rounded-xl border shadow-sm p-4 transition-all duration-150',
-              job.boost_type === 'hot'
-                ? 'bg-gradient-to-br from-amber-50/70 to-orange-50/45 border-orange-200 ring-1 ring-orange-100/50'
-                : job.boost_type === 'top10'
-                ? 'bg-gradient-to-br from-blue-50/70 to-indigo-50/45 border-blue-200 ring-1 ring-blue-100/50'
-                : 'bg-white border-gray-100'
-            ]"
+            class="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
           >
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0">
-                <div class="font-semibold text-gray-900 flex items-center gap-1.5 flex-wrap">
-                  <span>{{ job.title }}</span>
-                  <span v-if="job.boost_type === 'hot'" class="px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap">
-                    <i class="pi pi-star-fill text-[8px]"></i> HOT
-                  </span>
-                  <span v-else-if="job.boost_type === 'top10'" class="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap">
-                    <i class="pi pi-chart-line text-[8px]"></i> Top-10
-                  </span>
+                <div class="font-semibold text-gray-900 truncate">
+                  {{ job.title }}
                 </div>
                 <div class="text-xs text-gray-500 mt-1">
                   Created {{ formatDate(job.created_at) }}
@@ -128,21 +112,11 @@
 
               <button
                 v-if="activeTab === 'active'"
-                :title="t('pipeline.navLabel')"
-                @click="$router.push(`/recruiter/jobs/${job.id}/pipeline`)"
+                title="View applicants"
+                @click="$router.push(`/recruiter/jobs/${job.id}/applicants`)"
                 class="px-3 py-2 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-all duration-150"
               >
                 <i class="pi pi-users text-base"></i>
-              </button>
-
-              <!-- BOOST BUTTON (mobile) -->
-              <button
-                v-if="activeTab === 'active'"
-                title="Boost iklan"
-                @click="openBoostModal(job)"
-                class="px-3 py-2 text-orange-500 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all duration-150"
-              >
-                <i class="pi pi-chart-line text-base"></i>
               </button>
 
               <button
@@ -266,25 +240,12 @@
             <tr
               v-for="(job, index) in jobs"
               :key="job.id"
-              :class="[
-                'border-b border-gray-100 transition-all duration-150',
-                job.boost_type === 'hot'
-                  ? 'bg-amber-50/40 hover:bg-amber-100/40'
-                  : job.boost_type === 'top10'
-                  ? 'bg-blue-50/20 hover:bg-blue-100/30'
-                  : 'hover:bg-blue-50/50'
-              ]"
+              class="border-b border-gray-100 hover:bg-blue-50/50 transition-all duration-150"
             >
               <!-- JOB -->
               <td class="px-6 py-5">
-                <div class="font-semibold text-gray-900 text-base flex items-center gap-2 flex-wrap">
+                <div class="font-semibold text-gray-900 text-base">
                   {{ job.title }}
-                  <span v-if="job.boost_type === 'hot'" class="px-2 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full flex items-center gap-1">
-                    <i class="pi pi-star-fill text-[10px]"></i> HOT
-                  </span>
-                  <span v-else-if="job.boost_type === 'top10'" class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-bold rounded-full flex items-center gap-1">
-                    <i class="pi pi-chart-line text-[10px]"></i> Top-10
-                  </span>
                 </div>
                 <div class="text-xs text-gray-600 mt-1 flex items-center gap-2">
                   <span class="px-2 py-0.5 bg-gray-100 rounded">{{ job.employment_type }}</span>
@@ -351,22 +312,13 @@
                       <i class="pi pi-pencil text-base"></i>
                     </router-link>
 
-                    <!-- CANDIDATE PIPELINE -->
+                    <!-- APPLICANTS -->
                     <button
-                      :title="t('pipeline.navLabel')"
-                      @click="$router.push(`/recruiter/jobs/${job.id}/pipeline`)"
+                      title="View applicants"
+                      @click="$router.push(`/recruiter/jobs/${job.id}/applicants`)"
                       class="p-2 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-100 rounded-lg transition-all duration-150 transform hover:scale-110"
                     >
                       <i class="pi pi-users text-base"></i>
-                    </button>
-
-                    <!-- BOOST BUTTON (desktop) -->
-                    <button
-                      title="Boost iklan"
-                      @click="openBoostModal(job)"
-                      class="p-2 text-orange-500 hover:text-orange-600 hover:bg-orange-100 rounded-lg transition-all duration-150 transform hover:scale-110"
-                    >
-                      <i class="pi pi-chart-line text-base"></i>
                     </button>
 
                     <!-- MORE ACTIONS DROPDOWN BUTTON -->
@@ -680,24 +632,6 @@
       </div>
     </div>
   </div>
-  <!-- BOOST JOB MODAL -->
-  <BoostJobModal
-    v-if="boostModalJob"
-    :show="showBoostModal"
-    :job="boostModalJob"
-    @close="showBoostModal = false"
-    @success="fetchJobs"
-  />
-
-  <!-- SINGLE POST MODAL -->
-  <SinglePostModal
-    v-if="singlePostModalJob"
-    :show="showSinglePostModal"
-    :job="singlePostModalJob"
-    @close="showSinglePostModal = false"
-    @success="fetchJobs"
-  />
-
 </template>
 
 <script setup>
@@ -707,10 +641,6 @@ import { push } from "notivue";
 import { getJobPostsSelf } from "@/services/jobposts.api";
 import { useRouter } from "vue-router";
 import api from "@/services/api";
-import ActivePlanBanner from "@/components/recruiter/ActivePlanBanner.vue";
-import BoostJobModal from "@/components/recruiter/BoostJobModal.vue";
-import SinglePostModal from "@/components/recruiter/SinglePostModal.vue";
-import { getAllPlans, getPaymentOrders } from "@/services/payments.api.js";
 
 const activeTab = ref("active"); // active | archived
 
@@ -728,51 +658,6 @@ const page = ref(1);
 const limit = ref(5);
 const totalPages = ref(1);
 const openMenuId = ref(null);
-
-const boostPlans = ref([]);
-const paidBoostOrders = ref([]);
-
-async function loadBoostMetadata() {
-  try {
-    const [plansRes, ordersRes] = await Promise.all([
-      getAllPlans("boost"),
-      getPaymentOrders({ order_type: "boost", status: "paid", limit: 50 })
-    ]);
-    boostPlans.value = plansRes?.data?.boost || [];
-    paidBoostOrders.value = ordersRes?.data || [];
-  } catch (err) {
-    console.error("Failed to load boost metadata", err);
-  }
-}
-
-function applyBoostsToJobs() {
-  if (!jobs.value || jobs.value.length === 0) return;
-  
-  jobs.value = jobs.value.map(job => {
-    if (job.boost_type) return job;
-    
-    const activeBoost = paidBoostOrders.value.find(order => {
-      if (order.job_post_id !== job.id) return false;
-      
-      const plan = boostPlans.value.find(p => p.id === order.plan_id);
-      if (!plan) return false;
-      
-      const paidAt = new Date(order.paid_at || order.created_at);
-      const expiresAt = new Date(paidAt.getTime() + plan.duration_days * 24 * 60 * 60 * 1000);
-      return expiresAt > new Date();
-    });
-    
-    if (activeBoost) {
-      const plan = boostPlans.value.find(p => p.id === activeBoost.plan_id);
-      return {
-        ...job,
-        boost_type: plan?.boost_priority === 1 ? "hot" : "top10",
-      };
-    }
-    
-    return job;
-  });
-}
 
 function toggleMenu(jobId) {
   openMenuId.value = openMenuId.value === jobId ? null : jobId;
@@ -909,7 +794,6 @@ async function fetchJobs() {
     });
     if (!countit.value && activeTab.value === "active") {
       jobs.value = res.data?.data || [];
-      applyBoostsToJobs();
       totalPages.value = res.data?.meta?.totalPage || 1;
     }
     jobCounter.value = res.data?.meta?.total || 0;
@@ -930,7 +814,6 @@ async function archivedJobs() {
     });
     if (!countit.value && activeTab.value === "archived") {
       jobs.value = res.data?.data || [];
-      applyBoostsToJobs();
       totalPages.value = res.data?.meta?.totalPage || 1;
     }
     archivedJobCounter.value = res.data?.meta?.total || 0;
@@ -940,8 +823,7 @@ async function archivedJobs() {
   }
 }
 
-onMounted(async () => {
-  await loadBoostMetadata();
+onMounted(() => {
   fetchJobs();
   archivedJobs();
 });
@@ -1027,25 +909,5 @@ async function duplicateJob(jobId) {
     console.error("Duplicate failed", err);
     push.error(t("notifications.failedToDuplicateJob"));
   }
-}
-
-// ─── Boost Modal ─────────────────────────────────────────────────────────────
-const showBoostModal = ref(false);
-const boostModalJob = ref(null);
-
-function openBoostModal(job) {
-  boostModalJob.value = job;
-  showBoostModal.value = true;
-  closeMenu();
-}
-
-// ─── Single Post Modal ────────────────────────────────────────────────────────
-const showSinglePostModal = ref(false);
-const singlePostModalJob = ref(null);
-
-function openSinglePostModal(job) {
-  singlePostModalJob.value = job;
-  showSinglePostModal.value = true;
-  closeMenu();
 }
 </script>

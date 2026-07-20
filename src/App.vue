@@ -1,7 +1,7 @@
 <script setup>
+import HelloWorld from "./components/HelloWorld.vue";
 import AppFooter from "./components/layout/AppFooter.vue";
 import AppHeader from "./components/layout/AppHeader.vue";
-import NotificationChannelBanner from "./components/auth/NotificationChannelBanner.vue";
 import { useI18n } from "vue-i18n";
 import { Notivue, Notification } from "notivue";
 const { locale, t } = useI18n();
@@ -11,7 +11,6 @@ import "primeicons/primeicons.css";
 <template>
   <div class="min-h-screen bg-white text-gray-900">
     <AppHeader />
-    <NotificationChannelBanner />
     <router-view :key="$route.fullPath" />
     <Notivue v-slot="item">
       <Notification :item="item" />

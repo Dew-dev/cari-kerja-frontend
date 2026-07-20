@@ -6,7 +6,6 @@ import { i18n } from "../i18n";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_FILE_STORAGE_URL}/api/v1`,
-  withCredentials: true,
 });
 
 let isRefreshing = false;
@@ -55,7 +54,7 @@ function processQueue(error, token = null) {
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  if (token && token !== "google-cookie-session") {
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;

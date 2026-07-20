@@ -2,19 +2,25 @@
 import { useRouter, useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { computed } from "vue"
+// import { useAuthStore } from "@/stores/auth.store"
+// import ProfileAvatar from "@/components/common/ProfileAvatar.vue"
 const { locale,t } = useI18n()
+// computed
 const router = useRouter()
 const route = useRoute()
+// const auth = useAuthStore()
+// const router = useRouter()
+// const auth = useAuthStore() 
+// computed
 
 const menu = computed(() => [
   { label: t("jobs"), path: "/jobposts" },
   { label: t("categories"), path: "/categories" },
-  { label: t("chat.title"), path: "/chat" },
   { label: t("Profile"), path: "/profile/edit" },
 ])
 
 function isActive(path) {
-  return route.path === path || route.path.startsWith(path + '/')
+  return route.path === path
 }
 </script>
 

@@ -22,5 +22,5 @@ Aturan ini mewajibkan setiap perubahan kode atau penambahan fitur agar mematuhi 
 Aturan ini menetapkan batasan ruang lingkup kerja agen terkait perubahan frontend. Karena pengguna memiliki agen terpisah untuk menangani frontend.
 
 ## Aturan
-1. **Hanya Fokus pada Frontend**: Agen tidak diperbolehkan mengubah kode atau file apapun yang berada di direktori backend. Terhadap direktori sibling `../cari-kerja-backend` (relatif terhadap root project frontend ini), agen hanya diberikan akses **Read-Only** (hanya untuk membaca dan memahami konteks), tanpa izin untuk menambah, memodifikasi, atau menghapus file apa pun.
+1. **Hanya Fokus pada Frontend**: Agen tidak diperbolehkan mengubah kode atau file apapun yang berada di direktori backend. Terhadap direktori `C:\Users\Hakim\Documents\Freelance\job-portal\cari-kerja-backend`, agen hanya diberikan akses **Read-Only** (hanya untuk membaca dan memahami konteks), tanpa izin untuk menambah, memodifikasi, atau menghapus file apa pun.
 2. **Berikan Instruksi Khusus**: Jika ada perubahan fitur yang memerlukan penyesuaian di backend, agen harus mendeskripsikan secara spesifik apa saja yang perlu dilakukan pada sisi backend, dan menyerahkannya sebagai **Instruksi untuk Agen Backend** yang dapat disalin oleh pengguna.

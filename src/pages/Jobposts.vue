@@ -187,7 +187,6 @@
                 <div>
                   <label class="block text-xs text-gray-600 mb-1">Currency</label>
                   <select v-model="salaryCurrency" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="ALL">ALL</option>
                     <option value="IDR">IDR</option>
                     <option value="UZS">UZS</option>
                     <option value="USD">USD</option>
@@ -196,11 +195,11 @@
                 </div>
                 <div>
                   <label class="block text-xs text-gray-600 mb-1">Min ({{ salaryCurrency }})</label>
-                  <input type="text" v-model="displaySalaryMin" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Min salary" />
+                  <input type="number" v-model="salaryMin" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Min salary" />
                 </div>
                 <div>
                   <label class="block text-xs text-gray-600 mb-1">Max ({{ salaryCurrency }})</label>
-                  <input type="text" v-model="displaySalaryMax" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Max salary" />
+                  <input type="number" v-model="salaryMax" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Max salary" />
                 </div>
                 <button @click="handleFilterChange" class="w-full rounded-md border border-gray-200 shadow-sm px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100">
                   Apply
@@ -301,54 +300,6 @@
             </div>
           </div>
 
-          <!-- HOT Jobs Section -->
-          <div v-if="hotJobs.length > 0" class="mb-8">
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-xl font-extrabold text-gray-900 flex items-center gap-2">
-                <span class="text-orange-500">🔥</span> Lowongan Terhangat (HOT Jobs)
-              </h2>
-              <router-link
-                to="/jobposts/hot"
-                class="text-xs font-bold text-orange-600 hover:text-orange-700 hover:underline flex items-center gap-1 transition-all"
-              >
-                Lihat Semua <i class="pi pi-angle-right text-[10px]"></i>
-              </router-link>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div
-                v-for="job in hotJobs"
-                :key="'hot-' + job.id"
-                class="bg-gradient-to-br from-amber-50/70 to-orange-50/40 border-2 border-orange-200 rounded-xl shadow-xs hover:shadow-orange-200/50 hover:shadow-md transition-all duration-200 p-4 cursor-pointer flex flex-col justify-between"
-                @click="viewJobDetail(job.id)"
-              >
-                <div>
-                  <div class="flex items-start justify-between gap-2 mb-3">
-                    <div class="w-10 h-10 bg-white border border-gray-150 rounded-lg flex items-center justify-center p-1.5 flex-shrink-0 shadow-2xs">
-                      <img
-                        :src="job.avatar_url ? fileStorageUrl + job.avatar_url : '/company-default-image.png'"
-                        @error="(e) => (e.target.src = '/company-default-image.png')"
-                        :alt="job.company_name"
-                        class="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                    <span class="px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-extrabold rounded-full flex items-center gap-0.5 whitespace-nowrap shadow-3xs">
-                      <i class="pi pi-star-fill text-[7px]"></i> HOT
-                    </span>
-                  </div>
-                  
-                  <h3 class="font-bold text-gray-900 text-sm line-clamp-1 mb-1" :title="job.title">{{ job.title }}</h3>
-                  <p class="text-xs text-gray-600 mb-2 truncate">{{ job.company_name }}</p>
-                </div>
-                
-                <div class="mt-4 pt-3 border-t border-orange-100 flex items-center justify-between">
-                  <span class="text-xs text-gray-500"><i class="pi pi-map-marker text-[10px]"></i> {{ job.location }}</span>
-                  <span class="text-xs font-bold text-orange-600 truncate">{{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <!-- Results Header -->
           <div class="bg-white rounded-lg shadow p-4 mb-4 hidden lg:block">
             <div class="flex items-center justify-between">
@@ -390,14 +341,7 @@
               <div
                 v-for="job in jobs"
                 :key="job.id"
-                :class="[
-                  'rounded-lg shadow transition-all duration-200 p-4 sm:p-5 md:p-6 cursor-pointer mb-6 last:mb-0 border-2',
-                  job.boost_type === 'hot'
-                    ? 'bg-gradient-to-br from-amber-50/70 to-orange-50/40 border-orange-200 hover:shadow-orange-200/40 hover:shadow-xl ring-2 ring-orange-100/50'
-                    : job.boost_type === 'top10'
-                    ? 'bg-gradient-to-br from-blue-50/70 to-indigo-50/40 border-blue-200 hover:shadow-blue-200/40 hover:shadow-xl ring-2 ring-blue-100/50'
-                    : 'bg-white border-transparent hover:shadow-lg'
-                ]"
+                class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-4 sm:p-5 md:p-6 cursor-pointer mb-6 last:mb-0"
                 @click="viewJobDetail(job.id)"
               >
                 <!-- Mobile-first card: image on top, content below -->
@@ -423,14 +367,8 @@
 
                   <div class="flex items-start justify-between gap-4">
                     <div class="flex-1 min-w-0">
-                      <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-1.5 flex-wrap">
-                        <span>{{ job.title }}</span>
-                        <span v-if="job.boost_type === 'hot'" class="px-2 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap shadow-sm">
-                          <i class="pi pi-star-fill text-[8px]"></i> HOT
-                        </span>
-                        <span v-else-if="job.boost_type === 'top10'" class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap border border-blue-200 shadow-sm">
-                          <i class="pi pi-chart-line text-[8px]"></i> Top-10
-                        </span>
+                      <h3 class="text-lg font-semibold text-gray-900 truncate">
+                        {{ job.title }}
                       </h3>
 
                       <div
@@ -600,7 +538,7 @@ import { ref, onMounted, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../stores/authStore";
 import HeroSearch from "../components/home/HeroSearch.vue";
-import { getJobPosts, getHotJobPosts } from "../services/jobposts.api";
+import { getJobPosts } from "../services/jobposts.api";
 import { getCategoriesWithJobcount } from "../services/categories.api";
 import api from "../services/api";
 import { useRoute, useRouter } from "vue-router";
@@ -643,39 +581,9 @@ let provinceTimeout = null;
 let cityTimeout = null;
 const salaryMin = ref(null);
 const salaryMax = ref(null);
-const salaryCurrency = ref("ALL");
+const salaryCurrency = ref("IDR");
 
 // Computed
-const displaySalaryMin = computed({
-  get: () => {
-    if (salaryMin.value === null || salaryMin.value === undefined || salaryMin.value === "") return "";
-    return Number(salaryMin.value).toLocaleString("id-ID");
-  },
-  set: (val) => {
-    if (!val) {
-      salaryMin.value = null;
-      return;
-    }
-    const raw = String(val).replace(/\D/g, "");
-    salaryMin.value = raw ? Number(raw) : null;
-  },
-});
-
-const displaySalaryMax = computed({
-  get: () => {
-    if (salaryMax.value === null || salaryMax.value === undefined || salaryMax.value === "") return "";
-    return Number(salaryMax.value).toLocaleString("id-ID");
-  },
-  set: (val) => {
-    if (!val) {
-      salaryMax.value = null;
-      return;
-    }
-    const raw = String(val).replace(/\D/g, "");
-    salaryMax.value = raw ? Number(raw) : null;
-  },
-});
-
 const displayPages = computed(() => {
   const pages = [];
   const start = Math.max(1, currentPage.value - 1);
@@ -905,11 +813,9 @@ const jobService = {
         hasActiveFilters = true;
       }
 
-      if (filters.salaryCurrency && filters.salaryCurrency !== "ALL") {
+      if (filters.salaryCurrency) {
         params.currency = filters.salaryCurrency;
         hasActiveFilters = true;
-      } else if (filters.salaryCurrency === "IDR" && (filters.salaryMin || filters.salaryMax)) {
-        params.currency = filters.salaryCurrency;
       }
 
       if (filters.sortBy && filters.sortBy !== "" && filters.sortBy !== "created_at") {
@@ -1088,7 +994,7 @@ const handleFilterChange = () => {
       cities_name: selectedCity.value || undefined,
       salary_min: salaryMin.value || undefined,
       salary_max: salaryMax.value || undefined,
-      salary_currency: salaryCurrency.value !== "ALL" ? salaryCurrency.value : undefined,
+      salary_currency: salaryCurrency.value || undefined,
       recommendations: "false",
       page: 1, // Reset ke 1 hanya saat fungsi ini dipanggil
     },
@@ -1108,7 +1014,7 @@ const resetFilters = () => {
   cityOptions.value = [];
   salaryMin.value = null;
   salaryMax.value = null;
-  salaryCurrency.value = "ALL";
+  salaryCurrency.value = "IDR";
   sortBy.value = "";
   currentPage.value = 1;
 
@@ -1145,7 +1051,7 @@ const enableRecommendations = () => {
   cityInput.value = "";
   salaryMin.value = null;
   salaryMax.value = null;
-  salaryCurrency.value = "ALL";
+  salaryCurrency.value = "IDR";
   sortBy.value = "";
   searchQuery.value = "";
   
@@ -1194,7 +1100,7 @@ watch(
     selectedCity.value = q.cities_name || "";
     salaryMin.value = q.salary_min ? Number(q.salary_min) : null;
     salaryMax.value = q.salary_max ? Number(q.salary_max) : null;
-    salaryCurrency.value = q.salary_currency || "ALL";
+    salaryCurrency.value = q.salary_currency || "IDR";
     if (q.province_name) {
       provinceInput.value = q.province_name;
       resolveProvinceIdByName(q.province_name).catch(() => null);
@@ -1214,7 +1120,7 @@ watch(
       q.cities_name ||
       q.salary_min !== undefined ||
       q.salary_max !== undefined ||
-      (q.salary_currency !== undefined && q.salary_currency !== "ALL")
+      (q.salary_currency !== undefined && q.salary_currency !== "IDR")
     );
     
     // Recommendations only for non-recruiter logged-in users
@@ -1236,25 +1142,10 @@ watch(
 );
 
 // Lifecycle
-const hotJobs = ref([]);
-const loadingHot = ref(false);
-
-async function fetchHotJobs() {
-  loadingHot.value = true;
-  try {
-    const res = await getHotJobPosts({ limit: 5, page: 1 });
-    hotJobs.value = res.data?.data || [];
-  } catch (err) {
-    console.error("Error loading hot jobs:", err);
-  } finally {
-    loadingHot.value = false;
-  }
-}
-
 onMounted(() => {
   loadCategories();
   loadEmploymentTypes();
-  fetchHotJobs();
+  // recommendations.value = true;
 });
 </script>
 
