@@ -2012,7 +2012,8 @@
       "sending": "Sending...",
       "resendVerification": "Resend verification email",
       "verify": "Verifying...",
-      "redirecting": "Redirecting to login…"
+      "redirecting": "Redirecting to login…",
+      "redirectingToApp": "Signing you in…"
     },
     "messages": {
       "emailNotVerified": "Your email is not verified.",

@@ -1993,7 +1993,8 @@
       "sending": "Yuborilmoqda...",
       "resendVerification": "Tasdiqlash xatini qayta yuboring",
       "verify": "Tekshirilmoqda...",
-      "redirecting": "Kirishga yo'naltirilyapti…"
+      "redirecting": "Kirishga yo'naltirilyapti…",
+      "redirectingToApp": "Hisobingizga kiritilmoqda…"
     },
     "messages": {
       "emailNotVerified": "Sizning elektron pochta manzili tasdiqlanmadi.",

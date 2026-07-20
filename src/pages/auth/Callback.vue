@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import { push } from "notivue";
@@ -12,7 +12,78 @@ const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
 const { t } = useI18n();
-const status = ref("loading");
+
+function resolveLoginProvider(decoded) {
+  if (decoded?.login_provider) return decoded.login_provider;
+  if (isFlagTruthy(route.query.requires_email_setup)) return "telegram";
+  if (isFlagTruthy(route.query.requires_telegram_link)) return "google";
+  return "local";
+}
+
+function buildUserFromToken(token) {
+  const decoded = decodeAccessToken(token) || {};
+  const provider = resolveLoginProvider(decoded);
+  const roleId = Number(decoded.role_id);
+
+  if (roleId === 2) {
+    return {
+      id: decoded.recruiter_id || decoded.id,
+      user_id: decoded.id,
+      name: decoded.name || "Recruiter",
+      email: displayEmail(decoded.email),
+      avatar_url: decoded.avatar_url || null,
+      role: "recruiter",
+      login_provider: provider,
+    };
+  }
+
+  return {
+    id: decoded.worker_id || decoded.id,
+    user_id: decoded.id,
+    name: decoded.name || "User",
+    email: displayEmail(decoded.email),
+    avatar_url: decoded.avatar_url || null,
+    role: "user",
+    login_provider: provider,
+  };
+}
+
+async function enrichUserProfile(token) {
+  const decoded = decodeAccessToken(token) || {};
+  try {
+    if (Number(decoded.role_id) === 2) {
+      const profileRes = await api.get(`/users/${decoded.id}/recruiters`);
+      const recruiterData = profileRes.data?.data;
+      if (!recruiterData) return;
+      auth.mergeUser({
+        id: recruiterData.id,
+        user_id: recruiterData.user_id,
+        name:
+          recruiterData.contact_name ||
+          recruiterData.company_name ||
+          auth.user?.name,
+        email: displayEmail(decoded.email || recruiterData.email),
+        avatar_url: recruiterData.avatar_url,
+        role: "recruiter",
+      });
+      return;
+    }
+
+    const profileRes = await api.get("/users/workers/me");
+    const workerData = profileRes.data?.data;
+    if (!workerData) return;
+    auth.mergeUser({
+      id: workerData.id,
+      user_id: workerData.user_id,
+      name: workerData.name,
+      email: displayEmail(workerData.email),
+      avatar_url: workerData.avatar_url,
+      role: "user",
+    });
+  } catch (error) {
+    console.warn("Profile enrichment after OAuth failed:", error);
+  }
+}
 
 onMounted(async () => {
   const token = route.query.token;
@@ -24,23 +95,60 @@ onMounted(async () => {
       t("auth.messages.invalidToken") ||
         "Authentication failed or parameters missing.",
     );
-    router.push("/login");
+    router.replace("/login");
     return;
   }
 
   try {
+    // 1) Simpan session dulu supaya user langsung dianggap login
     auth.token = token;
     auth.$patch({ refreshToken });
     localStorage.setItem("token", token);
     localStorage.setItem("refreshToken", refreshToken);
 
-    // Flags dari query OAuth (banner, bukan gate)
     auth.applyNotificationFlags({
       requires_email_setup: route.query.requires_email_setup,
       requires_email_update: route.query.requires_email_update,
       requires_telegram_link: route.query.requires_telegram_link,
     });
 
+    // 2) User minimal dari JWT / query — jangan block redirect
+    let user = null;
+    if (userStr && userStr !== "undefined") {
+      try {
+        user = JSON.parse(decodeURIComponent(userStr));
+      } catch {
+        user = null;
+      }
+    }
+    if (!user) {
+      user = buildUserFromToken(token);
+    } else {
+      user = {
+        ...user,
+        email: displayEmail(user.email),
+        login_provider:
+          user.login_provider || resolveLoginProvider(decodeAccessToken(token)),
+      };
+    }
+
+    auth.user = user;
+    localStorage.setItem("user", JSON.stringify(auth.user));
+
+    if (isFlagTruthy(route.query.requires_email_setup)) {
+      auth.applyNotificationFlags({ requires_email_setup: true });
+    }
+    if (isFlagTruthy(route.query.requires_telegram_link)) {
+      auth.applyNotificationFlags({ requires_telegram_link: true });
+    }
+
+    // 3) Redirect segera — jangan tunggu refresh/profile
+    const destination =
+      auth.user.role === "recruiter" ? "/recruiter/jobs" : "/jobposts";
+    push.success(t("auth.messages.loginSuccess") || "Login successful!");
+    await router.replace(destination);
+
+    // 4) Background: lengkapi worker_id di JWT + data profil
     try {
       await auth.refreshToken({ logoutOnFail: false });
     } catch (refreshError) {
@@ -49,81 +157,14 @@ onMounted(async () => {
         refreshError,
       );
     }
-
-    let user = null;
-    if (userStr && userStr !== "undefined") {
-      user = JSON.parse(decodeURIComponent(userStr));
-    } else {
-      const decoded = decodeAccessToken(auth.token || token);
-      if (decoded && Number(decoded.role_id) === 2) {
-        const profileRes = await api.get(`/users/${decoded.id}/recruiters`);
-        const recruiterData = profileRes.data.data;
-        user = {
-          id: recruiterData.id,
-          user_id: recruiterData.user_id,
-          name:
-            recruiterData.contact_name ||
-            recruiterData.company_name ||
-            decoded.name ||
-            "Recruiter",
-          email: displayEmail(decoded.email || recruiterData.email),
-          avatar_url: recruiterData.avatar_url,
-          role: "recruiter",
-          login_provider: decoded.login_provider || "google",
-        };
-      } else {
-        const profileRes = await api.get("/users/workers/me");
-        const workerData = profileRes.data.data;
-        user = {
-          id: workerData.id,
-          user_id: workerData.user_id,
-          name: workerData.name,
-          email: displayEmail(workerData.email),
-          avatar_url: workerData.avatar_url,
-          role: "user",
-          login_provider:
-            decoded?.login_provider ||
-            (isFlagTruthy(route.query.requires_email_setup)
-              ? "telegram"
-              : isFlagTruthy(route.query.requires_telegram_link)
-                ? "google"
-                : "local"),
-        };
-      }
-    }
-
-    // Jangan force page "lengkapi email" — masuk app langsung
-    auth.user = {
-      ...user,
-      email: displayEmail(user.email),
-      login_provider:
-        user.login_provider ||
-        decodeAccessToken(auth.token)?.login_provider ||
-        auth.loginProvider,
-    };
-    localStorage.setItem("user", JSON.stringify(auth.user));
-
-    // Pastikan flag query tetap dihormati jika refresh tidak mengembalikannya
-    if (isFlagTruthy(route.query.requires_email_setup)) {
-      auth.applyNotificationFlags({ requires_email_setup: true });
-    }
-    if (isFlagTruthy(route.query.requires_telegram_link)) {
-      auth.applyNotificationFlags({ requires_telegram_link: true });
-    }
-
-    status.value = "done";
-    push.success(t("auth.messages.loginSuccess") || "Login successful!");
-
-    if (auth.user.role === "recruiter") {
-      router.replace("/recruiter/jobs");
-    } else {
-      router.replace("/jobposts");
-    }
+    await enrichUserProfile(auth.token || token);
   } catch (error) {
     console.error("Callback parsing error:", error);
-    push.error(t("auth.messages.signInError") || "An error occurred during sign in.");
+    push.error(
+      t("auth.messages.signInError") || "An error occurred during sign in.",
+    );
     auth.logout();
-    router.push("/login");
+    router.replace("/login");
   }
 });
 </script>
@@ -137,17 +178,8 @@ onMounted(async () => {
         class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"
       ></div>
       <p class="text-lg font-semibold text-gray-700">
-        {{ t("auth.buttons.redirecting") || "Redirecting to your account..." }}
+        {{ t("auth.buttons.redirectingToApp") }}
       </p>
     </div>
   </div>
 </template>
-
-<style scoped>
-header {
-  display: none;
-}
-footer {
-  display: none;
-}
-</style>

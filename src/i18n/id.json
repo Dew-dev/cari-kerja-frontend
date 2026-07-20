@@ -1707,7 +1707,8 @@
       "sending": "Mengirim...",
       "resendVerification": "Kirim ulang email verifikasi",
       "verify": "Memverifikasi...",
-      "redirecting": "Mengalihkan ke login…"
+      "redirecting": "Mengalihkan ke login…",
+      "redirectingToApp": "Sedang masuk ke akun Anda…"
     },
     "messages": {
       "emailNotVerified": "Email Anda belum diverifikasi.",
