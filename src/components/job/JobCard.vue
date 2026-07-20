@@ -55,9 +55,7 @@ import { useAuthStore } from "@/stores/authStore.js"
 import {
   saveJob,
   unsaveJob,
-  isSavedJobId,
-  recallSavedJobId,
-  rememberSavedJobId,
+  syncSavedState,
 } from "@/services/saved-jobs.api"
 import { push } from "notivue"
 import { useI18n } from "vue-i18n"
@@ -73,15 +71,9 @@ const isSavingJob = ref(false)
 
 onMounted(() => {
   const jobPostId = props.job?.id
-  const rawSavedId = props.job?.saved_id
-  if (isSavedJobId(rawSavedId)) {
-    savedJobId.value = rawSavedId
-    isSaved.value = true
-    rememberSavedJobId(jobPostId, rawSavedId)
-  } else {
-    savedJobId.value = recallSavedJobId(jobPostId)
-    isSaved.value = Boolean(props.job?.saved || rawSavedId || savedJobId.value)
-  }
+  const savedState = syncSavedState(jobPostId, props.job)
+  savedJobId.value = savedState.savedJobId
+  isSaved.value = savedState.isSaved
 })
 
 const handleSaveJob = async () => {

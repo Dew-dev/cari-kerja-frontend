@@ -714,9 +714,7 @@ import {
 import {
   saveJob,
   unsaveJob,
-  isSavedJobId,
-  recallSavedJobId,
-  rememberSavedJobId,
+  syncSavedState,
 } from "../services/saved-jobs.api";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
@@ -969,16 +967,9 @@ const loadJobDetail = async () => {
     const response = await jobDetailService.fetchJobDetail(jobId.value);
     job.value = response.data;
 
-    // saved_id idealnya UUID; backend saat ini sering kirim boolean EXISTS
-    const rawSavedId = job.value?.saved_id;
-    if (isSavedJobId(rawSavedId)) {
-      savedJobId.value = rawSavedId;
-      isSaved.value = true;
-      rememberSavedJobId(jobId.value, rawSavedId);
-    } else {
-      savedJobId.value = recallSavedJobId(jobId.value);
-      isSaved.value = Boolean(rawSavedId) || Boolean(savedJobId.value);
-    }
+    const savedState = syncSavedState(jobId.value, job.value);
+    savedJobId.value = savedState.savedJobId;
+    isSaved.value = savedState.isSaved;
     console.log("Job detail loaded:", job.value);
     // Check if user has already applied
     if (auth.isLoggedIn && auth.role === "user") {
