@@ -2083,6 +2083,19 @@
       "telegramAlreadyLinked": "This Telegram is already linked for notifications on another account."
     }
   },
+  "captcha": {
+    "required": "Please complete the security check and submit again.",
+    "rateLimited": "Too many attempts. Please wait about 15 minutes and try again."
+  },
+  "verification": {
+    "title": "Company Verification Required",
+    "description": "Your company must be verified before you can publish job posts. You can still save your job as a draft, then contact us to verify your company.",
+    "banner": "Your company is not verified yet. You can prepare job drafts, but publishing is disabled until verification is complete.",
+    "cta": "Contact Us for Verification",
+    "saveDraft": "Save as Draft",
+    "draftSaved": "Job saved as draft",
+    "close": "Close"
+  },
   "notifications": {
     "sessionExpired": "Session expired, please login again",
     "jobDeletedSuccessfully": "Job deleted successfully",
