@@ -122,6 +122,11 @@ async function resolveWorkerIds(candidate) {
     } catch (err) {
       console.error("[Pipeline] Failed to resolve worker user_id:", err);
     }
+  }
+
+  return { userId, profileId };
+}
+
 function handleToggleSelect(candidate) {
   pipelineStore.toggleCandidateSelection(candidate.application_id);
 }
@@ -180,16 +185,6 @@ async function handleBulkMove(column) {
   } finally {
     bulkMoving.value = false;
   }
-}
-
-async function handleChat(candidate) {
-  const workerId = candidate.worker_id || candidate.id;
-  if (!workerId) {
-    push.error(t("chat.cannotStartChat") || "Cannot identify worker");
-    return;
-  }
-
-  return { userId, profileId };
 }
 
 async function handleChat(candidate) {

@@ -20,13 +20,10 @@ const isChatRoute = computed(() => route.path.startsWith("/chat"));
     :class="isChatRoute ? 'h-dvh flex flex-col overflow-hidden' : 'min-h-screen'"
   >
     <AppHeader class="shrink-0" />
+    <NotificationChannelBanner />
     <div :class="isChatRoute ? 'flex-1 min-h-0 overflow-hidden' : ''">
       <router-view :key="$route.fullPath" />
     </div>
-  <div class="min-h-screen bg-white text-gray-900">
-    <AppHeader />
-    <NotificationChannelBanner />
-    <router-view :key="$route.fullPath" />
     <Notivue v-slot="item">
       <Notification :item="item" />
     </Notivue>
