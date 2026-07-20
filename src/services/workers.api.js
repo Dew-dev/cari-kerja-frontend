@@ -32,3 +32,14 @@ export const getWorkerFilters = async () => {
     throw error
   }
 }
+
+/** Job alert preference for the authenticated worker. */
+export function getJobAlerts() {
+  // → { enabled: boolean, has_email: boolean }
+  return api.get("/workers/me/job-alerts");
+}
+
+export function updateJobAlerts(payload) {
+  // { enabled: boolean }
+  return api.put("/workers/me/job-alerts", payload);
+}
