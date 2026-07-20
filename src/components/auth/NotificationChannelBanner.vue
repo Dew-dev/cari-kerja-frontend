@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { useAuthStore } from "@/stores/authStore";
@@ -9,13 +10,19 @@ import {
 } from "@/services/auth.api";
 
 const auth = useAuthStore();
+const route = useRoute();
 const { t } = useI18n();
 
 const showEmailModal = ref(false);
 const emailInput = ref("");
 const submittingEmail = ref(false);
 
+const isAuthTransitionRoute = computed(() =>
+  ["/auth/callback", "/auth/telegram-link"].includes(route.path),
+);
+
 const banner = computed(() => {
+  if (isAuthTransitionRoute.value) return null;
   if (auth.showTelegramLinkBanner) {
     return {
       type: "telegram",
