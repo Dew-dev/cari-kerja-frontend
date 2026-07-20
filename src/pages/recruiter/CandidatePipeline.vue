@@ -12,6 +12,10 @@ import PipelineAnalytics from "@/components/recruiter/pipeline/PipelineAnalytics
 import PipelineBoard from "@/components/recruiter/pipeline/PipelineBoard.vue";
 import CandidateDetailDrawer from "@/components/recruiter/pipeline/CandidateDetailDrawer.vue";
 import StageManagerModal from "@/components/recruiter/pipeline/StageManagerModal.vue";
+import BulkActionBar from "@/components/recruiter/communication/BulkActionBar.vue";
+import BulkSendModal from "@/components/recruiter/communication/BulkSendModal.vue";
+import TemplateManagerModal from "@/components/recruiter/communication/TemplateManagerModal.vue";
+import CommunicationHistoryModal from "@/components/recruiter/communication/CommunicationHistoryModal.vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -29,6 +33,10 @@ const drawerCandidate = ref(null);
 const drawerOpen = ref(false);
 const stageManagerOpen = ref(false);
 const chattingId = ref(null);
+
+const bulkSendOpen = ref(false);
+const templateManagerOpen = ref(false);
+const historyOpen = ref(false);
 
 async function loadJob() {
   try {
@@ -89,6 +97,26 @@ function closeDrawer() {
   drawerOpen.value = false;
 }
 
+function handleToggleSelect(candidate) {
+  pipelineStore.toggleCandidateSelection(candidate.application_id);
+}
+
+function handleToggleColumnSelect({ columnKey, selected }) {
+  pipelineStore.setColumnSelection(columnKey, selected);
+}
+
+function openBulkSend() {
+  if (!pipelineStore.selectionIsSingleStage) {
+    push.warning(t("communication.bulk.singleStageRequired"));
+    return;
+  }
+  bulkSendOpen.value = true;
+}
+
+function onBulkSent() {
+  pipelineStore.clearCandidateSelection();
+}
+
 async function handleChat(candidate) {
   const workerId = candidate.worker_id || candidate.id;
   if (!workerId) {
@@ -108,11 +136,10 @@ async function handleChat(candidate) {
     chattingId.value = null;
   }
 }
-
 </script>
 
 <template>
-  <div class="bg-gray-50 min-h-screen py-8">
+  <div class="bg-gray-50 min-h-screen py-8 pb-28">
     <div class="max-w-7xl mx-auto px-4 space-y-5">
       <!-- Header -->
       <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
@@ -130,16 +157,30 @@ async function handleChat(candidate) {
           </p>
         </div>
 
-        <button
-          @click="stageManagerOpen = true"
-          class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors w-full sm:w-auto justify-center"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          {{ t("pipeline.stageManager.manageButton") }}
-        </button>
+        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <button
+            @click="historyOpen = true"
+            class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors justify-center"
+          >
+            {{ t("communication.history.title") }}
+          </button>
+          <button
+            @click="templateManagerOpen = true"
+            class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors justify-center"
+          >
+            {{ t("communication.templates.manage") }}
+          </button>
+          <button
+            @click="stageManagerOpen = true"
+            class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors justify-center"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {{ t("pipeline.stageManager.manageButton") }}
+          </button>
+        </div>
       </div>
 
       <!-- Filters (scoped to this job — no cross-job position picker) -->
@@ -174,11 +215,40 @@ async function handleChat(candidate) {
         :is-moving="pipelineStore.isMoving"
         :loading="pipelineStore.loadingCandidates"
         :show-job-title="!pipelineStore.isSingleJobMode"
+        :is-selected="pipelineStore.isCandidateSelected"
+        :is-column-fully-selected="pipelineStore.isColumnFullySelected"
+        :is-column-partially-selected="pipelineStore.isColumnPartiallySelected"
         @move="handleMove"
         @open="handleOpenCandidate"
         @chat="handleChat"
+        @toggle-select="handleToggleSelect"
+        @toggle-column-select="handleToggleColumnSelect"
       />
     </div>
+
+    <BulkActionBar
+      v-if="pipelineStore.selectedCount > 0"
+      :count="pipelineStore.selectedCount"
+      :single-stage="pipelineStore.selectionIsSingleStage"
+      @clear="pipelineStore.clearCandidateSelection()"
+      @send="openBulkSend"
+      @templates="templateManagerOpen = true"
+      @history="historyOpen = true"
+    />
+
+    <BulkSendModal
+      :open="bulkSendOpen"
+      :candidates="pipelineStore.selectedCandidates"
+      :job-post-id="pipelineStore.activeJobPostId"
+      :job-title="jobTitle"
+      @close="bulkSendOpen = false"
+      @sent="onBulkSent"
+      @manage-templates="templateManagerOpen = true"
+    />
+
+    <TemplateManagerModal :open="templateManagerOpen" @close="templateManagerOpen = false" />
+
+    <CommunicationHistoryModal :open="historyOpen" @close="historyOpen = false" />
 
     <!-- Candidate detail drawer -->
     <CandidateDetailDrawer :open="drawerOpen" :candidate="drawerCandidate" @close="closeDrawer" @chat="handleChat" />
