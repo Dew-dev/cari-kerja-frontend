@@ -1510,6 +1510,7 @@ watch(activeTab, (newTab) => {
                 v-model="form.date_of_birth"
                 type="date"
                 class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 md:py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
+                required
               />
             </div>
 
@@ -1528,7 +1529,9 @@ watch(activeTab, (newTab) => {
 
             <div>
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.nationality') }}</label
+                >{{ $t('profile.nationality') }}
+                <span class="text-red-500">*</span>
+                </label
               >
               <SearchableSelect
                 :options="nationalityOptions"
@@ -1540,7 +1543,9 @@ watch(activeTab, (newTab) => {
             </div>
 
             <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.religion') }}</label>
+              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.religion') }}
+                <span class="text-red-500">*</span>
+              </label>
               <select
                 v-model="form.religion_id"
                 class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
@@ -1554,7 +1559,7 @@ watch(activeTab, (newTab) => {
 
             <div>
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.maritalStatus') }}</label
+                >{{ $t('profile.maritalStatus') }} <span class="text-red-500">*</span></label
               >
               <select
                 v-model="form.marriage_status_id"
@@ -1569,7 +1574,9 @@ watch(activeTab, (newTab) => {
 
             <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.currentSalary') }}</label
+                >{{ $t('profile.currentSalary') }}
+                <span class="text-red-500">*</span>
+                </label
               >
               <div class="grid grid-cols-2 gap-2">
                 <input
@@ -1608,7 +1615,9 @@ watch(activeTab, (newTab) => {
 
             <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.expectedSalary') }}</label
+                >{{ $t('profile.expectedSalary') }}
+                <span class="text-red-500">*</span>
+                </label
               >
               <div class="grid grid-cols-2 gap-2">
                 <input
@@ -1657,7 +1666,9 @@ watch(activeTab, (newTab) => {
 
             <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.profileSummary') }}</label
+                >{{ $t('profile.profileSummary') }}
+                <span class="text-red-500">*</span>
+                </label
               >
               <textarea
                 v-model="form.profile_summary"
