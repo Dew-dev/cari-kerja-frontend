@@ -8,6 +8,7 @@ const communicationStore = useCommunicationStore();
 
 const props = defineProps({
   open: { type: Boolean, default: false },
+  jobPostId: { type: [String, Number], default: null },
 });
 
 const emit = defineEmits(["close"]);
@@ -21,7 +22,11 @@ watch(
       detailOpen.value = false;
       return;
     }
-    await communicationStore.fetchCampaigns({ page: 1, limit: 20 });
+    await communicationStore.fetchCampaigns({
+      page: 1,
+      limit: 20,
+      job_post_id: props.jobPostId || undefined,
+    });
   },
 );
 
@@ -48,21 +53,27 @@ function formatDate(value) {
   <Teleport to="body">
     <div
       v-if="open"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-      @click.self="emit('close')"
+      class="fixed inset-0 z-[90] flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
     >
-      <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-        <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+      <div class="absolute inset-0 bg-black/40" @click="emit('close')"></div>
+
+      <div
+        class="relative z-10 bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
+        @click.stop
+      >
+        <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between shrink-0">
           <div>
             <h2 class="text-lg font-bold text-gray-900">{{ t("communication.history.title") }}</h2>
             <p class="text-xs text-gray-500 mt-0.5">{{ t("communication.history.subtitle") }}</p>
           </div>
-          <button type="button" class="text-gray-400 hover:text-gray-600" @click="emit('close')">
+          <button type="button" class="w-8 h-8 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 flex items-center justify-center" @click="emit('close')">
             <i class="pi pi-times"></i>
           </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-5">
+        <div class="flex-1 overflow-y-auto p-5 min-h-0">
           <div v-if="detailOpen && communicationStore.activeCampaign" class="space-y-4">
             <button type="button" class="text-sm text-blue-600 hover:underline" @click="detailOpen = false">
               ← {{ t("communication.history.backToList") }}
@@ -91,7 +102,7 @@ function formatDate(value) {
                     :key="row.id || row.application_id || idx"
                     class="border-t border-gray-100"
                   >
-                    <td class="px-3 py-2">{{ row.name || row.application_id || "—" }}</td>
+                    <td class="px-3 py-2">{{ row.worker_name || row.name || row.application_id || "—" }}</td>
                     <td class="px-3 py-2">{{ row.email || "—" }}</td>
                     <td class="px-3 py-2">
                       <span class="inline-flex px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700">
@@ -127,7 +138,7 @@ function formatDate(value) {
                     <p class="text-xs text-gray-500 mt-0.5">
                       {{ formatDate(campaign.created_at) }}
                       ·
-                      {{ t("communication.history.recipientCount", { count: campaign.recipient_count ?? campaign.recipients?.length ?? 0 }) }}
+                      {{ t("communication.history.recipientCount", { count: campaign.total ?? campaign.recipient_count ?? campaign.recipients?.length ?? 0 }) }}
                     </p>
                   </div>
                   <span class="text-xs px-2 py-1 rounded bg-blue-50 text-blue-700 shrink-0">

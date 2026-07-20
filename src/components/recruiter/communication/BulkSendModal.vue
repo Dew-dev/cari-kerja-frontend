@@ -86,23 +86,25 @@ async function submit() {
   <Teleport to="body">
     <div
       v-if="open"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      class="fixed inset-0 bg-black/40 z-40 flex items-center justify-center p-4"
       @click.self="emit('close')"
     >
-      <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
-        <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+      <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200">
           <div>
-            <h2 class="text-lg font-bold text-gray-900">{{ t("communication.bulk.sendTitle") }}</h2>
+            <h2 class="text-base font-semibold text-gray-900">{{ t("communication.bulk.sendTitle") }}</h2>
             <p class="text-xs text-gray-500 mt-0.5">
               {{ t("communication.bulk.recipientCount", { count: candidates.length }) }}
             </p>
           </div>
           <button type="button" class="text-gray-400 hover:text-gray-600" @click="emit('close')">
-            <i class="pi pi-times"></i>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-5 space-y-4">
+        <div class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
           <div class="flex flex-wrap gap-2">
             <span
               v-for="c in candidates.slice(0, 8)"
@@ -132,9 +134,6 @@ async function submit() {
                 {{ tpl.name }}
               </option>
             </select>
-            <p v-if="communicationStore.templatesError" class="text-xs text-amber-600 mt-1">
-              {{ t("communication.templates.unavailable") }}
-            </p>
           </div>
 
           <div>
@@ -166,7 +165,7 @@ async function submit() {
           <p class="text-xs text-gray-500">{{ t("communication.bulk.gdprNotice") }}</p>
         </div>
 
-        <div class="px-5 py-4 border-t border-gray-200 flex justify-end gap-2">
+        <div class="border-t border-gray-200 px-5 py-4 flex justify-end gap-2">
           <button
             type="button"
             class="px-4 py-2 text-sm rounded-lg border border-gray-300 hover:bg-gray-50"
@@ -177,7 +176,7 @@ async function submit() {
           </button>
           <button
             type="button"
-            class="px-4 py-2 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+            class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
             :disabled="submitting || communicationStore.sending"
             @click="submit"
           >

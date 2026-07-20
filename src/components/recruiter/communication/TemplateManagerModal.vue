@@ -19,16 +19,20 @@ const saving = ref(false);
 
 watch(
   () => props.open,
-  async (isOpen) => {
+  (isOpen) => {
     if (!isOpen) return;
     resetForm();
-    await communicationStore.fetchTemplates();
+    communicationStore.fetchTemplates();
   },
 );
 
 function resetForm() {
   editingId.value = null;
-  form.value = { name: "", subject: "", body: "" };
+  form.value = {
+    name: "",
+    subject: "",
+    body: t("communication.bulk.defaultBody"),
+  };
 }
 
 function startEdit(template) {
@@ -36,7 +40,7 @@ function startEdit(template) {
   form.value = {
     name: template.name || "",
     subject: template.subject || "",
-    body: template.body || template.body_html || template.body_text || "",
+    body: template.body || "",
   };
 }
 
@@ -70,7 +74,7 @@ async function save() {
 }
 
 async function remove(template) {
-  if (!confirm(t("communication.templates.confirmDelete", { name: template.name }))) return;
+  if (!window.confirm(t("communication.templates.confirmDelete", { name: template.name }))) return;
   try {
     await communicationStore.removeTemplate(template.id);
     if (String(editingId.value) === String(template.id)) resetForm();
@@ -85,45 +89,54 @@ async function remove(template) {
   <Teleport to="body">
     <div
       v-if="open"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      class="fixed inset-0 bg-black/40 z-40 flex items-center justify-center p-4"
       @click.self="emit('close')"
     >
-      <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-        <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 class="text-lg font-bold text-gray-900">{{ t("communication.templates.title") }}</h2>
+      <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+          <div>
+            <h2 class="text-base font-semibold text-gray-900">
+              {{ t("communication.templates.title") }}
+            </h2>
+            <p class="text-xs text-gray-500 mt-0.5">
+              {{ t("communication.templates.popupHint") }}
+            </p>
+          </div>
           <button type="button" class="text-gray-400 hover:text-gray-600" @click="emit('close')">
-            <i class="pi pi-times"></i>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <div class="space-y-3">
+        <div class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+          <div class="space-y-2">
             <h3 class="text-sm font-semibold text-gray-700">
               {{ editingId ? t("communication.templates.edit") : t("communication.templates.create") }}
             </h3>
             <input
               v-model="form.name"
               type="text"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('communication.templates.namePlaceholder')"
             />
             <input
               v-model="form.subject"
               type="text"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('communication.templates.subjectPlaceholder')"
             />
             <textarea
               v-model="form.body"
-              rows="10"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-y"
+              rows="7"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('communication.templates.bodyPlaceholder')"
             />
             <p class="text-[11px] text-gray-400">{{ t("communication.bulk.mergeFieldsHint") }}</p>
             <div class="flex gap-2">
               <button
                 type="button"
-                class="px-4 py-2 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
                 :disabled="saving"
                 @click="save"
               >
@@ -140,36 +153,47 @@ async function remove(template) {
             </div>
           </div>
 
-          <div>
-            <h3 class="text-sm font-semibold text-gray-700 mb-3">{{ t("communication.templates.list") }}</h3>
-            <div v-if="communicationStore.loadingTemplates" class="text-sm text-gray-500 py-8 text-center">
+          <div class="border-t border-gray-100 pt-4">
+            <h3 class="text-sm font-semibold text-gray-700 mb-2">
+              {{ t("communication.templates.list") }}
+            </h3>
+            <p
+              v-if="communicationStore.usingLocalTemplates"
+              class="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 mb-3"
+            >
+              {{ t("communication.templates.localHint") }}
+            </p>
+            <div v-if="communicationStore.loadingTemplates" class="text-sm text-gray-500 py-6 text-center">
               {{ t("loading") }}...
             </div>
-            <div v-else-if="communicationStore.templatesError" class="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-              {{ t("communication.templates.unavailable") }}
-            </div>
-            <div v-else-if="!communicationStore.templates.length" class="text-sm text-gray-500 py-8 text-center">
+            <div v-else-if="!communicationStore.templates.length" class="text-sm text-gray-500 py-6 text-center">
               {{ t("communication.templates.empty") }}
             </div>
             <ul v-else class="space-y-2">
               <li
                 v-for="tpl in communicationStore.templates"
                 :key="tpl.id"
-                class="border border-gray-200 rounded-lg p-3"
+                class="border border-gray-200 rounded-lg px-3 py-2 flex items-start justify-between gap-2"
               >
-                <div class="flex items-start justify-between gap-2">
-                  <div class="min-w-0">
-                    <p class="text-sm font-semibold text-gray-900 truncate">{{ tpl.name }}</p>
-                    <p class="text-xs text-gray-500 truncate">{{ tpl.subject }}</p>
-                  </div>
-                  <div class="flex gap-1 shrink-0">
-                    <button type="button" class="text-xs text-blue-600 px-2 py-1 hover:bg-blue-50 rounded" @click="startEdit(tpl)">
-                      {{ t("communication.templates.editAction") }}
-                    </button>
-                    <button type="button" class="text-xs text-red-600 px-2 py-1 hover:bg-red-50 rounded" @click="remove(tpl)">
-                      {{ t("communication.templates.deleteAction") }}
-                    </button>
-                  </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-medium text-gray-900 truncate">{{ tpl.name }}</p>
+                  <p class="text-xs text-gray-500 truncate">{{ tpl.subject }}</p>
+                </div>
+                <div class="flex gap-1 shrink-0">
+                  <button
+                    type="button"
+                    class="text-xs text-blue-600 px-2 py-1 hover:bg-blue-50 rounded"
+                    @click="startEdit(tpl)"
+                  >
+                    {{ t("communication.templates.editAction") }}
+                  </button>
+                  <button
+                    type="button"
+                    class="text-xs text-red-600 px-2 py-1 hover:bg-red-50 rounded"
+                    @click="remove(tpl)"
+                  >
+                    {{ t("communication.templates.deleteAction") }}
+                  </button>
                 </div>
               </li>
             </ul>
