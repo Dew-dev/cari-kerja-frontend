@@ -10,9 +10,10 @@ const props = defineProps({
   currentColumnKey: { type: String, default: "" },
   moving: { type: Boolean, default: false },
   showJobTitle: { type: Boolean, default: true },
+  selected: { type: Boolean, default: false },
 });
 
-const emit = defineEmits(["move", "open", "chat"]);
+const emit = defineEmits(["move", "open", "chat", "toggle-select"]);
 
 const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
 
@@ -57,22 +58,36 @@ function moveTo(column) {
     ref="rootRef"
     :draggable="!moving"
     @dragstart="onDragStart"
-    class="bg-white rounded-lg border border-gray-200 p-3 shadow-sm hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing relative"
-    :class="{ 'opacity-50 pointer-events-none': moving }"
+    class="bg-white rounded-lg border p-3 shadow-sm hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing relative"
+    :class="[
+      moving ? 'opacity-50 pointer-events-none' : '',
+      selected ? 'border-blue-400 ring-1 ring-blue-200' : 'border-gray-200',
+    ]"
   >
-    <div class="flex items-start gap-2.5" @click="emit('open', candidate)">
-      <!-- Avatar -->
-      <div class="w-9 h-9 rounded-full bg-gray-200 shrink-0 flex items-center justify-center overflow-hidden">
-        <img v-if="candidate.avatar_url" :src="linkStorageUrl + candidate.avatar_url" class="w-full h-full object-cover" />
-        <span v-else class="text-xs font-semibold text-gray-600">{{ candidate.name?.charAt(0)?.toUpperCase() }}</span>
-      </div>
+    <div class="flex items-start gap-2.5">
+      <input
+        type="checkbox"
+        class="mt-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500 shrink-0"
+        :checked="selected"
+        :aria-label="t('communication.bulk.selectCandidate')"
+        @click.stop
+        @change="emit('toggle-select', candidate)"
+      />
 
-      <div class="flex-1 min-w-0 cursor-pointer">
-        <div class="text-sm font-semibold text-gray-900 truncate">{{ candidate.name }}</div>
-        <div v-if="showJobTitle && candidate.job_post_title" class="text-xs text-blue-600 truncate">
-          {{ candidate.job_post_title }}
+      <div class="flex items-start gap-2.5 flex-1 min-w-0" @click="emit('open', candidate)">
+        <!-- Avatar -->
+        <div class="w-9 h-9 rounded-full bg-gray-200 shrink-0 flex items-center justify-center overflow-hidden">
+          <img v-if="candidate.avatar_url" :src="linkStorageUrl + candidate.avatar_url" class="w-full h-full object-cover" />
+          <span v-else class="text-xs font-semibold text-gray-600">{{ candidate.name?.charAt(0)?.toUpperCase() }}</span>
         </div>
-        <div class="text-[11px] text-gray-400 mt-0.5">{{ appliedAgo }}</div>
+
+        <div class="flex-1 min-w-0 cursor-pointer">
+          <div class="text-sm font-semibold text-gray-900 truncate">{{ candidate.name }}</div>
+          <div v-if="showJobTitle && candidate.job_post_title" class="text-xs text-blue-600 truncate">
+            {{ candidate.job_post_title }}
+          </div>
+          <div class="text-[11px] text-gray-400 mt-0.5">{{ appliedAgo }}</div>
+        </div>
       </div>
 
       <!-- Overflow menu (drag & drop fallback) -->
