@@ -4,15 +4,18 @@ import PipelineColumn from "./PipelineColumn.vue";
 
 const { t } = useI18n();
 
-const props = defineProps({
+defineProps({
   columns: { type: Array, default: () => [] },
   candidatesByColumn: { type: Object, default: () => ({}) },
   isMoving: { type: Function, default: () => () => false },
   loading: { type: Boolean, default: false },
   showJobTitle: { type: Boolean, default: true },
+  isSelected: { type: Function, default: () => () => false },
+  isColumnFullySelected: { type: Function, default: () => () => false },
+  isColumnPartiallySelected: { type: Function, default: () => () => false },
 });
 
-const emit = defineEmits(["move", "open", "chat"]);
+const emit = defineEmits(["move", "open", "chat", "toggle-select", "toggle-column-select"]);
 </script>
 
 <template>
@@ -33,9 +36,14 @@ const emit = defineEmits(["move", "open", "chat"]);
       :all-columns="columns"
       :is-moving="isMoving"
       :show-job-title="showJobTitle"
+      :is-selected="isSelected"
+      :column-fully-selected="isColumnFullySelected(column.key)"
+      :column-partially-selected="isColumnPartiallySelected(column.key)"
       @move="emit('move', $event)"
       @open="emit('open', $event)"
       @chat="emit('chat', $event)"
+      @toggle-select="emit('toggle-select', $event)"
+      @toggle-column-select="emit('toggle-column-select', $event)"
     />
   </div>
 </template>

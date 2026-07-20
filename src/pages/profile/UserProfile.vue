@@ -8,6 +8,7 @@ import { getSavedJobs, removeSavedJob } from "@/services/saved-jobs.api";
 import { changeEmail } from "@/services/auth.api";
 import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
+import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
 import { displayEmail } from "@/utils/authFlags";
 
 const router = useRouter();
@@ -1405,8 +1406,9 @@ watch(activeTab, (newTab) => {
       <!-- PERSONAL INFO TAB -->
       <div
         v-if="activeTab === 'profile'"
-        class="bg-white rounded-2xl shadow-sm p-6"
+        class="space-y-6"
       >
+        <div class="bg-white rounded-2xl shadow-sm p-6">
         <div v-if="loadingProfile" class="text-sm text-gray-500">
           {{ $t('profile.loadingProfile') }}
         </div>
@@ -1771,6 +1773,9 @@ watch(activeTab, (newTab) => {
             </button>
           </div>
         </form>
+        </div>
+
+        <CommunicationPreferencesCard />
       </div>
 
       <!-- RESUMES TAB -->
