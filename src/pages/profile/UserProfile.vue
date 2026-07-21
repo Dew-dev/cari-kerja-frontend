@@ -8,11 +8,13 @@ import { getSavedJobs, removeSavedJob } from "@/services/saved-jobs.api";
 import { changeEmail } from "@/services/auth.api";
 import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
+import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
 import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
 import NotificationChannelsCard from "@/components/profile/NotificationChannelsCard.vue";
 import { displayEmail } from "@/utils/authFlags";
 import { isContentRejectedError, isDisposableEmailRejected } from "@/utils/apiErrors";
+import { stripHtml } from "@/utils/richText";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -1689,11 +1691,10 @@ watch(activeTab, (newTab) => {
                 <span class="text-red-500">*</span>
                 </label
               >
-              <textarea
+              <RichTextEditor
                 v-model="form.profile_summary"
-                rows="4"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
                 :placeholder="$t('profile.profileSummaryPlaceholder')"
+                min-height="140px"
               />
             </div>
           </div>
@@ -1725,12 +1726,77 @@ watch(activeTab, (newTab) => {
 
             <!-- ADD SKILLS BUTTON -->
             <button
+              v-if="!showSkillModal"
               type="button"
               @click="openSkillModal"
               class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm"
             >
               + {{ $t('profile.addSkillsButton') }}
             </button>
+
+            <!-- ADD SKILLS PANEL -->
+            <div
+              v-if="showSkillModal"
+              class="mt-3 border border-gray-200 rounded-lg p-4 bg-gray-50"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-semibold text-gray-800">
+                  {{ $t('profile.addSkillsButton') }}
+                </h3>
+                <button
+                  type="button"
+                  @click="closeSkillModal"
+                  class="text-gray-400 hover:text-gray-600 text-xl leading-none"
+                >
+                  ×
+                </button>
+              </div>
+
+              <input
+                v-model="skillSearchQuery"
+                @input="handleSkillSearch"
+                @keydown.enter.prevent="handleSkillEnter"
+                type="text"
+                :placeholder="$t('profile.searchOrCreateSkill')"
+                class="w-full border border-gray-200 bg-white shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+              />
+
+              <div
+                v-if="skillSuggestions.length"
+                class="space-y-2 mb-3 max-h-48 overflow-y-auto"
+              >
+                <div
+                  v-for="skill in skillSuggestions"
+                  :key="skill.id"
+                  @click="addSkillFromSuggestion(skill)"
+                  class="p-2 border border-gray-200 bg-white rounded cursor-pointer hover:bg-blue-50 text-sm"
+                >
+                  {{ skill.name }}
+                </div>
+              </div>
+
+              <div v-if="skillSearchQuery && !skillSuggestions.length" class="mb-3">
+                <button
+                  type="button"
+                  @click="createAndAddSkill(skillSearchQuery)"
+                  class="w-full p-2 border-2 border-dashed border-green-300 rounded text-sm text-green-700 hover:bg-green-50"
+                >
+                  + {{ $t('profile.createSkill') }} "{{ skillSearchQuery }}"
+                </button>
+              </div>
+
+              <p v-if="loadingSkills" class="text-xs text-gray-500 text-center mb-3">
+                {{ $t('profile.loadingSkills') }}
+              </p>
+
+              <button
+                type="button"
+                @click="closeSkillModal"
+                class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
+              >
+                {{ $t('profile.done') }}
+              </button>
+            </div>
           </div>
 
           <!-- Languages Section -->
@@ -1979,12 +2045,13 @@ watch(activeTab, (newTab) => {
               />
               {{ $t('profile.currentlyWorkingHere') }}
             </label>
-            <textarea
-              v-model="work.description"
-              :placeholder="$t('profile.descriptionPlaceholder')"
-              rows="3"
-              class="w-full rounded-lg border px-3 py-2 text-xs md:text-sm mb-3 min-h-10"
-            />
+            <div class="mb-3">
+              <RichTextEditor
+                v-model="work.description"
+                :placeholder="$t('profile.descriptionPlaceholder')"
+                min-height="120px"
+              />
+            </div>
             <div class="flex flex-col sm:flex-row gap-2">
               <button
                 @click="saveWorkExp(work)"
@@ -2063,12 +2130,13 @@ watch(activeTab, (newTab) => {
               />
               {{ $t('profile.currentlyStudyingHere') }}
             </label>
-            <textarea
-              v-model="edu.description"
-              :placeholder="$t('profile.descriptionPlaceholder')"
-              rows="2"
-              class="w-full rounded-lg border px-3 py-2 text-xs md:text-sm mb-3 min-h-10"
-            />
+            <div class="mb-3">
+              <RichTextEditor
+                v-model="edu.description"
+                :placeholder="$t('profile.descriptionPlaceholder')"
+                min-height="100px"
+              />
+            </div>
             <div class="flex flex-col sm:flex-row gap-2">
               <button
                 @click="saveEducation(edu)"
@@ -2728,7 +2796,7 @@ watch(activeTab, (newTab) => {
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 line-clamp-2">
-                  {{ job.description || "-" }}
+                  {{ stripHtml(job.description) || "-" }}
                 </p>
               </div>
               <div class="flex items-center">
@@ -2751,73 +2819,6 @@ watch(activeTab, (newTab) => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Skills Modal -->
-    <div
-      v-if="showSkillModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      @click.self="closeSkillModal"
-    >
-      <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-semibold">{{ $t('profile.addSkillsButton') }}</h3>
-          <button
-            @click="closeSkillModal"
-            class="text-gray-400 hover:text-gray-600 text-xl"
-          >
-            ×
-          </button>
-        </div>
-
-        <!-- Search Input -->
-        <input
-          v-model="skillSearchQuery"
-          @input="handleSkillSearch"
-          @keydown.enter.prevent="handleSkillEnter"
-          type="text"
-          :placeholder="$t('profile.searchOrCreateSkill')"
-          class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-        />
-
-        <!-- Suggestions -->
-        <div
-          v-if="skillSuggestions.length"
-          class="space-y-2 mb-4 max-h-48 overflow-y-auto"
-        >
-          <div
-            v-for="skill in skillSuggestions"
-            :key="skill.id"
-            @click="addSkillFromSuggestion(skill)"
-            class="p-2 border border-gray-200 rounded cursor-pointer hover:bg-blue-50 text-sm"
-          >
-            {{ skill.name }}
-          </div>
-        </div>
-
-        <!-- Create New Skill -->
-        <div v-if="skillSearchQuery && !skillSuggestions.length" class="mb-3">
-          <button
-            @click="createAndAddSkill(skillSearchQuery)"
-            class="w-full p-2 border-2 border-dashed border-green-300 rounded text-sm text-green-700 hover:bg-green-50"
-          >
-            + {{ $t('profile.createSkill') }} "{{ skillSearchQuery }}"
-          </button>
-        </div>
-
-        <!-- Loading -->
-        <p v-if="loadingSkills" class="text-xs text-gray-500 text-center">
-          {{ $t('profile.loadingSkills') }}
-        </p>
-
-        <!-- Close Button -->
-        <button
-          @click="closeSkillModal"
-          class="w-full mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
-        >
-          {{ $t('profile.done') }}
-        </button>
       </div>
     </div>
 

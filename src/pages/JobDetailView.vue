@@ -207,14 +207,15 @@
               </svg>
               {{ $t("jobDescription") }}
             </h2>
-            <div class="prose max-w-none text-gray-700 whitespace-pre-line leading-relaxed">
-              {{ job.description }}
-            </div>
+            <RichTextContent
+              :html="job.description"
+              class="leading-relaxed"
+            />
           </div>
 
           <!-- Requirements -->
           <div
-            v-if="job.requirements"
+            v-if="job.requirements?.length"
             class="bg-white rounded-lg shadow-md p-6"
           >
             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -233,7 +234,7 @@
 
           <!-- Responsibilities -->
           <div
-            v-if="job.responsibilities"
+            v-if="job.responsibilities?.length"
             class="bg-white rounded-lg shadow-md p-6"
           >
             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -251,7 +252,7 @@
           </div>
 
           <!-- Benefits -->
-          <div v-if="job.benefits" class="bg-white rounded-lg shadow-md p-6">
+          <div v-if="job.benefits?.length" class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5c.75 0 1.498-.037 2.237-.111a6.009 6.009 0 00-11.066 0c.738.074 1.487.111 2.237.111h6.592z" />
@@ -273,7 +274,7 @@
           </div>
 
           <!-- Skills -->
-          <div v-if="skills.length > 0" class="bg-white rounded-lg shadow-md p-6">
+          <div v-if="skills?.length" class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5h.01" />
@@ -360,10 +361,11 @@
                 <span class="text-gray-600 break-all">{{ job.email }}</span>
               </div>
 
-              <div v-if="job.company_description" class="mt-4 pt-4 ">
-                <p class="text-gray-600 text-sm">
-                  {{ job.company_description }}
-                </p>
+              <div v-if="job.company_description" class="mt-4 pt-4">
+                <RichTextContent
+                  :html="job.company_description"
+                  class="text-sm"
+                />
               </div>
             </div>
 
@@ -728,6 +730,7 @@ import { push } from "notivue";
 import { useAuthStore } from "../stores/authStore";
 import api from "@/services/api";
 import { isRateLimitedError } from "@/utils/apiErrors";
+import RichTextContent from "@/components/common/RichTextContent.vue";
 
 const COVER_LETTER_MAX = 5000;
 

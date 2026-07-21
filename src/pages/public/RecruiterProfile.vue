@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import api from "@/services/api"
+import RichTextContent from "@/components/common/RichTextContent.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -179,8 +180,13 @@ onMounted(fetchRecruiter)
               </svg>
               {{ $t('recruiterPublic.aboutCompany') }}
             </h2>
-            <p class="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
-              {{ recruiter.description || $t('recruiterPublic.noDescriptionProvided') }}
+            <RichTextContent
+              v-if="recruiter.description"
+              :html="recruiter.description"
+              class="text-sm leading-relaxed"
+            />
+            <p v-else class="text-sm text-gray-700 leading-relaxed">
+              {{ $t('recruiterPublic.noDescriptionProvided') }}
             </p>
           </div>
         </div>
@@ -240,7 +246,12 @@ onMounted(fetchRecruiter)
                 </div>
 
                 <!-- Description -->
-                <p class="text-xs text-gray-500 line-clamp-2 mb-3">{{ job.description }}</p>
+                <RichTextContent
+                  plain
+                  as="p"
+                  :html="job.description"
+                  class="text-xs text-gray-500 line-clamp-2 mb-3"
+                />
 
                 <!-- Salary + Dates -->
                 <div class="flex flex-wrap items-center justify-between gap-2">
