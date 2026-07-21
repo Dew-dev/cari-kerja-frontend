@@ -1835,6 +1835,7 @@
   },
   "contentRejected": {
     "disposableEmail": "Email sementara/disposabel tidak diizinkan. Silakan gunakan email permanen.",
+    "disposablePhone": "Nomor telepon tidak valid atau disposabel tidak diizinkan. Silakan gunakan nomor telepon asli.",
     "upload": "File ditolak (tipe tidak valid atau tipuan). Unggah ulang file asli dalam format yang didukung."
   },
   "maintenance": {
