@@ -333,7 +333,7 @@
               <div class="p-4 space-y-3 flex-1 flex flex-col">
                 <!-- Profile Summary -->
                 <p v-if="worker.profile_summary" class="text-sm text-gray-600 line-clamp-2">
-                  {{ worker.profile_summary }}
+                  {{ stripHtml(worker.profile_summary) }}
                 </p>
 
                 <!-- Compact Info Grid -->
@@ -448,6 +448,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { searchWorkers } from '@/services/workers.api'
 import api from '@/services/api'
+import { stripHtml } from '@/utils/richText'
 
 const router = useRouter()
 const route = useRoute()
