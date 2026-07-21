@@ -12,6 +12,7 @@ import CommunicationPreferencesCard from "@/components/worker/CommunicationPrefe
 import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
 import NotificationChannelsCard from "@/components/profile/NotificationChannelsCard.vue";
 import { displayEmail } from "@/utils/authFlags";
+import { isContentRejectedError, isDisposableEmailRejected } from "@/utils/apiErrors";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -267,6 +268,10 @@ async function saveProfile() {
 
      push.success(t('profile.profileUpdatedSuccessfully'));
   } catch (err) {
+    if (isContentRejectedError(err)) {
+      push.warning(t("contentRejected.upload"));
+      return;
+    }
      push.error(err?.response?.data?.message || t('profile.failedToUpdateProfile'));
   } finally {
     savingProfile.value = false;
@@ -294,6 +299,10 @@ async function saveEmailForNotifications() {
     auth.applyNotificationFlags(data);
     push.success(t("auth.banners.verificationEmailSent"));
   } catch (err) {
+    if (isDisposableEmailRejected(err)) {
+      push.warning(t("contentRejected.disposableEmail"));
+      return;
+    }
     push.error(
       err?.response?.data?.message || t("auth.banners.failedChangeEmail"),
     );
@@ -349,6 +358,10 @@ async function addResume(file, title, isDefault) {
 
        push.success(t('profile.resumeAddedSuccessfully'));
   } catch (err) {
+    if (isContentRejectedError(err)) {
+      push.warning(t("contentRejected.upload"));
+      return;
+    }
        push.error(t('profile.failedToUploadResume'));
   }
 }
@@ -991,6 +1004,11 @@ async function parseCVFile() {
 
     cvParsedData.value = res.data?.data || res.data;
   } catch (err) {
+    if (isContentRejectedError(err)) {
+      cvParserError.value = t("contentRejected.upload");
+      push.warning(cvParserError.value);
+      return;
+    }
     cvParserError.value = err?.response?.data?.message || t('profile.cvParser.failedToParse');
     push.error(cvParserError.value);
   } finally {

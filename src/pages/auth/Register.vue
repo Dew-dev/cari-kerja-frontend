@@ -5,7 +5,7 @@ import { register } from "@/services/auth.api"
 import api from "@/services/api"
 import { useAuthStore } from "@/stores/authStore"
 import TurnstileWidget from "@/components/common/TurnstileWidget.vue"
-import { isCaptchaError, isRateLimitedError } from "@/utils/apiErrors"
+import { isCaptchaError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors"
 
 import { useI18n } from "vue-i18n"
 import { push } from "notivue"
@@ -109,6 +109,11 @@ async function submit() {
     if (isCaptchaError(err)) {
       turnstileRef.value?.reset()
       state.serverError = t("captcha.required")
+      push.warning(state.serverError)
+      return
+    }
+    if (isDisposableEmailRejected(err)) {
+      state.serverError = t("contentRejected.disposableEmail")
       push.warning(state.serverError)
       return
     }

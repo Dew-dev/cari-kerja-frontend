@@ -1833,6 +1833,17 @@
     "required": "Silakan selesaikan pemeriksaan keamanan lalu kirim ulang.",
     "rateLimited": "Terlalu banyak percobaan. Silakan tunggu sekitar 15 menit lalu coba lagi."
   },
+  "contentRejected": {
+    "disposableEmail": "Email sementara/disposabel tidak diizinkan. Silakan gunakan email permanen.",
+    "upload": "File ditolak (tipe tidak valid atau tipuan). Unggah ulang file asli dalam format yang didukung."
+  },
+  "maintenance": {
+    "pageTitle": "Sedang Maintenance — Cari Kerja",
+    "title": "Sedang dalam maintenance",
+    "description": "Platform sementara tidak tersedia karena pemeliharaan terjadwal. Silakan coba lagi nanti — tidak perlu terus me-refresh halaman.",
+    "backHome": "Kembali ke beranda",
+    "hint": "Kami segera kembali."
+  },
   "verification": {
     "title": "Verifikasi Perusahaan Diperlukan",
     "description": "Perusahaan Anda harus terverifikasi sebelum dapat mempublikasikan lowongan. Anda tetap bisa menyimpan lowongan sebagai draft, lalu hubungi kami untuk verifikasi perusahaan.",

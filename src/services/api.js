@@ -3,6 +3,7 @@ import { push } from "notivue";
 import router from "../router";
 import { useAuthStore } from "../stores/authStore";
 import { i18n } from "../i18n";
+import { isMaintenanceModeError } from "../utils/apiErrors";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_FILE_STORAGE_URL}/api/v1`,
@@ -13,6 +14,7 @@ let isRefreshing = false;
 let queue = [];
 let hasShownSessionExpiredToast = false;
 let hasShownSuspendedToast = false;
+let isRedirectingToMaintenance = false;
 
 function logoutAndRedirectToLogin(auth, { notifySessionExpired = false } = {}) {
   auth.logout();
@@ -90,6 +92,23 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const auth = useAuthStore();
+
+    // 503 MAINTENANCE_MODE — satu redirect, tanpa retry/spam toast
+    if (isMaintenanceModeError(error)) {
+      if (
+        !isRedirectingToMaintenance &&
+        router.currentRoute.value.name !== "maintenance"
+      ) {
+        isRedirectingToMaintenance = true;
+        router.replace({ name: "maintenance" }).finally(() => {
+          // Izinkan redirect ulang jika user navigasi keluar lalu kena 503 lagi
+          setTimeout(() => {
+            isRedirectingToMaintenance = false;
+          }, 2000);
+        });
+      }
+      return Promise.reject(error);
+    }
 
     // 403 Account is suspended → force logout + banner (only when logged in;
     // login failures are handled by the login page itself)

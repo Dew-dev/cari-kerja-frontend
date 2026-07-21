@@ -5,6 +5,7 @@ import { useAuthStore } from "@/stores/authStore.js";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
+import { isContentRejectedError } from "@/utils/apiErrors";
 
 const auth = useAuthStore();
 const { t } = useI18n();
@@ -167,6 +168,10 @@ async function saveProfile() {
     push.success(t("notifications.profileUpdated"));
   } catch (err) {
     console.error("Save failed", err);
+    if (isContentRejectedError(err)) {
+      push.warning(t("contentRejected.upload"));
+      return;
+    }
     push.error(err?.response?.data?.message || t("notifications.failedToUpdateProfile"));
   }
 }

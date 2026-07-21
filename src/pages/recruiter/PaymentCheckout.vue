@@ -4,7 +4,8 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getAllPlans, createInvoice } from "@/services/payments.api.js";
-import { isRateLimitedError } from "@/utils/apiErrors";
+import { isRateLimitedError, isVerificationRequiredError } from "@/utils/apiErrors";
+import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
 
 const route  = useRoute();
 const router = useRouter();
@@ -17,6 +18,7 @@ const jobPostId = route.query.job_post_id || null;
 const plan           = ref(null);
 const loading        = ref(true);
 const invoiceLoading = ref(false);
+const showVerificationModal = ref(false);
 
 onMounted(async () => {
   if (!orderType || !planId) {
@@ -115,6 +117,10 @@ async function createBill() {
       push.error("Gagal membuat tagihan. Silakan coba lagi.");
     }
   } catch (err) {
+    if (isVerificationRequiredError(err)) {
+      showVerificationModal.value = true;
+      return;
+    }
     if (isRateLimitedError(err)) {
       const message = String(err?.response?.data?.message || "");
       // Pending-cap: terlalu banyak invoice pending → arahkan ke daftar order
@@ -235,4 +241,9 @@ async function createBill() {
       </div>
     </div>
   </div>
+
+  <VerificationRequiredModal
+    :show="showVerificationModal"
+    @close="showVerificationModal = false"
+  />
 </template>
