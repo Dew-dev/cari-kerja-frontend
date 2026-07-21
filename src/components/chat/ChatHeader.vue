@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -29,9 +30,20 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  /** Peer sudah diblokir oleh user saat ini */
+  isBlocked: {
+    type: Boolean,
+    default: false,
+  },
+  actionLoading: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const emit = defineEmits(['back'])
+const emit = defineEmits(['back', 'report', 'block', 'unblock'])
+
+const menuOpen = ref(false)
 
 function goToProfile() {
   if (!props.profileId || !props.profileRole) return
@@ -41,6 +53,38 @@ function goToProfile() {
     router.push(`/recruiters/${props.profileId}`)
   }
 }
+
+function toggleMenu() {
+  menuOpen.value = !menuOpen.value
+}
+
+function closeMenu() {
+  menuOpen.value = false
+}
+
+function onReport() {
+  closeMenu()
+  emit('report')
+}
+
+function onBlock() {
+  closeMenu()
+  emit('block')
+}
+
+function onUnblock() {
+  closeMenu()
+  emit('unblock')
+}
+
+function onDocClick(e) {
+  if (!e.target.closest?.('[data-chat-header-menu]')) {
+    closeMenu()
+  }
+}
+
+onMounted(() => document.addEventListener('click', onDocClick))
+onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
 </script>
 
 <template>
@@ -84,9 +128,62 @@ function goToProfile() {
     <!-- Name + Status -->
     <div class="flex-1 min-w-0 cursor-pointer" @click="goToProfile">
       <p class="text-sm font-semibold text-gray-800 truncate">{{ name }}</p>
-      <p class="text-xs" :class="online ? 'text-green-500' : 'text-gray-400'">
-        {{ online ? $t('chat.online') : $t('chat.offline') }}
+      <p class="text-xs" :class="isBlocked ? 'text-red-500' : online ? 'text-green-500' : 'text-gray-400'">
+        {{
+          isBlocked
+            ? $t('chat.blockedStatus')
+            : online
+              ? $t('chat.online')
+              : $t('chat.offline')
+        }}
       </p>
+    </div>
+
+    <!-- Actions menu -->
+    <div class="relative shrink-0" data-chat-header-menu>
+      <button
+        type="button"
+        class="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 transition"
+        :disabled="actionLoading"
+        :aria-label="$t('chat.moreActions')"
+        @click.stop="toggleMenu"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+        </svg>
+      </button>
+
+      <div
+        v-if="menuOpen"
+        class="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-30"
+      >
+        <button
+          type="button"
+          class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+          @click="onReport"
+        >
+          <i class="pi pi-flag text-xs text-amber-500"></i>
+          {{ $t('chat.report.action') }}
+        </button>
+        <button
+          v-if="!isBlocked"
+          type="button"
+          class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+          @click="onBlock"
+        >
+          <i class="pi pi-ban text-xs"></i>
+          {{ $t('chat.block.action') }}
+        </button>
+        <button
+          v-else
+          type="button"
+          class="w-full text-left px-4 py-2.5 text-sm text-blue-600 hover:bg-blue-50 flex items-center gap-2"
+          @click="onUnblock"
+        >
+          <i class="pi pi-unlock text-xs"></i>
+          {{ $t('chat.block.unblock') }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
