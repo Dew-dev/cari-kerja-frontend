@@ -108,7 +108,16 @@ watch(activeConversationId, (id) => {
           <h2 class="text-base font-semibold text-gray-900">
             {{ $t('chat.title') }}
           </h2>
-          <UnreadBadge :count="chatStore.totalUnread" />
+          <div class="flex items-center gap-2">
+            <RouterLink
+              :to="{ name: 'chat-blocks' }"
+              class="text-xs text-gray-500 hover:text-blue-600 transition"
+              :title="$t('chat.blocks.title')"
+            >
+              <i class="pi pi-ban text-sm"></i>
+            </RouterLink>
+            <UnreadBadge :count="chatStore.totalUnread" />
+          </div>
         </div>
 
         <!-- Search -->

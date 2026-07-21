@@ -257,6 +257,12 @@ const routes = [
     component: () => import("../pages/chat/ChatPage.vue"),
   },
   {
+    path: "/chat/blocks",
+    name: "chat-blocks",
+    meta: { requiresAuth: true },
+    component: () => import("../pages/chat/BlockedUsers.vue"),
+  },
+  {
     path: "/chat/:conversationId",
     name: "chat-detail",
     meta: { requiresAuth: true },
