@@ -31,8 +31,12 @@ function logoutAndRedirectToLogin(auth, { notifySessionExpired = false } = {}) {
 
 function isAccountSuspendedError(error) {
   const status = error?.response?.status;
-  const message = String(error?.response?.data?.message || "").toLowerCase();
-  return status === 403 && message.includes("suspended");
+  const message = String(error?.response?.data?.message || "");
+  return (
+    status === 403 &&
+    (message.startsWith("ACCOUNT_RESTRICTED") ||
+      message.toLowerCase().includes("suspended"))
+  );
 }
 
 export function handleAccountSuspended(auth) {
