@@ -48,7 +48,18 @@ export function isContentRejectedError(err) {
  */
 export function isDisposableEmailRejected(err) {
   if (!isContentRejectedError(err)) return false;
-  return responseMessage(err).toLowerCase().includes("disposable");
+  const msg = responseMessage(err).toLowerCase();
+  // Jangan bentrok dengan "disposable phone number"
+  if (msg.includes("phone")) return false;
+  return msg.includes("email") || msg.includes("disposable");
+}
+
+/**
+ * Nomor telepon disposabel / tidak valid pada register recruiter.
+ */
+export function isDisposablePhoneRejected(err) {
+  if (!isContentRejectedError(err)) return false;
+  return responseMessage(err).toLowerCase().includes("phone");
 }
 
 /**
