@@ -18,6 +18,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  maxlength: {
+    type: Number,
+    default: 5000,
+  },
 })
 
 const emit = defineEmits(['update:modelValue', 'send', 'typing', 'stop-typing'])
@@ -91,6 +95,7 @@ defineExpose({ focus })
         ref="textareaRef"
         :value="modelValue"
         rows="1"
+        :maxlength="maxlength"
         :disabled="disabled || sending"
         :placeholder="$t('chat.typeMessage')"
         class="flex-1 resize-none rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/60 focus:border-blue-300 focus:bg-white transition leading-relaxed max-h-[120px] overflow-y-auto disabled:opacity-60"

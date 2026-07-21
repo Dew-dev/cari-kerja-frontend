@@ -17,8 +17,14 @@ import {
   isRateLimitedError,
   isChatBlockedError,
   isChatArchivedError,
+  isMessageTooLongError,
+  isAccountRestrictedError,
+  isMaintenanceModeError,
+  getRetryAfterSeconds,
+  errorMessage,
   chatErrorI18nKey,
 } from '@/utils/apiErrors'
+import { handleAccountSuspended } from '@/services/api'
 import {
   reportConversation,
   blockUser,
@@ -76,6 +82,24 @@ const showReportModal = ref(false)
 const reportMessageId = ref(null)
 const reportLoading = ref(false)
 const showBlockConfirm = ref(false)
+const sendCooldown = ref(0)
+let sendCooldownTimer = null
+
+const CHAT_MESSAGE_MAX = 5000
+
+function startSendCooldown(seconds) {
+  const sec = Math.max(1, Math.floor(Number(seconds) || 60))
+  sendCooldown.value = sec
+  if (sendCooldownTimer) clearInterval(sendCooldownTimer)
+  sendCooldownTimer = setInterval(() => {
+    sendCooldown.value -= 1
+    if (sendCooldown.value <= 0) {
+      clearInterval(sendCooldownTimer)
+      sendCooldownTimer = null
+      sendCooldown.value = 0
+    }
+  }, 1000)
+}
 
 // ─── Computed ─────────────────────────────────────────────────────────────────
 const conversation = computed(() =>
@@ -108,7 +132,8 @@ const composerDisabled = computed(
     !connected.value ||
     isPeerBlocked.value ||
     isArchived.value ||
-    composerLock.value === 'blocked',
+    composerLock.value === 'blocked' ||
+    sendCooldown.value > 0,
 )
 
 const composerHint = computed(() => {
@@ -117,6 +142,9 @@ const composerHint = computed(() => {
   }
   if (isArchived.value) {
     return t('chat.composer.archived')
+  }
+  if (sendCooldown.value > 0) {
+    return t('chat.composer.rateLimited', { seconds: sendCooldown.value })
   }
   return null
 })
@@ -280,6 +308,11 @@ async function handleSend() {
   const content = messageText.value.trim()
   if (!content || sending.value || composerDisabled.value) return
 
+  if (content.length > CHAT_MESSAGE_MAX) {
+    push.warning(t('chat.errors.messageTooLong', { max: CHAT_MESSAGE_MAX }))
+    return
+  }
+
   messageText.value = ''
 
   try {
@@ -288,13 +321,44 @@ async function handleSend() {
   } catch (err) {
     if (!messageText.value) messageText.value = content
     applySendErrorState(err)
+    if (isMaintenanceModeError(err)) {
+      router.replace({ name: 'maintenance' })
+      return
+    }
+    if (isAccountRestrictedError(err)) {
+      handleAccountSuspended(auth)
+      return
+    }
+    if (isMessageTooLongError(err)) {
+      push.warning(t('chat.errors.messageTooLong', { max: CHAT_MESSAGE_MAX }))
+      return
+    }
     if (isRateLimitedError(err)) {
+      const retryAfter = getRetryAfterSeconds(err) ?? 60
+      startSendCooldown(retryAfter)
       push.warning(t('captcha.rateLimited'))
     } else if (notifyChatError(err)) {
       // handled
     } else {
       push.error(t('chat.failedToSendMessage'))
     }
+  }
+}
+
+function handleSocketError(payload) {
+  const msg = errorMessage(payload)
+  if (!msg) return
+
+  if (isAccountRestrictedError(payload) || msg.includes('ACCOUNT_RESTRICTED')) {
+    handleAccountSuspended(auth)
+    return
+  }
+  if (msg.includes('MAINTENANCE_MODE')) {
+    router.replace({ name: 'maintenance' })
+    return
+  }
+  if (isMessageTooLongError(payload)) {
+    push.warning(t('chat.errors.messageTooLong', { max: CHAT_MESSAGE_MAX }))
   }
 }
 
@@ -426,6 +490,7 @@ onMounted(() => {
   on('typing', handleTyping)
   on('stop_typing', handleStopTyping)
   on('read_message', handleReadReceipt)
+  on('error', handleSocketError)
 
   init()
 })
@@ -436,7 +501,10 @@ onBeforeUnmount(() => {
   off('typing', handleTyping)
   off('stop_typing', handleStopTyping)
   off('read_message', handleReadReceipt)
+  off('error', handleSocketError)
   observer?.disconnect()
+
+  if (sendCooldownTimer) clearInterval(sendCooldownTimer)
 
   chatStore.clearConversation(props.conversationId)
 })

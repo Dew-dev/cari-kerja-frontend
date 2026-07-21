@@ -109,11 +109,13 @@
     "errors": {
       "gate": "Anda hanya bisa mengirim pesan ke perusahaan ini setelah melamar salah satu lowongannya.",
       "blocked": "Pesan diblokir antara Anda dan pengguna ini.",
-      "archived": "Percakapan ini diarsipkan. Anda tidak dapat mengirim pesan baru."
+      "archived": "Percakapan ini diarsipkan. Anda tidak dapat mengirim pesan baru.",
+      "messageTooLong": "Pesan terlalu panjang (maks. {max} karakter)."
     },
     "composer": {
       "blocked": "Anda telah memblokir pengguna ini. Buka blokir untuk mengirim pesan lagi.",
-      "archived": "Percakapan ini diarsipkan."
+      "archived": "Percakapan ini diarsipkan.",
+      "rateLimited": "Terlalu banyak pesan. Coba lagi dalam {seconds}s."
     },
     "report": {
       "action": "Laporkan",
@@ -409,6 +411,7 @@
   "viewMoreCategories": "Lihat lebih banyak kategori",
   "viewLessCategories": "Tampilkan lebih sedikit kategori",
   "alreadyApplied": "Sudah Dilamar",
+  "alreadyAppliedMessage": "Anda sudah melamar lowongan ini.",
   "applyNow": "Lamar Sekarang",
   "applying": "Melamar...",
   "loadingApplicants": "Memuat pelamar…",

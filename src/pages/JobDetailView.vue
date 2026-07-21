@@ -661,6 +661,14 @@
           </div>
         </div>
 
+        <div v-if="showApplyCaptcha" class="px-6 pb-2">
+          <TurnstileWidget
+            ref="applyTurnstileRef"
+            @verified="onApplyCaptchaVerified"
+            @expired="onApplyCaptchaExpired"
+          />
+        </div>
+
         <!-- Modal Footer -->
         <div
           class="sticky bottom-0 bg-gray-50 shadow-sm px-6 py-4 flex justify-end gap-3"
@@ -674,7 +682,7 @@
           </button>
           <button
             @click="submitApplication"
-            :disabled="isSubmitting || !applicationForm.resume_id"
+            :disabled="isSubmitting || applyCooldown > 0 || !applicationForm.resume_id"
             class="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-md transition flex items-center gap-2"
           >
             <svg
@@ -697,7 +705,10 @@
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-            <span>{{
+            <span v-if="applyCooldown > 0">
+              {{ $t("auth.resendIn") }} {{ applyCooldown }}s
+            </span>
+            <span v-else>{{
               isSubmitting ? $t("submitting") : $t("submitApplication")
             }}</span>
           </button>
@@ -727,7 +738,13 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { useAuthStore } from "../stores/authStore";
 import api from "@/services/api";
-import { isRateLimitedError } from "@/utils/apiErrors";
+import TurnstileWidget from "@/components/common/TurnstileWidget.vue";
+import {
+  isCaptchaError,
+  isDuplicateSubmissionError,
+  isRateLimitedError,
+  getRetryAfterSeconds,
+} from "@/utils/apiErrors";
 
 const COVER_LETTER_MAX = 5000;
 
@@ -749,6 +766,34 @@ const isSubmitting = ref(false);
 const resumes = ref([]);
 const jobQuestions = ref([]);
 const skills = ref([]);
+
+const showApplyCaptcha = ref(false);
+const applyCaptchaToken = ref("");
+const applyTurnstileRef = ref(null);
+const applyCooldown = ref(0);
+let applyCooldownTimer = null;
+
+function onApplyCaptchaVerified(token) {
+  applyCaptchaToken.value = token;
+}
+
+function onApplyCaptchaExpired() {
+  applyCaptchaToken.value = "";
+}
+
+function startApplyCooldown(seconds) {
+  const sec = Math.max(1, Math.floor(Number(seconds) || 60));
+  applyCooldown.value = sec;
+  if (applyCooldownTimer) clearInterval(applyCooldownTimer);
+  applyCooldownTimer = setInterval(() => {
+    applyCooldown.value -= 1;
+    if (applyCooldown.value <= 0) {
+      clearInterval(applyCooldownTimer);
+      applyCooldownTimer = null;
+      applyCooldown.value = 0;
+    }
+  }, 1000);
+}
 
 // Application Form
 // NOTE: application_status_id is no longer sent — the backend now always
@@ -1096,11 +1141,13 @@ const closeApplicationModal = () => {
       answer: "",
     })),
   };
+  applyCaptchaToken.value = "";
+  applyTurnstileRef.value?.reset();
 };
 
 const submitApplication = async () => {
   // Lock: cegah double-submit sebelum response datang
-  if (isSubmitting.value) return;
+  if (isSubmitting.value || applyCooldown.value > 0) return;
 
   // Backend menolak cover letter > 5000 karakter — validasi dulu di client
   if ((applicationForm.value.cover_letter || "").length > COVER_LETTER_MAX) {
@@ -1132,6 +1179,9 @@ const submitApplication = async () => {
         (a) => a.answer && a.answer.trim() !== "",
       ),
     };
+    if (showApplyCaptcha.value && applyCaptchaToken.value) {
+      payload.captcha_token = applyCaptchaToken.value;
+    }
 
     await api.post(`/job-posts/${jobId.value}/apply`, payload, {
       headers: {
@@ -1140,11 +1190,26 @@ const submitApplication = async () => {
     });
 
     hasApplied.value = true;
+    showApplyCaptcha.value = false;
     closeApplicationModal();
     push.success(t("applicationSubmittedSuccess"));
   } catch (error) {
     console.error("Error submitting application:", error);
+    if (isCaptchaError(error)) {
+      showApplyCaptcha.value = true;
+      applyTurnstileRef.value?.reset();
+      push.warning(t("captcha.required"));
+      return;
+    }
+    if (isDuplicateSubmissionError(error)) {
+      hasApplied.value = true;
+      closeApplicationModal();
+      push.info(t("alreadyAppliedMessage"));
+      return;
+    }
     if (isRateLimitedError(error)) {
+      const retryAfter = getRetryAfterSeconds(error) ?? 60;
+      startApplyCooldown(retryAfter);
       push.warning(t("captcha.rateLimited"));
       return;
     }

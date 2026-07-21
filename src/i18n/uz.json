@@ -338,6 +338,7 @@
   "viewMoreCategories": "Ko'proq kategoriya ko'rish",
   "viewLessCategories": "Kamroq kategoriya ko'rish",
   "alreadyApplied": "Allaqachon topshirgan",
+  "alreadyAppliedMessage": "Siz allaqachon bu ishga ariza topshirgansiz.",
   "applyNow": "Hozir murojaat qiling",
   "applying": "Yuborilmoqda...",
   "loadingApplicants": "Nomzodlar yuklanmoqda…",

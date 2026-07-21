@@ -1,20 +1,61 @@
 /**
  * Deteksi error terstruktur dari backend (rate limit, CAPTCHA, gate verifikasi).
  * Format pesan mengikuti kontrak backend:
- * - 429  "RATE_LIMITED: ..."
+ * - 429  "RATE_LIMITED: ..." (+ data.retry_after_seconds / Retry-After)
  * - 400  "CAPTCHA_REQUIRED" | "CAPTCHA_INVALID"
- * - 403  "VERIFICATION_REQUIRED: ..."
+ * - 403  "VERIFICATION_REQUIRED: ..." | "ACCOUNT_RESTRICTED: ..."
+ * - 400  "DUPLICATE_SUBMISSION: ..."
+ * - 400  "CONTENT_REJECTED: Message exceeds maximum length ..."
  */
 
 function responseMessage(err) {
   return String(err?.response?.data?.message || "");
 }
 
+/**
+ * Pesan error dari HTTP axios ATAU payload socket (`{ message }` / Error / string).
+ */
+export function errorMessage(errOrPayload) {
+  if (errOrPayload == null) return "";
+  if (typeof errOrPayload === "string") return errOrPayload;
+  const fromHttp = errOrPayload?.response?.data?.message;
+  if (fromHttp) return String(fromHttp);
+  if (errOrPayload?.message != null) return String(errOrPayload.message);
+  return "";
+}
+
 export function isRateLimitedError(err) {
   return (
     err?.response?.status === 429 ||
-    responseMessage(err).startsWith("RATE_LIMITED:")
+    responseMessage(err).startsWith("RATE_LIMITED:") ||
+    errorMessage(err).startsWith("RATE_LIMITED:")
   );
+}
+
+/**
+ * Detik cooldown dari body (`data.retry_after_seconds`) atau header `Retry-After`.
+ * @returns {number|null}
+ */
+export function getRetryAfterSeconds(err) {
+  const body = err?.response?.data;
+  const nested = body?.data?.retry_after_seconds;
+  if (nested != null && Number.isFinite(Number(nested))) {
+    return Math.max(0, Number(nested));
+  }
+  if (body?.retry_after_seconds != null && Number.isFinite(Number(body.retry_after_seconds))) {
+    return Math.max(0, Number(body.retry_after_seconds));
+  }
+
+  const headers = err?.response?.headers || {};
+  const headerVal =
+    headers["retry-after"] ??
+    headers["Retry-After"] ??
+    headers["RETRY-AFTER"];
+  if (headerVal != null && Number.isFinite(Number(headerVal))) {
+    return Math.max(0, Number(headerVal));
+  }
+
+  return null;
 }
 
 export function isCaptchaError(err) {
@@ -29,6 +70,37 @@ export function isVerificationRequiredError(err) {
   return (
     err?.response?.status === 403 &&
     responseMessage(err).startsWith("VERIFICATION_REQUIRED")
+  );
+}
+
+/**
+ * Akun ditangguhkan / dibatasi — biasanya 403 + ACCOUNT_RESTRICTED:.
+ * Juga cocok untuk pesan socket connect_error.
+ */
+export function isAccountRestrictedError(err) {
+  const message = errorMessage(err);
+  if (message.includes("ACCOUNT_RESTRICTED")) return true;
+  if (err?.response?.status === 403 && message.toLowerCase().includes("suspended")) {
+    return true;
+  }
+  return message.toLowerCase().includes("account is suspended");
+}
+
+/**
+ * Lamaran / submit ganda — treat sebagai already applied.
+ */
+export function isDuplicateSubmissionError(err) {
+  return responseMessage(err).startsWith("DUPLICATE_SUBMISSION");
+}
+
+/**
+ * Pesan chat terlalu panjang (REST atau socket error payload).
+ */
+export function isMessageTooLongError(err) {
+  const msg = errorMessage(err).toLowerCase();
+  return (
+    msg.includes("message exceeds") ||
+    (msg.startsWith("content_rejected") && msg.includes("maximum length"))
   );
 }
 
