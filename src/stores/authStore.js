@@ -5,6 +5,7 @@ import { refreshToken as refreshApi } from "../services/auth.api";
 import { disconnectSocket } from "../composables/useSocket";
 import { decodeAccessToken } from "../utils/jwt";
 import { isFlagTruthy, isTelegramPlaceholderEmail } from "../utils/authFlags";
+import { isCaptchaError, isRateLimitedError } from "../utils/apiErrors";
 
 const FLAGS_KEY = "notificationChannelFlags";
 
@@ -30,6 +31,8 @@ export const useAuthStore = defineStore("auth", {
       loading: false,
       error: null,
       needVerifyEmail: false,
+      /** Setelah beberapa gagal login, BE meminta Turnstile (CAPTCHA_REQUIRED / INVALID). */
+      captchaRequired: false,
       lastLoginEmail: null,
       requiresEmailSetup: Boolean(flags.requiresEmailSetup),
       requiresTelegramLink: Boolean(flags.requiresTelegramLink),
@@ -127,6 +130,7 @@ export const useAuthStore = defineStore("auth", {
     async login(payload) {
       this.loading = true;
       this.error = null;
+      this.needVerifyEmail = false;
 
       try {
         const res = await loginApi(payload);
@@ -147,6 +151,8 @@ export const useAuthStore = defineStore("auth", {
         localStorage.setItem("refreshToken", refreshToken);
         localStorage.setItem("user", JSON.stringify(this.user));
 
+        this.captchaRequired = false;
+
         this.applyNotificationFlags({
           requires_telegram_link:
             data.requires_telegram_link ?? user?.requires_telegram_link,
@@ -159,6 +165,17 @@ export const useAuthStore = defineStore("auth", {
         console.error("Login error:", err);
         const msg = err?.response?.data?.message;
 
+        if (isCaptchaError(err)) {
+          this.captchaRequired = true;
+          this.error = i18n.global.t("captcha.required");
+          return false;
+        }
+
+        if (isRateLimitedError(err)) {
+          this.error = i18n.global.t("captcha.rateLimited");
+          return false;
+        }
+
         // 403 suspended → tampilkan pesan yang diterjemahkan di banner login
         if (
           err?.response?.status === 403 &&
@@ -169,14 +186,13 @@ export const useAuthStore = defineStore("auth", {
         }
 
         if (msg === "Email not verified") {
-          this.error = "Please verify your email before logging in.";
+          this.error = null;
           this.needVerifyEmail = true;
           this.lastLoginEmail = payload.email;
-        } else {
-          this.error = "Invalid email or password";
+          return false;
         }
 
-        this.error = msg || "Login failed";
+        this.error = msg || "Invalid email or password";
         return false;
       } finally {
         this.loading = false;
@@ -188,6 +204,8 @@ export const useAuthStore = defineStore("auth", {
       this.token = null;
       this.refreshToken = null;
       this.user = null;
+      this.captchaRequired = false;
+      this.needVerifyEmail = false;
       this.requiresEmailSetup = false;
       this.requiresTelegramLink = false;
       this.dismissedEmailBanner = false;

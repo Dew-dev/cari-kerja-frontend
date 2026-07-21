@@ -7,26 +7,67 @@ import { push } from "notivue";
 import { useI18n } from "vue-i18n";
 import api from "@/services/api";
 import { clearOAuthLinkIntent } from "@/utils/oauthIntent";
-const { locale, t } = useI18n();
+import TurnstileWidget from "@/components/common/TurnstileWidget.vue";
+import { isRateLimitedError } from "@/utils/apiErrors";
+
+const { t } = useI18n();
 const loading = ref(false);
 const router = useRouter();
 const route = useRoute();
 const auth = useAuthStore();
 
-const showPassword = ref(false)
+const showPassword = ref(false);
+const resendCooldown = ref(0);
+let resendTimer = null;
 
 const form = reactive({
   email: "",
   password: "",
 });
 
+const captchaToken = ref("");
+const turnstileRef = ref(null);
+
+function onCaptchaVerified(token) {
+  captchaToken.value = token;
+}
+
+function onCaptchaExpired() {
+  captchaToken.value = "";
+}
+
+function startResendCooldown(seconds = 120) {
+  resendCooldown.value = seconds;
+  if (resendTimer) clearInterval(resendTimer);
+  resendTimer = setInterval(() => {
+    resendCooldown.value -= 1;
+    if (resendCooldown.value <= 0) {
+      clearInterval(resendTimer);
+      resendTimer = null;
+    }
+  }, 1000);
+}
+
 async function submit() {
-  const success = await auth.login(form);
-  if (!success) return;
+  const payload = {
+    email: form.email,
+    password: form.password,
+  };
+  if (auth.captchaRequired && captchaToken.value) {
+    payload.captcha_token = captchaToken.value;
+  }
+
+  const success = await auth.login(payload);
+  if (!success) {
+    if (auth.captchaRequired) {
+      turnstileRef.value?.reset();
+    }
+    return;
+  }
 
   // Check if there's a redirect query parameter
   const redirectTo = route.query.redirect;
-  
+
   if (redirectTo) {
     // Redirect back to the page they came from
     router.push(redirectTo);
@@ -42,17 +83,20 @@ async function submit() {
 }
 
 async function resendVerification() {
+  if (loading.value || resendCooldown.value > 0) return;
+  loading.value = true;
   try {
-    await api.post("/auth/verify-email/resend", form);
+    await api.post("/auth/verify-email/resend", { email: form.email });
     push.success(t("notifications.verificationEmailSent"));
-    loading.value = true;
+    startResendCooldown(120);
   } catch (e) {
-    if (e?.response?.status === 429) {
-      push.warning(e.response.data.message);
+    if (isRateLimitedError(e) || e?.response?.status === 429) {
+      push.warning(t("captcha.rateLimited"));
+      startResendCooldown(120);
     } else {
       push.error(t("notifications.failedToSendVerificationEmail"));
     }
-  } finally{
+  } finally {
     loading.value = false;
   }
 }
@@ -150,13 +194,23 @@ function loginWithTelegram() {
               <button
                 type="button"
                 @click="resendVerification"
-                :disabled="loading"
+                :disabled="loading || resendCooldown > 0"
                 class="underline font-semibold hover:text-yellow-800 disabled:opacity-50"
               >
-                {{ t("auth.buttons.resendVerification") }}
+                <span v-if="resendCooldown > 0">
+                  {{ t("auth.resendIn") }} {{ resendCooldown }}s
+                </span>
+                <span v-else>{{ t("auth.buttons.resendVerification") }}</span>
               </button>
             </p>
           </div>
+
+          <TurnstileWidget
+            v-if="auth.captchaRequired"
+            ref="turnstileRef"
+            @verified="onCaptchaVerified"
+            @expired="onCaptchaExpired"
+          />
 
           <!-- Sign In Button -->
           <button

@@ -2068,6 +2068,7 @@
   },
   "contentRejected": {
     "disposableEmail": "Vaqtincha yoki bir martalik email manzillariga ruxsat berilmaydi. Doimiy email ishlating.",
+    "disposablePhone": "Yaroqsiz yoki bir martalik telefon raqamlariga ruxsat berilmaydi. Haqiqiy telefon raqamidan foydalaning.",
     "upload": "Fayl rad etildi (yaroqsiz yoki soxta tur). Qo'llab-quvvatlanadigan formatdagi asl faylni qayta yuklang."
   },
   "maintenance": {

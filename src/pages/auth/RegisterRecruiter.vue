@@ -3,7 +3,7 @@ import { reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import { registerRecruiter } from "@/services/auth.api"
 import TurnstileWidget from "@/components/common/TurnstileWidget.vue"
-import { isCaptchaError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors"
+import { isCaptchaError, isDisposableEmailRejected, isDisposablePhoneRejected, isRateLimitedError } from "@/utils/apiErrors"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
@@ -111,6 +111,11 @@ async function submit() {
     }
     if (isDisposableEmailRejected(err)) {
       state.serverError = t("contentRejected.disposableEmail")
+      return
+    }
+    if (isDisposablePhoneRejected(err)) {
+      errors.contact_phone = t("contentRejected.disposablePhone")
+      state.serverError = t("contentRejected.disposablePhone")
       return
     }
     state.serverError =

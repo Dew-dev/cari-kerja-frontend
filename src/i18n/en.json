@@ -2142,6 +2142,7 @@
   },
   "contentRejected": {
     "disposableEmail": "Temporary or disposable email addresses are not allowed. Please use a permanent email.",
+    "disposablePhone": "Invalid or disposable phone numbers are not allowed. Please use a real phone number.",
     "upload": "This file was rejected (invalid or spoofed type). Please re-upload the original file in a supported format."
   },
   "maintenance": {
