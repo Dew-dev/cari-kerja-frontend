@@ -2,11 +2,46 @@ import { ref, onUnmounted } from 'vue'
 import { io } from 'socket.io-client'
 import { useAuthStore } from '@/stores/authStore'
 import { handleAccountSuspended } from '@/services/api'
+import { isAccountRestrictedError, errorMessage } from '@/utils/apiErrors'
+import router from '@/router'
 
 // Singleton socket instance shared across all components
 let _socket = null
 const _connected = ref(false)
 const _instanceCount = ref(0)
+let _isRedirectingToMaintenance = false
+
+function handleSocketAuthFailure(err) {
+  const msg = errorMessage(err)
+
+  if (isAccountRestrictedError(err) || msg.toLowerCase().includes('suspended')) {
+    const auth = useAuthStore()
+    // logout() calls disconnectSocket(), which also stops the reconnection loop
+    handleAccountSuspended(auth)
+    return true
+  }
+
+  if (msg.includes('MAINTENANCE_MODE')) {
+    if (_socket) {
+      _socket.io.opts.reconnection = false
+    }
+    disconnectSocket()
+    if (
+      !_isRedirectingToMaintenance &&
+      router.currentRoute.value.name !== 'maintenance'
+    ) {
+      _isRedirectingToMaintenance = true
+      router.replace({ name: 'maintenance' }).finally(() => {
+        setTimeout(() => {
+          _isRedirectingToMaintenance = false
+        }, 2000)
+      })
+    }
+    return true
+  }
+
+  return false
+}
 
 function createSocket(token) {
   const url = import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_FILE_STORAGE_URL || ''
@@ -31,13 +66,12 @@ function createSocket(token) {
 
   socket.on('connect_error', (err) => {
     console.warn('[Socket] Connection error:', err.message)
+    handleSocketAuthFailure(err)
+  })
 
-    // Backend rejects suspended accounts with "Forbidden: account is suspended"
-    if (String(err?.message || '').toLowerCase().includes('suspended')) {
-      const auth = useAuthStore()
-      // logout() calls disconnectSocket(), which also stops the reconnection loop
-      handleAccountSuspended(auth)
-    }
+  // Runtime errors from chat_handler (send_message, join, …)
+  socket.on('error', (payload) => {
+    handleSocketAuthFailure(payload)
   })
 
   return socket
