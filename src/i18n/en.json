@@ -109,11 +109,13 @@
     "errors": {
       "gate": "You can only message this employer after applying to one of their jobs.",
       "blocked": "Messaging is blocked between you and this user.",
-      "archived": "This conversation is archived. You cannot send new messages."
+      "archived": "This conversation is archived. You cannot send new messages.",
+      "messageTooLong": "Message is too long (max {max} characters)."
     },
     "composer": {
       "blocked": "You have blocked this user. Unblock to send messages again.",
-      "archived": "This conversation is archived."
+      "archived": "This conversation is archived.",
+      "rateLimited": "Too many messages. Try again in {seconds}s."
     },
     "report": {
       "action": "Report",
@@ -410,6 +412,7 @@
   "viewMoreCategories": "View more categories",
   "viewLessCategories": "View less categories",
   "alreadyApplied": "Already Applied",
+  "alreadyAppliedMessage": "You have already applied to this job.",
   "applyNow": "Apply Now",
   "applying": "Applying...",
   "loadingApplicants": "Loading applicants…",
