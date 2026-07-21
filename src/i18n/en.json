@@ -98,12 +98,63 @@
     "startConversation": "Say hello to get the conversation started!",
     "online": "Online",
     "offline": "Offline",
+    "blockedStatus": "Blocked",
+    "moreActions": "More actions",
     "today": "Today",
     "yesterday": "Yesterday",
     "failedToSend": "Failed to send message",
     "chatButton": "Chat",
     "failedToStartChat": "Failed to start conversation",
-    "cannotStartChat": "Cannot identify worker"
+    "cannotStartChat": "Cannot identify worker",
+    "errors": {
+      "gate": "You can only message this employer after applying to one of their jobs.",
+      "blocked": "Messaging is blocked between you and this user.",
+      "archived": "This conversation is archived. You cannot send new messages."
+    },
+    "composer": {
+      "blocked": "You have blocked this user. Unblock to send messages again.",
+      "archived": "This conversation is archived."
+    },
+    "report": {
+      "action": "Report",
+      "messageAction": "Report message",
+      "title": "Report conversation",
+      "messageTitle": "Report message",
+      "description": "Tell us why you're reporting. Our team will review it.",
+      "placeholder": "Describe the issue (min. 3 characters)...",
+      "reasonTooShort": "Please enter at least 3 characters.",
+      "reasonTooLong": "Reason must be at most 1000 characters.",
+      "cancel": "Cancel",
+      "submit": "Submit report",
+      "submitting": "Submitting...",
+      "success": "Report submitted. Thank you.",
+      "failed": "Failed to submit report",
+      "reasons": {
+        "spam": "Spam",
+        "harassment": "Harassment",
+        "scam": "Scam / fraud",
+        "inappropriate": "Inappropriate content",
+        "other": "Other"
+      }
+    },
+    "block": {
+      "action": "Block user",
+      "unblock": "Unblock",
+      "confirmTitle": "Block this user?",
+      "confirmDescription": "You will no longer be able to message each other. You can unblock them later from Blocked users.",
+      "success": "User blocked",
+      "failed": "Failed to block user",
+      "unblocked": "User unblocked",
+      "unblockFailed": "Failed to unblock user"
+    },
+    "blocks": {
+      "title": "Blocked users",
+      "subtitle": "People you have blocked from messaging you",
+      "loading": "Loading...",
+      "empty": "You haven't blocked anyone.",
+      "loadFailed": "Failed to load blocked users",
+      "unblocking": "Unblocking..."
+    }
   },
   "home": {
     "title": "Indonesia's #1 job portal",

@@ -7,6 +7,7 @@ import api from "@/services/api";
 import { getJobStages, moveApplicationStage } from "@/services/pipeline.api";
 import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
 import { resolveWorkerProfileId, resolveWorkerUserId } from "@/utils/chatIdentity";
+import { chatErrorI18nKey } from "@/utils/apiErrors";
 import { useChatStore } from "@/stores/chatStore";
 import { getWorkerById } from "@/services/workers.api";
 
@@ -121,7 +122,9 @@ async function startChat(applicant) {
     });
     router.push(`/chat/${conversationId}`);
   } catch (err) {
-    push.error(err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation");
+    const key = chatErrorI18nKey(err);
+    if (key) push.warning(t(key));
+    else push.error(err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation");
   } finally {
     chattingId.value = null;
   }

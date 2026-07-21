@@ -34,3 +34,28 @@ export const sendMessage = (conversationId, data) =>
  */
 export const markAsRead = (conversationId) =>
   api.put(`/chat/${conversationId}/read`)
+
+/**
+ * Report a conversation (optionally a specific message).
+ * @param {string} conversationId
+ * @param {{ reason: string, message_id?: string }} data
+ */
+export const reportConversation = (conversationId, data) =>
+  api.post(`/chat/${conversationId}/report`, data)
+
+/**
+ * Block a user by users.id.
+ * @param {string} userId
+ */
+export const blockUser = (userId) => api.post('/chat/block', { user_id: userId })
+
+/**
+ * Unblock a previously blocked user.
+ * @param {string} userId
+ */
+export const unblockUser = (userId) => api.delete(`/chat/block/${userId}`)
+
+/**
+ * List users blocked by the current user.
+ */
+export const listBlocks = () => api.get('/chat/blocks')

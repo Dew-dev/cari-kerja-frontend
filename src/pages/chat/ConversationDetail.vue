@@ -8,11 +8,23 @@ import {
   nextTick,
 } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { useChatStore } from '@/stores/chatStore'
 import { useSocket } from '@/composables/useSocket'
 import { getSenderKey } from '@/utils/chatIdentity'
-import { isRateLimitedError } from '@/utils/apiErrors'
+import {
+  isRateLimitedError,
+  isChatBlockedError,
+  isChatArchivedError,
+  chatErrorI18nKey,
+} from '@/utils/apiErrors'
+import {
+  reportConversation,
+  blockUser,
+  unblockUser,
+  listBlocks,
+} from '@/services/chat.api'
 import { push } from 'notivue'
 import { useI18n } from 'vue-i18n'
 
@@ -22,6 +34,7 @@ import ChatInput from '@/components/chat/ChatInput.vue'
 import TypingIndicator from '@/components/chat/TypingIndicator.vue'
 import MessageSkeleton from '@/components/chat/MessageSkeleton.vue'
 import EmptyState from '@/components/chat/EmptyState.vue'
+import ReportChatModal from '@/components/chat/ReportChatModal.vue'
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 const props = defineProps({
@@ -36,6 +49,7 @@ const emit = defineEmits(['back'])
 // ─── Composables ──────────────────────────────────────────────────────────────
 const auth = useAuthStore()
 const chatStore = useChatStore()
+const router = useRouter()
 const {
   conversations,
   messages: messagesMap,
@@ -55,6 +69,14 @@ const isAtBottom = ref(true)
 const loadingOlder = ref(false)
 const initializing = ref(true)
 
+const isPeerBlocked = ref(false)
+const composerLock = ref(null) // 'blocked' | 'archived' | null
+const actionLoading = ref(false)
+const showReportModal = ref(false)
+const reportMessageId = ref(null)
+const reportLoading = ref(false)
+const showBlockConfirm = ref(false)
+
 // ─── Computed ─────────────────────────────────────────────────────────────────
 const conversation = computed(() =>
   conversations.value.find((c) => c.id === props.conversationId),
@@ -73,6 +95,32 @@ const participant = computed(() => {
   return conversation.value.recruiter || conversation.value.participant
 })
 
+/** users.id lawan bicara — wajib untuk POST /chat/block */
+const peerUserId = computed(() => participant.value?.user_id || null)
+
+const isArchived = computed(() => {
+  const status = String(conversation.value?.status || '').toUpperCase()
+  return status === 'ARCHIVED' || composerLock.value === 'archived'
+})
+
+const composerDisabled = computed(
+  () =>
+    !connected.value ||
+    isPeerBlocked.value ||
+    isArchived.value ||
+    composerLock.value === 'blocked',
+)
+
+const composerHint = computed(() => {
+  if (isPeerBlocked.value || composerLock.value === 'blocked') {
+    return t('chat.composer.blocked')
+  }
+  if (isArchived.value) {
+    return t('chat.composer.archived')
+  }
+  return null
+})
+
 const typingUsersList = computed(() =>
   chatStore.getTypingUsers(props.conversationId),
 )
@@ -83,6 +131,45 @@ const loading = computed(
   () => loadingMessages.value && messages.value.length === 0,
 )
 
+// ─── Error helpers ────────────────────────────────────────────────────────────
+function notifyChatError(err) {
+  const key = chatErrorI18nKey(err)
+  if (key) {
+    push.warning(t(key))
+    return true
+  }
+  return false
+}
+
+function applySendErrorState(err) {
+  if (isChatBlockedError(err)) {
+    composerLock.value = 'blocked'
+    isPeerBlocked.value = true
+  } else if (isChatArchivedError(err)) {
+    composerLock.value = 'archived'
+  }
+}
+
+// ─── Blocks ───────────────────────────────────────────────────────────────────
+async function refreshBlockState() {
+  const peerId = peerUserId.value
+  if (!peerId) {
+    isPeerBlocked.value = false
+    return
+  }
+  try {
+    const res = await listBlocks()
+    const list = res.data?.data || res.data || []
+    const rows = Array.isArray(list) ? list : []
+    isPeerBlocked.value = rows.some(
+      (b) => String(b.blocked_user_id) === String(peerId),
+    )
+    if (isPeerBlocked.value) composerLock.value = 'blocked'
+  } catch (err) {
+    console.error('[Chat] Failed to load blocks:', err)
+  }
+}
+
 // ─── Scroll helpers ────────────────────────────────────────────────────────────
 async function scrollToBottom(behavior = 'auto') {
   await nextTick()
@@ -91,7 +178,6 @@ async function scrollToBottom(behavior = 'auto') {
   const el = messagesRef.value
   if (!el) return
 
-  // Scroll fully to end so latest messages sit above the sticky input
   const top = el.scrollHeight
   if (behavior === 'smooth') {
     el.scrollTo({ top, behavior: 'smooth' })
@@ -131,7 +217,6 @@ function setupIntersectionObserver() {
 
       await chatStore.loadMoreMessages(props.conversationId)
 
-      // Preserve scroll position after prepending older messages
       await nextTick()
       if (messagesRef.value) {
         const newScrollHeight = messagesRef.value.scrollHeight
@@ -150,12 +235,10 @@ function handleReceiveMessage(message) {
   if (message.conversation_id !== props.conversationId) return
   chatStore.handleIncomingMessage(message)
 
-  // Auto-scroll if user is at bottom
   if (isAtBottom.value) {
     scrollToBottom('smooth')
   }
 
-  // Mark read since conversation is open
   chatStore.markAsRead(props.conversationId)
   socketEmit('read_message', { conversationId: props.conversationId })
 }
@@ -184,6 +267,7 @@ function handleReadReceipt(data) {
 
 // ─── My typing ────────────────────────────────────────────────────────────────
 function onTyping() {
+  if (composerDisabled.value) return
   socketEmit('typing', { conversationId: props.conversationId })
 }
 
@@ -194,7 +278,7 @@ function onStopTyping() {
 // ─── Send message ─────────────────────────────────────────────────────────────
 async function handleSend() {
   const content = messageText.value.trim()
-  if (!content || sending.value) return
+  if (!content || sending.value || composerDisabled.value) return
 
   messageText.value = ''
 
@@ -202,13 +286,87 @@ async function handleSend() {
     await chatStore.sendMessage(props.conversationId, content)
     await scrollToBottom('smooth')
   } catch (err) {
-    // Kembalikan teks agar user tidak kehilangan pesan yang gagal terkirim
     if (!messageText.value) messageText.value = content
+    applySendErrorState(err)
     if (isRateLimitedError(err)) {
       push.warning(t('captcha.rateLimited'))
+    } else if (notifyChatError(err)) {
+      // handled
     } else {
       push.error(t('chat.failedToSendMessage'))
     }
+  }
+}
+
+// ─── Report / Block ───────────────────────────────────────────────────────────
+function openReport(messageId = null) {
+  reportMessageId.value = messageId
+  showReportModal.value = true
+}
+
+async function submitReport({ reason, message_id }) {
+  reportLoading.value = true
+  try {
+    await reportConversation(props.conversationId, {
+      reason,
+      ...(message_id ? { message_id } : {}),
+    })
+    push.success(t('chat.report.success'))
+    showReportModal.value = false
+    reportMessageId.value = null
+  } catch (err) {
+    if (!notifyChatError(err)) {
+      push.error(err?.response?.data?.message || t('chat.report.failed'))
+    }
+  } finally {
+    reportLoading.value = false
+  }
+}
+
+function confirmBlock() {
+  showBlockConfirm.value = true
+}
+
+async function handleBlock() {
+  const peerId = peerUserId.value
+  if (!peerId || actionLoading.value) return
+
+  actionLoading.value = true
+  showBlockConfirm.value = false
+  try {
+    await blockUser(peerId)
+    isPeerBlocked.value = true
+    composerLock.value = 'blocked'
+    push.success(t('chat.block.success'))
+    // Keluar dari thread setelah block
+    chatStore.clearConversation(props.conversationId)
+    emit('back')
+    router.push({ name: 'chat' })
+  } catch (err) {
+    if (!notifyChatError(err)) {
+      push.error(err?.response?.data?.message || t('chat.block.failed'))
+    }
+  } finally {
+    actionLoading.value = false
+  }
+}
+
+async function handleUnblock() {
+  const peerId = peerUserId.value
+  if (!peerId || actionLoading.value) return
+
+  actionLoading.value = true
+  try {
+    await unblockUser(peerId)
+    isPeerBlocked.value = false
+    if (composerLock.value === 'blocked') composerLock.value = null
+    push.success(t('chat.block.unblocked'))
+  } catch (err) {
+    if (!notifyChatError(err)) {
+      push.error(err?.response?.data?.message || t('chat.block.unblockFailed'))
+    }
+  } finally {
+    actionLoading.value = false
   }
 }
 
@@ -241,25 +399,29 @@ function showAvatar(messages, index) {
 async function init() {
   initializing.value = true
   observer?.disconnect()
+  composerLock.value = null
+  isPeerBlocked.value = false
 
   await chatStore.fetchMessages(props.conversationId)
-  // Wait until message bubbles are painted, then jump to latest
   await scrollToBottom('auto')
   await scrollToBottom('auto')
 
   await chatStore.markAsRead(props.conversationId)
+  await refreshBlockState()
+
+  if (String(conversation.value?.status || '').toUpperCase() === 'ARCHIVED') {
+    composerLock.value = 'archived'
+  }
 
   initializing.value = false
   await nextTick()
   setupIntersectionObserver()
-  chatInputRef.value?.focus()
+  if (!composerDisabled.value) chatInputRef.value?.focus()
 }
 
 onMounted(() => {
-  // Join conversation room
   socketEmit('join_conversation', { conversationId: props.conversationId })
 
-  // Register socket listeners
   on('receive_message', handleReceiveMessage)
   on('typing', handleTyping)
   on('stop_typing', handleStopTyping)
@@ -279,7 +441,6 @@ onBeforeUnmount(() => {
   chatStore.clearConversation(props.conversationId)
 })
 
-// Re-init when conversationId changes (user clicks different conversation)
 watch(
   () => props.conversationId,
   (newId, oldId) => {
@@ -293,7 +454,6 @@ watch(
   },
 )
 
-// Scroll to bottom when new messages arrive (not during initial open)
 watch(
   messages,
   async () => {
@@ -304,14 +464,18 @@ watch(
   { deep: false },
 )
 
-// Focus composer once socket is ready
 watch(connected, (val) => {
-  if (val && !initializing.value) chatInputRef.value?.focus()
+  if (val && !initializing.value && !composerDisabled.value) {
+    chatInputRef.value?.focus()
+  }
 })
 
-// Scroll when typing indicator appears
 watch(someoneTyping, async (val) => {
   if (val && isAtBottom.value) await scrollToBottom('smooth')
+})
+
+watch(peerUserId, () => {
+  if (!initializing.value) refreshBlockState()
 })
 </script>
 
@@ -324,8 +488,13 @@ watch(someoneTyping, async (val) => {
         :avatar-url="participant?.avatar_url"
         :profile-id="participant?.id"
         :profile-role="participant?.role || (auth.user?.role === 'recruiter' ? 'worker' : 'recruiter')"
+        :is-blocked="isPeerBlocked"
+        :action-loading="actionLoading"
         show-back
         @back="emit('back')"
+        @report="openReport()"
+        @block="confirmBlock"
+        @unblock="handleUnblock"
       />
     </div>
 
@@ -374,26 +543,82 @@ watch(someoneTyping, async (val) => {
               :participant-name="participant?.name"
               :participant-avatar="participant?.avatar_url"
               :class="index === messages.length - 1 ? 'mb-1' : ''"
+              @report="openReport"
             />
           </template>
 
-          <div v-if="someoneTyping" class="pl-2 pb-1">
+          <div v-if="someoneTyping && !composerDisabled" class="pl-2 pb-1">
             <TypingIndicator :name="participant?.name" />
           </div>
         </div>
       </template>
     </div>
 
-    <!-- Sticky input (outside scroll) -->
+    <!-- Composer lock banner -->
+    <div
+      v-if="composerHint"
+      class="shrink-0 px-4 py-2.5 bg-gray-100 border-t border-gray-200 text-center"
+    >
+      <p class="text-sm text-gray-600">{{ composerHint }}</p>
+      <button
+        v-if="isPeerBlocked"
+        type="button"
+        class="mt-1 text-sm font-medium text-blue-600 hover:underline"
+        :disabled="actionLoading"
+        @click="handleUnblock"
+      >
+        {{ $t('chat.block.unblock') }}
+      </button>
+    </div>
+
+    <!-- Sticky input -->
     <ChatInput
       ref="chatInputRef"
       v-model="messageText"
       :sending="sending"
-      :disabled="!connected"
+      :disabled="composerDisabled"
       autofocus
       @send="handleSend"
       @typing="onTyping"
       @stop-typing="onStopTyping"
     />
+
+    <!-- Report modal -->
+    <ReportChatModal
+      :show="showReportModal"
+      :loading="reportLoading"
+      :message-id="reportMessageId"
+      @close="showReportModal = false; reportMessageId = null"
+      @submit="submitReport"
+    />
+
+    <!-- Block confirm -->
+    <div
+      v-if="showBlockConfirm"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      @click.self="showBlockConfirm = false"
+    >
+      <div class="w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl">
+        <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $t('chat.block.confirmTitle') }}</h3>
+        <p class="text-sm text-gray-600 mb-5">{{ $t('chat.block.confirmDescription') }}</p>
+        <div class="flex gap-2">
+          <button
+            type="button"
+            class="flex-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 text-sm font-medium"
+            @click="showBlockConfirm = false"
+          >
+            {{ $t('chat.report.cancel') }}
+          </button>
+          <button
+            type="button"
+            class="flex-1 rounded-lg bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 text-sm font-medium"
+            :disabled="actionLoading"
+            @click="handleBlock"
+          >
+            {{ $t('chat.block.action') }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>

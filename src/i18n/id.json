@@ -98,12 +98,63 @@
     "startConversation": "Ucapkan halo untuk memulai percakapan!",
     "online": "Online",
     "offline": "Offline",
+    "blockedStatus": "Diblokir",
+    "moreActions": "Aksi lainnya",
     "today": "Hari ini",
     "yesterday": "Kemarin",
     "failedToSend": "Gagal mengirim pesan",
     "chatButton": "Chat",
     "failedToStartChat": "Gagal memulai percakapan",
-    "cannotStartChat": "Tidak dapat mengidentifikasi pekerja"
+    "cannotStartChat": "Tidak dapat mengidentifikasi pekerja",
+    "errors": {
+      "gate": "Anda hanya bisa mengirim pesan ke perusahaan ini setelah melamar salah satu lowongannya.",
+      "blocked": "Pesan diblokir antara Anda dan pengguna ini.",
+      "archived": "Percakapan ini diarsipkan. Anda tidak dapat mengirim pesan baru."
+    },
+    "composer": {
+      "blocked": "Anda telah memblokir pengguna ini. Buka blokir untuk mengirim pesan lagi.",
+      "archived": "Percakapan ini diarsipkan."
+    },
+    "report": {
+      "action": "Laporkan",
+      "messageAction": "Laporkan pesan",
+      "title": "Laporkan percakapan",
+      "messageTitle": "Laporkan pesan",
+      "description": "Jelaskan alasan laporan Anda. Tim kami akan meninjaunya.",
+      "placeholder": "Jelaskan masalahnya (min. 3 karakter)...",
+      "reasonTooShort": "Masukkan minimal 3 karakter.",
+      "reasonTooLong": "Alasan maksimal 1000 karakter.",
+      "cancel": "Batal",
+      "submit": "Kirim laporan",
+      "submitting": "Mengirim...",
+      "success": "Laporan terkirim. Terima kasih.",
+      "failed": "Gagal mengirim laporan",
+      "reasons": {
+        "spam": "Spam",
+        "harassment": "Pelecehan",
+        "scam": "Penipuan",
+        "inappropriate": "Konten tidak pantas",
+        "other": "Lainnya"
+      }
+    },
+    "block": {
+      "action": "Blokir pengguna",
+      "unblock": "Buka blokir",
+      "confirmTitle": "Blokir pengguna ini?",
+      "confirmDescription": "Anda tidak lagi dapat saling mengirim pesan. Anda bisa membuka blokir nanti di halaman Pengguna diblokir.",
+      "success": "Pengguna diblokir",
+      "failed": "Gagal memblokir pengguna",
+      "unblocked": "Blokir dibuka",
+      "unblockFailed": "Gagal membuka blokir"
+    },
+    "blocks": {
+      "title": "Pengguna diblokir",
+      "subtitle": "Orang yang Anda blokir dari mengirim pesan",
+      "loading": "Memuat...",
+      "empty": "Anda belum memblokir siapa pun.",
+      "loadFailed": "Gagal memuat daftar blokir",
+      "unblocking": "Membuka blokir..."
+    }
   },
   "home": {
     "title": "Portal lowongan #1 di Indonesia",

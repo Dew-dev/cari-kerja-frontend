@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { isOwnMessage } from '@/utils/chatIdentity'
 
@@ -23,9 +23,17 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  /** Izinkan report pesan lawan bicara */
+  allowReport: {
+    type: Boolean,
+    default: true,
+  },
 })
 
+const emit = defineEmits(['report'])
+
 const isMine = computed(() => isOwnMessage(props.message, auth.user))
+const menuOpen = ref(false)
 
 const displayName = computed(
   () => props.message.sender?.name || props.participantName || '',
@@ -42,11 +50,26 @@ function formatTime(dateStr) {
   if (!dateStr) return ''
   return new Date(dateStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
+
+function onReport() {
+  menuOpen.value = false
+  if (!props.message?.id || String(props.message.id).startsWith('temp_')) return
+  emit('report', props.message.id)
+}
+
+function onDocClick(e) {
+  if (!e.target.closest?.('[data-chat-bubble-menu]')) {
+    menuOpen.value = false
+  }
+}
+
+onMounted(() => document.addEventListener('click', onDocClick))
+onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
 </script>
 
 <template>
   <div
-    class="flex gap-2 mb-1.5 w-full"
+    class="flex gap-2 mb-1.5 w-full group"
     :class="isMine ? 'justify-end' : 'justify-start'"
   >
     <!-- Avatar (theirs) -->
@@ -69,7 +92,7 @@ function formatTime(dateStr) {
     <div v-else-if="!isMine && !showAvatar" class="w-7 shrink-0" />
 
     <!-- Bubble -->
-    <div class="flex flex-col max-w-[78%] sm:max-w-[70%]" :class="isMine ? 'items-end' : 'items-start'">
+    <div class="flex flex-col max-w-[78%] sm:max-w-[70%] relative" :class="isMine ? 'items-end' : 'items-start'">
       <div
         class="px-3.5 py-2 rounded-2xl text-sm leading-relaxed break-words shadow-sm"
         :class="[
@@ -126,6 +149,36 @@ function formatTime(dateStr) {
             />
           </svg>
         </template>
+
+        <!-- Report peer message -->
+        <div
+          v-if="!isMine && allowReport && message.id && !String(message.id).startsWith('temp_')"
+          class="relative"
+          data-chat-bubble-menu
+        >
+          <button
+            type="button"
+            class="opacity-0 group-hover:opacity-100 focus:opacity-100 p-0.5 text-gray-400 hover:text-gray-600 transition"
+            :aria-label="$t('chat.report.action')"
+            @click.stop="menuOpen = !menuOpen"
+          >
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+            </svg>
+          </button>
+          <div
+            v-if="menuOpen"
+            class="absolute left-0 bottom-full mb-1 w-36 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-20"
+          >
+            <button
+              type="button"
+              class="w-full text-left px-3 py-2 text-xs text-red-600 hover:bg-red-50"
+              @click="onReport"
+            >
+              {{ $t('chat.report.messageAction') }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
