@@ -2140,6 +2140,17 @@
     "required": "Please complete the security check and submit again.",
     "rateLimited": "Too many attempts. Please wait about 15 minutes and try again."
   },
+  "contentRejected": {
+    "disposableEmail": "Temporary or disposable email addresses are not allowed. Please use a permanent email.",
+    "upload": "This file was rejected (invalid or spoofed type). Please re-upload the original file in a supported format."
+  },
+  "maintenance": {
+    "pageTitle": "Under Maintenance — Cari Kerja",
+    "title": "We're under maintenance",
+    "description": "The platform is temporarily unavailable while we perform scheduled maintenance. Please check back shortly — no need to keep refreshing.",
+    "backHome": "Back to home",
+    "hint": "We'll be back soon."
+  },
   "verification": {
     "title": "Company Verification Required",
     "description": "Your company must be verified before you can publish job posts. You can still save your job as a draft, then contact us to verify your company.",

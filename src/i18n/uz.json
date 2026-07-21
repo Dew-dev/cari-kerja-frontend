@@ -2066,6 +2066,17 @@
     "required": "Iltimos, xavfsizlik tekshiruvini yakunlang va qaytadan yuboring.",
     "rateLimited": "Juda ko'p urinish. Taxminan 15 daqiqa kutib, qayta urinib ko'ring."
   },
+  "contentRejected": {
+    "disposableEmail": "Vaqtincha yoki bir martalik email manzillariga ruxsat berilmaydi. Doimiy email ishlating.",
+    "upload": "Fayl rad etildi (yaroqsiz yoki soxta tur). Qo'llab-quvvatlanadigan formatdagi asl faylni qayta yuklang."
+  },
+  "maintenance": {
+    "pageTitle": "Texnik xizmat — Cari Kerja",
+    "title": "Texnik xizmat ko'rsatilmoqda",
+    "description": "Rejalashtirilgan texnik xizmat sababli platforma vaqtincha mavjud emas. Keyinroq urinib ko'ring — sahifani tinmay yangilash shart emas.",
+    "backHome": "Bosh sahifaga",
+    "hint": "Tez orada qaytamiz."
+  },
   "verification": {
     "title": "Kompaniya tasdiqlanishi talab qilinadi",
     "description": "Ish e'lonlarini chop etishdan oldin kompaniyangiz tasdiqlanishi kerak. E'lonni qoralama sifatida saqlashingiz mumkin, so'ngra kompaniyani tasdiqlash uchun biz bilan bog'laning.",
