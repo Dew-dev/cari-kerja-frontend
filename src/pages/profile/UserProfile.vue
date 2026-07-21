@@ -12,7 +12,7 @@ import CommunicationPreferencesCard from "@/components/worker/CommunicationPrefe
 import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
 import NotificationChannelsCard from "@/components/profile/NotificationChannelsCard.vue";
 import { displayEmail } from "@/utils/authFlags";
-import { isContentRejectedError, isDisposableEmailRejected } from "@/utils/apiErrors";
+import { isContentRejectedError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -133,8 +133,10 @@ function proficiencyLabel(id) {
 // CV Parser
 const cvParserFileInput = ref(null);
 const cvParserLoading = ref(false);
+const cvParserRateLimited = ref(false);
 const cvParsedData = ref(null);
 const cvParserError = ref("");
+let cvParserCooldownTimer = null;
 
 const RESUME_LIMIT = 3;
 const CV_MAX_MB = 5;
@@ -972,7 +974,18 @@ function handleAddResume() {
 }
 
 // CV Parser functions
+function startCvParserCooldown(seconds = 60) {
+  cvParserRateLimited.value = true;
+  if (cvParserCooldownTimer) clearTimeout(cvParserCooldownTimer);
+  cvParserCooldownTimer = setTimeout(() => {
+    cvParserRateLimited.value = false;
+    cvParserCooldownTimer = null;
+  }, seconds * 1000);
+}
+
 async function parseCVFile() {
+  if (cvParserLoading.value || cvParserRateLimited.value) return;
+
   const file = cvParserFileInput.value?.files?.[0];
   if (!file) {
     push.error(t('profile.cvParser.selectFile'));
@@ -1004,6 +1017,12 @@ async function parseCVFile() {
 
     cvParsedData.value = res.data?.data || res.data;
   } catch (err) {
+    if (isRateLimitedError(err)) {
+      cvParserError.value = t("captcha.rateLimited");
+      push.warning(cvParserError.value);
+      startCvParserCooldown(60);
+      return;
+    }
     if (isContentRejectedError(err)) {
       cvParserError.value = t("contentRejected.upload");
       push.warning(cvParserError.value);
@@ -2205,7 +2224,7 @@ watch(activeTab, (newTab) => {
             </div>
             <button
               @click="parseCVFile"
-              :disabled="cvParserLoading"
+              :disabled="cvParserLoading || cvParserRateLimited"
               class="px-4 py-2 min-h-10 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
             >
               {{ cvParserLoading ? $t('profile.cvParser.parsing') : $t('profile.cvParser.parseButton') }}
