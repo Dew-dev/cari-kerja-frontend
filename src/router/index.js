@@ -348,6 +348,12 @@ const routes = [
     component: () => import("../pages/auth/AuthError.vue"),
   },
   {
+    path: "/maintenance",
+    name: "maintenance",
+    meta: { public: true },
+    component: () => import("../pages/Maintenance.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "not-found",
     component: () => import("../pages/NotFound.vue"),

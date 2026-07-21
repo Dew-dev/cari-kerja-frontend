@@ -33,6 +33,35 @@ export function isVerificationRequiredError(err) {
 }
 
 /**
+ * 400 BadRequest — konten ditolak (email disposable, file tipuan/magic bytes, dll).
+ * Message diawali "CONTENT_REJECTED:".
+ */
+export function isContentRejectedError(err) {
+  return (
+    err?.response?.status === 400 &&
+    responseMessage(err).startsWith("CONTENT_REJECTED")
+  );
+}
+
+/**
+ * Disposable / temporary email rejected at register (or change-email).
+ */
+export function isDisposableEmailRejected(err) {
+  if (!isContentRejectedError(err)) return false;
+  return responseMessage(err).toLowerCase().includes("disposable");
+}
+
+/**
+ * 503 + MAINTENANCE_MODE: — platform sedang maintenance.
+ */
+export function isMaintenanceModeError(err) {
+  return (
+    err?.response?.status === 503 &&
+    responseMessage(err).startsWith("MAINTENANCE_MODE")
+  );
+}
+
+/**
  * Response SUKSES dengan message "CONTENT_FLAGGED: ..." — job ditahan
  * ke status PENDING untuk review konten (bukan failure).
  * Detail ada di response.data.data.moderation ({ risk_score, flags }).
