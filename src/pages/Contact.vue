@@ -122,6 +122,19 @@
               <p v-if="errors.message" class="contact-error">{{ errors.message }}</p>
             </div>
 
+            <!-- Honeypot: bots that fill this are rejected by BE -->
+            <div style="display: none" aria-hidden="true">
+              <label for="contact-website">Website</label>
+              <input
+                id="contact-website"
+                name="website"
+                type="text"
+                tabindex="-1"
+                autocomplete="off"
+                value=""
+              />
+            </div>
+
             <TurnstileWidget
               ref="turnstileRef"
               @verified="onCaptchaVerified"
@@ -448,6 +461,7 @@ async function onSubmit() {
       message: form.message.trim(),
       phone: form.phone.trim() || null,
       captcha_token: captchaToken.value || null,
+      website: "",
     });
 
     sent.value = true;

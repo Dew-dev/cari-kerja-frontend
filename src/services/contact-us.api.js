@@ -12,6 +12,9 @@ export async function createContactMessage(payload) {
     subject: payload.subject,
     message: payload.message,
     phone: payload.phone || null,
+    captcha_token: payload.captcha_token || null,
+    // Honeypot — selalu kosong; bot yang mengisi akan ditolak BE
+    website: payload.website ?? "",
   });
   return res.data;
 }
