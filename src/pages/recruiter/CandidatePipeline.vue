@@ -8,6 +8,7 @@ import { useChatStore } from "@/stores/chatStore";
 import { getWorkerByApplication } from "@/services/applications";
 import { getWorkerById } from "@/services/workers.api";
 import { resolveWorkerProfileId, resolveWorkerUserId } from "@/utils/chatIdentity";
+import { chatErrorI18nKey } from "@/utils/apiErrors";
 import api from "@/services/api";
 
 import PipelineFilters from "@/components/recruiter/pipeline/PipelineFilters.vue";
@@ -205,9 +206,13 @@ async function handleChat(candidate) {
     const conversationId = await chatStore.startOrOpenConversation(payload);
     router.push(`/chat/${conversationId}`);
   } catch (err) {
-    push.error(
-      err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation",
-    );
+    const key = chatErrorI18nKey(err);
+    if (key) push.warning(t(key));
+    else {
+      push.error(
+        err?.response?.data?.message || t("chat.failedToStartChat") || "Failed to start conversation",
+      );
+    }
   } finally {
     chattingId.value = null;
   }
