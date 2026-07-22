@@ -173,7 +173,7 @@
 
                   <!-- Description Section -->
                   <p v-if="company.description" class="text-base text-gray-700 line-clamp-2 mb-4">
-                    {{ stripHtml(company.description) }}
+                    {{ company.description }}
                   </p>
                   <p v-else class="text-base text-gray-400 italic mb-4">
                     {{ $t("noDescriptionProvided") || "No description provided" }}
@@ -265,7 +265,6 @@ import {
   getRecruiterCompanies,
   getRecruitersGroupedByIndustry,
 } from "../services/recruiters.api";
-import { stripHtml } from "@/utils/richText";
 
 const router = useRouter();
 const loading = ref(false);

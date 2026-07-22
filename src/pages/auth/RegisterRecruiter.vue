@@ -2,8 +2,6 @@
 import { reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import { registerRecruiter } from "@/services/auth.api"
-import TurnstileWidget from "@/components/common/TurnstileWidget.vue"
-import { isCaptchaError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
@@ -34,17 +32,6 @@ const state = reactive({
   loading: false,
   serverError: null,
 })
-
-const captchaToken = ref("")
-const turnstileRef = ref(null)
-
-function onCaptchaVerified(token) {
-  captchaToken.value = token
-}
-
-function onCaptchaExpired() {
-  captchaToken.value = ""
-}
 
 function validate() {
   let valid = true
@@ -94,25 +81,9 @@ async function submit() {
 
   state.loading = true
   try {
-    await registerRecruiter({
-      ...form,
-      captcha_token: captchaToken.value || null,
-    })
+    await registerRecruiter(form)
     router.push("/login")
   } catch (err) {
-    if (isRateLimitedError(err)) {
-      state.serverError = t("captcha.rateLimited")
-      return
-    }
-    if (isCaptchaError(err)) {
-      turnstileRef.value?.reset()
-      state.serverError = t("captcha.required")
-      return
-    }
-    if (isDisposableEmailRejected(err)) {
-      state.serverError = t("contentRejected.disposableEmail")
-      return
-    }
     state.serverError =
       err.response?.data?.message || "Registration failed"
   } finally {
@@ -237,13 +208,6 @@ async function submit() {
           <div v-if="state.serverError" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
             <p class="text-red-700 text-sm">{{ state.serverError }}</p>
           </div>
-
-          <!-- CAPTCHA -->
-          <TurnstileWidget
-            ref="turnstileRef"
-            @verified="onCaptchaVerified"
-            @expired="onCaptchaExpired"
-          />
 
           <!-- Sign Up Button -->
           <button
