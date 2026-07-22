@@ -610,6 +610,7 @@
     "edit": "Изменить",
     "cancel": "Отмена",
     "languages": "Языки",
+    "languagesHint": "Добавьте языки, которыми вы владеете, и уровень владения.",
     "noLanguagesAdded": "Языки не добавлены.",
     "addLanguageButton": "Добавить язык",
     "editLanguage": "Изменить язык",

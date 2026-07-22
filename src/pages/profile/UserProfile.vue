@@ -107,7 +107,7 @@ const skillSuggestions = ref([]);
 const loadingSkills = ref(false);
 
 const languages = ref([]);
-const showLanguageModal = ref(false);
+const showLanguagePanel = ref(false);
 const editingLanguageId = ref(null);
 const languageForm = reactive({
   language_id: null,
@@ -782,20 +782,30 @@ function selectLanguageSuggestion(lang) {
   languageSuggestions.value = [];
 }
 
-function openLanguageModal(language = null) {
+function resetLanguageForm() {
+  editingLanguageId.value = null;
+  languageForm.language_id = null;
+  languageForm.language_name = "";
+  languageForm.proficiency_level_id = "";
+  languageForm.is_primary = false;
+  languageSuggestions.value = [];
+}
+
+function openLanguageForm(language = null) {
   editingLanguageId.value = language?.id || null;
   languageForm.language_id = language?.language_id ?? null;
   languageForm.language_name = language?.language_name || "";
-  languageForm.proficiency_level_id = language?.proficiency_level_id || "";
+  languageForm.proficiency_level_id = language?.proficiency_level_id
+    ? String(language.proficiency_level_id)
+    : "";
   languageForm.is_primary = Boolean(language?.is_primary);
   languageSuggestions.value = [];
-  showLanguageModal.value = true;
+  showLanguagePanel.value = true;
 }
 
-function closeLanguageModal() {
-  showLanguageModal.value = false;
-  editingLanguageId.value = null;
-  languageSuggestions.value = [];
+function closeLanguageForm() {
+  showLanguagePanel.value = false;
+  resetLanguageForm();
 }
 
 async function saveLanguage() {
@@ -830,18 +840,28 @@ async function saveLanguage() {
     const headers = { Authorization: `Bearer ${localStorage.getItem("token")}` };
 
     if (editingLanguageId.value) {
-      await api.put(`/workers/languages/${editingLanguageId.value}`, payload, { headers });
-      const idx = languages.value.findIndex((l) => l.id === editingLanguageId.value);
-      if (idx !== -1) {
-        languages.value[idx] = { ...languages.value[idx], ...payload };
-      }
+      const currentId = editingLanguageId.value;
+      await api.put(`/workers/languages/${currentId}`, payload, { headers });
+      languages.value = languages.value.map((l) => {
+        if (l.id !== currentId) {
+          return payload.is_primary ? { ...l, is_primary: false } : l;
+        }
+        return { ...l, ...payload };
+      });
       push.success(t("profile.languageUpdated"));
     } else {
       const res = await api.post("/workers/languages", payload, { headers });
-      languages.value.push({ id: res.data?.data?.id, ...payload });
+      const created = { id: res.data?.data?.id, ...payload };
+      if (payload.is_primary) {
+        languages.value = languages.value.map((l) => ({
+          ...l,
+          is_primary: false,
+        }));
+      }
+      languages.value.push(created);
       push.success(t("profile.languageAdded"));
     }
-    closeLanguageModal();
+    closeLanguageForm();
   } catch (err) {
     push.error(err?.response?.data?.message || t("profile.failedToSaveLanguage"));
   } finally {
@@ -855,6 +875,9 @@ async function deleteLanguage(language) {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     languages.value = languages.value.filter((l) => l.id !== language.id);
+    if (editingLanguageId.value === language.id) {
+      closeLanguageForm();
+    }
     push.success(t("profile.languageRemoved"));
   } catch (err) {
     push.error(err?.response?.data?.message || t("profile.failedToDeleteLanguage"));
@@ -1828,60 +1851,176 @@ watch(activeTab, (newTab) => {
 
           <!-- Languages Section -->
           <div class="border-t pt-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              {{ $t('profile.languages') }}
-              <span class="ml-2 text-xs text-gray-400">Optional</span>
-            </label>
+            <div class="mb-3">
+              <label class="block text-sm font-medium text-gray-700">
+                {{ $t('profile.languages') }}
+                <span class="ml-2 text-xs text-gray-400 font-normal">{{ $t('optional') }}</span>
+              </label>
+              <p class="text-xs text-gray-500 mt-0.5">
+                {{ $t('profile.languagesHint') }}
+              </p>
+            </div>
 
             <div
-              v-if="languages.length === 0"
-              class="text-xs md:text-sm text-gray-500 py-2"
+              v-if="languages.length === 0 && !showLanguagePanel"
+              class="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-6 text-center text-xs md:text-sm text-gray-500"
             >
               {{ $t('profile.noLanguagesAdded') }}
             </div>
-            <div v-else class="space-y-2 mt-2">
-              <div
+
+            <ul v-else-if="languages.length > 0" class="space-y-2">
+              <li
                 v-for="language in languages"
                 :key="language.id"
-                class="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2"
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-gray-200 bg-white px-3.5 py-3"
+                :class="{
+                  'ring-1 ring-blue-200 border-blue-200':
+                    editingLanguageId === language.id && showLanguagePanel,
+                }"
               >
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="text-sm font-medium text-gray-800">
+                <div class="min-w-0 flex flex-wrap items-center gap-2">
+                  <span class="text-sm font-semibold text-gray-900">
                     {{ language.language_name }}
                   </span>
-                  <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs">
+                  <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
                     {{ proficiencyLabel(language.proficiency_level_id) }}
                   </span>
                   <span
                     v-if="language.is_primary"
-                    class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full text-xs"
+                    class="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200"
                   >
                     {{ $t('profile.primaryLanguage') }}
                   </span>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 shrink-0">
                   <button
                     type="button"
-                    @click="openLanguageModal(language)"
-                    class="text-blue-600 hover:text-blue-800 text-sm"
+                    class="rounded-lg px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-50 transition"
+                    @click="openLanguageForm(language)"
                   >
                     {{ $t('profile.edit') }}
                   </button>
                   <button
                     type="button"
+                    class="rounded-lg px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 transition"
                     @click="deleteLanguage(language)"
-                    class="text-red-600 hover:text-red-800 text-sm"
                   >
                     {{ $t('profile.remove') }}
                   </button>
                 </div>
+              </li>
+            </ul>
+
+            <!-- Inline add/edit panel (no modal) -->
+            <div
+              v-if="showLanguagePanel"
+              class="mt-3 rounded-xl border border-blue-100 bg-blue-50/50 p-4 space-y-3"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="text-sm font-semibold text-gray-900">
+                  {{
+                    editingLanguageId
+                      ? $t('profile.editLanguage')
+                      : $t('profile.addLanguageButton')
+                  }}
+                </h3>
+                <button
+                  type="button"
+                  class="text-gray-400 hover:text-gray-600 text-xl leading-none px-1"
+                  :aria-label="$t('profile.cancel')"
+                  @click="closeLanguageForm"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div>
+                <label class="text-xs md:text-sm font-medium text-gray-700">
+                  {{ $t('profile.languageName') }}
+                </label>
+                <div class="relative mt-1">
+                  <input
+                    :value="languageForm.language_name"
+                    type="text"
+                    autocomplete="off"
+                    :placeholder="$t('profile.searchOrTypeLanguage')"
+                    class="w-full border border-gray-200 bg-white shadow-sm rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
+                    @input="handleLanguageSearch"
+                  />
+                  <div
+                    v-if="languageSuggestions.length"
+                    class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-gray-200 rounded-lg"
+                  >
+                    <button
+                      v-for="lang in languageSuggestions"
+                      :key="lang.id"
+                      type="button"
+                      class="w-full text-left px-3 py-2 text-sm hover:bg-blue-50"
+                      @click="selectLanguageSuggestion(lang)"
+                    >
+                      {{ lang.name }}
+                    </button>
+                  </div>
+                  <p v-if="loadingLanguageOptions" class="text-xs text-gray-500 mt-1">
+                    {{ $t('profile.loadingLanguages') }}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-xs md:text-sm font-medium text-gray-700">
+                  {{ $t('profile.proficiencyLevel') }}
+                </label>
+                <select
+                  v-model="languageForm.proficiency_level_id"
+                  class="mt-1 w-full border border-gray-200 bg-white shadow-sm rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
+                >
+                  <option value="" disabled>
+                    {{ $t('profile.selectProficiency') }}
+                  </option>
+                  <option
+                    v-for="level in proficiencyOptions"
+                    :key="level.id"
+                    :value="String(level.id)"
+                  >
+                    {{ level.label }}
+                  </option>
+                </select>
+              </div>
+
+              <label class="flex items-center gap-2 text-sm text-gray-700">
+                <input
+                  v-model="languageForm.is_primary"
+                  type="checkbox"
+                  class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                {{ $t('profile.setAsPrimaryLanguage') }}
+              </label>
+
+              <div class="flex flex-col-reverse sm:flex-row gap-2 pt-1">
+                <button
+                  type="button"
+                  class="sm:flex-1 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 text-gray-800 px-4 py-2 text-sm font-medium min-h-10"
+                  @click="closeLanguageForm"
+                >
+                  {{ $t('profile.cancel') }}
+                </button>
+                <button
+                  type="button"
+                  class="sm:flex-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium disabled:opacity-50 min-h-10"
+                  :disabled="savingLanguage"
+                  @click="saveLanguage"
+                >
+                  {{ savingLanguage ? $t('profile.saving') : $t('profile.save') }}
+                </button>
               </div>
             </div>
 
             <button
+              v-if="!showLanguagePanel"
               type="button"
-              @click="openLanguageModal()"
-              class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
+              class="mt-3 inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium min-h-10"
+              @click="openLanguageForm()"
             >
               + {{ $t('profile.addLanguageButton') }}
             </button>
@@ -2848,91 +2987,5 @@ watch(activeTab, (newTab) => {
       </div>
     </div>
 
-    <!-- Language Modal -->
-    <div
-      v-if="showLanguageModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      @click.self="closeLanguageModal"
-    >
-      <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-semibold">
-            {{ editingLanguageId ? $t('profile.editLanguage') : $t('profile.addLanguageButton') }}
-          </h3>
-          <button
-            @click="closeLanguageModal"
-            class="text-gray-400 hover:text-gray-600 text-xl"
-          >
-            ×
-          </button>
-        </div>
-
-        <!-- Language name with master suggestions -->
-        <label class="text-xs md:text-sm font-medium text-gray-700">
-          {{ $t('profile.languageName') }}
-        </label>
-        <div class="relative mb-3">
-          <input
-            :value="languageForm.language_name"
-            @input="handleLanguageSearch"
-            type="text"
-            :placeholder="$t('profile.searchOrTypeLanguage')"
-            class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <div
-            v-if="languageSuggestions.length"
-            class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-gray-200 rounded-md"
-          >
-            <div
-              v-for="lang in languageSuggestions"
-              :key="lang.id"
-              @click="selectLanguageSuggestion(lang)"
-              class="px-3 py-2 text-sm cursor-pointer hover:bg-blue-50"
-            >
-              {{ lang.name }}
-            </div>
-          </div>
-          <p v-if="loadingLanguageOptions" class="text-xs text-gray-500 mt-1">
-            {{ $t('profile.loadingLanguages') }}
-          </p>
-        </div>
-
-        <!-- Proficiency level -->
-        <label class="text-xs md:text-sm font-medium text-gray-700">
-          {{ $t('profile.proficiencyLevel') }}
-        </label>
-        <select
-          v-model="languageForm.proficiency_level_id"
-          class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-        >
-          <option value="" disabled>{{ $t('profile.selectProficiency') }}</option>
-          <option v-for="level in proficiencyOptions" :key="level.id" :value="level.id">
-            {{ level.label }}
-          </option>
-        </select>
-
-        <!-- Primary language -->
-        <label class="flex items-center gap-2 text-sm text-gray-700 mb-4">
-          <input v-model="languageForm.is_primary" type="checkbox" class="rounded" />
-          {{ $t('profile.setAsPrimaryLanguage') }}
-        </label>
-
-        <div class="flex gap-2">
-          <button
-            @click="closeLanguageModal"
-            class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
-          >
-            {{ $t('profile.cancel') }}
-          </button>
-          <button
-            @click="saveLanguage"
-            :disabled="savingLanguage"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm disabled:opacity-50"
-          >
-            {{ savingLanguage ? $t('profile.saving') : $t('profile.save') }}
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
 </template>

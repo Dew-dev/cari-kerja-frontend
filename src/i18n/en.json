@@ -684,6 +684,7 @@
     "edit": "Edit",
     "cancel": "Cancel",
     "languages": "Languages",
+    "languagesHint": "Add languages you speak and your proficiency level.",
     "noLanguagesAdded": "No languages added.",
     "addLanguageButton": "Add Language",
     "editLanguage": "Edit Language",
