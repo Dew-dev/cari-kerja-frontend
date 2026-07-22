@@ -180,6 +180,17 @@ const proficiencyOptions = computed(() => [
   { id: 4, label: t("profile.proficiency.native") },
 ]);
 
+const profileTabs = computed(() => [
+  { id: "profile", label: t("profile.personalInfo"), shortLabel: t("profile.personalInfo") },
+  { id: "resumes", label: t("resume"), shortLabel: t("resume") },
+  { id: "work", label: t("profile.workExperience"), shortLabel: t("profile.work") },
+  { id: "education", label: t("education"), shortLabel: t("profile.edu") },
+  { id: "certifications", label: t("profile.certifications"), shortLabel: t("profile.cert") },
+  { id: "cvparser", label: t("profile.cvParser.tab"), shortLabel: "CV" },
+  { id: "applied", label: t("profile.appliedJobs"), shortLabel: t("profile.applied") },
+  { id: "saved", label: t("profile.savedJobs"), shortLabel: t("saved") },
+]);
+
 function proficiencyLabel(id) {
   return proficiencyOptions.value.find((p) => p.id === Number(id))?.label || "";
 }
@@ -1615,120 +1626,40 @@ watch(activeTab, (newTab) => {
 </script>
 
 <template>
-  <div class="bg-gray-50 min-h-screen py-6 md:py-10">
+  <div class="bg-slate-50 min-h-screen py-6 md:py-10">
     <div class="max-w-6xl mx-auto px-3 md:px-4 sm:max-w-md md:max-w-2xl lg:max-w-4xl">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div>
-          <h1 class="text-xl md:text-2xl font-semibold text-gray-900">{{ $t('profile.myProfile') }}</h1>
-          <p class="text-xs md:text-sm text-gray-500">
+          <h1 class="text-xl md:text-2xl font-semibold text-slate-900">{{ $t('profile.myProfile') }}</h1>
+          <p class="text-sm text-slate-500 mt-1">
             {{ $t('profile.manageProfile') }}
           </p>
         </div>
         <RouterLink
           to="/change-password"
-          class="rounded-full font-semibold bg-gray-900 text-white px-4 py-2 text-sm hover:bg-gray-800 transition text-center md:text-left"
+          class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 transition duration-200 text-center min-h-11"
         >
           {{ $t('profile.changePassword') }}
         </RouterLink>
       </div>
 
       <div
-        class="bg-white w-full rounded-lg md:rounded-2xl shadow-sm p-1 md:p-2 flex gap-1 md:gap-2 mb-6 md:mb-8 overflow-x-auto flex-nowrap justify-around"
+        class="bg-white w-full rounded-2xl shadow-sm border border-slate-100 p-1.5 flex gap-1 mb-6 md:mb-8 overflow-x-auto flex-nowrap scrollbar-thin"
       >
         <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
+          v-for="tab in profileTabs"
+          :key="tab.id"
+          type="button"
+          class="px-3 md:px-4 py-2 text-xs md:text-sm rounded-xl whitespace-nowrap min-h-10 transition duration-200 shrink-0"
           :class="
-            activeTab === 'profile'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-600 hover:bg-gray-100'
+            activeTab === tab.id
+              ? 'bg-blue-600 text-white shadow-sm'
+              : 'text-slate-600 hover:bg-slate-50'
           "
-          @click="activeTab = 'profile'"
+          @click="activeTab = tab.id"
         >
-          <span class="hidden sm:inline">{{ $t('profile.personalInfo') }}</span>
-          <span class="sm:hidden">{{ $t('profile.profilePhoto') }}</span>
-        </button>
-        <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
-          :class="
-            activeTab === 'resumes'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-600 hover:bg-gray-100'
-          "
-          @click="activeTab = 'resumes'"
-        >
-          {{ $t('resume') }}
-        </button>
-        <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
-          :class="
-            activeTab === 'work'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-600 hover:bg-gray-100'
-          "
-          @click="activeTab = 'work'"
-        >
-          <span class="hidden sm:inline">{{ $t('profile.workExperience') }}</span>
-          <span class="sm:hidden">{{ $t('profile.work') }}</span>
-        </button>
-        <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
-          :class="
-            activeTab === 'education'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-600 hover:bg-gray-100'
-          "
-          @click="activeTab = 'education'"
-        >
-          <span class="hidden sm:inline">{{ $t('education') }}</span>
-          <span class="sm:hidden">{{ $t('profile.edu') }}</span>
-        </button>
-        <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
-          :class="
-            activeTab === 'certifications'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-600 hover:bg-gray-100'
-          "
-          @click="activeTab = 'certifications'"
-        >
-          <span class="hidden sm:inline">{{ $t('profile.certifications') }}</span>
-          <span class="sm:hidden">{{ $t('profile.cert') }}</span>
-        </button>
-        <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
-          :class="
-            activeTab === 'cvparser'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-600 hover:bg-gray-100'
-          "
-          @click="activeTab = 'cvparser'"
-        >
-          <span class="hidden sm:inline">{{ $t('profile.cvParser.tab') }}</span>
-          <span class="sm:hidden">CV</span>
-        </button>
-        <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
-          :class="
-            activeTab === 'applied'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-600 hover:bg-gray-100'
-          "
-          @click="activeTab = 'applied'"
-        >
-          <span class="hidden sm:inline">{{ $t('profile.appliedJobs') }}</span>
-          <span class="sm:hidden">{{ $t('profile.applied') }}</span>
-        </button>
-        <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
-          :class="
-            activeTab === 'saved'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-600 hover:bg-gray-100'
-          "
-          @click="activeTab = 'saved'"
-        >
-          <span class="hidden sm:inline">{{ $t('profile.savedJobs') }}</span>
-          <span class="sm:hidden">{{ $t('saved') }}</span>
+          <span class="hidden sm:inline">{{ tab.label }}</span>
+          <span class="sm:hidden">{{ tab.shortLabel || tab.label }}</span>
         </button>
       </div>
 
@@ -1737,17 +1668,24 @@ watch(activeTab, (newTab) => {
         v-if="activeTab === 'profile'"
         class="space-y-6"
       >
-        <div class="bg-white rounded-2xl shadow-sm p-6">
-        <div v-if="loadingProfile" class="text-sm text-gray-500">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6">
+        <div class="mb-5">
+          <h2 class="text-lg md:text-xl font-semibold text-slate-900">
+            {{ $t('profile.personalInfo') }}
+          </h2>
+          <p class="text-sm text-slate-500 mt-1">{{ $t('profile.personalInfoHint') }}</p>
+        </div>
+
+        <div v-if="loadingProfile" class="text-sm text-slate-500 py-8 text-center">
           {{ $t('profile.loadingProfile') }}
         </div>
 
-        <form v-else class="space-y-6" @submit.prevent="saveProfile">
+        <form v-else class="space-y-8" @submit.prevent="saveProfile">
           <!-- Avatar Section -->
-          <div class="flex flex-col sm:flex-row sm:items-center gap-4 md:gap-6 pb-6 border-b">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-4 md:gap-6 pb-6 border-b border-slate-100">
             <div class="relative shrink-0">
               <div
-                class="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 rounded-full overflow-hidden border-2 border-gray-200 bg-gray-100"
+                class="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 rounded-full overflow-hidden border-2 border-slate-200 bg-slate-100 ring-4 ring-slate-50"
               >
                 <img
                   v-if="avatarPreview || avatarFromBackend"
@@ -1758,310 +1696,347 @@ watch(activeTab, (newTab) => {
                 />
                 <div
                   v-else
-                  class="h-full w-full flex items-center justify-center bg-blue-100 text-blue-600 text-xl sm:text-2xl md:text-3xl font-bold"
+                  class="h-full w-full flex items-center justify-center bg-blue-50 text-blue-600 text-xl sm:text-2xl md:text-3xl font-bold"
                 >
                   {{ form.name?.charAt(0)?.toUpperCase() || "?" }}
                 </div>
               </div>
             </div>
             <div class="flex-1 min-w-0">
-              <label class="block text-xs md:text-sm font-medium mb-2"
+              <label class="mb-1.5 block text-sm font-medium text-slate-700"
                 >{{ $t('profile.profilePhoto') }}</label
               >
               <input
                 type="file"
                 accept="image/*"
                 @change="onAvatarChange"
-                class="text-xs md:text-sm w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
+                class="w-full text-sm rounded-xl border border-slate-200 bg-white px-3 py-2.5 min-h-11 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-blue-700"
               />
-              <p class="text-xs text-gray-500 mt-1">{{ $t('profile.jpgOrPngMax2MB') }}</p>
+              <p class="text-xs text-slate-500 mt-1.5">{{ $t('profile.jpgOrPngMax2MB') }}</p>
             </div>
           </div>
 
-          <!-- Basic Info -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="col-span-2">
-              <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.fullNameLabel') }} <span class="text-red-500">*</span></label
-              >
-              <input
-                v-model="form.name"
-                type="text"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-                :placeholder="$t('profile.yourNamePlaceholder')"
-                required
-              />
-            </div>
-
-            <div v-if="isTelegramLogin">
-              <label class="text-xs md:text-sm font-medium text-gray-700">
-                {{ $t('profile.email') }}
-              </label>
-              <p class="mt-1 text-sm text-gray-600 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2">
-                {{ $t('profile.telegramNotificationsOnly') }}
-              </p>
-            </div>
-            <div v-else>
-              <label class="text-xs md:text-sm font-medium text-gray-700">
-                {{ $t('profile.email') }}
-                <span class="text-red-500">*</span>
-              </label>
-              <input
-                v-model="form.email"
-                type="email"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm min-h-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                :class="{ 'bg-gray-50': !canEditEmail }"
-                :placeholder="$t('profile.email')"
-                :readonly="!canEditEmail"
-              />
-              <p v-if="isGoogleLogin" class="text-xs text-gray-500 mt-1">
-                {{ $t('profile.emailManagedByGoogle') }}
-              </p>
-              <button
-                v-if="canEditEmail"
-                type="button"
-                class="mt-2 text-xs md:text-sm px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
-                :disabled="savingEmail"
-                @click="saveAccountEmail"
-              >
-                {{ savingEmail ? $t('auth.buttons.sending') : $t('profile.updateEmail') }}
-              </button>
-            </div>
-
+          <!-- Basic contact -->
+          <section class="space-y-4">
             <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.phone') }} <span class="text-red-500">*</span></label>
-              <input
-                v-model="form.telephone"
-                type="text"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-                :placeholder="$t('profile.phone')"
-              />
+              <h3 class="text-sm font-semibold text-slate-900">{{ $t('profile.sectionBasic') }}</h3>
+              <p class="text-xs text-slate-500 mt-0.5">{{ $t('profile.sectionBasicHint') }}</p>
             </div>
-
-            <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.dateOfBirth') }} <span class="text-red-500">*</span></label
-              >
-              <input
-                v-model="form.date_of_birth"
-                type="date"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 md:py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-                required
-              />
-            </div>
-
-            <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.gender') }} <span class="text-red-500">*</span></label>
-              <select
-                v-model="form.gender_id"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 md:py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-              >
-                <option value="">{{ $t('profile.selectGender') }}</option>
-                <option v-for="g in genders" :key="g.id" :value="g.id">
-                  {{ g.name }}
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.nationality') }}
-                <span class="text-red-500">*</span>
-                </label
-              >
-              <SearchableSelect
-                :options="nationalityOptions"
-                :value="form.nationality_id"
-                :placeholder="$t('profile.searchNationality')"
-                @change="(val) => (form.nationality_id = String(val || ''))"
-                @search="handleNationalitySearch"
-              />
-            </div>
-
-            <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.religion') }}
-                <span class="text-red-500">*</span>
-              </label>
-              <select
-                v-model="form.religion_id"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-              >
-                <option value="">{{ $t('profile.selectReligion') }}</option>
-                <option v-for="r in religions" :key="r.id" :value="r.id">
-                  {{ r.name }}
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.maritalStatus') }} <span class="text-red-500">*</span></label
-              >
-              <select
-                v-model="form.marriage_status_id"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-              >
-                <option value="">{{ $t('profile.selectStatus') }}</option>
-                <option v-for="m in maritalStatuses" :key="m.id" :value="m.id">
-                  {{ m.status }}
-                </option>
-              </select>
-            </div>
-
-            <div class="col-span-2">
-              <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.currentSalary') }}
-                <span class="text-red-500">*</span>
-                </label
-              >
-              <div class="grid grid-cols-2 gap-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="mb-1.5 block text-sm font-medium text-slate-700"
+                  >{{ $t('profile.fullNameLabel') }} <span class="text-red-600">*</span></label
+                >
                 <input
-                  v-model="form.current_salary"
-                  type="number"
-                  class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-                  :placeholder="$t('profile.salaryExample')"
+                  v-model="form.name"
+                  type="text"
+                  class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                  :placeholder="$t('profile.yourNamePlaceholder')"
+                  required
                 />
-                <div class="relative currency-dropdown-current">
-                  <input
-                    v-model="currentCurrencyInput"
-                    type="text"
-                    class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10 cursor-pointer"
-                    :placeholder="$t('profile.selectCurrency') || 'Select Currency'"
-                    @click="toggleCurrentCurrencyDropdown"
-                  />
-                  <div
-                    v-if="showCurrentCurrencyDropdown && currencyOptions.length"
-                    class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-gray-200 rounded-md"
-                  >
-                    <div
-                      v-for="currency in currencyOptions"
-                      :key="currency.id"
-                      @click="selectCurrentCurrency(currency)"
-                      class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
-                        >
-                        {{ currency.name }} ({{ currency.code }})
-                    </div>
-                  </div>
-                  <p v-if="currencyLoading" class="text-xs text-gray-500 mt-1">
-                    {{ $t('profile.loadingCurrencies') || 'Loading...' }}
-                  </p>
-                </div>
+              </div>
+
+              <div v-if="isTelegramLogin">
+                <label class="mb-1.5 block text-sm font-medium text-slate-700">
+                  {{ $t('profile.email') }}
+                </label>
+                <p class="mt-0 text-sm text-slate-600 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 min-h-11 flex items-center">
+                  {{ $t('profile.telegramNotificationsOnly') }}
+                </p>
+              </div>
+              <div v-else>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700">
+                  {{ $t('profile.email') }}
+                  <span class="text-red-600">*</span>
+                </label>
+                <input
+                  v-model="form.email"
+                  type="email"
+                  class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                  :class="{ 'bg-slate-50 text-slate-500': !canEditEmail }"
+                  :placeholder="$t('profile.email')"
+                  :readonly="!canEditEmail"
+                />
+                <p v-if="isGoogleLogin" class="text-xs text-slate-500 mt-1.5">
+                  {{ $t('profile.emailManagedByGoogle') }}
+                </p>
+                <button
+                  v-if="canEditEmail"
+                  type="button"
+                  class="mt-2 inline-flex items-center justify-center rounded-xl bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 disabled:opacity-50 min-h-10"
+                  :disabled="savingEmail"
+                  @click="saveAccountEmail"
+                >
+                  {{ savingEmail ? $t('auth.buttons.sending') : $t('profile.updateEmail') }}
+                </button>
+              </div>
+
+              <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700">{{ $t('profile.phone') }} <span class="text-red-600">*</span></label>
+                <input
+                  v-model="form.telephone"
+                  type="text"
+                  class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                  :placeholder="$t('profile.phone')"
+                />
               </div>
             </div>
+          </section>
 
-            <div class="col-span-2">
-              <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.expectedSalary') }}
-                <span class="text-red-500">*</span>
-                </label
-              >
-              <div class="grid grid-cols-2 gap-2">
+          <!-- Demographics -->
+          <section class="space-y-4 border-t border-slate-100 pt-6">
+            <div>
+              <h3 class="text-sm font-semibold text-slate-900">{{ $t('profile.sectionDemographics') }}</h3>
+              <p class="text-xs text-slate-500 mt-0.5">{{ $t('profile.sectionDemographicsHint') }}</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700"
+                  >{{ $t('profile.dateOfBirth') }} <span class="text-red-600">*</span></label
+                >
                 <input
-                  v-model="form.expected_salary"
-                  type="number"
-                  class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-                  :placeholder="$t('profile.salaryExample')"
+                  v-model="form.date_of_birth"
+                  type="date"
+                  class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                  required
                 />
-                <div class="relative currency-dropdown-expected">
+              </div>
+
+              <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700">{{ $t('profile.gender') }} <span class="text-red-600">*</span></label>
+                <select
+                  v-model="form.gender_id"
+                  class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                >
+                  <option value="">{{ $t('profile.selectGender') }}</option>
+                  <option v-for="g in genders" :key="g.id" :value="g.id">
+                    {{ g.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700"
+                  >{{ $t('profile.nationality') }}
+                  <span class="text-red-600">*</span>
+                  </label
+                >
+                <SearchableSelect
+                  :options="nationalityOptions"
+                  :value="form.nationality_id"
+                  :placeholder="$t('profile.searchNationality')"
+                  @change="(val) => (form.nationality_id = String(val || ''))"
+                  @search="handleNationalitySearch"
+                />
+              </div>
+
+              <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700">{{ $t('profile.religion') }}
+                  <span class="text-red-600">*</span>
+                </label>
+                <select
+                  v-model="form.religion_id"
+                  class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                >
+                  <option value="">{{ $t('profile.selectReligion') }}</option>
+                  <option v-for="r in religions" :key="r.id" :value="r.id">
+                    {{ r.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700"
+                  >{{ $t('profile.maritalStatus') }} <span class="text-red-600">*</span></label
+                >
+                <select
+                  v-model="form.marriage_status_id"
+                  class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                >
+                  <option value="">{{ $t('profile.selectStatus') }}</option>
+                  <option v-for="m in maritalStatuses" :key="m.id" :value="m.id">
+                    {{ m.status }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- Compensation -->
+          <section class="space-y-4 border-t border-slate-100 pt-6">
+            <div>
+              <h3 class="text-sm font-semibold text-slate-900">{{ $t('profile.sectionCompensation') }}</h3>
+              <p class="text-xs text-slate-500 mt-0.5">{{ $t('profile.sectionCompensationHint') }}</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="mb-1.5 block text-sm font-medium text-slate-700"
+                  >{{ $t('profile.currentSalary') }}
+                  <span class="text-red-600">*</span>
+                  </label
+                >
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input
-                    v-model="expectedCurrencyInput"
-                    type="text"
-                    class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10 cursor-pointer"
-                    :placeholder="$t('profile.selectCurrency') || 'Select Currency'"
-                    @click="toggleExpectedCurrencyDropdown"
+                    v-model="form.current_salary"
+                    type="number"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                    :placeholder="$t('profile.salaryExample')"
                   />
-                  <div
-                    v-if="showExpectedCurrencyDropdown && currencyOptions.length"
-                    class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-gray-200 rounded-md"
-                  >
+                  <div class="relative currency-dropdown-current">
+                    <input
+                      v-model="currentCurrencyInput"
+                      type="text"
+                      class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 cursor-pointer"
+                      :placeholder="$t('profile.selectCurrency') || 'Select Currency'"
+                      @click="toggleCurrentCurrencyDropdown"
+                    />
                     <div
-                      v-for="currency in currencyOptions"
-                      :key="currency.id"
-                      @click="selectExpectedCurrency(currency)"
-                      class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
+                      v-if="showCurrentCurrencyDropdown && currencyOptions.length"
+                      class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-slate-200 rounded-xl"
                     >
-                      {{ currency.name }} ({{ currency.code }})
+                      <div
+                        v-for="currency in currencyOptions"
+                        :key="currency.id"
+                        @click="selectCurrentCurrency(currency)"
+                        class="px-3 py-2.5 text-sm cursor-pointer hover:bg-blue-50 text-slate-800"
+                          >
+                          {{ currency.name }} ({{ currency.code }})
+                      </div>
                     </div>
+                    <p v-if="currencyLoading" class="text-xs text-slate-500 mt-1">
+                      {{ $t('profile.loadingCurrencies') || 'Loading...' }}
+                    </p>
                   </div>
-                  <p v-if="currencyLoading" class="text-xs text-gray-500 mt-1">
-                    {{ $t('profile.loadingCurrencies') || 'Loading...' }}
-                  </p>
+                </div>
+              </div>
+
+              <div class="md:col-span-2">
+                <label class="mb-1.5 block text-sm font-medium text-slate-700"
+                  >{{ $t('profile.expectedSalary') }}
+                  <span class="text-red-600">*</span>
+                  </label
+                >
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <input
+                    v-model="form.expected_salary"
+                    type="number"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                    :placeholder="$t('profile.salaryExample')"
+                  />
+                  <div class="relative currency-dropdown-expected">
+                    <input
+                      v-model="expectedCurrencyInput"
+                      type="text"
+                      class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 cursor-pointer"
+                      :placeholder="$t('profile.selectCurrency') || 'Select Currency'"
+                      @click="toggleExpectedCurrencyDropdown"
+                    />
+                    <div
+                      v-if="showExpectedCurrencyDropdown && currencyOptions.length"
+                      class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-slate-200 rounded-xl"
+                    >
+                      <div
+                        v-for="currency in currencyOptions"
+                        :key="currency.id"
+                        @click="selectExpectedCurrency(currency)"
+                        class="px-3 py-2.5 text-sm cursor-pointer hover:bg-blue-50 text-slate-800"
+                      >
+                        {{ currency.name }} ({{ currency.code }})
+                      </div>
+                    </div>
+                    <p v-if="currencyLoading" class="text-xs text-slate-500 mt-1">
+                      {{ $t('profile.loadingCurrencies') || 'Loading...' }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
+          </section>
 
-            <div class="col-span-2">
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.address') }} <span class="text-red-500">*</span></label>
-              <textarea
-                v-model="form.address"
-                rows="2"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-                :placeholder="$t('profile.yourAddress')"
-              />
+          <!-- About -->
+          <section class="space-y-4 border-t border-slate-100 pt-6">
+            <div>
+              <h3 class="text-sm font-semibold text-slate-900">{{ $t('profile.sectionAbout') }}</h3>
+              <p class="text-xs text-slate-500 mt-0.5">{{ $t('profile.sectionAboutHint') }}</p>
             </div>
+            <div class="space-y-4">
+              <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700">{{ $t('profile.address') }} <span class="text-red-600">*</span></label>
+                <textarea
+                  v-model="form.address"
+                  rows="2"
+                  class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                  :placeholder="$t('profile.yourAddress')"
+                />
+              </div>
 
-            <div class="col-span-2">
-              <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.profileSummary') }}
-                <span class="text-red-500">*</span>
-                </label
-              >
-              <RichTextEditor
-                v-model="form.profile_summary"
-                :placeholder="$t('profile.profileSummaryPlaceholder')"
-                min-height="140px"
-              />
+              <div>
+                <label class="mb-1.5 block text-sm font-medium text-slate-700"
+                  >{{ $t('profile.profileSummary') }}
+                  <span class="text-red-600">*</span>
+                  </label
+                >
+                <RichTextEditor
+                  v-model="form.profile_summary"
+                  :placeholder="$t('profile.profileSummaryPlaceholder')"
+                  min-height="140px"
+                />
+              </div>
             </div>
-          </div>
+          </section>
 
           <!-- Skills Section -->
-          <div class="border-t pt-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              {{ $t('profile.skills') }}
-              <span class="ml-2 text-xs text-gray-400">Optional</span>
-            </label>
+          <section class="border-t border-slate-100 pt-6">
+            <div class="mb-3">
+              <label class="block text-sm font-semibold text-slate-900">
+                {{ $t('profile.skills') }}
+                <span class="ml-2 text-xs text-slate-400 font-normal">{{ $t('optional') }}</span>
+              </label>
+              <p class="text-xs text-slate-500 mt-0.5">
+                {{ $t('profile.skillsSectionHint') }}
+              </p>
+            </div>
 
-            <!-- SELECTED SKILLS -->
             <div
-              v-if="skills.length === 0"
-              class="text-xs md:text-sm text-gray-500 py-2"
+              v-if="skills.length === 0 && !showSkillModal"
+              class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500"
             >
               {{ $t('profile.noSkillsAdded') }}
             </div>
-            <div v-else class="flex gap-2 flex-wrap mt-2">
-              <span
+
+            <ul v-else-if="skills.length > 0" class="flex flex-wrap gap-2">
+              <li
                 v-for="skill in skills"
                 :key="skill.id || skill.skill_id"
-                @click="deleteSkill(skill)"
-                class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm cursor-pointer hover:bg-green-200"
+                class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800"
               >
-                {{ skill.skill_name || skill.name }} ×
-              </span>
-            </div>
+                <span>{{ skill.skill_name || skill.name }}</span>
+                <button
+                  type="button"
+                  class="rounded-md p-0.5 text-slate-400 hover:text-red-600 hover:bg-red-50 transition"
+                  :aria-label="$t('profile.remove')"
+                  @click="deleteSkill(skill)"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </li>
+            </ul>
 
-            <!-- ADD SKILLS BUTTON -->
-            <button
-              v-if="!showSkillModal"
-              type="button"
-              @click="openSkillModal"
-              class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm"
-            >
-              + {{ $t('profile.addSkillsButton') }}
-            </button>
-
-            <!-- ADD SKILLS PANEL -->
             <div
               v-if="showSkillModal"
-              class="mt-3 border border-gray-200 rounded-lg p-4 bg-gray-50"
+              class="mt-3 rounded-2xl border border-blue-100 bg-slate-50 p-4 space-y-3"
             >
-              <div class="flex items-center justify-between mb-3">
-                <h3 class="text-sm font-semibold text-gray-800">
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="text-sm font-semibold text-slate-900">
                   {{ $t('profile.addSkillsButton') }}
                 </h3>
                 <button
                   type="button"
+                  class="text-slate-400 hover:text-slate-600 text-xl leading-none px-1"
+                  :aria-label="$t('profile.cancel')"
                   @click="closeSkillModal"
-                  class="text-gray-400 hover:text-gray-600 text-xl leading-none"
                 >
                   ×
                 </button>
@@ -2073,62 +2048,74 @@ watch(activeTab, (newTab) => {
                 @keydown.enter.prevent="handleSkillEnter"
                 type="text"
                 :placeholder="$t('profile.searchOrCreateSkill')"
-                class="w-full border border-gray-200 bg-white shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
               />
 
               <div
                 v-if="skillSuggestions.length"
-                class="space-y-2 mb-3 max-h-48 overflow-y-auto"
+                class="space-y-1 max-h-48 overflow-y-auto rounded-xl border border-slate-200 bg-white"
               >
-                <div
+                <button
                   v-for="skill in skillSuggestions"
                   :key="skill.id"
+                  type="button"
                   @click="addSkillFromSuggestion(skill)"
-                  class="p-2 border border-gray-200 bg-white rounded cursor-pointer hover:bg-blue-50 text-sm"
+                  class="w-full text-left px-3 py-2.5 text-sm hover:bg-blue-50 text-slate-800 transition"
                 >
                   {{ skill.name }}
-                </div>
+                </button>
               </div>
 
-              <div v-if="skillSearchQuery && !skillSuggestions.length" class="mb-3">
+              <div v-if="skillSearchQuery && !skillSuggestions.length && !loadingSkills">
                 <button
                   type="button"
                   @click="createAndAddSkill(skillSearchQuery)"
-                  class="w-full p-2 border-2 border-dashed border-green-300 rounded text-sm text-green-700 hover:bg-green-50"
+                  class="w-full rounded-xl border border-dashed border-blue-300 bg-blue-50/50 px-3 py-2.5 text-sm text-blue-700 hover:bg-blue-50 transition"
                 >
                   + {{ $t('profile.createSkill') }} "{{ skillSearchQuery }}"
                 </button>
               </div>
 
-              <p v-if="loadingSkills" class="text-xs text-gray-500 text-center mb-3">
+              <p v-if="loadingSkills" class="text-xs text-slate-500 text-center">
                 {{ $t('profile.loadingSkills') }}
               </p>
 
-              <button
-                type="button"
-                @click="closeSkillModal"
-                class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
-              >
-                {{ $t('profile.done') }}
-              </button>
+              <div class="flex flex-col-reverse sm:flex-row gap-2 pt-1">
+                <button
+                  type="button"
+                  class="sm:flex-1 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 transition duration-200 min-h-11"
+                  @click="closeSkillModal"
+                >
+                  {{ $t('profile.done') }}
+                </button>
+              </div>
             </div>
-          </div>
+
+            <button
+              v-if="!showSkillModal"
+              type="button"
+              class="mt-3 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11"
+              @click="openSkillModal"
+            >
+              + {{ $t('profile.addSkillsButton') }}
+            </button>
+          </section>
 
           <!-- Languages Section -->
-          <div class="border-t pt-6">
+          <section class="border-t border-slate-100 pt-6">
             <div class="mb-3">
-              <label class="block text-sm font-medium text-gray-700">
+              <label class="block text-sm font-semibold text-slate-900">
                 {{ $t('profile.languages') }}
-                <span class="ml-2 text-xs text-gray-400 font-normal">{{ $t('optional') }}</span>
+                <span class="ml-2 text-xs text-slate-400 font-normal">{{ $t('optional') }}</span>
               </label>
-              <p class="text-xs text-gray-500 mt-0.5">
+              <p class="text-xs text-slate-500 mt-0.5">
                 {{ $t('profile.languagesHint') }}
               </p>
             </div>
 
             <div
               v-if="languages.length === 0 && !showLanguagePanel"
-              class="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-6 text-center text-xs md:text-sm text-gray-500"
+              class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500"
             >
               {{ $t('profile.noLanguagesAdded') }}
             </div>
@@ -2137,14 +2124,14 @@ watch(activeTab, (newTab) => {
               <li
                 v-for="language in languages"
                 :key="language.id"
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-gray-200 bg-white px-3.5 py-3"
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3.5"
                 :class="{
                   'ring-1 ring-blue-200 border-blue-200':
                     editingLanguageId === language.id && showLanguagePanel,
                 }"
               >
                 <div class="min-w-0 flex flex-wrap items-center gap-2">
-                  <span class="text-sm font-semibold text-gray-900">
+                  <span class="text-sm font-semibold text-slate-900">
                     {{ language.language_name }}
                   </span>
                   <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
@@ -2160,14 +2147,14 @@ watch(activeTab, (newTab) => {
                 <div class="flex items-center gap-2 shrink-0">
                   <button
                     type="button"
-                    class="rounded-lg px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-50 transition"
+                    class="rounded-xl px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-50 transition duration-200"
                     @click="openLanguageForm(language)"
                   >
                     {{ $t('profile.edit') }}
                   </button>
                   <button
                     type="button"
-                    class="rounded-lg px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 transition"
+                    class="rounded-xl px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 transition duration-200"
                     @click="deleteLanguage(language)"
                   >
                     {{ $t('profile.remove') }}
@@ -2176,13 +2163,12 @@ watch(activeTab, (newTab) => {
               </li>
             </ul>
 
-            <!-- Inline add/edit panel (no modal) -->
             <div
               v-if="showLanguagePanel"
-              class="mt-3 rounded-xl border border-blue-100 bg-blue-50/50 p-4 space-y-3"
+              class="mt-3 rounded-2xl border border-blue-100 bg-slate-50 p-4 space-y-3"
             >
               <div class="flex items-center justify-between gap-2">
-                <h3 class="text-sm font-semibold text-gray-900">
+                <h3 class="text-sm font-semibold text-slate-900">
                   {{
                     editingLanguageId
                       ? $t('profile.editLanguage')
@@ -2191,7 +2177,7 @@ watch(activeTab, (newTab) => {
                 </h3>
                 <button
                   type="button"
-                  class="text-gray-400 hover:text-gray-600 text-xl leading-none px-1"
+                  class="text-slate-400 hover:text-slate-600 text-xl leading-none px-1"
                   :aria-label="$t('profile.cancel')"
                   @click="closeLanguageForm"
                 >
@@ -2200,45 +2186,45 @@ watch(activeTab, (newTab) => {
               </div>
 
               <div>
-                <label class="text-xs md:text-sm font-medium text-gray-700">
+                <label class="mb-1.5 block text-sm font-medium text-slate-700">
                   {{ $t('profile.languageName') }}
                 </label>
-                <div class="relative mt-1">
+                <div class="relative">
                   <input
                     :value="languageForm.language_name"
                     type="text"
                     autocomplete="off"
                     :placeholder="$t('profile.searchOrTypeLanguage')"
-                    class="w-full border border-gray-200 bg-white shadow-sm rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
                     @input="handleLanguageSearch"
                   />
                   <div
                     v-if="languageSuggestions.length"
-                    class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-gray-200 rounded-lg"
+                    class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-slate-200 rounded-xl"
                   >
                     <button
                       v-for="lang in languageSuggestions"
                       :key="lang.id"
                       type="button"
-                      class="w-full text-left px-3 py-2 text-sm hover:bg-blue-50"
+                      class="w-full text-left px-3 py-2.5 text-sm hover:bg-blue-50 text-slate-800"
                       @click="selectLanguageSuggestion(lang)"
                     >
                       {{ lang.name }}
                     </button>
                   </div>
-                  <p v-if="loadingLanguageOptions" class="text-xs text-gray-500 mt-1">
+                  <p v-if="loadingLanguageOptions" class="text-xs text-slate-500 mt-1">
                     {{ $t('profile.loadingLanguages') }}
                   </p>
                 </div>
               </div>
 
               <div>
-                <label class="text-xs md:text-sm font-medium text-gray-700">
+                <label class="mb-1.5 block text-sm font-medium text-slate-700">
                   {{ $t('profile.proficiencyLevel') }}
                 </label>
                 <select
                   v-model="languageForm.proficiency_level_id"
-                  class="mt-1 w-full border border-gray-200 bg-white shadow-sm rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
+                  class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
                 >
                   <option value="" disabled>
                     {{ $t('profile.selectProficiency') }}
@@ -2253,11 +2239,11 @@ watch(activeTab, (newTab) => {
                 </select>
               </div>
 
-              <label class="flex items-center gap-2 text-sm text-gray-700">
+              <label class="flex items-center gap-2 text-sm text-slate-700">
                 <input
                   v-model="languageForm.is_primary"
                   type="checkbox"
-                  class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
                 />
                 {{ $t('profile.setAsPrimaryLanguage') }}
               </label>
@@ -2265,14 +2251,14 @@ watch(activeTab, (newTab) => {
               <div class="flex flex-col-reverse sm:flex-row gap-2 pt-1">
                 <button
                   type="button"
-                  class="sm:flex-1 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 text-gray-800 px-4 py-2 text-sm font-medium min-h-10"
+                  class="sm:flex-1 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 transition duration-200 min-h-11"
                   @click="closeLanguageForm"
                 >
                   {{ $t('profile.cancel') }}
                 </button>
                 <button
                   type="button"
-                  class="sm:flex-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium disabled:opacity-50 min-h-10"
+                  class="sm:flex-1 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11 disabled:opacity-50"
                   :disabled="savingLanguage"
                   @click="saveLanguage"
                 >
@@ -2284,17 +2270,17 @@ watch(activeTab, (newTab) => {
             <button
               v-if="!showLanguagePanel"
               type="button"
-              class="mt-3 inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium min-h-10"
+              class="mt-3 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11"
               @click="openLanguageForm()"
             >
               + {{ $t('profile.addLanguageButton') }}
             </button>
-          </div>
+          </section>
 
-          <div class="flex justify-end gap-2 pt-4 border-t flex-col-reverse sm:flex-row">
+          <div class="flex justify-end gap-2 pt-4 border-t border-slate-100 flex-col-reverse sm:flex-row">
             <button
               type="submit"
-              class="rounded-lg md:rounded-xl bg-blue-600 px-4 md:px-6 py-2.5 text-xs md:text-sm font-semibold text-white hover:bg-blue-700 transition min-h-10"
+              class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition duration-200 min-h-11 disabled:opacity-50"
               :disabled="savingProfile"
             >
               {{ savingProfile ? $t('profile.saving') : $t('profile.saveChanges') }}
@@ -2919,31 +2905,32 @@ watch(activeTab, (newTab) => {
 
 
       <!-- CV PARSER TAB -->
-      <div v-else-if="activeTab === 'cvparser'" class="bg-white rounded-lg md:rounded-2xl shadow-sm p-4 md:p-6">
-        <div class="mb-6">
-          <h2 class="text-base md:text-lg font-semibold mb-1">{{ $t('profile.cvParser.title') }}</h2>
-          <p class="text-xs md:text-sm text-gray-500">{{ $t('profile.cvParser.subtitle') }}</p>
+      <div v-else-if="activeTab === 'cvparser'" class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6">
+        <div class="mb-5">
+          <h2 class="text-lg md:text-xl font-semibold text-slate-900">{{ $t('profile.cvParser.title') }}</h2>
+          <p class="text-sm text-slate-500 mt-1">{{ $t('profile.cvParser.subtitle') }}</p>
         </div>
 
         <!-- Upload Section -->
-        <div class="rounded-xl border border-dashed border-blue-300 bg-blue-50 p-4 md:p-6 mb-6">
+        <div class="rounded-2xl border border-dashed border-blue-200 bg-blue-50/60 p-4 md:p-6 mb-6">
           <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-end">
-            <div class="flex-1">
-              <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1">
+            <div class="flex-1 w-full">
+              <label class="mb-1.5 block text-sm font-medium text-slate-700">
                 {{ $t('profile.cvParser.uploadLabel') }}
               </label>
               <input
                 type="file"
                 accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 ref="cvParserFileInput"
-                class="w-full text-xs md:text-sm rounded-lg border border-gray-200 bg-white px-3 py-2 min-h-10"
+                class="w-full text-sm rounded-xl border border-slate-200 bg-white px-3 py-2.5 min-h-11 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-blue-700"
               />
-              <p class="text-[10px] md:text-xs text-gray-500 mt-1">{{ $t('profile.cvParser.acceptedFormats') }}</p>
+              <p class="text-xs text-slate-500 mt-1.5">{{ $t('profile.cvParser.acceptedFormats') }}</p>
             </div>
             <button
+              type="button"
               @click="parseCVFile"
               :disabled="cvParserLoading || cvParserRateLimited"
-              class="px-4 py-2 min-h-10 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
+              class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
             >
               {{ cvParserLoading ? $t('profile.cvParser.parsing') : $t('profile.cvParser.parseButton') }}
             </button>
@@ -2960,87 +2947,87 @@ watch(activeTab, (newTab) => {
         </div>
 
         <!-- Error -->
-        <div v-else-if="cvParserError && !cvParsedData" class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+        <div v-else-if="cvParserError && !cvParsedData" class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
           {{ cvParserError }}
         </div>
 
         <!-- Parsed Results -->
         <div v-else-if="cvParsedData" class="space-y-6">
-          <div class="flex items-center gap-2 mb-2">
-            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex items-center gap-2 mb-2 rounded-xl bg-emerald-50 border border-emerald-100 px-3 py-2.5">
+            <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <span class="text-sm font-semibold text-gray-700">{{ $t('profile.cvParser.parseSuccess') }}</span>
+            <span class="text-sm font-semibold text-emerald-800">{{ $t('profile.cvParser.parseSuccess') }}</span>
           </div>
 
           <!-- Badge helper -->
           <!-- Personal Info Section -->
-          <div class="border rounded-xl p-4">
+          <div class="rounded-2xl border border-slate-200 p-4">
             <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 class="text-sm font-semibold text-gray-800">{{ $t('profile.personalInfo') }}</h3>
+              <h3 class="text-sm font-semibold text-slate-900">{{ $t('profile.personalInfo') }}</h3>
               <button
                 @click="applyParsedPersonalInfo"
-                class="text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-200"
               >
                 {{ $t('profile.cvParser.applyToProfile') }}
               </button>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div v-if="cvParsedData.name" class="bg-gray-50 rounded-lg px-3 py-2">
+              <div v-if="cvParsedData.name" class="bg-slate-50 rounded-xl px-3 py-2">
                 <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
                   <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                   {{ $t('profile.cvParser.foundInCV') }}
                 </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.fullNameLabel') }}</p>
-                <p class="text-sm font-medium text-gray-800">{{ cvParsedData.name }}</p>
+                <p class="text-xs text-slate-500">{{ $t('profile.fullNameLabel') }}</p>
+                <p class="text-sm font-medium text-slate-800">{{ cvParsedData.name }}</p>
               </div>
-              <div v-if="cvParsedData.email" class="bg-gray-50 rounded-lg px-3 py-2">
+              <div v-if="cvParsedData.email" class="bg-slate-50 rounded-xl px-3 py-2">
                 <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
                   <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                   {{ $t('profile.cvParser.foundInCV') }}
                 </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.email') }}</p>
-                <p class="text-sm font-medium text-gray-800">{{ cvParsedData.email }}</p>
+                <p class="text-xs text-slate-500">{{ $t('profile.email') }}</p>
+                <p class="text-sm font-medium text-slate-800">{{ cvParsedData.email }}</p>
               </div>
-              <div v-if="cvParsedData.phone || cvParsedData.telephone" class="bg-gray-50 rounded-lg px-3 py-2">
+              <div v-if="cvParsedData.phone || cvParsedData.telephone" class="bg-slate-50 rounded-xl px-3 py-2">
                 <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
                   <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                   {{ $t('profile.cvParser.foundInCV') }}
                 </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.phone') }}</p>
-                <p class="text-sm font-medium text-gray-800">{{ cvParsedData.phone || cvParsedData.telephone }}</p>
+                <p class="text-xs text-slate-500">{{ $t('profile.phone') }}</p>
+                <p class="text-sm font-medium text-slate-800">{{ cvParsedData.phone || cvParsedData.telephone }}</p>
               </div>
-              <div v-if="cvParsedData.date_of_birth" class="bg-gray-50 rounded-lg px-3 py-2">
+              <div v-if="cvParsedData.date_of_birth" class="bg-slate-50 rounded-xl px-3 py-2">
                 <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
                   <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                   {{ $t('profile.cvParser.foundInCV') }}
                 </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.dateOfBirth') }}</p>
-                <p class="text-sm font-medium text-gray-800">{{ cvParsedData.date_of_birth }}</p>
+                <p class="text-xs text-slate-500">{{ $t('profile.dateOfBirth') }}</p>
+                <p class="text-sm font-medium text-slate-800">{{ cvParsedData.date_of_birth }}</p>
               </div>
-              <div v-if="cvParsedData.address" class="bg-gray-50 rounded-lg px-3 py-2 sm:col-span-2">
+              <div v-if="cvParsedData.address" class="bg-slate-50 rounded-xl px-3 py-2 sm:col-span-2">
                 <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
                   <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                   {{ $t('profile.cvParser.foundInCV') }}
                 </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.address') }}</p>
-                <p class="text-sm font-medium text-gray-800">{{ cvParsedData.address }}</p>
+                <p class="text-xs text-slate-500">{{ $t('profile.address') }}</p>
+                <p class="text-sm font-medium text-slate-800">{{ cvParsedData.address }}</p>
               </div>
-              <div v-if="cvParsedData.summary || cvParsedData.profile_summary" class="bg-gray-50 rounded-lg px-3 py-2 sm:col-span-2">
+              <div v-if="cvParsedData.summary || cvParsedData.profile_summary" class="bg-slate-50 rounded-xl px-3 py-2 sm:col-span-2">
                 <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
                   <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                   {{ $t('profile.cvParser.foundInCV') }}
                 </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.profileSummary') }}</p>
-                <p class="text-sm text-gray-800 line-clamp-4">{{ cvParsedData.summary || cvParsedData.profile_summary }}</p>
+                <p class="text-xs text-slate-500">{{ $t('profile.profileSummary') }}</p>
+                <p class="text-sm text-slate-800 line-clamp-4">{{ cvParsedData.summary || cvParsedData.profile_summary }}</p>
               </div>
             </div>
           </div>
 
           <!-- Skills Section -->
-          <div v-if="cvParsedData.skills && cvParsedData.skills.length" class="border rounded-xl p-4">
+          <div v-if="cvParsedData.skills && cvParsedData.skills.length" class="rounded-2xl border border-slate-200 p-4">
             <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 class="text-sm font-semibold text-gray-800">{{ $t('profile.skills') }}</h3>
+              <h3 class="text-sm font-semibold text-slate-900">{{ $t('profile.skills') }}</h3>
               <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded">
                 <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                 {{ $t('profile.cvParser.foundInCV') }}
@@ -3055,16 +3042,16 @@ watch(activeTab, (newTab) => {
                 {{ typeof skill === 'string' ? skill : skill.name }}
               </span>
             </div>
-            <p class="text-xs text-gray-400 mt-2">{{ $t('profile.cvParser.skillsHint') }}</p>
+            <p class="text-xs text-slate-400 mt-2">{{ $t('profile.cvParser.skillsHint') }}</p>
           </div>
 
           <!-- Work Experience Section -->
-          <div v-if="cvParsedData.work_experiences && cvParsedData.work_experiences.length" class="border rounded-xl p-4">
+          <div v-if="cvParsedData.work_experiences && cvParsedData.work_experiences.length" class="rounded-2xl border border-slate-200 p-4">
             <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 class="text-sm font-semibold text-gray-800">{{ $t('profile.workExperience') }}</h3>
+              <h3 class="text-sm font-semibold text-slate-900">{{ $t('profile.workExperience') }}</h3>
               <button
                 @click="applyAllParsedWorkExp"
-                class="text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-200"
               >
                 {{ $t('profile.cvParser.applyAll') }}
               </button>
@@ -3073,7 +3060,7 @@ watch(activeTab, (newTab) => {
               <div
                 v-for="(exp, idx) in cvParsedData.work_experiences"
                 :key="idx"
-                class="bg-gray-50 rounded-lg p-3"
+                class="bg-slate-50 rounded-xl p-3"
               >
                 <div class="flex items-start justify-between gap-2">
                   <div class="flex-1 min-w-0">
@@ -3081,32 +3068,32 @@ watch(activeTab, (newTab) => {
                       <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                       {{ $t('profile.cvParser.foundInCV') }}
                     </span>
-                    <p class="text-sm font-semibold text-gray-800">{{ exp.job_title }}</p>
-                    <p class="text-xs text-gray-600">{{ exp.company_name }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">
+                    <p class="text-sm font-semibold text-slate-900">{{ exp.job_title }}</p>
+                    <p class="text-xs text-slate-600">{{ exp.company_name }}</p>
+                    <p class="text-xs text-slate-400 mt-0.5">
                       {{ exp.start_date }} – {{ exp.is_current ? $t('profile.currentlyWorkingHere') : (exp.end_date || '-') }}
                     </p>
-                    <p v-if="exp.description" class="text-xs text-gray-600 mt-1 line-clamp-2">{{ exp.description }}</p>
+                    <p v-if="exp.description" class="text-xs text-slate-600 mt-1 line-clamp-2">{{ exp.description }}</p>
                   </div>
                   <button
                     @click="applyParsedWorkExp(exp)"
-                    class="shrink-0 text-xs px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                    class="shrink-0 text-xs px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-200"
                   >
                     {{ $t('profile.cvParser.apply') }}
                   </button>
                 </div>
               </div>
             </div>
-            <p class="text-xs text-gray-400 mt-2">{{ $t('profile.cvParser.applyHint') }}</p>
+            <p class="text-xs text-slate-400 mt-2">{{ $t('profile.cvParser.applyHint') }}</p>
           </div>
 
           <!-- Education Section -->
-          <div v-if="cvParsedData.educations && cvParsedData.educations.length" class="border rounded-xl p-4">
+          <div v-if="cvParsedData.educations && cvParsedData.educations.length" class="rounded-2xl border border-slate-200 p-4">
             <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 class="text-sm font-semibold text-gray-800">{{ $t('education') }}</h3>
+              <h3 class="text-sm font-semibold text-slate-900">{{ $t('education') }}</h3>
               <button
                 @click="applyAllParsedEducation"
-                class="text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-200"
               >
                 {{ $t('profile.cvParser.applyAll') }}
               </button>
@@ -3115,7 +3102,7 @@ watch(activeTab, (newTab) => {
               <div
                 v-for="(edu, idx) in cvParsedData.educations"
                 :key="idx"
-                class="bg-gray-50 rounded-lg p-3"
+                class="bg-slate-50 rounded-xl p-3"
               >
                 <div class="flex items-start justify-between gap-2">
                   <div class="flex-1 min-w-0">
@@ -3123,31 +3110,31 @@ watch(activeTab, (newTab) => {
                       <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                       {{ $t('profile.cvParser.foundInCV') }}
                     </span>
-                    <p class="text-sm font-semibold text-gray-800">{{ edu.degree }} <span v-if="edu.major">– {{ edu.major }}</span></p>
-                    <p class="text-xs text-gray-600">{{ edu.institution_name }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">
+                    <p class="text-sm font-semibold text-slate-900">{{ edu.degree }} <span v-if="edu.major">– {{ edu.major }}</span></p>
+                    <p class="text-xs text-slate-600">{{ edu.institution_name }}</p>
+                    <p class="text-xs text-slate-400 mt-0.5">
                       {{ edu.start_date }} – {{ edu.is_current ? $t('profile.currentlyStudyingHere') : (edu.end_date || '-') }}
                     </p>
                   </div>
                   <button
                     @click="applyParsedEducation(edu)"
-                    class="shrink-0 text-xs px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                    class="shrink-0 text-xs px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-200"
                   >
                     {{ $t('profile.cvParser.apply') }}
                   </button>
                 </div>
               </div>
             </div>
-            <p class="text-xs text-gray-400 mt-2">{{ $t('profile.cvParser.applyHint') }}</p>
+            <p class="text-xs text-slate-400 mt-2">{{ $t('profile.cvParser.applyHint') }}</p>
           </div>
 
           <!-- Certifications Section -->
-          <div v-if="cvParsedData.certifications && cvParsedData.certifications.length" class="border rounded-xl p-4">
+          <div v-if="cvParsedData.certifications && cvParsedData.certifications.length" class="rounded-2xl border border-slate-200 p-4">
             <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 class="text-sm font-semibold text-gray-800">{{ $t('profile.certifications') }}</h3>
+              <h3 class="text-sm font-semibold text-slate-900">{{ $t('profile.certifications') }}</h3>
               <button
                 @click="applyAllParsedCertifications"
-                class="text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-200"
               >
                 {{ $t('profile.cvParser.applyAll') }}
               </button>
@@ -3156,7 +3143,7 @@ watch(activeTab, (newTab) => {
               <div
                 v-for="(cert, idx) in cvParsedData.certifications"
                 :key="idx"
-                class="bg-gray-50 rounded-lg p-3"
+                class="bg-slate-50 rounded-xl p-3"
               >
                 <div class="flex items-start justify-between gap-2">
                   <div class="flex-1 min-w-0">
@@ -3164,40 +3151,47 @@ watch(activeTab, (newTab) => {
                       <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                       {{ $t('profile.cvParser.foundInCV') }}
                     </span>
-                    <p class="text-sm font-semibold text-gray-800">{{ cert.name }}</p>
-                    <p class="text-xs text-gray-600">{{ cert.issuer }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">{{ cert.issue_date }}</p>
+                    <p class="text-sm font-semibold text-slate-900">{{ cert.name }}</p>
+                    <p class="text-xs text-slate-600">{{ cert.issuer }}</p>
+                    <p class="text-xs text-slate-400 mt-0.5">{{ cert.issue_date }}</p>
                   </div>
                   <button
                     @click="applyParsedCertification(cert)"
-                    class="shrink-0 text-xs px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                    class="shrink-0 text-xs px-3 py-1.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-200"
                   >
                     {{ $t('profile.cvParser.apply') }}
                   </button>
                 </div>
               </div>
             </div>
-            <p class="text-xs text-gray-400 mt-2">{{ $t('profile.cvParser.applyHint') }}</p>
+            <p class="text-xs text-slate-400 mt-2">{{ $t('profile.cvParser.applyHint') }}</p>
           </div>
         </div>
       </div>
 
-      <div v-else-if="activeTab === 'applied'" class="space-y-4">
-        <div v-if="loadingApplied" class="text-xs md:text-sm text-gray-500">
+      <div v-else-if="activeTab === 'applied'" class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6 space-y-4">
+        <div class="mb-1">
+          <h2 class="text-lg md:text-xl font-semibold text-slate-900">{{ $t('profile.appliedJobs') }}</h2>
+          <p class="text-sm text-slate-500 mt-1">{{ $t('profile.appliedJobsHint') }}</p>
+        </div>
+        <div v-if="loadingApplied" class="text-sm text-slate-500 py-8 text-center">
           {{ $t('profile.loadingAppliedJobs') }}
         </div>
-        <div v-else-if="appliedError" class="text-xs md:text-sm text-red-600">
+        <div v-else-if="appliedError" class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
           {{ appliedError }}
         </div>
-        <div v-else-if="!appliedJobCards.length" class="text-xs md:text-sm text-gray-500">
+        <div
+          v-else-if="!appliedJobCards.length"
+          class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500"
+        >
           {{ $t('profile.noAppliedJobs') }}
         </div>
 
-        <div v-else class="space-y-3 md:space-y-4">
+        <div v-else class="space-y-3">
           <div
             v-for="item in appliedJobs"
             :key="item.id || item.application_id || item.job_id"
-            class="bg-white rounded-lg md:rounded-lg shadow hover:shadow-lg transition-shadow p-3 md:p-5 cursor-pointer"
+            class="rounded-2xl border border-slate-200 bg-white p-4 md:p-5 cursor-pointer hover:border-blue-200 hover:bg-slate-50/50 transition duration-200"
             @click="goToJobDetail(item)"
           >
             <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
@@ -3210,12 +3204,12 @@ watch(activeTab, (newTab) => {
                   "
                   @error="(e) => (e.target.src = '/company-default-image.png')"
                   :alt="item.job?.company_name || item.company_name"
-                  class="w-14 h-14 md:w-16 md:h-16 rounded shadow-sm"
+                  class="w-14 h-14 md:w-16 md:h-16 rounded-xl object-cover border border-slate-100"
                 />
               </div>
               <div class="flex-1 min-w-0">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-                  <h3 class="text-sm md:text-lg font-semibold text-gray-900 hover:text-blue-600 line-clamp-2">
+                  <h3 class="text-sm md:text-base font-semibold text-slate-900 hover:text-blue-600 line-clamp-2">
                     {{
                       item.job?.title ||
                       item.job_title ||
@@ -3224,10 +3218,10 @@ watch(activeTab, (newTab) => {
                     }}
                   </h3>
                   <span
-                    class="inline-flex items-center gap-1 px-2 py-0.5 md:py-1 bg-green-100 text-green-700 text-[10px] md:text-xs font-medium rounded-full whitespace-nowrap shrink-0"
+                    class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-md ring-1 ring-inset ring-emerald-200 whitespace-nowrap shrink-0"
                   >
                     <svg
-                      class="w-2.5 h-2.5 md:w-3 md:h-3"
+                      class="w-3 h-3"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -3242,10 +3236,10 @@ watch(activeTab, (newTab) => {
                     {{ $t('profile.applied') }}
                   </span>
                 </div>
-                <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-[11px] md:text-sm text-gray-600 mb-3">
+                <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-xs md:text-sm text-slate-600 mb-3">
                   <div class="flex items-center gap-1 min-w-0">
                     <svg
-                      class="w-3 h-3 md:w-4 md:h-4 shrink-0"
+                      class="w-4 h-4 shrink-0 text-slate-400"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -3266,7 +3260,7 @@ watch(activeTab, (newTab) => {
                   </div>
                   <div class="flex items-center gap-1 min-w-0">
                     <svg
-                      class="w-3 h-3 md:w-4 md:h-4 shrink-0"
+                      class="w-4 h-4 shrink-0 text-slate-400"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -3287,52 +3281,26 @@ watch(activeTab, (newTab) => {
                     <span class="truncate">{{ item.job?.location || item.location || "-" }}</span>
                   </div>
                 </div>
-                <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-[11px] md:text-sm mb-2">
-                  <div class="flex items-center gap-1 text-green-600 font-semibold whitespace-nowrap">
+                <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-xs md:text-sm mb-2">
+                  <div class="flex items-center gap-1 text-emerald-700 font-semibold whitespace-nowrap">
                     <span v-if="item.job?.salary_min">{{ formatNumber(item.job?.salary_min) }} {{ item.job?.currency }}</span>
                     <span v-if="item.job?.salary_min && item.job?.salary_max">-</span>
                     <span v-if="item.job?.salary_max">{{ formatNumber(item.job?.salary_max) }} {{ item.job?.currency }}</span>
                   </div>
-                  <div class="flex items-center gap-1 text-gray-500">
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                      />
-                    </svg>
+                  <div class="flex items-center gap-1 text-slate-500">
                     <span>{{ item.job?.employment_type || item.employment_type || "-" }}</span>
                   </div>
-                  <div class="flex items-center gap-1 text-gray-500">
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
+                  <div class="flex items-center gap-1 text-slate-500">
                     <span>{{ formatDate(item.applied_at || item.created_at) }}</span>
                   </div>
                 </div>
-                <p class="text-sm text-gray-600 line-clamp-2">
+                <p class="text-sm text-slate-600 line-clamp-2">
                   {{ item.job?.description || item.description || "-" }}
                 </p>
               </div>
               <div class="flex items-center">
                 <svg
-                  class="w-5 h-5 text-gray-400"
+                  class="w-5 h-5 text-slate-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -3350,22 +3318,29 @@ watch(activeTab, (newTab) => {
         </div>
       </div>
 
-      <div v-else class="space-y-4">
-        <div v-if="loadingSaved" class="text-xs md:text-sm text-gray-500">
+      <div v-else class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6 space-y-4">
+        <div class="mb-1">
+          <h2 class="text-lg md:text-xl font-semibold text-slate-900">{{ $t('profile.savedJobs') }}</h2>
+          <p class="text-sm text-slate-500 mt-1">{{ $t('profile.savedJobsHint') }}</p>
+        </div>
+        <div v-if="loadingSaved" class="text-sm text-slate-500 py-8 text-center">
           {{ $t('profile.loadingSavedJobs') }}
         </div>
-        <div v-else-if="savedError" class="text-xs md:text-sm text-red-600">
+        <div v-else-if="savedError" class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
           {{ savedError }}
         </div>
-        <div v-else-if="!savedJobCards.length" class="text-xs md:text-sm text-gray-500">
+        <div
+          v-else-if="!savedJobCards.length"
+          class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500"
+        >
           {{ $t('profile.noSavedJobs') }}
         </div>
 
-        <div v-else class="space-y-3 md:space-y-4">
+        <div v-else class="space-y-3">
           <div
             v-for="job in savedJobCards"
             :key="job.job_post_id"
-            class="bg-white rounded-lg md:rounded-lg shadow hover:shadow-lg transition-shadow p-3 md:p-5 cursor-pointer group"
+            class="rounded-2xl border border-slate-200 bg-white p-4 md:p-5 cursor-pointer group hover:border-blue-200 hover:bg-slate-50/50 transition duration-200"
             @click="goToJobDetail(job)"
           >
             <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
@@ -3378,19 +3353,19 @@ watch(activeTab, (newTab) => {
                   "
                   @error="(e) => (e.target.src = '/company-default-image.png')"
                   :alt="job.company_name"
-                  class="w-14 h-14 md:w-16 md:h-16 rounded shadow-sm"
+                  class="w-14 h-14 md:w-16 md:h-16 rounded-xl object-cover border border-slate-100"
                 />
               </div>
               <div class="flex-1 min-w-0">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-                  <h3 class="text-sm md:text-lg font-semibold text-gray-900 hover:text-blue-600 line-clamp-2">
+                  <h3 class="text-sm md:text-base font-semibold text-slate-900 hover:text-blue-600 line-clamp-2">
                     {{ job.title || $t('profile.untitledJob') }}
                   </h3>
                   <span
-                    class="inline-flex items-center gap-1 px-2 py-0.5 md:py-1 bg-amber-100 text-amber-700 text-[10px] md:text-xs font-medium rounded-full whitespace-nowrap shrink-0"
+                    class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 text-amber-800 text-xs font-medium rounded-md ring-1 ring-inset ring-amber-200 whitespace-nowrap shrink-0"
                   >
                     <svg
-                      class="w-2.5 h-2.5 md:w-3 md:h-3"
+                      class="w-3 h-3"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
@@ -3398,13 +3373,13 @@ watch(activeTab, (newTab) => {
                         d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
                       />
                     </svg>
-                    Saved
+                    {{ $t('profile.saved') }}
                   </span>
                 </div>
-                <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-[11px] md:text-sm text-gray-600 mb-2">
+                <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-xs md:text-sm text-slate-600 mb-2">
                   <div class="flex items-center gap-1 min-w-0">
                     <svg
-                      class="w-3 h-3 md:w-4 md:h-4 shrink-0"
+                      class="w-4 h-4 shrink-0 text-slate-400"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -3420,7 +3395,7 @@ watch(activeTab, (newTab) => {
                   </div>
                   <div class="flex items-center gap-1 min-w-0">
                     <svg
-                      class="w-3 h-3 md:w-4 md:h-4 shrink-0"
+                      class="w-4 h-4 shrink-0 text-slate-400"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -3442,37 +3417,25 @@ watch(activeTab, (newTab) => {
                   </div>
                 </div>
                 <div class="flex items-center gap-4 text-sm mb-3">
-                  <div class="flex items-center gap-1 text-green-600 font-semibold">
+                  <div class="flex items-center gap-1 text-emerald-700 font-semibold">
                     <span v-if="job.salary_min">{{ formatNumber(job.salary_min) }} {{ job.currency }}</span>
                     <span v-if="job.salary_min && job.salary_max">-</span>
                     <span v-if="job.salary_max">{{ formatNumber(job.salary_max) }} {{ job.currency }}</span>
                   </div>
-                  <div class="flex items-center gap-1 text-gray-500">
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                      />
-                    </svg>
+                  <div class="flex items-center gap-1 text-slate-500">
                     <span>{{ job.employment_type || "-" }}</span>
                   </div>
                 </div>
-                <p class="text-sm text-gray-600 line-clamp-2">
+                <p class="text-sm text-slate-600 line-clamp-2">
                   {{ stripHtml(job.description) || "-" }}
                 </p>
               </div>
               <div class="flex items-center">
                 <button
+                  type="button"
                   @click.stop="handleRemoveSaved(job)"
-                  class="text-red-600 hover:text-red-800 opacity-0 group-hover:opacity-100 transition-opacity"
-                  title="{{ $t('profile.removeFromSaved') }}"
+                  class="rounded-xl p-2 text-red-600 hover:bg-red-50 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition duration-200"
+                  :title="$t('profile.removeFromSaved')"
                 >
                   <svg
                     class="w-5 h-5"

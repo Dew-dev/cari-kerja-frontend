@@ -66,13 +66,13 @@ async function onToggle(event) {
 </script>
 
 <template>
-  <div class="bg-white rounded-lg shadow-md border border-gray-200 p-5 space-y-3">
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6 space-y-3">
     <div>
-      <h3 class="text-base font-semibold text-gray-900">{{ t("jobAlerts.title") }}</h3>
-      <p class="text-sm text-gray-600 mt-1">{{ t("jobAlerts.subtitle") }}</p>
+      <h3 class="text-base font-semibold text-slate-900">{{ t("jobAlerts.title") }}</h3>
+      <p class="text-sm text-slate-500 mt-1">{{ t("jobAlerts.subtitle") }}</p>
     </div>
 
-    <div v-if="loading" class="text-sm text-gray-500">
+    <div v-if="loading" class="text-sm text-slate-500">
       {{ t("loading") }}...
     </div>
 
@@ -83,16 +83,16 @@ async function onToggle(event) {
       >
         <input
           type="checkbox"
-          class="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
+          class="mt-1 rounded border-slate-300 text-blue-600 focus:ring-blue-600 disabled:opacity-50"
           :checked="enabled"
           :disabled="toggleDisabled"
           @change="onToggle"
         />
         <span>
-          <span class="block text-sm font-medium text-gray-800">
+          <span class="block text-sm font-medium text-slate-800">
             {{ t("jobAlerts.enableLabel") }}
           </span>
-          <span class="block text-xs text-gray-500 mt-0.5">
+          <span class="block text-xs text-slate-500 mt-0.5">
             {{ t("jobAlerts.enableHint") }}
           </span>
         </span>
