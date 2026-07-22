@@ -9,8 +9,24 @@ import api from "./api";
  */
 
 // ── Candidates ───────────────────────────────────────────────────────────
+/**
+ * @param {object} params
+ * @param {string} [params.job_post_id]
+ * @param {string} [params.search]
+ * @param {string} [params.stage_type]
+ * @param {number} [params.page]
+ * @param {number} [params.limit]
+ * @param {'match_score'|'updated_at'|'applied_at'} [params.sort]
+ * @param {'asc'|'desc'} [params.order]
+ * @param {number} [params.min_match_score]
+ */
 export function getPipelineCandidates(params = {}) {
   return api.get("/recruiter/pipeline/candidates", { params });
+}
+
+/** Optional detail endpoint for a single application's AI match payload. */
+export function getApplicationMatch(applicationId) {
+  return api.get(`/job-applications/${applicationId}/match`);
 }
 
 /**

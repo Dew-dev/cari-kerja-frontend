@@ -30,6 +30,17 @@ function buildFallbackStages() {
   }));
 }
 
+function mapMatchFields(raw = {}) {
+  const score = raw.match_score ?? null;
+  return {
+    match_score: score,
+    match_status: raw.match_status || (score == null ? "pending" : "ready"),
+    match_computed_at: raw.match_computed_at || null,
+    match_breakdown: raw.match_breakdown || null,
+    match_reasons: Array.isArray(raw.match_reasons) ? raw.match_reasons : [],
+  };
+}
+
 function mapApplicantToCandidate(applicant, jobPostId, stages) {
   const stageType = resolveStageTypeFromStatusName(applicant.status);
   const stage =
@@ -59,6 +70,7 @@ function mapApplicantToCandidate(applicant, jobPostId, stages) {
     updated_at: applicant.applied_at,
     resume_url: applicant.resume_url,
     cover_letter: applicant.cover_letter,
+    ...mapMatchFields(applicant),
   };
 }
 
@@ -80,7 +92,33 @@ function normalizePipelineCandidate(raw) {
     job_post_id: raw.job_post_id || raw.job_post?.id || null,
     name: raw.name || raw.worker?.name || raw.applicant_name,
     avatar_url: raw.avatar_url || raw.worker?.avatar_url || null,
+    ...mapMatchFields(raw),
   };
+}
+
+function compareCandidates(a, b, sortBy, sortOrder) {
+  const dir = sortOrder === "asc" ? 1 : -1;
+  let delta = 0;
+
+  if (sortBy === "match_score") {
+    const sa = a.match_score == null ? -1 : Number(a.match_score);
+    const sb = b.match_score == null ? -1 : Number(b.match_score);
+    delta = sa - sb;
+  } else if (sortBy === "applied_at") {
+    delta = new Date(a.applied_at || 0).getTime() - new Date(b.applied_at || 0).getTime();
+  } else {
+    // updated_at (default secondary)
+    delta = new Date(a.updated_at || a.applied_at || 0).getTime() - new Date(b.updated_at || b.applied_at || 0).getTime();
+  }
+
+  if (delta === 0) {
+    // Stable tie-breaker: higher match first, then name
+    const sa = a.match_score == null ? -1 : Number(a.match_score);
+    const sb = b.match_score == null ? -1 : Number(b.match_score);
+    if (sa !== sb) return sb - sa;
+    return String(a.name || "").localeCompare(String(b.name || ""));
+  }
+  return delta * dir;
 }
 
 function sortStages(stages) {
@@ -101,6 +139,9 @@ export const usePipelineStore = defineStore("pipeline", () => {
   const selectedJobPostIds = ref([]); // empty => global (all jobs)
   const search = ref("");
   const stageTypeFilter = ref(null);
+  const sortBy = ref("match_score");
+  const sortOrder = ref("desc");
+  const minMatchScore = ref(null);
 
   const candidates = ref([]);
   const loadingCandidates = ref(false);
@@ -166,9 +207,29 @@ export const usePipelineStore = defineStore("pipeline", () => {
   );
 
   const filteredCandidates = computed(() => {
+    let list = candidates.value;
+
     const query = search.value.trim().toLowerCase();
-    if (!query) return candidates.value;
-    return candidates.value.filter((c) => (c.name || "").toLowerCase().includes(query));
+    if (query) {
+      list = list.filter(
+        (c) =>
+          (c.name || "").toLowerCase().includes(query) ||
+          (c.email || "").toLowerCase().includes(query),
+      );
+    }
+
+    if (minMatchScore.value != null && minMatchScore.value !== "") {
+      const min = Number(minMatchScore.value);
+      if (!Number.isNaN(min)) {
+        list = list.filter(
+          (c) => c.match_score != null && Number(c.match_score) >= min,
+        );
+      }
+    }
+
+    // Always apply client sort so column order stays stable for fallback
+    // applicants path and when the API ignores sort params.
+    return [...list].sort((a, b) => compareCandidates(a, b, sortBy.value, sortOrder.value));
   });
 
   const candidatesByColumn = computed(() => {
@@ -330,6 +391,11 @@ export const usePipelineStore = defineStore("pipeline", () => {
     if (selectedJobPostIds.value.length) params.job_post_id = selectedJobPostIds.value.join(",");
     if (search.value.trim()) params.search = search.value.trim();
     if (stageTypeFilter.value) params.stage_type = stageTypeFilter.value;
+    if (sortBy.value) params.sort = sortBy.value;
+    if (sortOrder.value) params.order = sortOrder.value;
+    if (minMatchScore.value != null && minMatchScore.value !== "") {
+      params.min_match_score = Number(minMatchScore.value);
+    }
     return params;
   }
 
@@ -526,6 +592,23 @@ export const usePipelineStore = defineStore("pipeline", () => {
     stageTypeFilter.value = value;
   }
 
+  function setSortBy(value) {
+    sortBy.value = value || "match_score";
+  }
+
+  function setSortOrder(value) {
+    sortOrder.value = value === "asc" ? "asc" : "desc";
+  }
+
+  function setMinMatchScore(value) {
+    if (value === "" || value === null || value === undefined) {
+      minMatchScore.value = null;
+      return;
+    }
+    const n = Number(value);
+    minMatchScore.value = Number.isNaN(n) ? null : Math.min(100, Math.max(0, n));
+  }
+
   return {
     // State
     jobPosts,
@@ -533,6 +616,9 @@ export const usePipelineStore = defineStore("pipeline", () => {
     selectedJobPostIds,
     search,
     stageTypeFilter,
+    sortBy,
+    sortOrder,
+    minMatchScore,
     candidates,
     loadingCandidates,
     candidatesError,
@@ -571,6 +657,9 @@ export const usePipelineStore = defineStore("pipeline", () => {
     setSelectedJobPostIds,
     setSearch,
     setStageTypeFilter,
+    setSortBy,
+    setSortOrder,
+    setMinMatchScore,
     isCandidateSelected,
     toggleCandidateSelection,
     selectCandidatesInColumn,
