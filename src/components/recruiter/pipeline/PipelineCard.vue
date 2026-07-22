@@ -42,6 +42,20 @@ const appliedAgo = computed(() => {
 const matchBadge = computed(() => {
   const status = props.candidate.match_status;
   const score = props.candidate.match_score;
+  const hasNumericScore = score !== null && score !== undefined && score !== "";
+
+  // Include 0% for ready/pending — do not treat 0 as missing.
+  if ((status === "ready" || status === "pending") && hasNumericScore) {
+    const rounded = Math.round(Number(score));
+    if (!Number.isNaN(rounded)) {
+      return {
+        show: true,
+        label: t("pipeline.match.score", { score: rounded }),
+        className: getMatchScoreTone(rounded).badge,
+        aria: t("pipeline.match.scoreAria", { score: rounded }),
+      };
+    }
+  }
 
   if (status === "pending") {
     return {
@@ -65,15 +79,6 @@ const matchBadge = computed(() => {
       label: t("pipeline.match.failed"),
       className: "bg-rose-50 text-rose-600 border-rose-100",
       aria: t("pipeline.match.failed"),
-    };
-  }
-  if (status === "ready" && score != null) {
-    const rounded = Math.round(Number(score));
-    return {
-      show: true,
-      label: t("pipeline.match.score", { score: rounded }),
-      className: getMatchScoreTone(rounded).badge,
-      aria: t("pipeline.match.scoreAria", { score: rounded }),
     };
   }
   return { show: false };
