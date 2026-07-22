@@ -64,6 +64,59 @@ const educations = ref([]);
 const certifications = ref([]);
 const skills = ref([]);
 
+// Resume upload (controlled)
+const resumeFile = ref(null);
+const resumeTitle = ref("");
+const resumeAsDefault = ref(false);
+const uploadingResume = ref(false);
+
+// Work / Education / Certification inline panels
+const showWorkPanel = ref(false);
+const editingWorkKey = ref(null);
+const savingWork = ref(false);
+const workForm = reactive({
+  company_name: "",
+  job_title: "",
+  start_date: "",
+  end_date: "",
+  is_current: false,
+  description: "",
+});
+
+const showEducationPanel = ref(false);
+const editingEducationKey = ref(null);
+const savingEducation = ref(false);
+const educationForm = reactive({
+  institution_name: "",
+  degree: "",
+  major: "",
+  start_date: "",
+  end_date: "",
+  is_current: false,
+  description: "",
+});
+
+const showCertificationPanel = ref(false);
+const editingCertificationKey = ref(null);
+const savingCertification = ref(false);
+const certificationForm = reactive({
+  name: "",
+  issuer: "",
+  issue_date: "",
+  expiry_date: "",
+  credential_id: "",
+  link: "",
+  is_active: true,
+});
+
+function createLocalKey() {
+  return `local-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function profileItemKey(item) {
+  return item?.id ?? item?._localKey;
+}
+
 const genders = ref([
   { id: "1", name: "Male" },
   { id: "2", name: "Female" },
@@ -319,25 +372,26 @@ async function saveAccountEmail() {
 async function addResume(file, title, isDefault) {
   try {
     if (!/application\/pdf/i.test(file.type)) {
-        push.error(t('profile.onlyPDFAllowed'));
+      push.error(t("profile.onlyPDFAllowed"));
       return;
     }
 
     if (file.size > CV_MAX_MB * 1024 * 1024) {
-        push.error(t('profile.maxSizeMB', { size: CV_MAX_MB }));
+      push.error(t("profile.maxSizeMB", { size: CV_MAX_MB }));
       return;
     }
 
     if (!title.trim()) {
-        push.error(t('profile.titleRequired'));
+      push.error(t("profile.titleRequired"));
       return;
     }
 
     if (resumes.value.length >= RESUME_LIMIT) {
-        push.error(t('profile.maxResumes', { limit: RESUME_LIMIT }));
+      push.error(t("profile.maxResumes", { limit: RESUME_LIMIT }));
       return;
     }
 
+    uploadingResume.value = true;
     const formData = new FormData();
     formData.append("resume", file);
     formData.append("title", title.trim());
@@ -360,13 +414,19 @@ async function addResume(file, title, isDefault) {
       }));
     }
 
-       push.success(t('profile.resumeAddedSuccessfully'));
+    push.success(t("profile.resumeAddedSuccessfully"));
+    resumeFile.value = null;
+    resumeTitle.value = "";
+    resumeAsDefault.value = false;
+    if (resumeFileInput.value) resumeFileInput.value.value = "";
   } catch (err) {
     if (isContentRejectedError(err)) {
       push.warning(t("contentRejected.upload"));
       return;
     }
-       push.error(t('profile.failedToUploadResume'));
+    push.error(t("profile.failedToUploadResume"));
+  } finally {
+    uploadingResume.value = false;
   }
 }
 
@@ -382,9 +442,9 @@ async function removeResume(id) {
       await setPrimaryResume(resumes.value[0].id);
     }
 
-       push.success(t('profile.resumeRemoved'));
+    push.success(t("profile.resumeRemoved"));
   } catch (err) {
-       push.error(t('profile.failedToDeleteResume'));
+    push.error(t("profile.failedToDeleteResume"));
   }
 }
 
@@ -410,203 +470,422 @@ async function setPrimaryResume(id) {
       is_default: r.id === id,
     }));
 
-       push.success(t('profile.resumeSetAsPrimary'));
+    push.success(t("profile.resumeSetAsPrimary"));
   } catch (err) {
-       push.error(t('profile.failedToSetPrimaryResume'));
+    push.error(t("profile.failedToSetPrimaryResume"));
   }
 }
 
-// Work Experience
-async function addWorkExp() {
+function onResumeFileChange(e) {
+  resumeFile.value = e.target.files?.[0] || null;
+}
+
+function handleAddResume() {
+  if (!resumeFile.value) {
+    push.error(t("notifications.pleaseSelectFile"));
+    return;
+  }
+  addResume(resumeFile.value, resumeTitle.value, resumeAsDefault.value);
+}
+
+function authHeaders() {
+  return { Authorization: `Bearer ${localStorage.getItem("token")}` };
+}
+
+function formatProfileDateRange(start, end, isCurrent) {
+  const startLabel = start ? formatDate(start) : "";
+  if (isCurrent) {
+    return startLabel
+      ? `${startLabel} – ${t("workerProfile.present")}`
+      : t("workerProfile.present");
+  }
+  const endLabel = end ? formatDate(end) : "";
+  if (startLabel && endLabel) return `${startLabel} – ${endLabel}`;
+  return startLabel || endLabel || "";
+}
+
+// Work Experience — list + inline panel (no placeholder POST on Add)
+function resetWorkForm() {
+  editingWorkKey.value = null;
+  workForm.company_name = "";
+  workForm.job_title = "";
+  workForm.start_date = "";
+  workForm.end_date = "";
+  workForm.is_current = false;
+  workForm.description = "";
+}
+
+function openWorkForm(item = null) {
+  if (item) {
+    editingWorkKey.value = profileItemKey(item);
+    workForm.company_name = item.company_name || "";
+    workForm.job_title = item.job_title || "";
+    workForm.start_date = formatDateForInput(item.start_date);
+    workForm.end_date = item.is_current ? "" : formatDateForInput(item.end_date);
+    workForm.is_current = Boolean(item.is_current);
+    workForm.description = item.description || "";
+  } else {
+    resetWorkForm();
+  }
+  showWorkPanel.value = true;
+}
+
+function closeWorkForm() {
+  showWorkPanel.value = false;
+  resetWorkForm();
+}
+
+async function saveWorkExp() {
+  if (!workForm.company_name.trim() || !workForm.job_title.trim()) {
+    push.warning(t("profile.workFormIncomplete"));
+    return;
+  }
+
+  const payload = {
+    company_name: workForm.company_name.trim(),
+    job_title: workForm.job_title.trim(),
+    start_date: workForm.start_date || null,
+    end_date: workForm.is_current ? null : workForm.end_date || null,
+    is_current: Boolean(workForm.is_current),
+    description: workForm.description || null,
+  };
+
   try {
-    const res = await api.post(
-      "/workers/work-exp",
-      {
-        company_name: "Company Name",
-        job_title: "Job Title",
-        start_date: new Date().toISOString().split("T")[0],
-        end_date: null,
-        is_current: false,
-        description: null,
-      },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      },
+    savingWork.value = true;
+    const existing = workExperiences.value.find(
+      (w) => profileItemKey(w) === editingWorkKey.value,
     );
 
-    workExperiences.value.unshift(res.data.data);
-  } catch (err) {
-     push.error(t('profile.failedToAddWorkExperience'));
-  }
-}
-
-async function saveWorkExp(item) {
-  try {
-    if (item.is_current) item.end_date = null;
-    if (!item.id) {
-      const res = await api.post("/workers/work-exp", item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    if (existing?.id) {
+      await api.put(`/workers/work-exp/${existing.id}`, payload, {
+        headers: authHeaders(),
       });
-      item.id = res.data.data.id;
-      delete item._pending;
+      Object.assign(existing, payload);
+      push.success(t("profile.workExperienceAdded"));
+    } else if (existing?._pending || existing?._localKey) {
+      const res = await api.post("/workers/work-exp", payload, {
+        headers: authHeaders(),
+      });
+      const saved = res.data?.data || {};
+      const idx = workExperiences.value.findIndex(
+        (w) => profileItemKey(w) === editingWorkKey.value,
+      );
+      if (idx !== -1) {
+        workExperiences.value[idx] = {
+          ...payload,
+          id: saved.id,
+          start_date: formatDateForInput(saved.start_date || payload.start_date),
+          end_date: payload.is_current
+            ? null
+            : formatDateForInput(saved.end_date || payload.end_date),
+        };
+      }
+      push.success(t("profile.workExperienceAdded"));
     } else {
-      await api.put(`/workers/work-exp/${item.id}`, item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      const res = await api.post("/workers/work-exp", payload, {
+        headers: authHeaders(),
       });
+      const saved = res.data?.data || {};
+      workExperiences.value.unshift({
+        ...payload,
+        id: saved.id,
+        start_date: formatDateForInput(saved.start_date || payload.start_date),
+        end_date: payload.is_current
+          ? null
+          : formatDateForInput(saved.end_date || payload.end_date),
+      });
+      push.success(t("profile.workExperienceAdded"));
     }
-     push.success(t('profile.workExperienceAdded'));
+    closeWorkForm();
   } catch (err) {
-     push.error(t('profile.failedToUpdateWorkExperience'));
+    push.error(
+      err?.response?.data?.message || t("profile.failedToUpdateWorkExperience"),
+    );
+  } finally {
+    savingWork.value = false;
   }
 }
 
-async function deleteWorkExp(id) {
-  if (!id) {
-    workExperiences.value = workExperiences.value.filter((w) => w.id !== id && !(w._pending && !w.id));
+async function deleteWorkExp(item) {
+  const key = profileItemKey(item);
+  if (!item?.id) {
+    workExperiences.value = workExperiences.value.filter(
+      (w) => profileItemKey(w) !== key,
+    );
+    if (editingWorkKey.value === key) closeWorkForm();
     return;
   }
   try {
-    await api.delete(`/workers/work-exp/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    await api.delete(`/workers/work-exp/${item.id}`, {
+      headers: authHeaders(),
     });
-
-    workExperiences.value = workExperiences.value.filter((w) => w.id !== id);
-     push.success(t('profile.workExperienceRemoved'));
+    workExperiences.value = workExperiences.value.filter((w) => w.id !== item.id);
+    if (editingWorkKey.value === key) closeWorkForm();
+    push.success(t("profile.workExperienceRemoved"));
   } catch (err) {
-     push.error(t('profile.failedToDeleteWorkExperience'));
+    push.error(t("profile.failedToDeleteWorkExperience"));
   }
 }
 
 // Education
-async function addEducation() {
+function resetEducationForm() {
+  editingEducationKey.value = null;
+  educationForm.institution_name = "";
+  educationForm.degree = "";
+  educationForm.major = "";
+  educationForm.start_date = "";
+  educationForm.end_date = "";
+  educationForm.is_current = false;
+  educationForm.description = "";
+}
+
+function openEducationForm(item = null) {
+  if (item) {
+    editingEducationKey.value = profileItemKey(item);
+    educationForm.institution_name = item.institution_name || "";
+    educationForm.degree = item.degree || "";
+    educationForm.major = item.major || "";
+    educationForm.start_date = formatDateForInput(item.start_date);
+    educationForm.end_date = item.is_current
+      ? ""
+      : formatDateForInput(item.end_date);
+    educationForm.is_current = Boolean(item.is_current);
+    educationForm.description = item.description || "";
+  } else {
+    resetEducationForm();
+  }
+  showEducationPanel.value = true;
+}
+
+function closeEducationForm() {
+  showEducationPanel.value = false;
+  resetEducationForm();
+}
+
+async function saveEducation() {
+  if (!educationForm.institution_name.trim() || !educationForm.degree.trim()) {
+    push.warning(t("profile.educationFormIncomplete"));
+    return;
+  }
+
+  const payload = {
+    institution_name: educationForm.institution_name.trim(),
+    degree: educationForm.degree.trim(),
+    major: educationForm.major.trim(),
+    start_date: educationForm.start_date || null,
+    end_date: educationForm.is_current ? null : educationForm.end_date || null,
+    is_current: Boolean(educationForm.is_current),
+    description: educationForm.description || "",
+  };
+
   try {
-    const res = await api.post(
-      "/workers/educations",
-      {
-        institution_name: "Institution",
-        degree: "Degree",
-        major: "Major",
-        start_date: new Date().toISOString().split("T")[0],
-        end_date: null,
-        is_current: false,
-        description: "",
-      },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      },
+    savingEducation.value = true;
+    const existing = educations.value.find(
+      (e) => profileItemKey(e) === editingEducationKey.value,
     );
 
-    educations.value.unshift(res.data.data);
-  } catch (err) {
-     push.error(t('profile.failedToAddEducation'));
-  }
-}
-
-async function saveEducation(item) {
-  try {
-    if (item.is_current) item.end_date = null;
-    if (!item.id) {
-      const res = await api.post("/workers/educations", item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    if (existing?.id) {
+      await api.put(`/workers/educations/${existing.id}`, payload, {
+        headers: authHeaders(),
       });
-      item.id = res.data.data.id;
-      delete item._pending;
+      Object.assign(existing, payload);
+      push.success(t("profile.educationAdded"));
+    } else if (existing?._pending || existing?._localKey) {
+      const res = await api.post("/workers/educations", payload, {
+        headers: authHeaders(),
+      });
+      const saved = res.data?.data || {};
+      const idx = educations.value.findIndex(
+        (e) => profileItemKey(e) === editingEducationKey.value,
+      );
+      if (idx !== -1) {
+        educations.value[idx] = {
+          ...payload,
+          id: saved.id,
+          start_date: formatDateForInput(saved.start_date || payload.start_date),
+          end_date: payload.is_current
+            ? null
+            : formatDateForInput(saved.end_date || payload.end_date),
+        };
+      }
+      push.success(t("profile.educationAdded"));
     } else {
-      await api.put(`/workers/educations/${item.id}`, item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      const res = await api.post("/workers/educations", payload, {
+        headers: authHeaders(),
       });
+      const saved = res.data?.data || {};
+      educations.value.unshift({
+        ...payload,
+        id: saved.id,
+        start_date: formatDateForInput(saved.start_date || payload.start_date),
+        end_date: payload.is_current
+          ? null
+          : formatDateForInput(saved.end_date || payload.end_date),
+      });
+      push.success(t("profile.educationAdded"));
     }
-     push.success(t('profile.educationAdded'));
+    closeEducationForm();
   } catch (err) {
-     push.error(t('profile.failedToUpdateEducation'));
+    push.error(
+      err?.response?.data?.message || t("profile.failedToUpdateEducation"),
+    );
+  } finally {
+    savingEducation.value = false;
   }
 }
 
-async function deleteEducation(id) {
-  if (!id) {
-    educations.value = educations.value.filter((e) => e.id !== id && !(e._pending && !e.id));
+async function deleteEducation(item) {
+  const key = profileItemKey(item);
+  if (!item?.id) {
+    educations.value = educations.value.filter(
+      (e) => profileItemKey(e) !== key,
+    );
+    if (editingEducationKey.value === key) closeEducationForm();
     return;
   }
   try {
-    await api.delete(`/workers/educations/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    await api.delete(`/workers/educations/${item.id}`, {
+      headers: authHeaders(),
     });
-
-    educations.value = educations.value.filter((e) => e.id !== id);
-     push.success(t('profile.educationRemoved'));
+    educations.value = educations.value.filter((e) => e.id !== item.id);
+    if (editingEducationKey.value === key) closeEducationForm();
+    push.success(t("profile.educationRemoved"));
   } catch (err) {
-     push.error(t('profile.failedToDeleteEducation'));
+    push.error(t("profile.failedToDeleteEducation"));
   }
 }
 
 // Certifications
-async function addCertification() {
+function resetCertificationForm() {
+  editingCertificationKey.value = null;
+  certificationForm.name = "";
+  certificationForm.issuer = "";
+  certificationForm.issue_date = "";
+  certificationForm.expiry_date = "";
+  certificationForm.credential_id = "";
+  certificationForm.link = "";
+  certificationForm.is_active = true;
+}
+
+function openCertificationForm(item = null) {
+  if (item) {
+    editingCertificationKey.value = profileItemKey(item);
+    certificationForm.name = item.name || "";
+    certificationForm.issuer = item.issuer || "";
+    certificationForm.issue_date = formatDateForInput(item.issue_date);
+    certificationForm.expiry_date = item.is_active === false
+      ? ""
+      : formatDateForInput(item.expiry_date);
+    certificationForm.credential_id = item.credential_id || "";
+    certificationForm.link = item.link || "";
+    certificationForm.is_active = item.is_active !== false;
+  } else {
+    resetCertificationForm();
+  }
+  showCertificationPanel.value = true;
+}
+
+function closeCertificationForm() {
+  showCertificationPanel.value = false;
+  resetCertificationForm();
+}
+
+async function saveCertification() {
+  if (!certificationForm.name.trim() || !certificationForm.issuer.trim()) {
+    push.warning(t("profile.certificationFormIncomplete"));
+    return;
+  }
+
+  const payload = {
+    name: certificationForm.name.trim(),
+    issuer: certificationForm.issuer.trim(),
+    issue_date: certificationForm.issue_date || null,
+    expiry_date: certificationForm.is_active
+      ? certificationForm.expiry_date || null
+      : null,
+    credential_id: certificationForm.credential_id || "",
+    link: certificationForm.link || "",
+    is_active: Boolean(certificationForm.is_active),
+  };
+
   try {
-    const res = await api.post(
-      "/workers/cert",
-      {
-        name: "Certification Name",
-        issuer: "Issuing Organization",
-        issue_date: new Date().toISOString().split("T")[0],
-        expiry_date: null,
-        credential_id: "",
-        link: "example.com",
-        is_active: true,
-      },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      },
+    savingCertification.value = true;
+    const existing = certifications.value.find(
+      (c) => profileItemKey(c) === editingCertificationKey.value,
     );
 
-    const newCert = res.data.data;
-    certifications.value.unshift({
-      ...newCert,
-      issue_date: formatDateForInput(newCert.issue_date),
-      expiry_date: formatDateForInput(newCert.expiry_date),
-    //   isSaved: true,
-    });
-  } catch (err) {
-     push.error(t('profile.failedToAddCertification'));
-  }
-}
-
-async function saveCertification(item) {
-  try {
-    item.isSaved = true;
-    if (item.is_active === false) item.expiry_date = null;
-    if (!item.id) {
-      const res = await api.post("/workers/cert", item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    if (existing?.id) {
+      await api.put(`/workers/cert/${existing.id}`, payload, {
+        headers: authHeaders(),
       });
-      item.id = res.data.data.id;
-      delete item._pending;
+      Object.assign(existing, {
+        ...payload,
+        issue_date: formatDateForInput(payload.issue_date),
+        expiry_date: formatDateForInput(payload.expiry_date),
+      });
+      push.success(t("profile.certificationAdded"));
+    } else if (existing?._pending || existing?._localKey) {
+      const res = await api.post("/workers/cert", payload, {
+        headers: authHeaders(),
+      });
+      const saved = res.data?.data || {};
+      const idx = certifications.value.findIndex(
+        (c) => profileItemKey(c) === editingCertificationKey.value,
+      );
+      if (idx !== -1) {
+        certifications.value[idx] = {
+          ...payload,
+          id: saved.id,
+          issue_date: formatDateForInput(saved.issue_date || payload.issue_date),
+          expiry_date: formatDateForInput(
+            saved.expiry_date || payload.expiry_date,
+          ),
+        };
+      }
+      push.success(t("profile.certificationAdded"));
     } else {
-      await api.put(`/workers/cert/${item.id}`, item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      const res = await api.post("/workers/cert", payload, {
+        headers: authHeaders(),
       });
+      const saved = res.data?.data || {};
+      certifications.value.unshift({
+        ...payload,
+        id: saved.id,
+        issue_date: formatDateForInput(saved.issue_date || payload.issue_date),
+        expiry_date: formatDateForInput(
+          saved.expiry_date || payload.expiry_date,
+        ),
+      });
+      push.success(t("profile.certificationAdded"));
     }
-    push.success(t('profile.certificationAdded'));
+    closeCertificationForm();
   } catch (err) {
-    push.error(t('profile.failedToUpdateCertification'));
+    push.error(
+      err?.response?.data?.message || t("profile.failedToUpdateCertification"),
+    );
   } finally {
-    item.isSaved = false;
+    savingCertification.value = false;
   }
 }
 
-async function deleteCertification(id) {
-  if (!id) {
-    certifications.value = certifications.value.filter((c) => c.id !== id && !(c._pending && !c.id));
+async function deleteCertification(item) {
+  const key = profileItemKey(item);
+  if (!item?.id) {
+    certifications.value = certifications.value.filter(
+      (c) => profileItemKey(c) !== key,
+    );
+    if (editingCertificationKey.value === key) closeCertificationForm();
     return;
   }
   try {
-    await api.delete(`/workers/cert/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    await api.delete(`/workers/cert/${item.id}`, {
+      headers: authHeaders(),
     });
-
-    certifications.value = certifications.value.filter((c) => c.id !== id);
-     push.success(t('profile.certificationRemoved'));
+    certifications.value = certifications.value.filter((c) => c.id !== item.id);
+    if (editingCertificationKey.value === key) closeCertificationForm();
+    push.success(t("profile.certificationRemoved"));
   } catch (err) {
-     push.error(t('profile.failedToDeleteCertification'));
+    push.error(t("profile.failedToDeleteCertification"));
   }
 }
 
@@ -977,26 +1256,6 @@ async function handleRemoveSaved(job) {
 }
 
 const resumeFileInput = ref(null);
-const resumeTitleInput = ref(null);
-const resumeDefaultInput = ref(null);
-
-function handleAddResume() {
-  const file = resumeFileInput.value?.files?.[0];
-  const title = resumeTitleInput.value?.value || "";
-  const isDefault = resumeDefaultInput.value?.checked || false;
-
-  if (!file) {
-    push.error(t("notifications.pleaseSelectFile"));
-    return;
-  }
-
-  addResume(file, title, isDefault);
-
-  // Reset form
-  if (resumeFileInput.value) resumeFileInput.value.value = "";
-  if (resumeTitleInput.value) resumeTitleInput.value.value = "";
-  if (resumeDefaultInput.value) resumeDefaultInput.value.checked = false;
-}
 
 // CV Parser functions
 function startCvParserCooldown(seconds = 60) {
@@ -1074,16 +1333,17 @@ function applyParsedPersonalInfo() {
 
 function applyParsedWorkExp(exp) {
   workExperiences.value.unshift({
-    company_name: exp.company_name || '',
-    job_title: exp.job_title || '',
+    company_name: exp.company_name || "",
+    job_title: exp.job_title || "",
     start_date: formatDateForInput(exp.start_date),
     end_date: exp.is_current ? null : formatDateForInput(exp.end_date),
     is_current: exp.is_current || false,
-    description: exp.description || '',
+    description: exp.description || "",
     _pending: true,
+    _localKey: createLocalKey(),
   });
-  activeTab.value = 'work';
-  push.success(t('profile.cvParser.appliedSection'));
+  activeTab.value = "work";
+  push.success(t("profile.cvParser.appliedSection"));
 }
 
 function applyAllParsedWorkExp() {
@@ -1091,32 +1351,34 @@ function applyAllParsedWorkExp() {
   if (!exps.length) return;
   exps.forEach((exp) => {
     workExperiences.value.unshift({
-      company_name: exp.company_name || '',
-      job_title: exp.job_title || '',
+      company_name: exp.company_name || "",
+      job_title: exp.job_title || "",
       start_date: formatDateForInput(exp.start_date),
       end_date: exp.is_current ? null : formatDateForInput(exp.end_date),
       is_current: exp.is_current || false,
-      description: exp.description || '',
+      description: exp.description || "",
       _pending: true,
+      _localKey: createLocalKey(),
     });
   });
-  activeTab.value = 'work';
-  push.success(t('profile.cvParser.appliedSection'));
+  activeTab.value = "work";
+  push.success(t("profile.cvParser.appliedSection"));
 }
 
 function applyParsedEducation(edu) {
   educations.value.unshift({
-    institution_name: edu.institution_name || '',
-    degree: edu.degree || '',
-    major: edu.major || '',
+    institution_name: edu.institution_name || "",
+    degree: edu.degree || "",
+    major: edu.major || "",
     start_date: formatDateForInput(edu.start_date),
     end_date: edu.is_current ? null : formatDateForInput(edu.end_date),
     is_current: edu.is_current || false,
-    description: edu.description || '',
+    description: edu.description || "",
     _pending: true,
+    _localKey: createLocalKey(),
   });
-  activeTab.value = 'education';
-  push.success(t('profile.cvParser.appliedSection'));
+  activeTab.value = "education";
+  push.success(t("profile.cvParser.appliedSection"));
 }
 
 function applyAllParsedEducation() {
@@ -1124,33 +1386,35 @@ function applyAllParsedEducation() {
   if (!edus.length) return;
   edus.forEach((edu) => {
     educations.value.unshift({
-      institution_name: edu.institution_name || '',
-      degree: edu.degree || '',
-      major: edu.major || '',
+      institution_name: edu.institution_name || "",
+      degree: edu.degree || "",
+      major: edu.major || "",
       start_date: formatDateForInput(edu.start_date),
       end_date: edu.is_current ? null : formatDateForInput(edu.end_date),
       is_current: edu.is_current || false,
-      description: edu.description || '',
+      description: edu.description || "",
       _pending: true,
+      _localKey: createLocalKey(),
     });
   });
-  activeTab.value = 'education';
-  push.success(t('profile.cvParser.appliedSection'));
+  activeTab.value = "education";
+  push.success(t("profile.cvParser.appliedSection"));
 }
 
 function applyParsedCertification(cert) {
   certifications.value.unshift({
-    name: cert.name || '',
-    issuer: cert.issuer || '',
+    name: cert.name || "",
+    issuer: cert.issuer || "",
     issue_date: formatDateForInput(cert.issue_date),
     expiry_date: formatDateForInput(cert.expiry_date),
-    credential_id: cert.credential_id || '',
-    link: cert.link || '',
+    credential_id: cert.credential_id || "",
+    link: cert.link || "",
     is_active: true,
     _pending: true,
+    _localKey: createLocalKey(),
   });
-  activeTab.value = 'certifications';
-  push.success(t('profile.cvParser.appliedSection'));
+  activeTab.value = "certifications";
+  push.success(t("profile.cvParser.appliedSection"));
 }
 
 function applyAllParsedCertifications() {
@@ -1158,18 +1422,19 @@ function applyAllParsedCertifications() {
   if (!certs.length) return;
   certs.forEach((cert) => {
     certifications.value.unshift({
-      name: cert.name || '',
-      issuer: cert.issuer || '',
+      name: cert.name || "",
+      issuer: cert.issuer || "",
       issue_date: formatDateForInput(cert.issue_date),
       expiry_date: formatDateForInput(cert.expiry_date),
-      credential_id: cert.credential_id || '',
-      link: cert.link || '',
+      credential_id: cert.credential_id || "",
+      link: cert.link || "",
       is_active: true,
       _pending: true,
+      _localKey: createLocalKey(),
     });
   });
-  activeTab.value = 'certifications';
-  push.success(t('profile.cvParser.appliedSection'));
+  activeTab.value = "certifications";
+  push.success(t("profile.cvParser.appliedSection"));
 }
 
 function goToJobDetail(job) {
@@ -2045,371 +2310,610 @@ watch(activeTab, (newTab) => {
       <!-- RESUMES TAB -->
       <div
         v-else-if="activeTab === 'resumes'"
-        class="bg-white rounded-lg md:rounded-2xl shadow-sm p-4 md:p-6"
+        class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6"
       >
-        <h2 class="text-base md:text-lg font-semibold mb-4">{{ $t('profile.manageResumes') }}</h2>
-
-        <!-- Resume Counter -->
-        <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-          <p class="text-xs md:text-sm text-blue-800">
-            {{ $t('profile.resumesCount', { current: resumes.length, limit: RESUME_LIMIT }) || `Resumes: ${resumes.length}/${RESUME_LIMIT}` }}
-          </p>
+        <div class="mb-5">
+          <h2 class="text-lg md:text-xl font-semibold text-slate-900">
+            {{ $t('profile.manageResumes') }}
+          </h2>
+          <p class="text-sm text-slate-500 mt-1">{{ $t('profile.resumesHint') }}</p>
         </div>
 
-        <!-- Upload Resume Form -->
         <div
-          class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 rounded-lg md:rounded-xl border p-3 md:p-4 mb-6"
+          class="mb-4 inline-flex items-center rounded-xl bg-blue-50 px-3 py-1.5 text-xs md:text-sm font-medium text-blue-700"
+        >
+          {{ $t('profile.resumesCount', { current: resumes.length, limit: RESUME_LIMIT }) }}
+        </div>
+
+        <div
+          class="rounded-2xl border border-slate-200 bg-slate-50 p-4 mb-5 space-y-3"
           :class="{ 'opacity-50 pointer-events-none': resumes.length >= RESUME_LIMIT }"
         >
-          <div>
-            <label class="mb-1 block text-xs md:text-sm font-medium"
-              >{{ $t('profile.uploadPDF') }} <span class="text-red-500">*</span></label
-            >
-            <input
-              type="file"
-              accept="application/pdf"
-              ref="resumeFileInput"
-              class="w-full text-xs md:text-sm rounded-lg border px-3 py-2 min-h-10"
-              :disabled="resumes.length >= RESUME_LIMIT"
-            />
-            <span class="text-[10px] md:text-xs text-gray-500">{{ $t('profile.maxSize5MB') }}</span>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label class="mb-1.5 block text-sm font-medium text-slate-700">
+                {{ $t('profile.uploadPDF') }} <span class="text-red-600">*</span>
+              </label>
+              <input
+                ref="resumeFileInput"
+                type="file"
+                accept="application/pdf"
+                class="w-full text-sm rounded-xl border border-slate-200 bg-white px-3 py-2.5 min-h-11 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-blue-700"
+                :disabled="resumes.length >= RESUME_LIMIT"
+                @change="onResumeFileChange"
+              />
+              <p class="text-xs text-slate-500 mt-1">{{ $t('profile.maxSize5MB') }}</p>
+            </div>
+            <div>
+              <label class="mb-1.5 block text-sm font-medium text-slate-700">
+                {{ $t('profile.title') }} <span class="text-red-600">*</span>
+              </label>
+              <input
+                v-model="resumeTitle"
+                type="text"
+                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                :placeholder="$t('profile.professionalResume')"
+                :disabled="resumes.length >= RESUME_LIMIT"
+              />
+            </div>
           </div>
-
-          <div>
-            <label class="mb-1 block text-xs md:text-sm font-medium"
-              >{{ $t('profile.title') }} <span class="text-red-500">*</span></label
-            >
-            <input
-              type="text"
-              ref="resumeTitleInput"
-              class="w-full rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-              :placeholder="$t('profile.professionalResume')"
-              :disabled="resumes.length >= RESUME_LIMIT"
-            />
-          </div>
-
-          <div class="flex flex-col justify-end gap-2">
-            <label class="flex items-center gap-2 text-xs md:text-sm font-medium">
-              <input type="checkbox" ref="resumeDefaultInput" class="rounded" :disabled="resumes.length >= RESUME_LIMIT" />
-              <span class="hidden sm:inline">{{ $t('profile.setAsDefault') }}</span>
-              <span class="sm:hidden">{{ $t('profile.default') }}</span>
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                v-model="resumeAsDefault"
+                type="checkbox"
+                class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
+                :disabled="resumes.length >= RESUME_LIMIT"
+              />
+              {{ $t('profile.setAsDefault') }}
             </label>
             <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11 disabled:bg-slate-300 disabled:cursor-not-allowed"
+              :disabled="resumes.length >= RESUME_LIMIT || uploadingResume"
               @click="handleAddResume"
-              :disabled="resumes.length >= RESUME_LIMIT"
-              class="w-full rounded-lg md:rounded-xl bg-blue-600 px-3 md:px-4 py-2 text-xs md:text-sm font-semibold text-white hover:bg-blue-700 min-h-10 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
             >
-              {{ resumes.length >= RESUME_LIMIT ? $t('profile.maxResumesReached', { limit: RESUME_LIMIT }) : $t('profile.addResume') }}
+              {{
+                resumes.length >= RESUME_LIMIT
+                  ? $t('profile.maxResumesReached', { limit: RESUME_LIMIT })
+                  : uploadingResume
+                    ? $t('profile.saving')
+                    : $t('profile.addResume')
+              }}
             </button>
           </div>
         </div>
 
-        <!-- Resume List -->
         <div
           v-if="resumes.length === 0"
-          class="text-sm text-gray-500 text-center py-8"
+          class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500"
         >
           {{ $t('profile.noResumesUploaded') }}
         </div>
-        <div v-else class="space-y-2 md:space-y-3">
-          <div
+        <ul v-else class="space-y-2">
+          <li
             v-for="resume in resumes"
             :key="resume.id"
-            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 md:gap-4 p-3 md:p-4 border rounded-lg"
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3.5"
           >
-            <div class="flex-1 min-w-0">
-              <h3 class="font-medium text-sm truncate">{{ resume.title }}</h3>
-              <p class="text-xs text-gray-500">
-                {{ resume.created_at ? formatDate(resume.created_at) : "" }}
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 class="font-semibold text-sm text-slate-900 truncate">{{ resume.title }}</h3>
                 <span
                   v-if="resume.is_default"
-                  class="ml-2 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-[10px]"
+                  class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-200"
                 >
                   {{ $t('profile.primaryButton') }}
                 </span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">
+                {{ resume.created_at ? formatDate(resume.created_at) : "" }}
               </p>
             </div>
-            <div class="flex gap-2 flex-wrap sm:flex-nowrap">
+            <div class="flex flex-wrap items-center gap-2 shrink-0">
               <a
                 :href="`${linkStorageUrl}${resume.resume_url}`"
                 target="_blank"
-                class="text-xs md:text-sm text-blue-600 hover:underline flex-1 sm:flex-none text-center sm:text-left"
+                rel="noopener noreferrer"
+                class="rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50 transition duration-200"
               >
                 {{ $t('profile.view') }}
               </a>
               <button
                 v-if="!resume.is_default"
+                type="button"
+                class="rounded-xl px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-50 transition duration-200"
                 @click="setPrimaryResume(resume.id)"
-                class="text-xs md:text-sm text-green-600 hover:underline flex-1 sm:flex-none text-center sm:text-left"
               >
                 {{ $t('profile.primaryButton') }}
               </button>
               <button
+                type="button"
+                class="rounded-xl px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 transition duration-200"
                 @click="removeResume(resume.id)"
-                class="text-xs md:text-sm text-red-600 hover:underline flex-1 sm:flex-none text-center sm:text-left"
               >
                 {{ $t('profile.remove') }}
               </button>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
 
       <!-- WORK EXPERIENCE TAB -->
-      <div v-else-if="activeTab === 'work'" class="bg-white rounded-lg md:rounded-2xl shadow-sm p-4 md:p-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-          <h2 class="text-base md:text-lg font-semibold">{{ $t('profile.workExperience') }}</h2>
-          <button
-            @click="addWorkExp"
-            class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 whitespace-nowrap"
-          >
-            + {{ $t('profile.addExperience') }}
-          </button>
+      <div
+        v-else-if="activeTab === 'work'"
+        class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6"
+      >
+        <div class="mb-5">
+          <h2 class="text-lg md:text-xl font-semibold text-slate-900">
+            {{ $t('profile.workExperience') }}
+          </h2>
+          <p class="text-sm text-slate-500 mt-1">{{ $t('profile.workExperienceHint') }}</p>
         </div>
 
         <div
-          v-if="workExperiences.length === 0"
-          class="text-sm text-gray-500 text-center py-8"
+          v-if="workExperiences.length === 0 && !showWorkPanel"
+          class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500"
         >
           {{ $t('profile.noWorkExperienceAdded') }}
         </div>
-        <div v-else class="space-y-4">
-          <div
-            v-for="(work, idx) in workExperiences"
-            :key="work.id"
-            class="border rounded-lg p-4"
+
+        <ul v-else-if="workExperiences.length > 0" class="space-y-2">
+          <li
+            v-for="work in workExperiences"
+            :key="profileItemKey(work)"
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3.5"
+            :class="{
+              'ring-1 ring-blue-200 border-blue-200':
+                editingWorkKey === profileItemKey(work) && showWorkPanel,
+            }"
           >
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-              <input
-                v-model="work.company_name"
-                :placeholder="$t('profile.companyName')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-              />
-              <input
-                v-model="work.job_title"
-                :placeholder="$t('profile.jobTitle')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-              />
-              <input
-                v-model="work.start_date"
-                type="date"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-              />
-              <input
-                v-model="work.end_date"
-                type="date"
-                :disabled="work.is_current"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-              />
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 class="text-sm font-semibold text-slate-900">
+                  {{ work.job_title || $t('profile.jobTitle') }}
+                </h3>
+                <span
+                  v-if="work._pending"
+                  class="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200"
+                >
+                  {{ $t('profile.unsavedDraft') }}
+                </span>
+              </div>
+              <p class="text-sm text-slate-600 mt-0.5">
+                {{ work.company_name || $t('profile.companyName') }}
+              </p>
+              <p class="text-xs text-slate-500 mt-1">
+                {{ formatProfileDateRange(work.start_date, work.end_date, work.is_current) }}
+              </p>
             </div>
-            <label class="flex items-center gap-2 text-xs md:text-sm mb-3">
-              <input
-                type="checkbox"
-                v-model="work.is_current"
-                class="rounded"
-              />
-              {{ $t('profile.currentlyWorkingHere') }}
-            </label>
-            <div class="mb-3">
-              <RichTextEditor
-                v-model="work.description"
-                :placeholder="$t('profile.descriptionPlaceholder')"
-                min-height="120px"
-              />
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2">
+            <div class="flex items-center gap-2 shrink-0">
               <button
-                @click="saveWorkExp(work)"
-                class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 flex-1 sm:flex-none"
+                type="button"
+                class="rounded-xl px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-50 transition duration-200"
+                @click="openWorkForm(work)"
               >
-                {{ $t('profile.save') }}
+                {{ $t('profile.edit') }}
               </button>
               <button
-                @click="deleteWorkExp(work.id)"
-                class="px-3 md:px-4 py-2 text-xs md:text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 min-h-10 flex-1 sm:flex-none"
+                type="button"
+                class="rounded-xl px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 transition duration-200"
+                @click="deleteWorkExp(work)"
               >
                 {{ $t('profile.delete') }}
               </button>
             </div>
+          </li>
+        </ul>
+
+        <div
+          v-if="showWorkPanel"
+          class="mt-4 rounded-2xl border border-blue-100 bg-slate-50 p-4 space-y-3"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-sm font-semibold text-slate-900">
+              {{ editingWorkKey ? $t('profile.editExperience') : $t('profile.addExperience') }}
+            </h3>
+            <button
+              type="button"
+              class="text-slate-400 hover:text-slate-600 text-xl leading-none px-1"
+              :aria-label="$t('profile.cancel')"
+              @click="closeWorkForm"
+            >
+              ×
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input
+              v-model="workForm.company_name"
+              type="text"
+              :placeholder="$t('profile.companyName')"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="workForm.job_title"
+              type="text"
+              :placeholder="$t('profile.jobTitle')"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="workForm.start_date"
+              type="date"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="workForm.end_date"
+              type="date"
+              :disabled="workForm.is_current"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 disabled:bg-slate-100 disabled:text-slate-400"
+            />
+          </div>
+          <label class="flex items-center gap-2 text-sm text-slate-700">
+            <input
+              v-model="workForm.is_current"
+              type="checkbox"
+              class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
+            />
+            {{ $t('profile.currentlyWorkingHere') }}
+          </label>
+          <RichTextEditor
+            v-model="workForm.description"
+            :placeholder="$t('profile.descriptionPlaceholder')"
+            min-height="120px"
+          />
+          <div class="flex flex-col-reverse sm:flex-row gap-2 pt-1">
+            <button
+              type="button"
+              class="sm:flex-1 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 transition duration-200 min-h-11"
+              @click="closeWorkForm"
+            >
+              {{ $t('profile.cancel') }}
+            </button>
+            <button
+              type="button"
+              class="sm:flex-1 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11 disabled:opacity-50"
+              :disabled="savingWork"
+              @click="saveWorkExp"
+            >
+              {{ savingWork ? $t('profile.saving') : $t('profile.save') }}
+            </button>
           </div>
         </div>
+
+        <button
+          v-if="!showWorkPanel"
+          type="button"
+          class="mt-4 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11"
+          @click="openWorkForm()"
+        >
+          + {{ $t('profile.addExperience') }}
+        </button>
       </div>
 
       <!-- EDUCATION TAB -->
-      <div v-else-if="activeTab === 'education'" class="bg-white rounded-lg md:rounded-2xl shadow-sm p-4 md:p-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-          <h2 class="text-base md:text-lg font-semibold">{{ $t('education') }}</h2>
-          <button
-            @click="addEducation"
-            class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 whitespace-nowrap"
-          >
-            + {{ $t('profile.addEducation') }}
-          </button>
+      <div
+        v-else-if="activeTab === 'education'"
+        class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6"
+      >
+        <div class="mb-5">
+          <h2 class="text-lg md:text-xl font-semibold text-slate-900">
+            {{ $t('education') }}
+          </h2>
+          <p class="text-sm text-slate-500 mt-1">{{ $t('profile.educationHint') }}</p>
         </div>
 
         <div
-          v-if="educations.length === 0"
-          class="text-sm text-gray-500 text-center py-8"
+          v-if="educations.length === 0 && !showEducationPanel"
+          class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500"
         >
           {{ $t('profile.noEducationAdded') }}
         </div>
-        <div v-else class="space-y-4">
-          <div
+
+        <ul v-else-if="educations.length > 0" class="space-y-2">
+          <li
             v-for="edu in educations"
-            :key="edu.id"
-            class="border rounded-lg p-4"
+            :key="profileItemKey(edu)"
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3.5"
+            :class="{
+              'ring-1 ring-blue-200 border-blue-200':
+                editingEducationKey === profileItemKey(edu) && showEducationPanel,
+            }"
           >
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-              <input
-                v-model="edu.institution_name"
-                :placeholder="$t('profile.institution')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-              />
-              <input
-                v-model="edu.degree"
-                :placeholder="$t('profile.degree')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-              />
-              <input
-                v-model="edu.major"
-                :placeholder="$t('profile.major')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-              />
-              <input
-                v-model="edu.start_date"
-                type="date"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-              />
-              <input
-                v-model="edu.end_date"
-                type="date"
-                :disabled="edu.is_current"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-              />
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 class="text-sm font-semibold text-slate-900">
+                  {{ edu.institution_name || $t('profile.institution') }}
+                </h3>
+                <span
+                  v-if="edu._pending"
+                  class="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200"
+                >
+                  {{ $t('profile.unsavedDraft') }}
+                </span>
+              </div>
+              <p class="text-sm text-slate-600 mt-0.5">
+                {{ [edu.degree, edu.major].filter(Boolean).join(' · ') || $t('profile.degree') }}
+              </p>
+              <p class="text-xs text-slate-500 mt-1">
+                {{ formatProfileDateRange(edu.start_date, edu.end_date, edu.is_current) }}
+              </p>
             </div>
-            <label class="flex items-center gap-2 text-xs md:text-sm mb-3">
-              <input
-                type="checkbox"
-                v-model="edu.is_current"
-                class="rounded"
-              />
-              {{ $t('profile.currentlyStudyingHere') }}
-            </label>
-            <div class="mb-3">
-              <RichTextEditor
-                v-model="edu.description"
-                :placeholder="$t('profile.descriptionPlaceholder')"
-                min-height="100px"
-              />
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2">
+            <div class="flex items-center gap-2 shrink-0">
               <button
-                @click="saveEducation(edu)"
-                class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 flex-1 sm:flex-none"
+                type="button"
+                class="rounded-xl px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-50 transition duration-200"
+                @click="openEducationForm(edu)"
               >
-                {{ $t('profile.save') }}
+                {{ $t('profile.edit') }}
               </button>
               <button
-                @click="deleteEducation(edu.id)"
-                class="px-3 md:px-4 py-2 text-xs md:text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 min-h-10 flex-1 sm:flex-none"
+                type="button"
+                class="rounded-xl px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 transition duration-200"
+                @click="deleteEducation(edu)"
               >
                 {{ $t('profile.delete') }}
               </button>
             </div>
+          </li>
+        </ul>
+
+        <div
+          v-if="showEducationPanel"
+          class="mt-4 rounded-2xl border border-blue-100 bg-slate-50 p-4 space-y-3"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-sm font-semibold text-slate-900">
+              {{ editingEducationKey ? $t('profile.editEducation') : $t('profile.addEducation') }}
+            </h3>
+            <button
+              type="button"
+              class="text-slate-400 hover:text-slate-600 text-xl leading-none px-1"
+              :aria-label="$t('profile.cancel')"
+              @click="closeEducationForm"
+            >
+              ×
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input
+              v-model="educationForm.institution_name"
+              type="text"
+              :placeholder="$t('profile.institution')"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="educationForm.degree"
+              type="text"
+              :placeholder="$t('profile.degree')"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="educationForm.major"
+              type="text"
+              :placeholder="$t('profile.major')"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="educationForm.start_date"
+              type="date"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="educationForm.end_date"
+              type="date"
+              :disabled="educationForm.is_current"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 disabled:bg-slate-100 disabled:text-slate-400"
+            />
+          </div>
+          <label class="flex items-center gap-2 text-sm text-slate-700">
+            <input
+              v-model="educationForm.is_current"
+              type="checkbox"
+              class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
+            />
+            {{ $t('profile.currentlyStudyingHere') }}
+          </label>
+          <RichTextEditor
+            v-model="educationForm.description"
+            :placeholder="$t('profile.descriptionPlaceholder')"
+            min-height="100px"
+          />
+          <div class="flex flex-col-reverse sm:flex-row gap-2 pt-1">
+            <button
+              type="button"
+              class="sm:flex-1 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 transition duration-200 min-h-11"
+              @click="closeEducationForm"
+            >
+              {{ $t('profile.cancel') }}
+            </button>
+            <button
+              type="button"
+              class="sm:flex-1 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11 disabled:opacity-50"
+              :disabled="savingEducation"
+              @click="saveEducation"
+            >
+              {{ savingEducation ? $t('profile.saving') : $t('profile.save') }}
+            </button>
           </div>
         </div>
+
+        <button
+          v-if="!showEducationPanel"
+          type="button"
+          class="mt-4 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11"
+          @click="openEducationForm()"
+        >
+          + {{ $t('profile.addEducation') }}
+        </button>
       </div>
 
       <!-- CERTIFICATIONS TAB -->
-      <div v-else-if="activeTab === 'certifications'" class="bg-white rounded-lg md:rounded-2xl shadow-sm p-4 md:p-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-          <h2 class="text-base md:text-lg font-semibold">{{ $t('profile.certifications') }}</h2>
-          <button
-            @click="addCertification"
-            class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 whitespace-nowrap"
-          >
-            + {{ $t('profile.addCertification') }}
-          </button>
+      <div
+        v-else-if="activeTab === 'certifications'"
+        class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6"
+      >
+        <div class="mb-5">
+          <h2 class="text-lg md:text-xl font-semibold text-slate-900">
+            {{ $t('profile.certifications') }}
+          </h2>
+          <p class="text-sm text-slate-500 mt-1">{{ $t('profile.certificationsHint') }}</p>
         </div>
 
         <div
-          v-if="certifications.length === 0"
-          class="text-sm text-gray-500 text-center py-8"
+          v-if="certifications.length === 0 && !showCertificationPanel"
+          class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm text-slate-500"
         >
           {{ $t('profile.noCertificationsAdded') }}
         </div>
-        <div v-else class="space-y-4">
-          <div
+
+        <ul v-else-if="certifications.length > 0" class="space-y-2">
+          <li
             v-for="cert in certifications"
-            :key="cert.id"
-            class="border rounded-lg p-4"
+            :key="profileItemKey(cert)"
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3.5"
+            :class="{
+              'ring-1 ring-blue-200 border-blue-200':
+                editingCertificationKey === profileItemKey(cert) && showCertificationPanel,
+            }"
           >
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-              <input
-                v-model="cert.name"
-                :placeholder="$t('profile.certificationName')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-                @input="cert.isSaved = false"
-              />
-              <input
-                v-model="cert.issuer"
-                :placeholder="$t('profile.issuingOrganization')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-                @input="cert.isSaved = false"
-              />
-              <input
-                v-model="cert.issue_date"
-                type="date"
-                :placeholder="$t('profile.issueDate')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-                @input="cert.isSaved = false"
-              />
-              <input
-                v-model="cert.expiry_date"
-                type="date"
-                :placeholder="$t('profile.expiryDateOptional')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-                @input="cert.isSaved = false"
-              />
-              <input
-                v-model="cert.credential_id"
-                :placeholder="$t('profile.credentialID')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-                @input="cert.isSaved = false"
-              />
-              <input
-                v-model="cert.link"
-                :placeholder="$t('profile.credentialURL')"
-                class="rounded-lg border px-3 py-2 text-xs md:text-sm min-h-10"
-                @input="cert.isSaved = false"
-              />
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 class="text-sm font-semibold text-slate-900">
+                  {{ cert.name || $t('profile.certificationName') }}
+                </h3>
+                <span
+                  v-if="cert._pending"
+                  class="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200"
+                >
+                  {{ $t('profile.unsavedDraft') }}
+                </span>
+                <span
+                  v-if="cert.is_active"
+                  class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-200"
+                >
+                  {{ $t('profile.activeCertification') }}
+                </span>
+              </div>
+              <p class="text-sm text-slate-600 mt-0.5">
+                {{ cert.issuer || $t('profile.issuingOrganization') }}
+              </p>
+              <p class="text-xs text-slate-500 mt-1">
+                {{ formatProfileDateRange(cert.issue_date, cert.expiry_date, false) }}
+              </p>
             </div>
-            <label class="flex items-center gap-2 text-xs md:text-sm mb-3">
-              <input
-                type="checkbox"
-                v-model="cert.is_active"
-                class="rounded"
-                @change="cert.isSaved = false"
-              />
-              {{ $t('profile.activeCertification') }}
-            </label>
-            <div class="flex flex-col sm:flex-row gap-2">
+            <div class="flex items-center gap-2 shrink-0">
               <button
-                @click="saveCertification(cert)"
-                class="px-3 md:px-4 py-2 text-xs md:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-10 flex-1 sm:flex-none"
-                :class="{ 'opacity-50': cert.isSaved }"
+                type="button"
+                class="rounded-xl px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-50 transition duration-200"
+                @click="openCertificationForm(cert)"
               >
-                {{ cert.isSaved ? $t('profile.saved') : $t('profile.save') }}
+                {{ $t('profile.edit') }}
               </button>
               <button
-                @click="deleteCertification(cert.id)"
-                class="px-3 md:px-4 py-2 text-xs md:text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 min-h-10 flex-1 sm:flex-none"
+                type="button"
+                class="rounded-xl px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 transition duration-200"
+                @click="deleteCertification(cert)"
               >
                 {{ $t('profile.delete') }}
               </button>
             </div>
+          </li>
+        </ul>
+
+        <div
+          v-if="showCertificationPanel"
+          class="mt-4 rounded-2xl border border-blue-100 bg-slate-50 p-4 space-y-3"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-sm font-semibold text-slate-900">
+              {{
+                editingCertificationKey
+                  ? $t('profile.editCertification')
+                  : $t('profile.addCertification')
+              }}
+            </h3>
+            <button
+              type="button"
+              class="text-slate-400 hover:text-slate-600 text-xl leading-none px-1"
+              :aria-label="$t('profile.cancel')"
+              @click="closeCertificationForm"
+            >
+              ×
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input
+              v-model="certificationForm.name"
+              type="text"
+              :placeholder="$t('profile.certificationName')"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="certificationForm.issuer"
+              type="text"
+              :placeholder="$t('profile.issuingOrganization')"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="certificationForm.issue_date"
+              type="date"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="certificationForm.expiry_date"
+              type="date"
+              :disabled="!certificationForm.is_active"
+              :placeholder="$t('profile.expiryDateOptional')"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 disabled:bg-slate-100 disabled:text-slate-400"
+            />
+            <input
+              v-model="certificationForm.credential_id"
+              type="text"
+              :placeholder="$t('profile.credentialID')"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+            <input
+              v-model="certificationForm.link"
+              type="url"
+              :placeholder="$t('profile.credentialURL')"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+            />
+          </div>
+          <label class="flex items-center gap-2 text-sm text-slate-700">
+            <input
+              v-model="certificationForm.is_active"
+              type="checkbox"
+              class="rounded border-slate-300 text-blue-600 focus:ring-blue-600"
+            />
+            {{ $t('profile.activeCertification') }}
+          </label>
+          <div class="flex flex-col-reverse sm:flex-row gap-2 pt-1">
+            <button
+              type="button"
+              class="sm:flex-1 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 transition duration-200 min-h-11"
+              @click="closeCertificationForm"
+            >
+              {{ $t('profile.cancel') }}
+            </button>
+            <button
+              type="button"
+              class="sm:flex-1 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11 disabled:opacity-50"
+              :disabled="savingCertification"
+              @click="saveCertification"
+            >
+              {{ savingCertification ? $t('profile.saving') : $t('profile.save') }}
+            </button>
           </div>
         </div>
+
+        <button
+          v-if="!showCertificationPanel"
+          type="button"
+          class="mt-4 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition duration-200 min-h-11"
+          @click="openCertificationForm()"
+        >
+          + {{ $t('profile.addCertification') }}
+        </button>
       </div>
 
 
