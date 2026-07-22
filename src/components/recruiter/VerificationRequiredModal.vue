@@ -50,7 +50,7 @@ const emit = defineEmits(["close", "save-draft"]);
           {{ $t('verification.saveDraft') }}
         </button>
         <RouterLink
-          to="/contact"
+          to="/recruiter/verification"
           class="w-full rounded-lg bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 text-sm font-medium text-center transition"
         >
           {{ $t('verification.cta') }}
