@@ -2,21 +2,25 @@
 import { ref, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { getWorkerByApplication } from "@/services/applications";
+import { usePipelineStore } from "@/stores/pipelineStore";
 import { getMatchScoreTone } from "@/constants/matchScore";
 import CandidateTimeline from "./CandidateTimeline.vue";
 
 const { t, locale } = useI18n();
+const pipelineStore = usePipelineStore();
 
 const props = defineProps({
   candidate: { type: Object, default: null },
   open: { type: Boolean, default: false },
 });
 
-const emit = defineEmits(["close", "chat"]);
+const emit = defineEmits(["close", "chat", "match-updated"]);
 
 const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
 const detail = ref(null);
 const loading = ref(false);
+const matchDetail = ref(null);
+const loadingMatch = ref(false);
 
 async function loadDetail() {
   if (!props.candidate?.application_id) return;
@@ -32,22 +36,44 @@ async function loadDetail() {
   }
 }
 
+async function loadMatchDetail() {
+  if (!props.candidate?.application_id) return;
+  loadingMatch.value = true;
+  try {
+    const data = await pipelineStore.fetchApplicationMatch(props.candidate.application_id);
+    matchDetail.value = data;
+    emit("match-updated", data);
+  } catch (err) {
+    // List payload already has match fields; detail is optional enrichment.
+    console.warn("[Pipeline] Optional match detail unavailable:", err);
+    matchDetail.value = null;
+  } finally {
+    loadingMatch.value = false;
+  }
+}
+
 watch(
   () => [props.open, props.candidate?.application_id],
   ([isOpen]) => {
-    if (isOpen) loadDetail();
+    if (isOpen) {
+      matchDetail.value = null;
+      loadDetail();
+      loadMatchDetail();
+    }
   },
   { immediate: true },
 );
 
-const matchStatus = computed(() => props.candidate?.match_status || "pending");
+const matchSource = computed(() => matchDetail.value || props.candidate || {});
+
+const matchStatus = computed(() => matchSource.value.match_status || "pending");
 const matchScore = computed(() =>
-  props.candidate?.match_score == null ? null : Math.round(Number(props.candidate.match_score)),
+  matchSource.value.match_score == null ? null : Math.round(Number(matchSource.value.match_score)),
 );
 const matchTone = computed(() => getMatchScoreTone(matchScore.value));
 
 const breakdownRows = computed(() => {
-  const b = props.candidate?.match_breakdown;
+  const b = matchSource.value.match_breakdown;
   if (!b || typeof b !== "object") return [];
   return [
     { key: "semantic", label: t("pipeline.match.breakdown.semantic"), value: b.semantic },
@@ -57,12 +83,13 @@ const breakdownRows = computed(() => {
   ].filter((row) => row.value != null);
 });
 
-const matchReasons = computed(() =>
-  Array.isArray(props.candidate?.match_reasons) ? props.candidate.match_reasons : [],
-);
+const matchReasons = computed(() => {
+  const list = matchSource.value.match_reasons;
+  return Array.isArray(list) ? list : [];
+});
 
 const computedAtLabel = computed(() => {
-  const raw = props.candidate?.match_computed_at;
+  const raw = matchSource.value.match_computed_at;
   if (!raw) return "";
   try {
     return new Date(raw).toLocaleString(locale.value || undefined);
@@ -70,6 +97,20 @@ const computedAtLabel = computed(() => {
     return String(raw);
   }
 });
+
+function reasonKey(reason, idx) {
+  return reason.code || reason.type || idx;
+}
+
+function reasonLabel(reason) {
+  return reason.label || reason.code || reason.type || "";
+}
+
+function reasonWeight(reason) {
+  if (reason.weight != null) return reason.weight;
+  if (reason.score != null) return Math.round(Number(reason.score));
+  return null;
+}
 
 function barWidth(value) {
   const n = Number(value);
@@ -138,7 +179,10 @@ function barWidth(value) {
 
           <!-- AI Match section -->
           <section class="rounded-lg border border-gray-200 p-4 space-y-3">
-            <h3 class="text-xs font-semibold text-gray-500 uppercase">{{ t("pipeline.match.sectionTitle") }}</h3>
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="text-xs font-semibold text-gray-500 uppercase">{{ t("pipeline.match.sectionTitle") }}</h3>
+              <span v-if="loadingMatch" class="text-[11px] text-gray-400">{{ t("pipeline.match.refreshing") }}</span>
+            </div>
 
             <div v-if="matchStatus === 'ready' && matchScore != null" class="space-y-3">
               <div class="flex items-end gap-2">
@@ -161,13 +205,13 @@ function barWidth(value) {
               <ul v-if="matchReasons.length" class="space-y-1.5 pt-1">
                 <li
                   v-for="(reason, idx) in matchReasons"
-                  :key="reason.code || idx"
+                  :key="reasonKey(reason, idx)"
                   class="text-sm text-gray-700 flex gap-2"
                 >
                   <span class="text-teal-600 shrink-0">•</span>
                   <span>
-                    {{ reason.label || reason.code }}
-                    <span v-if="reason.weight != null" class="text-xs text-gray-400">({{ reason.weight }})</span>
+                    {{ reasonLabel(reason) }}
+                    <span v-if="reasonWeight(reason) != null" class="text-xs text-gray-400">({{ reasonWeight(reason) }})</span>
                   </span>
                 </li>
               </ul>

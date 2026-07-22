@@ -29,6 +29,11 @@ export function getApplicationMatch(applicationId) {
   return api.get(`/job-applications/${applicationId}/match`);
 }
 
+/** Enqueue recompute of AI match scores for all applicants on a job post. */
+export function rematchJobPost(jobPostId) {
+  return api.post(`/job-posts/${jobPostId}/rematch`);
+}
+
 /**
  * Legacy applicants list for a single job post. Used as a fallback when the
  * dedicated pipeline candidates endpoint is not yet available on the API host.

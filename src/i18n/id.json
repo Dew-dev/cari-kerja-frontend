@@ -2116,6 +2116,12 @@
       "failed": "Gagal menghitung",
       "sectionTitle": "Kecocokan AI dengan lowongan",
       "computedAt": "Dihitung {date}",
+      "refreshing": "Memuat ulang…",
+      "rematch": "Hitung ulang kecocokan",
+      "rematching": "Mengantrikan…",
+      "rematchQueued": "Perhitungan ulang kecocokan diantrikan",
+      "rematchQueuedCount": "Menghitung ulang kecocokan untuk {count} pelamar",
+      "rematchFailed": "Gagal mengantrikan perhitungan ulang",
       "breakdown": {
         "semantic": "Kesamaan deskripsi",
         "skills": "Kecocokan skill",

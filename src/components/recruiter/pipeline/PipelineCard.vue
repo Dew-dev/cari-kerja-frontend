@@ -59,6 +59,14 @@ const matchBadge = computed(() => {
       aria: t("pipeline.match.insufficient"),
     };
   }
+  if (status === "failed") {
+    return {
+      show: true,
+      label: t("pipeline.match.failed"),
+      className: "bg-rose-50 text-rose-600 border-rose-100",
+      aria: t("pipeline.match.failed"),
+    };
+  }
   if (status === "ready" && score != null) {
     const rounded = Math.round(Number(score));
     return {

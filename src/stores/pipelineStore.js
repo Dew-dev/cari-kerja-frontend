@@ -11,6 +11,8 @@ import {
   reorderJobStages,
   deleteJobStage,
   moveApplicationStage,
+  getApplicationMatch,
+  rematchJobPost,
 } from "@/services/pipeline.api";
 import { CANONICAL_STAGE_TYPES, resolveStageTypeFromStatusName } from "@/constants/pipeline";
 
@@ -153,6 +155,7 @@ export const usePipelineStore = defineStore("pipeline", () => {
 
   const analytics = ref({ stage_counts: [], conversion_rates: [] });
   const loadingAnalytics = ref(false);
+  const rematching = ref(false);
 
   const movingApplicationIds = ref(new Set());
 
@@ -609,6 +612,44 @@ export const usePipelineStore = defineStore("pipeline", () => {
     minMatchScore.value = Number.isNaN(n) ? null : Math.min(100, Math.max(0, n));
   }
 
+  function applyMatchToCandidate(applicationId, matchPayload) {
+    const idx = candidates.value.findIndex(
+      (c) => String(c.application_id) === String(applicationId),
+    );
+    if (idx === -1) return null;
+    const mapped = mapMatchFields(matchPayload || {});
+    candidates.value[idx] = { ...candidates.value[idx], ...mapped };
+    return candidates.value[idx];
+  }
+
+  async function fetchApplicationMatch(applicationId) {
+    const res = await getApplicationMatch(applicationId);
+    const data = res.data?.data || res.data || {};
+    return applyMatchToCandidate(applicationId, data) || {
+      application_id: applicationId,
+      ...mapMatchFields(data),
+    };
+  }
+
+  async function rematchActiveJob() {
+    const jobId = activeJobPostId.value;
+    if (!jobId) throw new Error("No active job post");
+
+    rematching.value = true;
+    try {
+      const res = await rematchJobPost(jobId);
+      // Optimistic: scores recompute asynchronously on the backend.
+      candidates.value = candidates.value.map((c) =>
+        String(c.job_post_id) === String(jobId)
+          ? { ...c, match_status: "pending", match_score: null }
+          : c,
+      );
+      return res.data?.data || res.data || { enqueued: true };
+    } finally {
+      rematching.value = false;
+    }
+  }
+
   return {
     // State
     jobPosts,
@@ -626,6 +667,7 @@ export const usePipelineStore = defineStore("pipeline", () => {
     loadingStages,
     analytics,
     loadingAnalytics,
+    rematching,
     selectedApplicationIds,
     // Getters
     isSingleJobMode,
@@ -660,6 +702,8 @@ export const usePipelineStore = defineStore("pipeline", () => {
     setSortBy,
     setSortOrder,
     setMinMatchScore,
+    fetchApplicationMatch,
+    rematchActiveJob,
     isCandidateSelected,
     toggleCandidateSelection,
     selectCandidatesInColumn,

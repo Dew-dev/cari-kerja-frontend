@@ -106,8 +106,34 @@ function handleOpenCandidate(candidate) {
   drawerOpen.value = true;
 }
 
+function onMatchUpdated(matchPayload) {
+  if (!drawerCandidate.value?.application_id || !matchPayload) return;
+  drawerCandidate.value = {
+    ...drawerCandidate.value,
+    ...matchPayload,
+  };
+}
+
 function closeDrawer() {
   drawerOpen.value = false;
+}
+
+async function handleRematch() {
+  try {
+    const result = await pipelineStore.rematchActiveJob();
+    const count = result?.applicant_count;
+    push.success(
+      count != null
+        ? t("pipeline.match.rematchQueuedCount", { count })
+        : t("pipeline.match.rematchQueued"),
+    );
+    // Poll once after a short delay so pending badges can refresh when ready.
+    setTimeout(() => {
+      pipelineStore.fetchCandidates();
+    }, 4000);
+  } catch (err) {
+    push.error(err?.response?.data?.message || t("pipeline.match.rematchFailed"));
+  }
 }
 
 async function resolveWorkerIds(candidate) {
@@ -256,6 +282,23 @@ async function handleChat(candidate) {
         <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
             type="button"
+            class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors justify-center disabled:opacity-50"
+            :disabled="pipelineStore.rematching || !jobPostId"
+            @click="handleRematch"
+          >
+            <svg
+              class="w-4 h-4"
+              :class="pipelineStore.rematching ? 'animate-spin' : ''"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            {{ pipelineStore.rematching ? t("pipeline.match.rematching") : t("pipeline.match.rematch") }}
+          </button>
+          <button
+            type="button"
             class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors justify-center"
             @click="openHistory"
           >
@@ -355,7 +398,13 @@ async function handleChat(candidate) {
       @close="historyOpen = false"
     />
 
-    <CandidateDetailDrawer :open="drawerOpen" :candidate="drawerCandidate" @close="closeDrawer" @chat="handleChat" />
+    <CandidateDetailDrawer
+      :open="drawerOpen"
+      :candidate="drawerCandidate"
+      @close="closeDrawer"
+      @chat="handleChat"
+      @match-updated="onMatchUpdated"
+    />
 
     <StageManagerModal
       :open="stageManagerOpen"
