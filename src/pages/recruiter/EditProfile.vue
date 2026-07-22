@@ -5,7 +5,9 @@ import { useAuthStore } from "@/stores/authStore.js";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
+import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import { isContentRejectedError } from "@/utils/apiErrors";
+import { countWordsHtml } from "@/utils/richText";
 
 const auth = useAuthStore();
 const { t } = useI18n();
@@ -26,9 +28,7 @@ const form = reactive({
   tiktok_url: "",
 });
 
-const descWordCount = computed(() =>
-  form.description.trim() === '' ? 0 : form.description.trim().split(/\s+/).length
-)
+const descWordCount = computed(() => countWordsHtml(form.description))
 const descWordCountColor = computed(() => {
   if (descWordCount.value < 60) return 'text-red-500'
   if (descWordCount.value > 130) return 'text-red-500'
@@ -337,11 +337,10 @@ onMounted(loadProfile);
           <label class="block text-xs font-medium text-gray-600 mb-1">
             {{ t('companyDescription') }} <span class="text-red-500">*</span>
           </label>
-          <textarea
+          <RichTextEditor
             v-model="form.description"
-            class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows="4"
             :placeholder="t('companyDescription')"
+            min-height="140px"
           />
           <p class="text-xs mt-1" :class="descWordCountColor">
             {{ descWordCount }} kata

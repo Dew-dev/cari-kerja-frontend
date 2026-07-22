@@ -10,6 +10,7 @@ import { updateJob } from "@/services/jobposts.api";
 import { useRouter, useRoute } from "vue-router";
 import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
 import ContentFlaggedModal from "@/components/recruiter/ContentFlaggedModal.vue";
+import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import {
   isContentFlaggedResponse,
   isVerificationRequiredError,
@@ -1105,12 +1106,75 @@ function saveAsDraft() {
 
           <!-- ADD SKILLS BUTTON -->
           <button
+            v-if="!showSkillModal"
             type="button"
             @click="openSkillModal"
             class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm"
           >
             + Add Skills
           </button>
+
+          <!-- ADD SKILLS PANEL -->
+          <div
+            v-if="showSkillModal"
+            class="mt-3 border border-gray-200 rounded-lg p-4 bg-gray-50"
+          >
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-gray-800">Add Skills</h3>
+              <button
+                type="button"
+                @click="closeSkillModal"
+                class="text-gray-400 hover:text-gray-600 text-xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+
+            <input
+              v-model="skillSearchQuery"
+              @input="handleSkillSearch"
+              @keydown.enter.prevent="handleSkillEnter"
+              type="text"
+              placeholder="Search or create skill..."
+              class="w-full border border-gray-200 bg-white shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+            />
+
+            <div
+              v-if="skillSuggestions.length"
+              class="space-y-2 mb-3 max-h-48 overflow-y-auto"
+            >
+              <div
+                v-for="skill in skillSuggestions"
+                :key="skill.id"
+                @click="addSkillFromSuggestion(skill)"
+                class="p-2 border border-gray-200 bg-white rounded cursor-pointer hover:bg-blue-50 text-sm"
+              >
+                {{ skill.name }}
+              </div>
+            </div>
+
+            <div v-if="skillSearchQuery && !skillSuggestions.length" class="mb-3">
+              <button
+                type="button"
+                @click="createAndAddSkill(skillSearchQuery)"
+                class="w-full p-2 border-2 border-dashed border-green-300 rounded text-sm text-green-700 hover:bg-green-50"
+              >
+                + Create "{{ skillSearchQuery }}"
+              </button>
+            </div>
+
+            <p v-if="loadingSkills" class="text-xs text-gray-500 text-center mb-3">
+              Loading skills...
+            </p>
+
+            <button
+              type="button"
+              @click="closeSkillModal"
+              class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
+            >
+              Done
+            </button>
+          </div>
         </div>
 
         <!-- REQUIREMENTS -->
@@ -1231,35 +1295,54 @@ function saveAsDraft() {
         </div>
 
         <!-- QUESTIONS -->
-        <div>
-          <div class="flex items-center justify-between">
-            <label class="block text-sm font-medium text-gray-700">
-              {{ t("questions") }}
-              <span class="ml-2 text-xs text-gray-400">{{ t("optional") }}</span>
-            </label>
+        <div class="rounded-lg border border-blue-100 bg-blue-50/40 p-4">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <label class="block text-base font-semibold text-gray-900">
+                {{ t("questions") }}
+                <span class="ml-2 text-xs font-normal text-gray-500">{{ t("optional") }}</span>
+              </label>
+              <p class="mt-1 text-sm text-gray-600">
+                {{ t("questions_hint") }}
+              </p>
+            </div>
             <button
               type="button"
               @click="addQuestion"
-              class="text-sm text-blue-600 hover:text-blue-700"
+              class="shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
             >
               + {{ t("add_question") }}
             </button>
           </div>
 
-          <div v-if="form.job_post_questions.length" class="mt-3 space-y-4">
+          <div
+            v-if="!form.job_post_questions.length"
+            class="mt-4 rounded-md border border-dashed border-blue-200 bg-white px-4 py-6 text-center"
+          >
+            <p class="text-sm text-gray-600">{{ t("questions_empty") }}</p>
+            <button
+              type="button"
+              @click="addQuestion"
+              class="mt-3 text-sm font-medium text-blue-600 hover:text-blue-700"
+            >
+              + {{ t("add_question") }}
+            </button>
+          </div>
+
+          <div v-else class="mt-4 space-y-3">
             <div
               v-for="(q, index) in form.job_post_questions"
               :key="index"
-              class="rounded-md shadow-sm p-3"
+              class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
             >
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-gray-700">
+              <div class="flex items-center justify-between mb-3">
+                <span class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800">
                   {{ t("question") }} {{ index + 1 }}
                 </span>
                 <button
                   type="button"
                   @click="removeQuestion(index)"
-                  class="text-xs text-red-500 hover:text-red-700"
+                  class="text-xs font-medium text-red-500 hover:text-red-700"
                 >
                   {{ t("remove") }}
                 </button>
@@ -1273,7 +1356,7 @@ function saveAsDraft() {
 
               <div class="grid md:grid-cols-3 gap-3 mt-3">
                 <div>
-                  <label class="block text-xs text-gray-600 mb-1">
+                  <label class="block text-xs font-medium text-gray-600 mb-1">
                     {{ t("question_type") }}
                   </label>
                   <select
@@ -1304,20 +1387,24 @@ function saveAsDraft() {
                 </div>
 
                 <div class="md:col-span-2">
-                  <label class="block text-xs text-gray-600 mb-1">
+                  <label class="block text-xs font-medium text-gray-600 mb-1">
                     {{ t("options") }}
                   </label>
                   <input
                     v-model="q.optionsText"
                     :disabled="!needsOptions(q.question_type_id)"
-                    class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-400"
                     :placeholder="t('options_placeholder')"
                   />
                 </div>
               </div>
 
               <label class="flex items-center gap-2 mt-3 text-sm text-gray-700">
-                <input type="checkbox" v-model="q.is_required" />
+                <input
+                  type="checkbox"
+                  v-model="q.is_required"
+                  class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
                 {{ t("required") }}
               </label>
             </div>
@@ -1331,11 +1418,13 @@ function saveAsDraft() {
             <span class="text-red-500 ml-1">*</span>
             <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
           </label>
-          <textarea
-            v-model="form.description"
-            class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-37.5"
-            :placeholder="t('job_description_placeholder')"
-          />
+          <div class="mt-1">
+            <RichTextEditor
+              v-model="form.description"
+              :placeholder="t('job_description_placeholder')"
+              min-height="200px"
+            />
+          </div>
         </div>
 
         <!-- SUBMIT -->
@@ -1367,67 +1456,4 @@ function saveAsDraft() {
     @close="showContentFlaggedModal = false"
   />
 
-  <!-- Skills Modal -->
-  <div
-    v-if="showSkillModal"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    @click.self="closeSkillModal"
-  >
-    <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold">Add Skills</h3>
-        <button
-          @click="closeSkillModal"
-          class="text-gray-400 hover:text-gray-600 text-xl"
-        >
-          ×
-        </button>
-      </div>
-
-      <!-- Search Input -->
-      <input
-        v-model="skillSearchQuery"
-        @input="handleSkillSearch"
-        @keydown.enter.prevent="handleSkillEnter"
-        type="text"
-        placeholder="Search or create skill..."
-        class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-      />
-
-      <!-- Suggestions -->
-      <div v-if="skillSuggestions.length" class="space-y-2 mb-4 max-h-48 overflow-y-auto">
-        <div
-          v-for="skill in skillSuggestions"
-          :key="skill.id"
-          @click="addSkillFromSuggestion(skill)"
-          class="p-2 border border-gray-200 rounded cursor-pointer hover:bg-blue-50 text-sm"
-        >
-          {{ skill.name }}
-        </div>
-      </div>
-
-      <!-- Create New Skill -->
-      <div v-if="skillSearchQuery && !skillSuggestions.length" class="mb-3">
-        <button
-          @click="createAndAddSkill(skillSearchQuery)"
-          class="w-full p-2 border-2 border-dashed border-green-300 rounded text-sm text-green-700 hover:bg-green-50"
-        >
-          + Create "{{ skillSearchQuery }}"
-        </button>
-      </div>
-
-      <!-- Loading -->
-      <p v-if="loadingSkills" class="text-xs text-gray-500 text-center">
-        Loading skills...
-      </p>
-
-      <!-- Close Button -->
-      <button
-        @click="closeSkillModal"
-        class="w-full mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
-      >
-        Done
-      </button>
-    </div>
-  </div>
 </template>
