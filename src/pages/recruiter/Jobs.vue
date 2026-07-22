@@ -31,7 +31,7 @@
           {{ t("verification.banner") }}
         </p>
         <RouterLink
-          to="/contact"
+          to="/recruiter/verification"
           class="text-sm font-semibold text-amber-700 hover:text-amber-900 underline whitespace-nowrap"
         >
           {{ t("verification.cta") }}

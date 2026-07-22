@@ -7,6 +7,12 @@ import { decodeAccessToken } from "../utils/jwt";
 import { isTelegramPlaceholderEmail } from "../utils/authFlags";
 import { isCaptchaError, isRateLimitedError } from "../utils/apiErrors";
 
+const RESTRICTED_KEY = "restrictedVerification";
+
+function readRestrictedFlag() {
+  return localStorage.getItem(RESTRICTED_KEY) === "1";
+}
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     token: localStorage.getItem("token"),
@@ -18,6 +24,12 @@ export const useAuthStore = defineStore("auth", {
     /** Setelah beberapa gagal login, BE meminta Turnstile (CAPTCHA_REQUIRED / INVALID). */
     captchaRequired: false,
     lastLoginEmail: null,
+    /**
+     * Soft-block KYC: akun suspended karena verification_incomplete.
+     * Hanya boleh akses halaman verifikasi employer.
+     */
+    restrictedVerification: readRestrictedFlag(),
+    accountNotice: null,
   }),
 
   getters: {
@@ -35,6 +47,28 @@ export const useAuthStore = defineStore("auth", {
     mergeUser(partial) {
       this.user = { ...(this.user || {}), ...partial };
       localStorage.setItem("user", JSON.stringify(this.user));
+    },
+
+    setRestrictedVerification(value, notice = null) {
+      this.restrictedVerification = Boolean(value);
+      if (notice != null) this.accountNotice = notice;
+      if (this.restrictedVerification) {
+        localStorage.setItem(RESTRICTED_KEY, "1");
+      } else {
+        localStorage.removeItem(RESTRICTED_KEY);
+        this.accountNotice = null;
+      }
+    },
+
+    applySessionFlags(data = {}) {
+      if (Object.prototype.hasOwnProperty.call(data, "restricted_verification")) {
+        this.setRestrictedVerification(
+          data.restricted_verification,
+          data.account_notice || null,
+        );
+      } else if (data.account_notice) {
+        this.accountNotice = data.account_notice;
+      }
     },
 
     async login(payload) {
@@ -62,6 +96,7 @@ export const useAuthStore = defineStore("auth", {
         localStorage.setItem("user", JSON.stringify(this.user));
 
         this.captchaRequired = false;
+        this.applySessionFlags(data);
 
         return true;
       } catch (err) {
@@ -80,9 +115,20 @@ export const useAuthStore = defineStore("auth", {
         }
 
         // 403 suspended → tampilkan pesan yang diterjemahkan di banner login
+        // Soft KYC block memakai restricted_verification di payload sukses, bukan error login.
         if (
           err?.response?.status === 403 &&
-          String(msg || "").toLowerCase().includes("suspended")
+          String(msg || "").includes("ACCOUNT_RESTRICTED") &&
+          !String(msg || "").includes("VERIFICATION_REQUIRED")
+        ) {
+          this.error = i18n.global.t("notifications.accountSuspended");
+          return false;
+        }
+
+        if (
+          err?.response?.status === 403 &&
+          String(msg || "").toLowerCase().includes("suspended") &&
+          !String(msg || "").includes("VERIFICATION_REQUIRED")
         ) {
           this.error = i18n.global.t("notifications.accountSuspended");
           return false;
@@ -109,11 +155,14 @@ export const useAuthStore = defineStore("auth", {
       this.user = null;
       this.captchaRequired = false;
       this.needVerifyEmail = false;
+      this.restrictedVerification = false;
+      this.accountNotice = null;
 
       localStorage.removeItem("token");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("user");
       localStorage.removeItem("notificationChannelFlags");
+      localStorage.removeItem(RESTRICTED_KEY);
     },
 
     async refreshToken({ logoutOnFail = true } = {}) {
@@ -161,6 +210,8 @@ export const useAuthStore = defineStore("auth", {
           };
           localStorage.setItem("user", JSON.stringify(this.user));
         }
+
+        this.applySessionFlags(payload);
 
         return token;
       } catch (err) {

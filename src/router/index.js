@@ -333,6 +333,12 @@ const routes = [
         name: "recruiter-payment-failure",
         component: () => import("../pages/recruiter/PaymentFailure.vue"),
       },
+      {
+        path: "verification",
+        name: "recruiter-verification",
+        component: () => import("../pages/recruiter/EmployerVerification.vue"),
+        meta: { requiresAuth: true, role: "recruiter", allowWhenVerificationRestricted: true },
+      },
     ],
   },
   {
@@ -380,7 +386,12 @@ router.beforeEach((to) => {
 
   // 🚫 GUEST ONLY (login/register)
   if (to.meta.guestOnly && auth.isLoggedIn) {
-    return auth.role === "recruiter" ? "/recruiter/jobs" : "/jobposts";
+    if (auth.role === "recruiter") {
+      return auth.restrictedVerification
+        ? "/recruiter/verification"
+        : "/recruiter/jobs";
+    }
+    return "/jobposts";
   }
 
   // 🚫 BLOCK SPECIFIC ROLE - Logout and redirect
@@ -397,6 +408,22 @@ router.beforeEach((to) => {
   // 🧭 ROLE CHECK
   if (to.meta.role && auth.role !== to.meta.role) {
     return "/";
+  }
+
+  // Soft KYC block: recruiter restricted_verification hanya boleh halaman verifikasi (+ public)
+  if (
+    auth.isLoggedIn &&
+    auth.role === "recruiter" &&
+    auth.restrictedVerification &&
+    !to.meta.public &&
+    !to.meta.allowWhenVerificationRestricted &&
+    to.name !== "recruiter-verification" &&
+    to.name !== "auth-error" &&
+    to.name !== "maintenance" &&
+    to.path !== "/login" &&
+    to.path !== "/recruiter-login"
+  ) {
+    return { name: "recruiter-verification", replace: true };
   }
 
   // Reset toast flag on successful login pages

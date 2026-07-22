@@ -7,6 +7,7 @@ import { useI18n } from "vue-i18n";
 import api from "@/services/api";
 import { decodeAccessToken } from "@/utils/jwt";
 import { displayEmail } from "@/utils/authFlags";
+import { resolveRecruiterLandingPath } from "@/utils/recruiterLanding";
 
 const route = useRoute();
 const router = useRouter();
@@ -135,12 +136,7 @@ onMounted(async () => {
     // Ambil nama profil SEBELUM redirect (jangan biarkan header kosong)
     await enrichUserProfile(token);
 
-    const destination =
-      auth.user.role === "recruiter" ? "/recruiter/jobs" : "/jobposts";
-    push.success(t("auth.messages.loginSuccess") || "Login successful!");
-    await router.replace(destination);
-
-    // Background: lengkapi JWT (worker_id) bila perlu
+    // Refresh untuk dapat restricted_verification + lengkapi JWT
     try {
       await auth.refreshToken({ logoutOnFail: false });
       if (!auth.user?.name) {
@@ -152,6 +148,16 @@ onMounted(async () => {
         refreshError,
       );
     }
+
+    let destination = "/jobposts";
+    if (auth.user.role === "recruiter") {
+      destination = auth.restrictedVerification
+        ? "/recruiter/verification"
+        : await resolveRecruiterLandingPath();
+    }
+
+    push.success(t("auth.messages.loginSuccess") || "Login successful!");
+    await router.replace(destination);
   } catch (error) {
     console.error("Callback parsing error:", error);
     push.error(

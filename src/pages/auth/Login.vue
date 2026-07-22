@@ -8,6 +8,7 @@ import { useI18n } from "vue-i18n";
 import api from "@/services/api";
 import TurnstileWidget from "@/components/common/TurnstileWidget.vue";
 import { isRateLimitedError } from "@/utils/apiErrors";
+import { resolveRecruiterLandingPath } from "@/utils/recruiterLanding";
 
 const { t } = useI18n();
 const loading = ref(false);
@@ -66,16 +67,17 @@ async function submit() {
   // Check if there's a redirect query parameter
   const redirectTo = route.query.redirect;
 
-  if (redirectTo) {
-    // Redirect back to the page they came from
+  if (auth.role === "recruiter" && auth.restrictedVerification) {
+    router.push("/recruiter/verification");
+    return;
+  }
+
+  if (redirectTo && !auth.restrictedVerification) {
     router.push(redirectTo);
+  } else if (auth.role === "recruiter") {
+    router.push(await resolveRecruiterLandingPath());
   } else {
-    // ROLE BASED REDIRECT
-    if (auth.role === "recruiter") {
-      router.push("/recruiter/jobs");
-    } else {
-      router.push("/jobposts");
-    }
+    router.push("/jobposts");
   }
 }
 

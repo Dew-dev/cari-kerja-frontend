@@ -3,7 +3,7 @@ import { push } from "notivue";
 import router from "../router";
 import { useAuthStore } from "../stores/authStore";
 import { i18n } from "../i18n";
-import { isMaintenanceModeError } from "../utils/apiErrors";
+import { isMaintenanceModeError, isVerificationRequiredError } from "../utils/apiErrors";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_FILE_STORAGE_URL}/api/v1`,
@@ -32,11 +32,30 @@ function logoutAndRedirectToLogin(auth, { notifySessionExpired = false } = {}) {
 function isAccountSuspendedError(error) {
   const status = error?.response?.status;
   const message = String(error?.response?.data?.message || "");
+  // Soft KYC block — jangan logout; diarahkan ke halaman verifikasi
+  if (message.includes("VERIFICATION_REQUIRED")) return false;
   return (
     status === 403 &&
     (message.startsWith("ACCOUNT_RESTRICTED") ||
       message.toLowerCase().includes("suspended"))
   );
+}
+
+let isRedirectingToVerification = false;
+
+function redirectToEmployerVerification(auth) {
+  auth.setRestrictedVerification(true);
+  if (
+    !isRedirectingToVerification &&
+    router.currentRoute.value.name !== "recruiter-verification"
+  ) {
+    isRedirectingToVerification = true;
+    router.replace({ name: "recruiter-verification" }).finally(() => {
+      setTimeout(() => {
+        isRedirectingToVerification = false;
+      }, 1500);
+    });
+  }
 }
 
 export function handleAccountSuspended(auth) {
@@ -110,6 +129,15 @@ api.interceptors.response.use(
             isRedirectingToMaintenance = false;
           }, 2000);
         });
+      }
+      return Promise.reject(error);
+    }
+
+    // Soft KYC: ACCOUNT_RESTRICTED: VERIFICATION_REQUIRED → halaman verifikasi
+    if (isVerificationRequiredError(error) && auth.isLoggedIn && auth.role === "recruiter") {
+      const message = String(error?.response?.data?.message || "");
+      if (message.includes("ACCOUNT_RESTRICTED")) {
+        redirectToEmployerVerification(auth);
       }
       return Promise.reject(error);
     }
