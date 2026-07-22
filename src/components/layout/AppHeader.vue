@@ -1,10 +1,10 @@
 <template>
-  <header class="bg-[#0a9cf5] text-white shrink-0">
+  <header class="bg-[#0a9cf5] text-white">
     <div
-      class="max-w-290 mx-auto px-4 sm:px-6 md:px-8 py-3 md:py-6 flex items-center justify-between gap-3"
+      class="max-w-290 mx-auto px-4 sm:px-6 md:px-8 py-4 md:py-10 flex items-center justify-between"
     >
       <div
-        class="text-lg md:text-xl font-bold hover:cursor-pointer hover:scale-105 transition duration-200 ease-in-out shrink-0"
+        class="text-lg md:text-xl font-bold hover:cursor-pointer hover:scale-110 transition duration-200 ease-in-out"
         @click="router.push('/')"
       >
         <span
@@ -25,14 +25,15 @@
         >
       </div>
 
-      <!-- Desktop: main 4 menus -->
-      <div class="hidden md:block flex-1 min-w-0">
+      <!-- Desktop: recruiter/user header -->
+      <div class="hidden md:block">
         <RecruiterHeader v-if="auth.role === 'recruiter'" />
         <UserHeader v-else />
       </div>
 
-      <!-- Desktop nav: language + auth -->
-      <nav class="hidden md:flex items-center gap-4 text-sm relative shrink-0">
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center gap-4 text-sm relative">
+        <!-- LANGUAGE DROPDOWN -->
         <div class="relative">
           <button
             @click="open = !open"
@@ -59,6 +60,7 @@
           </div>
         </div>
 
+        <!-- SIGN IN -->
         <template v-if="!auth.isLoggedIn">
           <button
             class="border border-white shadow-sm px-4 py-3 rounded font-semibold hover:bg-white hover:text-blue-500 transition duration-200"
@@ -68,6 +70,7 @@
           </button>
         </template>
 
+        <!-- AUTHENTICATED -->
         <template v-else>
           <div class="flex items-center gap-2 cursor-pointer" @click="goProfile">
             <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
@@ -100,7 +103,12 @@
           aria-label="Toggle menu"
           :aria-expanded="mobileOpen"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               v-if="!mobileOpen"
               stroke-linecap="round"
@@ -123,31 +131,12 @@
     <!-- Mobile panel -->
     <div
       v-if="mobileOpen"
-      class="md:hidden bg-[#0890e0] text-white border-t border-blue-400/60"
+      class="md:hidden bg-[#0a9cf5] text-white border-t border-blue-400"
     >
-      <div class="max-w-290 mx-auto px-4 py-4 space-y-4">
-        <!-- Main 4 menus -->
+      <div class="max-w-290 mx-auto px-4 py-4 space-y-3">
+        <!-- Language selector (mobile) -->
         <div>
-          <div class="text-[11px] uppercase tracking-wide text-white/70 font-semibold mb-2 px-1">
-            {{ $t("nav.menu") || "Menu" }}
-          </div>
-          <RecruiterHeader
-            v-if="auth.role === 'recruiter'"
-            mobile
-            @navigate="closeMobile"
-          />
-          <UserHeader
-            v-else
-            mobile
-            @navigate="closeMobile"
-          />
-        </div>
-
-        <div class="h-px bg-white/20" />
-
-        <!-- Language -->
-        <div>
-          <div class="text-[11px] uppercase tracking-wide text-white/70 font-semibold mb-2 px-1">
+          <div class="font-semibold mb-2">
             {{ $t("nav.language") || "Language" }}
           </div>
           <div class="flex gap-2">
@@ -155,38 +144,27 @@
               v-for="lang in languages"
               :key="lang.code + '-m'"
               @click="setLang(lang.code)"
-              class="flex-1 text-sm px-3 py-2.5 rounded-xl font-medium transition"
-              :class="
-                locale === lang.code
-                  ? 'bg-white text-[#0a9cf5]'
-                  : 'bg-white/10 hover:bg-white/20'
-              "
+              class="flex-1 text-sm text-left px-3 py-2 bg-white/10 rounded hover:bg-white/20"
             >
               {{ lang.label }}
             </button>
           </div>
         </div>
 
-        <div class="h-px bg-white/20" />
-
-        <!-- Auth -->
+        <!-- Auth actions (mobile) -->
         <div>
           <template v-if="!auth.isLoggedIn">
             <button
-              class="w-full text-left px-3 py-3 rounded-xl bg-white text-[#0a9cf5] hover:bg-blue-50 font-semibold"
-              @click="router.push('/login'); closeMobile()"
+              class="w-full text-left px-3 py-3 rounded bg-white/10 hover:bg-white/20 font-semibold"
+              @click="router.push('/login')"
             >
               {{ $t("nav.signIn") }}
             </button>
           </template>
 
           <template v-else>
-            <div class="flex items-center gap-3 px-1">
-              <button
-                type="button"
-                class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0"
-                @click="goProfile(); closeMobile()"
-              >
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden cursor-pointer" @click="goProfile">
                 <img
                   v-if="auth.user?.avatar_url"
                   :src="`${fileStorageUrl}${auth.user?.avatar_url}`"
@@ -195,11 +173,11 @@
                 <span v-else class="text-sm font-semibold text-gray-700">
                   {{ auth.user?.name?.charAt(0)?.toUpperCase() }}
                 </span>
-              </button>
+              </div>
               <div class="flex-1">
                 <div class="font-semibold">{{ auth.user?.name }}</div>
                 <button
-                  class="mt-2 text-sm px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 font-semibold"
+                  class="mt-2 block text-sm px-3 py-2 rounded bg-white/10 hover:bg-white/20 font-semibold"
                   @click="logout"
                 >
                   Logout
@@ -216,28 +194,25 @@
 <script setup>
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
 import RecruiterHeader from "@/components/layout/RecruiterHeader.vue";
 import UserHeader from "@/components/layout/UserHeader.vue";
-import { useAuthStore } from "@/stores/authStore.js";
 
 const { locale } = useI18n();
 const open = ref(false);
 const mobileOpen = ref(false);
+
+import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore.js";
 
 const router = useRouter();
 const route = useRoute();
 const auth = useAuthStore();
 const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 
-function closeMobile() {
-  mobileOpen.value = false;
-  open.value = false;
-}
-
 function logout() {
   auth.logout();
-  closeMobile();
+  mobileOpen.value = false;
+  open.value = false;
   router.push("/");
 }
 
@@ -252,11 +227,14 @@ function goProfile() {
 const languages = [
   { code: "en", label: "English" },
   { code: "id", label: "Indonesia" },
+  // { code: "ru", label: "Русский" },
+  // { code: "uz", label: "O'zbekcha" },
 ];
 
 function setLang(lang) {
   locale.value = lang;
   localStorage.setItem("lang", lang);
-  closeMobile();
+  open.value = false;
+  mobileOpen.value = false;
 }
 </script>

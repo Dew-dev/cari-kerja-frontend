@@ -2,7 +2,6 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getWorkerById } from '@/services/workers.api'
-import RichTextContent from '@/components/common/RichTextContent.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -90,11 +89,9 @@ onMounted(fetchWorkerProfile)
               
               <h1 class="text-2xl font-bold text-gray-900 mb-1">{{ worker.name }}</h1>
               
-              <RichTextContent
-                v-if="worker.profile_summary"
-                :html="worker.profile_summary"
-                class="text-sm mb-4"
-              />
+              <div v-if="worker.profile_summary" class="text-sm text-gray-600 mb-4">
+                {{ worker.profile_summary }}
+              </div>
 
               <!-- Contact Info -->
               <div class="w-full space-y-3 text-sm text-left border-t pt-4">
@@ -241,11 +238,9 @@ onMounted(fetchWorkerProfile)
                   {{ formatDate(exp.start_date) }} - 
                   {{ exp.is_current ? $t('workerProfile.present') : formatDate(exp.end_date) }}
                 </p>
-                <RichTextContent
-                  v-if="exp.description"
-                  :html="exp.description"
-                  class="text-gray-700"
-                />
+                <p v-if="exp.description" class="text-gray-700 whitespace-pre-line">
+                  {{ exp.description }}
+                </p>
               </div>
             </div>
           </div>
@@ -273,11 +268,9 @@ onMounted(fetchWorkerProfile)
                   {{ formatDate(edu.start_date) }} - 
                   {{ edu.is_current ? $t('workerProfile.present') : formatDate(edu.end_date) }}
                 </p>
-                <RichTextContent
-                  v-if="edu.description"
-                  :html="edu.description"
-                  class="text-gray-700"
-                />
+                <p v-if="edu.description" class="text-gray-700 whitespace-pre-line">
+                  {{ edu.description }}
+                </p>
               </div>
             </div>
           </div>
