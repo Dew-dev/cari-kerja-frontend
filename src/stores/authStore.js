@@ -4,42 +4,21 @@ import { login as loginApi } from "../services/auth.api";
 import { refreshToken as refreshApi } from "../services/auth.api";
 import { disconnectSocket } from "../composables/useSocket";
 import { decodeAccessToken } from "../utils/jwt";
-import { isFlagTruthy, isTelegramPlaceholderEmail } from "../utils/authFlags";
+import { isTelegramPlaceholderEmail } from "../utils/authFlags";
 import { isCaptchaError, isRateLimitedError } from "../utils/apiErrors";
 
-const FLAGS_KEY = "notificationChannelFlags";
-
-function readStoredFlags() {
-  try {
-    return JSON.parse(localStorage.getItem(FLAGS_KEY) || "{}") || {};
-  } catch {
-    return {};
-  }
-}
-
-function writeStoredFlags(flags) {
-  localStorage.setItem(FLAGS_KEY, JSON.stringify(flags));
-}
-
 export const useAuthStore = defineStore("auth", {
-  state: () => {
-    const flags = readStoredFlags();
-    return {
-      token: localStorage.getItem("token"),
-      refreshToken: localStorage.getItem("refreshToken"),
-      user: JSON.parse(localStorage.getItem("user")),
-      loading: false,
-      error: null,
-      needVerifyEmail: false,
-      /** Setelah beberapa gagal login, BE meminta Turnstile (CAPTCHA_REQUIRED / INVALID). */
-      captchaRequired: false,
-      lastLoginEmail: null,
-      requiresEmailSetup: Boolean(flags.requiresEmailSetup),
-      requiresTelegramLink: Boolean(flags.requiresTelegramLink),
-      dismissedEmailBanner: Boolean(flags.dismissedEmailBanner),
-      dismissedTelegramBanner: Boolean(flags.dismissedTelegramBanner),
-    };
-  },
+  state: () => ({
+    token: localStorage.getItem("token"),
+    refreshToken: localStorage.getItem("refreshToken"),
+    user: JSON.parse(localStorage.getItem("user")),
+    loading: false,
+    error: null,
+    needVerifyEmail: false,
+    /** Setelah beberapa gagal login, BE meminta Turnstile (CAPTCHA_REQUIRED / INVALID). */
+    captchaRequired: false,
+    lastLoginEmail: null,
+  }),
 
   getters: {
     isLoggedIn: (state) => !!state.token,
@@ -50,78 +29,9 @@ export const useAuthStore = defineStore("auth", {
       const decoded = decodeAccessToken(state.token);
       return decoded?.login_provider || "local";
     },
-    showTelegramLinkBanner(state) {
-      if (!state.token || state.dismissedTelegramBanner) return false;
-      if (!state.requiresTelegramLink) return false;
-      const provider = this.loginProvider;
-      return provider === "local" || provider === "google";
-    },
-    showEmailSetupBanner(state) {
-      if (!state.token || state.dismissedEmailBanner) return false;
-      if (!state.requiresEmailSetup) return false;
-      return this.loginProvider === "telegram";
-    },
   },
 
   actions: {
-    persistFlags() {
-      writeStoredFlags({
-        requiresEmailSetup: this.requiresEmailSetup,
-        requiresTelegramLink: this.requiresTelegramLink,
-        dismissedEmailBanner: this.dismissedEmailBanner,
-        dismissedTelegramBanner: this.dismissedTelegramBanner,
-      });
-    },
-
-    applyNotificationFlags(payload = {}) {
-      if (
-        Object.prototype.hasOwnProperty.call(payload, "requires_email_setup") ||
-        Object.prototype.hasOwnProperty.call(payload, "requires_email_update")
-      ) {
-        this.requiresEmailSetup = isFlagTruthy(
-          payload.requires_email_setup ?? payload.requires_email_update,
-        );
-        if (!this.requiresEmailSetup) {
-          this.dismissedEmailBanner = false;
-        }
-      }
-
-      if (
-        Object.prototype.hasOwnProperty.call(payload, "requires_telegram_link")
-      ) {
-        this.requiresTelegramLink = isFlagTruthy(
-          payload.requires_telegram_link,
-        );
-        if (!this.requiresTelegramLink) {
-          this.dismissedTelegramBanner = false;
-        }
-      }
-
-      this.persistFlags();
-    },
-
-    dismissEmailBanner() {
-      this.dismissedEmailBanner = true;
-      this.persistFlags();
-    },
-
-    dismissTelegramBanner() {
-      this.dismissedTelegramBanner = true;
-      this.persistFlags();
-    },
-
-    markTelegramLinked() {
-      this.requiresTelegramLink = false;
-      this.dismissedTelegramBanner = false;
-      this.persistFlags();
-    },
-
-    markEmailSetupDone() {
-      this.requiresEmailSetup = false;
-      this.dismissedEmailBanner = false;
-      this.persistFlags();
-    },
-
     mergeUser(partial) {
       this.user = { ...(this.user || {}), ...partial };
       localStorage.setItem("user", JSON.stringify(this.user));
@@ -152,13 +62,6 @@ export const useAuthStore = defineStore("auth", {
         localStorage.setItem("user", JSON.stringify(this.user));
 
         this.captchaRequired = false;
-
-        this.applyNotificationFlags({
-          requires_telegram_link:
-            data.requires_telegram_link ?? user?.requires_telegram_link,
-          requires_email_setup:
-            data.requires_email_setup ?? user?.requires_email_setup,
-        });
 
         return true;
       } catch (err) {
@@ -206,15 +109,11 @@ export const useAuthStore = defineStore("auth", {
       this.user = null;
       this.captchaRequired = false;
       this.needVerifyEmail = false;
-      this.requiresEmailSetup = false;
-      this.requiresTelegramLink = false;
-      this.dismissedEmailBanner = false;
-      this.dismissedTelegramBanner = false;
 
       localStorage.removeItem("token");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("user");
-      localStorage.removeItem(FLAGS_KEY);
+      localStorage.removeItem("notificationChannelFlags");
     },
 
     async refreshToken({ logoutOnFail = true } = {}) {
@@ -262,8 +161,6 @@ export const useAuthStore = defineStore("auth", {
           };
           localStorage.setItem("user", JSON.stringify(this.user));
         }
-
-        this.applyNotificationFlags(payload);
 
         return token;
       } catch (err) {
