@@ -70,9 +70,24 @@ function handleStageTypeUpdate(type) {
   pipelineStore.setStageTypeFilter(type);
 }
 
+function handleSortByUpdate(value) {
+  pipelineStore.setSortBy(value);
+  // Client sort applies immediately via computed; also refetch so API order matches.
+  pipelineStore.fetchCandidates();
+}
+
+function handleMinMatchScoreUpdate(value) {
+  pipelineStore.setMinMatchScore(value);
+  pipelineStore.fetchCandidates();
+}
+
 function resetFilters() {
   pipelineStore.setSearch("");
   pipelineStore.setStageTypeFilter(null);
+  pipelineStore.setSortBy("match_score");
+  pipelineStore.setSortOrder("desc");
+  pipelineStore.setMinMatchScore(null);
+  pipelineStore.fetchCandidates();
 }
 
 async function handleMove({ applicationId, column }) {
@@ -271,8 +286,12 @@ async function handleChat(candidate) {
         locked-position
         :search="pipelineStore.search"
         :stage-type-filter="pipelineStore.stageTypeFilter"
+        :sort-by="pipelineStore.sortBy"
+        :min-match-score="pipelineStore.minMatchScore"
         @update:search="handleSearchUpdate"
         @update:stage-type-filter="handleStageTypeUpdate"
+        @update:sort-by="handleSortByUpdate"
+        @update:min-match-score="handleMinMatchScoreUpdate"
         @reset="resetFilters"
       />
 
