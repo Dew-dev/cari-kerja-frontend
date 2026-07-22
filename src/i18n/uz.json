@@ -610,6 +610,7 @@
     "edit": "Tahrirlash",
     "cancel": "Bekor qilish",
     "languages": "Tillar",
+    "languagesHint": "Biladigan tillaringizni va darajangizni qo'shing.",
     "noLanguagesAdded": "Tillar qo'shilmagan.",
     "addLanguageButton": "Til qo'shish",
     "editLanguage": "Tilni tahrirlash",

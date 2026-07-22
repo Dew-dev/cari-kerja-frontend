@@ -676,6 +676,7 @@
     "edit": "Ubah",
     "cancel": "Batal",
     "languages": "Bahasa",
+    "languagesHint": "Tambahkan bahasa yang Anda kuasai beserta tingkat kemahirannya.",
     "noLanguagesAdded": "Belum ada bahasa yang ditambahkan.",
     "addLanguageButton": "Tambah Bahasa",
     "editLanguage": "Ubah Bahasa",
