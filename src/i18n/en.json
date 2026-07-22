@@ -2424,6 +2424,8 @@
       "sectionTitle": "AI match with job",
       "computedAt": "Calculated {date}",
       "refreshing": "Refreshing…",
+      "refresh": "Refresh match",
+      "refreshFailed": "Could not refresh match details",
       "rematch": "Recalculate matches",
       "rematching": "Queuing…",
       "rematchQueued": "Match recalculation queued",

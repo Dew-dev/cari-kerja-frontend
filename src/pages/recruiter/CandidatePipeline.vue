@@ -9,6 +9,7 @@ import { getWorkerByApplication } from "@/services/applications";
 import { getWorkerById } from "@/services/workers.api";
 import { resolveWorkerProfileId, resolveWorkerUserId } from "@/utils/chatIdentity";
 import { chatErrorI18nKey } from "@/utils/apiErrors";
+import { mergeMatchSources } from "@/constants/matchScore";
 import api from "@/services/api";
 
 import PipelineFilters from "@/components/recruiter/pipeline/PipelineFilters.vue";
@@ -108,10 +109,11 @@ function handleOpenCandidate(candidate) {
 
 function onMatchUpdated(matchPayload) {
   if (!drawerCandidate.value?.application_id || !matchPayload) return;
-  drawerCandidate.value = {
+  const merged = {
     ...drawerCandidate.value,
-    ...matchPayload,
+    ...mergeMatchSources(drawerCandidate.value, matchPayload),
   };
+  drawerCandidate.value = merged;
 }
 
 function closeDrawer() {
@@ -127,9 +129,24 @@ async function handleRematch() {
         ? t("pipeline.match.rematchQueuedCount", { count })
         : t("pipeline.match.rematchQueued"),
     );
-    // Poll once after a short delay so pending badges can refresh when ready.
-    setTimeout(() => {
-      pipelineStore.fetchCandidates();
+    // Poll so badges/drawer pick up recomputed scores without wiping UI first.
+    setTimeout(async () => {
+      await pipelineStore.fetchCandidates();
+      if (drawerOpen.value && drawerCandidate.value?.application_id) {
+        const fresh = pipelineStore.candidates.find(
+          (c) => String(c.application_id) === String(drawerCandidate.value.application_id),
+        );
+        if (fresh) {
+          drawerCandidate.value = {
+            ...drawerCandidate.value,
+            ...mergeMatchSources(drawerCandidate.value, fresh),
+            name: fresh.name || drawerCandidate.value.name,
+            stage_id: fresh.stage_id ?? drawerCandidate.value.stage_id,
+            stage_name: fresh.stage_name || drawerCandidate.value.stage_name,
+            stage_type: fresh.stage_type || drawerCandidate.value.stage_type,
+          };
+        }
+      }
     }, 4000);
   } catch (err) {
     push.error(err?.response?.data?.message || t("pipeline.match.rematchFailed"));
