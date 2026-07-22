@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { i18n } from "../i18n";
 import { login as loginApi } from "../services/auth.api";
 import { refreshToken as refreshApi } from "../services/auth.api";
 
@@ -40,6 +41,15 @@ export const useAuthStore = defineStore("auth", {
       } catch (err) {
         console.error("Login error:", err);
         const msg = err?.response?.data?.message;
+
+        // 403 suspended → tampilkan pesan yang diterjemahkan di banner login
+        if (
+          err?.response?.status === 403 &&
+          String(msg || "").toLowerCase().includes("suspended")
+        ) {
+          this.error = i18n.global.t("notifications.accountSuspended");
+          return false;
+        }
 
         if (msg === "Email not verified") {
           this.error = "Please verify your email before logging in.";

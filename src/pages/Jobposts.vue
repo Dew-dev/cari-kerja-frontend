@@ -427,7 +427,7 @@
                   </div>
 
                   <p class="text-sm text-gray-600 mt-1 line-clamp-2">
-                    {{ job.description }}
+                    {{ stripHtml(job.description) }}
                   </p>
 
                   <!-- arrow for larger screens -->
@@ -543,6 +543,7 @@ import { getCategoriesWithJobcount } from "../services/categories.api";
 import api from "../services/api";
 import { useRoute, useRouter } from "vue-router";
 import { getEmploymentTypes } from "../services/employment_types.api";
+import { stripHtml } from "@/utils/richText";
 
 const { t } = useI18n();
 const auth = useAuthStore();

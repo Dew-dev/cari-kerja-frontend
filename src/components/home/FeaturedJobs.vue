@@ -36,7 +36,7 @@
             </div>
           </div>
 
-          <p class="text-sm text-gray-600 line-clamp-2 mb-4">{{ job.description }}</p>
+          <p class="text-sm text-gray-600 line-clamp-2 mb-4">{{ stripHtml(job.description) }}</p>
 
           <div class="flex gap-2 flex-wrap">
             <span v-for="(skill, idx) in (job.skills || []).slice(0, 2)" :key="idx" class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
@@ -73,6 +73,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { getJobPosts } from '@/services/jobposts.api';
+import { stripHtml } from '@/utils/richText';
 
 const router = useRouter();
 const jobs = ref([]);
