@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
+import { getMatchScoreTone } from "@/constants/matchScore";
 
 const { t } = useI18n();
 
@@ -36,6 +37,51 @@ const appliedAgo = computed(() => {
   if (days <= 0) return t("pipeline.card.today");
   if (days === 1) return t("pipeline.card.daysAgo", { count: 1 });
   return t("pipeline.card.daysAgo", { count: days });
+});
+
+const matchBadge = computed(() => {
+  const status = props.candidate.match_status;
+  const score = props.candidate.match_score;
+  const hasNumericScore = score !== null && score !== undefined && score !== "";
+
+  // Include 0% for ready/pending — do not treat 0 as missing.
+  if ((status === "ready" || status === "pending") && hasNumericScore) {
+    const rounded = Math.round(Number(score));
+    if (!Number.isNaN(rounded)) {
+      return {
+        show: true,
+        label: t("pipeline.match.score", { score: rounded }),
+        className: getMatchScoreTone(rounded).badge,
+        aria: t("pipeline.match.scoreAria", { score: rounded }),
+      };
+    }
+  }
+
+  if (status === "pending") {
+    return {
+      show: true,
+      label: t("pipeline.match.pending"),
+      className: "bg-gray-100 text-gray-600 border-gray-200",
+      aria: t("pipeline.match.pending"),
+    };
+  }
+  if (status === "insufficient_data") {
+    return {
+      show: true,
+      label: t("pipeline.match.insufficient"),
+      className: "bg-gray-100 text-gray-500 border-gray-200",
+      aria: t("pipeline.match.insufficient"),
+    };
+  }
+  if (status === "failed") {
+    return {
+      show: true,
+      label: t("pipeline.match.failed"),
+      className: "bg-rose-50 text-rose-600 border-rose-100",
+      aria: t("pipeline.match.failed"),
+    };
+  }
+  return { show: false };
 });
 
 function onDragStart(e) {
@@ -75,7 +121,6 @@ function moveTo(column) {
       />
 
       <div class="flex items-start gap-2.5 flex-1 min-w-0" @click="emit('open', candidate)">
-        <!-- Avatar -->
         <div class="w-9 h-9 rounded-full bg-gray-200 shrink-0 flex items-center justify-center overflow-hidden">
           <img v-if="candidate.avatar_url" :src="linkStorageUrl + candidate.avatar_url" class="w-full h-full object-cover" />
           <span v-else class="text-xs font-semibold text-gray-600">{{ candidate.name?.charAt(0)?.toUpperCase() }}</span>
@@ -87,13 +132,21 @@ function moveTo(column) {
             {{ candidate.job_post_title }}
           </div>
           <div class="text-[11px] text-gray-400 mt-0.5">{{ appliedAgo }}</div>
+          <span
+            v-if="matchBadge.show"
+            class="inline-flex max-w-full mt-1.5 px-1.5 py-0.5 rounded border text-[10px] font-semibold truncate"
+            :class="matchBadge.className"
+            :aria-label="matchBadge.aria"
+          >
+            {{ matchBadge.label }}
+          </span>
         </div>
       </div>
 
-      <!-- Overflow menu (drag & drop fallback) -->
       <button
-        @click.stop="menuOpen = !menuOpen"
+        type="button"
         class="text-gray-400 hover:text-gray-600 p-1 -mr-1 -mt-1"
+        @click.stop="menuOpen = !menuOpen"
       >
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
           <path d="M10 6a2 2 0 100-4 2 2 0 000 4zM10 12a2 2 0 100-4 2 2 0 000 4zM10 18a2 2 0 100-4 2 2 0 000 4z" />
@@ -101,19 +154,24 @@ function moveTo(column) {
       </button>
     </div>
 
-    <div v-if="menuOpen" @click.stop class="absolute right-2 top-9 z-20 w-48 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+    <div v-if="menuOpen" class="absolute right-2 top-9 z-20 w-48 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden" @click.stop>
       <div class="px-3 py-1.5 text-[11px] font-semibold text-gray-400 uppercase">{{ t("pipeline.card.moveTo") }}</div>
       <button
         v-for="col in otherColumns"
         :key="col.key"
-        @click="moveTo(col)"
+        type="button"
         class="w-full text-left px-3 py-2 text-sm hover:bg-gray-50"
+        @click="moveTo(col)"
       >
         {{ col.name || t(col.i18nKey) }}
       </button>
 
       <div class="border-t border-gray-100">
-        <button @click="menuOpen = false; emit('chat', candidate)" class="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
+        <button
+          type="button"
+          class="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
+          @click="menuOpen = false; emit('chat', candidate)"
+        >
           <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>

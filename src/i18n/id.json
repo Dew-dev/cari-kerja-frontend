@@ -2186,7 +2186,37 @@
     "filters": {
       "searchPlaceholder": "Cari nama kandidat...",
       "allPositions": "Semua Posisi",
-      "reset": "Reset filter"
+      "reset": "Reset filter",
+      "sortLabel": "Urutkan",
+      "sortByMatch": "Kecocokan tertinggi",
+      "sortByUpdated": "Terbaru diupdate",
+      "sortByApplied": "Tanggal apply",
+      "minMatch": "Skor minimum",
+      "minMatchAll": "Semua"
+    },
+    "match": {
+      "score": "{score}% Match",
+      "scoreAria": "Kecocokan {score} persen",
+      "scoreLabel": "kecocokan",
+      "pending": "Menghitung kecocokan…",
+      "insufficient": "Data profil kurang",
+      "failed": "Gagal menghitung",
+      "sectionTitle": "Kecocokan AI dengan lowongan",
+      "computedAt": "Dihitung {date}",
+      "refreshing": "Memuat ulang…",
+      "refresh": "Muat ulang kecocokan",
+      "refreshFailed": "Gagal memuat ulang detail kecocokan",
+      "rematch": "Hitung ulang kecocokan",
+      "rematching": "Mengantrikan…",
+      "rematchQueued": "Perhitungan ulang kecocokan diantrikan",
+      "rematchQueuedCount": "Menghitung ulang kecocokan untuk {count} pelamar",
+      "rematchFailed": "Gagal mengantrikan perhitungan ulang",
+      "breakdown": {
+        "semantic": "Kesamaan deskripsi",
+        "skills": "Kecocokan skill",
+        "experience": "Pengalaman",
+        "education": "Pendidikan"
+      }
     },
     "analytics": {
       "stageCounts": "Jumlah Kandidat per Tahap",

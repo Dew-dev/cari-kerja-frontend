@@ -9,6 +9,7 @@ import { getWorkerByApplication } from "@/services/applications";
 import { getWorkerById } from "@/services/workers.api";
 import { resolveWorkerProfileId, resolveWorkerUserId } from "@/utils/chatIdentity";
 import { chatErrorI18nKey } from "@/utils/apiErrors";
+import { mergeMatchSources } from "@/constants/matchScore";
 import api from "@/services/api";
 
 import PipelineFilters from "@/components/recruiter/pipeline/PipelineFilters.vue";
@@ -70,9 +71,24 @@ function handleStageTypeUpdate(type) {
   pipelineStore.setStageTypeFilter(type);
 }
 
+function handleSortByUpdate(value) {
+  pipelineStore.setSortBy(value);
+  // Client sort applies immediately via computed; also refetch so API order matches.
+  pipelineStore.fetchCandidates();
+}
+
+function handleMinMatchScoreUpdate(value) {
+  pipelineStore.setMinMatchScore(value);
+  pipelineStore.fetchCandidates();
+}
+
 function resetFilters() {
   pipelineStore.setSearch("");
   pipelineStore.setStageTypeFilter(null);
+  pipelineStore.setSortBy("match_score");
+  pipelineStore.setSortOrder("desc");
+  pipelineStore.setMinMatchScore(null);
+  pipelineStore.fetchCandidates();
 }
 
 async function handleMove({ applicationId, column }) {
@@ -91,8 +107,50 @@ function handleOpenCandidate(candidate) {
   drawerOpen.value = true;
 }
 
+function onMatchUpdated(matchPayload) {
+  if (!drawerCandidate.value?.application_id || !matchPayload) return;
+  const merged = {
+    ...drawerCandidate.value,
+    ...mergeMatchSources(drawerCandidate.value, matchPayload),
+  };
+  drawerCandidate.value = merged;
+}
+
 function closeDrawer() {
   drawerOpen.value = false;
+}
+
+async function handleRematch() {
+  try {
+    const result = await pipelineStore.rematchActiveJob();
+    const count = result?.applicant_count;
+    push.success(
+      count != null
+        ? t("pipeline.match.rematchQueuedCount", { count })
+        : t("pipeline.match.rematchQueued"),
+    );
+    // Poll so badges/drawer pick up recomputed scores without wiping UI first.
+    setTimeout(async () => {
+      await pipelineStore.fetchCandidates();
+      if (drawerOpen.value && drawerCandidate.value?.application_id) {
+        const fresh = pipelineStore.candidates.find(
+          (c) => String(c.application_id) === String(drawerCandidate.value.application_id),
+        );
+        if (fresh) {
+          drawerCandidate.value = {
+            ...drawerCandidate.value,
+            ...mergeMatchSources(drawerCandidate.value, fresh),
+            name: fresh.name || drawerCandidate.value.name,
+            stage_id: fresh.stage_id ?? drawerCandidate.value.stage_id,
+            stage_name: fresh.stage_name || drawerCandidate.value.stage_name,
+            stage_type: fresh.stage_type || drawerCandidate.value.stage_type,
+          };
+        }
+      }
+    }, 4000);
+  } catch (err) {
+    push.error(err?.response?.data?.message || t("pipeline.match.rematchFailed"));
+  }
 }
 
 async function resolveWorkerIds(candidate) {
@@ -241,6 +299,23 @@ async function handleChat(candidate) {
         <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
             type="button"
+            class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors justify-center disabled:opacity-50"
+            :disabled="pipelineStore.rematching || !jobPostId"
+            @click="handleRematch"
+          >
+            <svg
+              class="w-4 h-4"
+              :class="pipelineStore.rematching ? 'animate-spin' : ''"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            {{ pipelineStore.rematching ? t("pipeline.match.rematching") : t("pipeline.match.rematch") }}
+          </button>
+          <button
+            type="button"
             class="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors justify-center"
             @click="openHistory"
           >
@@ -271,8 +346,12 @@ async function handleChat(candidate) {
         locked-position
         :search="pipelineStore.search"
         :stage-type-filter="pipelineStore.stageTypeFilter"
+        :sort-by="pipelineStore.sortBy"
+        :min-match-score="pipelineStore.minMatchScore"
         @update:search="handleSearchUpdate"
         @update:stage-type-filter="handleStageTypeUpdate"
+        @update:sort-by="handleSortByUpdate"
+        @update:min-match-score="handleMinMatchScoreUpdate"
         @reset="resetFilters"
       />
 
@@ -336,7 +415,13 @@ async function handleChat(candidate) {
       @close="historyOpen = false"
     />
 
-    <CandidateDetailDrawer :open="drawerOpen" :candidate="drawerCandidate" @close="closeDrawer" @chat="handleChat" />
+    <CandidateDetailDrawer
+      :open="drawerOpen"
+      :candidate="drawerCandidate"
+      @close="closeDrawer"
+      @chat="handleChat"
+      @match-updated="onMatchUpdated"
+    />
 
     <StageManagerModal
       :open="stageManagerOpen"

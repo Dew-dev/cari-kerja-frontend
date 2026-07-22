@@ -14,6 +14,14 @@ const props = defineProps({
     type: String,
     default: "Select...",
   },
+  id: {
+    type: String,
+    default: undefined,
+  },
+  ariaLabel: {
+    type: String,
+    default: undefined,
+  },
 })
 
 const emit = defineEmits(["change", "search"])
@@ -78,6 +86,8 @@ onBeforeUnmount(() => {
       ref="inputRef"
       type="text"
       class="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      :id="id"
+      :aria-label="ariaLabel"
       :placeholder="placeholder"
       v-model="inputValue"
       @focus="isOpen = true"

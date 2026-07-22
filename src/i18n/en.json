@@ -2493,7 +2493,37 @@
     "filters": {
       "searchPlaceholder": "Search candidate name...",
       "allPositions": "All Positions",
-      "reset": "Reset filters"
+      "reset": "Reset filters",
+      "sortLabel": "Sort by",
+      "sortByMatch": "Highest match",
+      "sortByUpdated": "Recently updated",
+      "sortByApplied": "Application date",
+      "minMatch": "Minimum match score",
+      "minMatchAll": "All"
+    },
+    "match": {
+      "score": "{score}% Match",
+      "scoreAria": "Match score {score} percent",
+      "scoreLabel": "match",
+      "pending": "Calculating…",
+      "insufficient": "Profile data incomplete",
+      "failed": "Could not calculate match",
+      "sectionTitle": "AI match with job",
+      "computedAt": "Calculated {date}",
+      "refreshing": "Refreshing…",
+      "refresh": "Refresh match",
+      "refreshFailed": "Could not refresh match details",
+      "rematch": "Recalculate matches",
+      "rematching": "Queuing…",
+      "rematchQueued": "Match recalculation queued",
+      "rematchQueuedCount": "Recalculating matches for {count} applicants",
+      "rematchFailed": "Failed to queue match recalculation",
+      "breakdown": {
+        "semantic": "Description similarity",
+        "skills": "Skills match",
+        "experience": "Experience",
+        "education": "Education"
+      }
     },
     "analytics": {
       "stageCounts": "Candidates per Stage",
