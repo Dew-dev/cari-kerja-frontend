@@ -20,10 +20,7 @@ onMounted(async () => {
     const result = await api.get("/auth/verify-email", { params: { token } });
     if (!result.err) {
       success.value = true;
-      // Setelah email terverifikasi, hilangkan banner setup email
       if (auth.isLoggedIn) {
-        auth.markEmailSetupDone();
-        auth.applyNotificationFlags({ requires_email_setup: false });
         try {
           await auth.refreshToken({ logoutOnFail: false });
         } catch {
@@ -31,7 +28,7 @@ onMounted(async () => {
         }
         setTimeout(() => {
           router.push(
-            auth.role === "recruiter" ? "/recruiter/jobs" : "/profile/edit",
+            auth.role === "recruiter" ? "/recruiter/jobs" : "/jobposts",
           );
         }, 2000);
         return;

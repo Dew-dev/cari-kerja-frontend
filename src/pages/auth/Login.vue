@@ -6,7 +6,6 @@ import { useAuthStore } from "@/stores/authStore.js";
 import { push } from "notivue";
 import { useI18n } from "vue-i18n";
 import api from "@/services/api";
-import { clearOAuthLinkIntent } from "@/utils/oauthIntent";
 import TurnstileWidget from "@/components/common/TurnstileWidget.vue";
 import { isRateLimitedError } from "@/utils/apiErrors";
 
@@ -105,8 +104,6 @@ function loginWithGoogle() {
 }
 
 function loginWithTelegram() {
-  // Jangan biarkan intent "link telegram" tersisa mengganggu login biasa
-  clearOAuthLinkIntent();
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_FILE_STORAGE_URL}/api/v1`;
   window.location.href = `${apiBaseUrl}/users/telegram?role_id=1&origin=${encodeURIComponent(window.location.origin)}`;
 }

@@ -143,12 +143,6 @@ const routes = [
     component: () => import("../pages/auth/Callback.vue"),
   },
   {
-    path: "/auth/telegram-link",
-    name: "auth-telegram-link",
-    meta: { requiresAuth: true },
-    component: () => import("../pages/auth/TelegramLinkCallback.vue"),
-  },
-  {
     path: "/recruiter-login",
     name: "recruiter-login",
     meta: { blockRole: "recruiter" },

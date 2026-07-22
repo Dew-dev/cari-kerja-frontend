@@ -11,7 +11,6 @@ import SearchableSelect from "@/components/common/SearchableSelect.vue";
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
 import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
-import NotificationChannelsCard from "@/components/profile/NotificationChannelsCard.vue";
 import { displayEmail } from "@/utils/authFlags";
 import { isContentRejectedError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors";
 import { stripHtml } from "@/utils/richText";
@@ -30,9 +29,9 @@ const appliedError = ref("");
 const savedError = ref("");
 
 const isTelegramLogin = computed(() => auth.loginProvider === "telegram");
-const canEditEmail = computed(
-  () => auth.loginProvider === "telegram" || auth.loginProvider === "local",
-);
+const isGoogleLogin = computed(() => auth.loginProvider === "google");
+/** Email akun hanya bisa diubah untuk login email/password — bukan channel notifikasi silang-provider. */
+const canEditEmail = computed(() => auth.loginProvider === "local");
 
 const form = reactive({
   id: "",
@@ -282,7 +281,9 @@ async function saveProfile() {
   }
 }
 
-async function saveEmailForNotifications() {
+async function saveAccountEmail() {
+  if (!canEditEmail.value) return;
+
   const email = String(form.email || "").trim().toLowerCase();
   if (!email) {
     push.warning(t("auth.banners.emailRequired"));
@@ -300,7 +301,6 @@ async function saveEmailForNotifications() {
     }
 
     auth.mergeUser({ email });
-    auth.applyNotificationFlags(data);
     push.success(t("auth.banners.verificationEmailSent"));
   } catch (err) {
     if (isDisposableEmailRejected(err)) {
@@ -1505,28 +1505,36 @@ watch(activeTab, (newTab) => {
               />
             </div>
 
-            <div>
+            <div v-if="isTelegramLogin">
               <label class="text-xs md:text-sm font-medium text-gray-700">
                 {{ $t('profile.email') }}
-                <span v-if="!isTelegramLogin" class="text-red-500">*</span>
+              </label>
+              <p class="mt-1 text-sm text-gray-600 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2">
+                {{ $t('profile.telegramNotificationsOnly') }}
+              </p>
+            </div>
+            <div v-else>
+              <label class="text-xs md:text-sm font-medium text-gray-700">
+                {{ $t('profile.email') }}
+                <span class="text-red-500">*</span>
               </label>
               <input
                 v-model="form.email"
                 type="email"
                 class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm min-h-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 :class="{ 'bg-gray-50': !canEditEmail }"
-                :placeholder="isTelegramLogin ? $t('profile.emailNotificationPlaceholder') : $t('profile.email')"
+                :placeholder="$t('profile.email')"
                 :readonly="!canEditEmail"
               />
-              <p v-if="isTelegramLogin" class="text-xs text-gray-500 mt-1">
-                {{ $t('profile.emailTelegramHint') }}
+              <p v-if="isGoogleLogin" class="text-xs text-gray-500 mt-1">
+                {{ $t('profile.emailManagedByGoogle') }}
               </p>
               <button
                 v-if="canEditEmail"
                 type="button"
                 class="mt-2 text-xs md:text-sm px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
                 :disabled="savingEmail"
-                @click="saveEmailForNotifications"
+                @click="saveAccountEmail"
               >
                 {{ savingEmail ? $t('auth.buttons.sending') : $t('profile.updateEmail') }}
               </button>
@@ -1891,7 +1899,6 @@ watch(activeTab, (newTab) => {
         </form>
         </div>
 
-        <NotificationChannelsCard />
         <JobAlertsCard />
         <CommunicationPreferencesCard />
       </div>
