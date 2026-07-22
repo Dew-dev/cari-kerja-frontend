@@ -4,10 +4,6 @@ export function getJobPosts(params) {
   return api.get(`/job-posts`, { params });
 }
 
-export function getHotJobPosts(params) {
-  return api.get(`/job-posts/hot`, { params });
-}
-
 export function getJobPostsSelf(params) {
   const res = api.get(`/recruiters/job-posts/self`, { params });
   return res;

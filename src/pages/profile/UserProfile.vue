@@ -5,16 +5,8 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import api from "@/services/api";
 import { getSavedJobs, removeSavedJob } from "@/services/saved-jobs.api";
-import { changeEmail } from "@/services/auth.api";
 import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
-import RichTextEditor from "@/components/common/RichTextEditor.vue";
-import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
-import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
-import NotificationChannelsCard from "@/components/profile/NotificationChannelsCard.vue";
-import { displayEmail } from "@/utils/authFlags";
-import { isContentRejectedError, isDisposableEmailRejected } from "@/utils/apiErrors";
-import { stripHtml } from "@/utils/richText";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -23,16 +15,10 @@ const { t } = useI18n();
 const activeTab = ref(localStorage.getItem("profileActiveTab") || "profile");
 const loadingProfile = ref(false);
 const savingProfile = ref(false);
-const savingEmail = ref(false);
 const loadingApplied = ref(false);
 const loadingSaved = ref(false);
 const appliedError = ref("");
 const savedError = ref("");
-
-const isTelegramLogin = computed(() => auth.loginProvider === "telegram");
-const canEditEmail = computed(
-  () => auth.loginProvider === "telegram" || auth.loginProvider === "local",
-);
 
 const form = reactive({
   id: "",
@@ -107,37 +93,6 @@ const skillSearchQuery = ref("");
 const skillSuggestions = ref([]);
 const loadingSkills = ref(false);
 
-const languages = ref([]);
-const showLanguageModal = ref(false);
-const editingLanguageId = ref(null);
-const languageForm = reactive({
-  language_id: null,
-  language_name: "",
-  proficiency_level_id: "",
-  is_primary: false,
-});
-const languageSuggestions = ref([]);
-const loadingLanguageOptions = ref(false);
-const savingLanguage = ref(false);
-let languageSearchTimeout = null;
-
-const proficiencyOptions = computed(() => [
-  { id: 1, label: t("profile.proficiency.beginner") },
-  { id: 2, label: t("profile.proficiency.intermediate") },
-  { id: 3, label: t("profile.proficiency.fluent") },
-  { id: 4, label: t("profile.proficiency.native") },
-]);
-
-function proficiencyLabel(id) {
-  return proficiencyOptions.value.find((p) => p.id === Number(id))?.label || "";
-}
-
-// CV Parser
-const cvParserFileInput = ref(null);
-const cvParserLoading = ref(false);
-const cvParsedData = ref(null);
-const cvParserError = ref("");
-
 const RESUME_LIMIT = 3;
 const CV_MAX_MB = 5;
 const linkStorageUrl =
@@ -179,8 +134,7 @@ async function loadProfile() {
     const data = res.data?.data || res.data || {};
     form.id = data.id ?? "";
     form.name = data.name ?? "";
-    // Email kosong / placeholder Telegram = normal (bukan error)
-    form.email = displayEmail(data.email);
+    form.email = data.email ?? "";
     form.telephone = data.telephone ?? "";
     form.address = data.address ?? "";
     form.headline = data.headline ?? "";
@@ -226,7 +180,6 @@ async function loadProfile() {
     //   isSaved: true,
     }));
     skills.value = data.worker_skills ?? [];
-    languages.value = data.languages ?? [];
   } catch (err) {
     console.error("Failed to load profile:", err);
   } finally {
@@ -270,46 +223,9 @@ async function saveProfile() {
 
      push.success(t('profile.profileUpdatedSuccessfully'));
   } catch (err) {
-    if (isContentRejectedError(err)) {
-      push.warning(t("contentRejected.upload"));
-      return;
-    }
      push.error(err?.response?.data?.message || t('profile.failedToUpdateProfile'));
   } finally {
     savingProfile.value = false;
-  }
-}
-
-async function saveEmailForNotifications() {
-  const email = String(form.email || "").trim().toLowerCase();
-  if (!email) {
-    push.warning(t("auth.banners.emailRequired"));
-    return;
-  }
-
-  try {
-    savingEmail.value = true;
-    const res = await changeEmail(email);
-    const data = res.data?.data || {};
-
-    if (data.token) {
-      auth.token = data.token;
-      localStorage.setItem("token", data.token);
-    }
-
-    auth.mergeUser({ email });
-    auth.applyNotificationFlags(data);
-    push.success(t("auth.banners.verificationEmailSent"));
-  } catch (err) {
-    if (isDisposableEmailRejected(err)) {
-      push.warning(t("contentRejected.disposableEmail"));
-      return;
-    }
-    push.error(
-      err?.response?.data?.message || t("auth.banners.failedChangeEmail"),
-    );
-  } finally {
-    savingEmail.value = false;
   }
 }
 
@@ -360,10 +276,6 @@ async function addResume(file, title, isDefault) {
 
        push.success(t('profile.resumeAddedSuccessfully'));
   } catch (err) {
-    if (isContentRejectedError(err)) {
-      push.warning(t("contentRejected.upload"));
-      return;
-    }
        push.error(t('profile.failedToUploadResume'));
   }
 }
@@ -440,18 +352,12 @@ async function addWorkExp() {
 
 async function saveWorkExp(item) {
   try {
-    if (item.is_current) item.end_date = null;
-    if (!item.id) {
-      const res = await api.post("/workers/work-exp", item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      item.id = res.data.data.id;
-      delete item._pending;
-    } else {
-      await api.put(`/workers/work-exp/${item.id}`, item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+    if(item.is_current){
+        item.end_date = null;
     }
+    await api.put(`/workers/work-exp/${item.id}`, item, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
      push.success(t('profile.workExperienceAdded'));
   } catch (err) {
      push.error(t('profile.failedToUpdateWorkExperience'));
@@ -459,10 +365,6 @@ async function saveWorkExp(item) {
 }
 
 async function deleteWorkExp(id) {
-  if (!id) {
-    workExperiences.value = workExperiences.value.filter((w) => w.id !== id && !(w._pending && !w.id));
-    return;
-  }
   try {
     await api.delete(`/workers/work-exp/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -502,18 +404,12 @@ async function addEducation() {
 
 async function saveEducation(item) {
   try {
-    if (item.is_current) item.end_date = null;
-    if (!item.id) {
-      const res = await api.post("/workers/educations", item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      item.id = res.data.data.id;
-      delete item._pending;
-    } else {
-      await api.put(`/workers/educations/${item.id}`, item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+    if(item.is_current){
+        item.end_date = null;
     }
+    await api.put(`/workers/educations/${item.id}`, item, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
      push.success(t('profile.educationAdded'));
   } catch (err) {
      push.error(t('profile.failedToUpdateEducation'));
@@ -521,10 +417,6 @@ async function saveEducation(item) {
 }
 
 async function deleteEducation(id) {
-  if (!id) {
-    educations.value = educations.value.filter((e) => e.id !== id && !(e._pending && !e.id));
-    return;
-  }
   try {
     await api.delete(`/workers/educations/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -570,32 +462,22 @@ async function addCertification() {
 
 async function saveCertification(item) {
   try {
-    item.isSaved = true;
-    if (item.is_active === false) item.expiry_date = null;
-    if (!item.id) {
-      const res = await api.post("/workers/cert", item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      item.id = res.data.data.id;
-      delete item._pending;
-    } else {
-      await api.put(`/workers/cert/${item.id}`, item, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-    }
-    push.success(t('profile.certificationAdded'));
+      item.isSaved = true;
+      if(item.is_active === false){
+          item.expiry_date = null;
+      }
+    await api.put(`/workers/cert/${item.id}`, item, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+      push.success(t('profile.certificationAdded'));
   } catch (err) {
-    push.error(t('profile.failedToUpdateCertification'));
+      push.error(t('profile.failedToUpdateCertification'));
   } finally {
     item.isSaved = false;
-  }
+}
 }
 
 async function deleteCertification(id) {
-  if (!id) {
-    certifications.value = certifications.value.filter((c) => c.id !== id && !(c._pending && !c.id));
-    return;
-  }
   try {
     await api.delete(`/workers/cert/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -748,117 +630,6 @@ async function deleteSkill(skill) {
   }
 }
 
-// Languages
-async function fetchLanguageOptions(search = "") {
-  if (!search.trim()) {
-    languageSuggestions.value = [];
-    return;
-  }
-  try {
-    loadingLanguageOptions.value = true;
-    // Public endpoint, no token required
-    const res = await api.get(`/languages?search=${encodeURIComponent(search)}`);
-    languageSuggestions.value = res.data?.data || [];
-  } catch (err) {
-    console.error("Failed to fetch languages:", err);
-    languageSuggestions.value = [];
-  } finally {
-    loadingLanguageOptions.value = false;
-  }
-}
-
-function handleLanguageSearch(e) {
-  languageForm.language_name = e.target.value;
-  languageForm.language_id = null;
-  clearTimeout(languageSearchTimeout);
-  languageSearchTimeout = setTimeout(() => fetchLanguageOptions(e.target.value), 300);
-}
-
-function selectLanguageSuggestion(lang) {
-  languageForm.language_id = lang.id;
-  languageForm.language_name = lang.name;
-  languageSuggestions.value = [];
-}
-
-function openLanguageModal(language = null) {
-  editingLanguageId.value = language?.id || null;
-  languageForm.language_id = language?.language_id ?? null;
-  languageForm.language_name = language?.language_name || "";
-  languageForm.proficiency_level_id = language?.proficiency_level_id || "";
-  languageForm.is_primary = Boolean(language?.is_primary);
-  languageSuggestions.value = [];
-  showLanguageModal.value = true;
-}
-
-function closeLanguageModal() {
-  showLanguageModal.value = false;
-  editingLanguageId.value = null;
-  languageSuggestions.value = [];
-}
-
-async function saveLanguage() {
-  const name = languageForm.language_name.trim();
-  if (!name || !languageForm.proficiency_level_id) {
-    push.warning(t("profile.languageFormIncomplete"));
-    return;
-  }
-
-  const isDuplicate = languages.value.some(
-    (l) =>
-      l.id !== editingLanguageId.value &&
-      l.language_name?.trim().toLowerCase() === name.toLowerCase(),
-  );
-  if (isDuplicate) {
-    push.warning(t("profile.languageAlreadyAdded"));
-    return;
-  }
-
-  // Keep sending language_name for backward compatibility alongside language_id
-  const payload = {
-    language_name: name,
-    proficiency_level_id: Number(languageForm.proficiency_level_id),
-    is_primary: languageForm.is_primary,
-  };
-  if (languageForm.language_id) {
-    payload.language_id = languageForm.language_id;
-  }
-
-  try {
-    savingLanguage.value = true;
-    const headers = { Authorization: `Bearer ${localStorage.getItem("token")}` };
-
-    if (editingLanguageId.value) {
-      await api.put(`/workers/languages/${editingLanguageId.value}`, payload, { headers });
-      const idx = languages.value.findIndex((l) => l.id === editingLanguageId.value);
-      if (idx !== -1) {
-        languages.value[idx] = { ...languages.value[idx], ...payload };
-      }
-      push.success(t("profile.languageUpdated"));
-    } else {
-      const res = await api.post("/workers/languages", payload, { headers });
-      languages.value.push({ id: res.data?.data?.id, ...payload });
-      push.success(t("profile.languageAdded"));
-    }
-    closeLanguageModal();
-  } catch (err) {
-    push.error(err?.response?.data?.message || t("profile.failedToSaveLanguage"));
-  } finally {
-    savingLanguage.value = false;
-  }
-}
-
-async function deleteLanguage(language) {
-  try {
-    await api.delete(`/workers/languages/${language.id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    languages.value = languages.value.filter((l) => l.id !== language.id);
-    push.success(t("profile.languageRemoved"));
-  } catch (err) {
-    push.error(err?.response?.data?.message || t("profile.failedToDeleteLanguage"));
-  }
-}
-
 function onAvatarChange(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -911,23 +682,11 @@ async function loadSavedJobs() {
 
   try {
     const res = await getSavedJobs();
-    const data = res?.data ?? [];
+    const data = res?.data || res || [];
     savedJobs.value = Array.isArray(data) ? data : [];
   } catch (err) {
-    const message = err?.response?.data?.message || err?.message || "";
-    const status = err?.response?.status;
-    const messageText =
-      typeof message === "string" ? message : message?.message || "";
-
-    // Backend: list kosong atau join gagal sering jadi 404 / "not found"
-    if (
-      status === 404 ||
-      /not found|tidak ditemukan|can not find/i.test(String(messageText))
-    ) {
-      savedJobs.value = [];
-      return;
-    }
-    savedError.value = messageText || "Failed to load saved jobs";
+    savedError.value =
+      err?.response?.data?.message || "Failed to load saved jobs";
     savedJobs.value = [];
   } finally {
     loadingSaved.value = false;
@@ -935,19 +694,19 @@ async function loadSavedJobs() {
 }
 
 async function handleRemoveSaved(job) {
-  // Dari GET /workers/saved-jobs/self: id = saved_jobs.id, job_post_id = job post
-  // DELETE /saved-jobs/:id butuh saved_jobs.id
-  const savedJobId = job?.id;
-  if (!savedJobId) return;
+  const jobId = job?.id || job?.job_id || job?.job_post_id;
+  if (!jobId) return;
 
   try {
-    await removeSavedJob(savedJobId);
-    savedJobs.value = savedJobs.value.filter((item) => item?.id !== savedJobId);
-    push.success(t("profile.removedFromSavedJobs"));
+    await removeSavedJob(jobId);
+    savedJobs.value = savedJobs.value.filter((item) => {
+      const itemJob = item?.job || item?.job_post || item;
+      const itemId = itemJob?.id || itemJob?.job_id || itemJob?.job_post_id;
+      return itemId !== jobId;
+    });
+       push.success(t('profile.removedFromSavedJobs'));
   } catch (err) {
-    push.error(
-      err?.response?.data?.message || t("profile.failedToRemoveSavedJob"),
-    );
+       push.error(err?.response?.data?.message || t('profile.failedToRemoveSavedJob'));
   }
 }
 
@@ -971,163 +730,6 @@ function handleAddResume() {
   if (resumeFileInput.value) resumeFileInput.value.value = "";
   if (resumeTitleInput.value) resumeTitleInput.value.value = "";
   if (resumeDefaultInput.value) resumeDefaultInput.value.checked = false;
-}
-
-// CV Parser functions
-async function parseCVFile() {
-  const file = cvParserFileInput.value?.files?.[0];
-  if (!file) {
-    push.error(t('profile.cvParser.selectFile'));
-    return;
-  }
-  const validTypes = [
-    'application/pdf',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  ];
-  if (!validTypes.includes(file.type)) {
-    push.error(t('profile.cvParser.invalidType'));
-    return;
-  }
-
-  try {
-    cvParserLoading.value = true;
-    cvParserError.value = '';
-    cvParsedData.value = null;
-
-    const formData = new FormData();
-    formData.append('cv', file);
-
-    const res = await api.post('/workers/cv/parse', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
-
-    cvParsedData.value = res.data?.data || res.data;
-  } catch (err) {
-    if (isContentRejectedError(err)) {
-      cvParserError.value = t("contentRejected.upload");
-      push.warning(cvParserError.value);
-      return;
-    }
-    cvParserError.value = err?.response?.data?.message || t('profile.cvParser.failedToParse');
-    push.error(cvParserError.value);
-  } finally {
-    cvParserLoading.value = false;
-  }
-}
-
-function applyParsedPersonalInfo() {
-  const d = cvParsedData.value;
-  if (!d) return;
-  if (d.name) form.name = d.name;
-  if (d.phone || d.telephone) form.telephone = d.phone || d.telephone;
-  if (d.address) form.address = d.address;
-  if (d.summary || d.profile_summary) form.profile_summary = d.summary || d.profile_summary;
-  if (d.date_of_birth) form.date_of_birth = formatDateForInput(d.date_of_birth);
-  activeTab.value = 'profile';
-  push.success(t('profile.cvParser.appliedPersonalInfo'));
-}
-
-function applyParsedWorkExp(exp) {
-  workExperiences.value.unshift({
-    company_name: exp.company_name || '',
-    job_title: exp.job_title || '',
-    start_date: formatDateForInput(exp.start_date),
-    end_date: exp.is_current ? null : formatDateForInput(exp.end_date),
-    is_current: exp.is_current || false,
-    description: exp.description || '',
-    _pending: true,
-  });
-  activeTab.value = 'work';
-  push.success(t('profile.cvParser.appliedSection'));
-}
-
-function applyAllParsedWorkExp() {
-  const exps = cvParsedData.value?.work_experiences || [];
-  if (!exps.length) return;
-  exps.forEach((exp) => {
-    workExperiences.value.unshift({
-      company_name: exp.company_name || '',
-      job_title: exp.job_title || '',
-      start_date: formatDateForInput(exp.start_date),
-      end_date: exp.is_current ? null : formatDateForInput(exp.end_date),
-      is_current: exp.is_current || false,
-      description: exp.description || '',
-      _pending: true,
-    });
-  });
-  activeTab.value = 'work';
-  push.success(t('profile.cvParser.appliedSection'));
-}
-
-function applyParsedEducation(edu) {
-  educations.value.unshift({
-    institution_name: edu.institution_name || '',
-    degree: edu.degree || '',
-    major: edu.major || '',
-    start_date: formatDateForInput(edu.start_date),
-    end_date: edu.is_current ? null : formatDateForInput(edu.end_date),
-    is_current: edu.is_current || false,
-    description: edu.description || '',
-    _pending: true,
-  });
-  activeTab.value = 'education';
-  push.success(t('profile.cvParser.appliedSection'));
-}
-
-function applyAllParsedEducation() {
-  const edus = cvParsedData.value?.educations || [];
-  if (!edus.length) return;
-  edus.forEach((edu) => {
-    educations.value.unshift({
-      institution_name: edu.institution_name || '',
-      degree: edu.degree || '',
-      major: edu.major || '',
-      start_date: formatDateForInput(edu.start_date),
-      end_date: edu.is_current ? null : formatDateForInput(edu.end_date),
-      is_current: edu.is_current || false,
-      description: edu.description || '',
-      _pending: true,
-    });
-  });
-  activeTab.value = 'education';
-  push.success(t('profile.cvParser.appliedSection'));
-}
-
-function applyParsedCertification(cert) {
-  certifications.value.unshift({
-    name: cert.name || '',
-    issuer: cert.issuer || '',
-    issue_date: formatDateForInput(cert.issue_date),
-    expiry_date: formatDateForInput(cert.expiry_date),
-    credential_id: cert.credential_id || '',
-    link: cert.link || '',
-    is_active: true,
-    _pending: true,
-  });
-  activeTab.value = 'certifications';
-  push.success(t('profile.cvParser.appliedSection'));
-}
-
-function applyAllParsedCertifications() {
-  const certs = cvParsedData.value?.certifications || [];
-  if (!certs.length) return;
-  certs.forEach((cert) => {
-    certifications.value.unshift({
-      name: cert.name || '',
-      issuer: cert.issuer || '',
-      issue_date: formatDateForInput(cert.issue_date),
-      expiry_date: formatDateForInput(cert.expiry_date),
-      credential_id: cert.credential_id || '',
-      link: cert.link || '',
-      is_active: true,
-      _pending: true,
-    });
-  });
-  activeTab.value = 'certifications';
-  push.success(t('profile.cvParser.appliedSection'));
 }
 
 function goToJobDetail(job) {
@@ -1390,18 +992,6 @@ watch(activeTab, (newTab) => {
         <button
           class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
           :class="
-            activeTab === 'cvparser'
-              ? 'bg-blue-600 text-white'
-              : 'text-gray-600 hover:bg-gray-100'
-          "
-          @click="activeTab = 'cvparser'"
-        >
-          <span class="hidden sm:inline">{{ $t('profile.cvParser.tab') }}</span>
-          <span class="sm:hidden">CV</span>
-        </button>
-        <button
-          class="px-2 md:px-4 py-2 text-xs md:text-sm rounded-lg md:rounded-xl whitespace-nowrap min-h-10 transition-colors w-full"
-          :class="
             activeTab === 'applied'
               ? 'bg-blue-600 text-white'
               : 'text-gray-600 hover:bg-gray-100'
@@ -1428,9 +1018,8 @@ watch(activeTab, (newTab) => {
       <!-- PERSONAL INFO TAB -->
       <div
         v-if="activeTab === 'profile'"
-        class="space-y-6"
+        class="bg-white rounded-2xl shadow-sm p-6"
       >
-        <div class="bg-white rounded-2xl shadow-sm p-6">
         <div v-if="loadingProfile" class="text-sm text-gray-500">
           {{ $t('profile.loadingProfile') }}
         </div>
@@ -1487,30 +1076,14 @@ watch(activeTab, (newTab) => {
             </div>
 
             <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">
-                {{ $t('profile.email') }}
-                <span v-if="!isTelegramLogin" class="text-red-500">*</span>
-              </label>
+              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.email') }} <span class="text-red-500">*</span></label>
               <input
                 v-model="form.email"
                 type="email"
-                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm min-h-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                :class="{ 'bg-gray-50': !canEditEmail }"
-                :placeholder="isTelegramLogin ? $t('profile.emailNotificationPlaceholder') : $t('profile.email')"
-                :readonly="!canEditEmail"
+                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-sm bg-gray-50 min-h-10"
+                :placeholder="$t('profile.email')"
+                readonly
               />
-              <p v-if="isTelegramLogin" class="text-xs text-gray-500 mt-1">
-                {{ $t('profile.emailTelegramHint') }}
-              </p>
-              <button
-                v-if="canEditEmail"
-                type="button"
-                class="mt-2 text-xs md:text-sm px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
-                :disabled="savingEmail"
-                @click="saveEmailForNotifications"
-              >
-                {{ savingEmail ? $t('auth.buttons.sending') : $t('profile.updateEmail') }}
-              </button>
             </div>
 
             <div>
@@ -1531,7 +1104,6 @@ watch(activeTab, (newTab) => {
                 v-model="form.date_of_birth"
                 type="date"
                 class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 md:py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
-                required
               />
             </div>
 
@@ -1550,9 +1122,7 @@ watch(activeTab, (newTab) => {
 
             <div>
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.nationality') }}
-                <span class="text-red-500">*</span>
-                </label
+                >{{ $t('profile.nationality') }}</label
               >
               <SearchableSelect
                 :options="nationalityOptions"
@@ -1564,9 +1134,7 @@ watch(activeTab, (newTab) => {
             </div>
 
             <div>
-              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.religion') }}
-                <span class="text-red-500">*</span>
-              </label>
+              <label class="text-xs md:text-sm font-medium text-gray-700">{{ $t('profile.religion') }}</label>
               <select
                 v-model="form.religion_id"
                 class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
@@ -1580,7 +1148,7 @@ watch(activeTab, (newTab) => {
 
             <div>
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.maritalStatus') }} <span class="text-red-500">*</span></label
+                >{{ $t('profile.maritalStatus') }}</label
               >
               <select
                 v-model="form.marriage_status_id"
@@ -1595,9 +1163,7 @@ watch(activeTab, (newTab) => {
 
             <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.currentSalary') }}
-                <span class="text-red-500">*</span>
-                </label
+                >{{ $t('profile.currentSalary') }}</label
               >
               <div class="grid grid-cols-2 gap-2">
                 <input
@@ -1636,9 +1202,7 @@ watch(activeTab, (newTab) => {
 
             <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.expectedSalary') }}
-                <span class="text-red-500">*</span>
-                </label
+                >{{ $t('profile.expectedSalary') }}</label
               >
               <div class="grid grid-cols-2 gap-2">
                 <input
@@ -1687,14 +1251,13 @@ watch(activeTab, (newTab) => {
 
             <div class="col-span-2">
               <label class="text-xs md:text-sm font-medium text-gray-700"
-                >{{ $t('profile.profileSummary') }}
-                <span class="text-red-500">*</span>
-                </label
+                >{{ $t('profile.profileSummary') }}</label
               >
-              <RichTextEditor
+              <textarea
                 v-model="form.profile_summary"
+                rows="4"
+                class="w-full rounded-lg border border-gray-200 shadow-sm px-3 py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-10"
                 :placeholder="$t('profile.profileSummaryPlaceholder')"
-                min-height="140px"
               />
             </div>
           </div>
@@ -1726,137 +1289,11 @@ watch(activeTab, (newTab) => {
 
             <!-- ADD SKILLS BUTTON -->
             <button
-              v-if="!showSkillModal"
               type="button"
               @click="openSkillModal"
               class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm"
             >
               + {{ $t('profile.addSkillsButton') }}
-            </button>
-
-            <!-- ADD SKILLS PANEL -->
-            <div
-              v-if="showSkillModal"
-              class="mt-3 border border-gray-200 rounded-lg p-4 bg-gray-50"
-            >
-              <div class="flex items-center justify-between mb-3">
-                <h3 class="text-sm font-semibold text-gray-800">
-                  {{ $t('profile.addSkillsButton') }}
-                </h3>
-                <button
-                  type="button"
-                  @click="closeSkillModal"
-                  class="text-gray-400 hover:text-gray-600 text-xl leading-none"
-                >
-                  ×
-                </button>
-              </div>
-
-              <input
-                v-model="skillSearchQuery"
-                @input="handleSkillSearch"
-                @keydown.enter.prevent="handleSkillEnter"
-                type="text"
-                :placeholder="$t('profile.searchOrCreateSkill')"
-                class="w-full border border-gray-200 bg-white shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-              />
-
-              <div
-                v-if="skillSuggestions.length"
-                class="space-y-2 mb-3 max-h-48 overflow-y-auto"
-              >
-                <div
-                  v-for="skill in skillSuggestions"
-                  :key="skill.id"
-                  @click="addSkillFromSuggestion(skill)"
-                  class="p-2 border border-gray-200 bg-white rounded cursor-pointer hover:bg-blue-50 text-sm"
-                >
-                  {{ skill.name }}
-                </div>
-              </div>
-
-              <div v-if="skillSearchQuery && !skillSuggestions.length" class="mb-3">
-                <button
-                  type="button"
-                  @click="createAndAddSkill(skillSearchQuery)"
-                  class="w-full p-2 border-2 border-dashed border-green-300 rounded text-sm text-green-700 hover:bg-green-50"
-                >
-                  + {{ $t('profile.createSkill') }} "{{ skillSearchQuery }}"
-                </button>
-              </div>
-
-              <p v-if="loadingSkills" class="text-xs text-gray-500 text-center mb-3">
-                {{ $t('profile.loadingSkills') }}
-              </p>
-
-              <button
-                type="button"
-                @click="closeSkillModal"
-                class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
-              >
-                {{ $t('profile.done') }}
-              </button>
-            </div>
-          </div>
-
-          <!-- Languages Section -->
-          <div class="border-t pt-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              {{ $t('profile.languages') }}
-              <span class="ml-2 text-xs text-gray-400">Optional</span>
-            </label>
-
-            <div
-              v-if="languages.length === 0"
-              class="text-xs md:text-sm text-gray-500 py-2"
-            >
-              {{ $t('profile.noLanguagesAdded') }}
-            </div>
-            <div v-else class="space-y-2 mt-2">
-              <div
-                v-for="language in languages"
-                :key="language.id"
-                class="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2"
-              >
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="text-sm font-medium text-gray-800">
-                    {{ language.language_name }}
-                  </span>
-                  <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs">
-                    {{ proficiencyLabel(language.proficiency_level_id) }}
-                  </span>
-                  <span
-                    v-if="language.is_primary"
-                    class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full text-xs"
-                  >
-                    {{ $t('profile.primaryLanguage') }}
-                  </span>
-                </div>
-                <div class="flex items-center gap-3">
-                  <button
-                    type="button"
-                    @click="openLanguageModal(language)"
-                    class="text-blue-600 hover:text-blue-800 text-sm"
-                  >
-                    {{ $t('profile.edit') }}
-                  </button>
-                  <button
-                    type="button"
-                    @click="deleteLanguage(language)"
-                    class="text-red-600 hover:text-red-800 text-sm"
-                  >
-                    {{ $t('profile.remove') }}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              @click="openLanguageModal()"
-              class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
-            >
-              + {{ $t('profile.addLanguageButton') }}
             </button>
           </div>
 
@@ -1870,11 +1307,6 @@ watch(activeTab, (newTab) => {
             </button>
           </div>
         </form>
-        </div>
-
-        <NotificationChannelsCard />
-        <JobAlertsCard />
-        <CommunicationPreferencesCard />
       </div>
 
       <!-- RESUMES TAB -->
@@ -2045,13 +1477,12 @@ watch(activeTab, (newTab) => {
               />
               {{ $t('profile.currentlyWorkingHere') }}
             </label>
-            <div class="mb-3">
-              <RichTextEditor
-                v-model="work.description"
-                :placeholder="$t('profile.descriptionPlaceholder')"
-                min-height="120px"
-              />
-            </div>
+            <textarea
+              v-model="work.description"
+              :placeholder="$t('profile.descriptionPlaceholder')"
+              rows="3"
+              class="w-full rounded-lg border px-3 py-2 text-xs md:text-sm mb-3 min-h-10"
+            />
             <div class="flex flex-col sm:flex-row gap-2">
               <button
                 @click="saveWorkExp(work)"
@@ -2130,13 +1561,12 @@ watch(activeTab, (newTab) => {
               />
               {{ $t('profile.currentlyStudyingHere') }}
             </label>
-            <div class="mb-3">
-              <RichTextEditor
-                v-model="edu.description"
-                :placeholder="$t('profile.descriptionPlaceholder')"
-                min-height="100px"
-              />
-            </div>
+            <textarea
+              v-model="edu.description"
+              :placeholder="$t('profile.descriptionPlaceholder')"
+              rows="2"
+              class="w-full rounded-lg border px-3 py-2 text-xs md:text-sm mb-3 min-h-10"
+            />
             <div class="flex flex-col sm:flex-row gap-2">
               <button
                 @click="saveEducation(edu)"
@@ -2248,270 +1678,6 @@ watch(activeTab, (newTab) => {
       </div>
 
 
-
-      <!-- CV PARSER TAB -->
-      <div v-else-if="activeTab === 'cvparser'" class="bg-white rounded-lg md:rounded-2xl shadow-sm p-4 md:p-6">
-        <div class="mb-6">
-          <h2 class="text-base md:text-lg font-semibold mb-1">{{ $t('profile.cvParser.title') }}</h2>
-          <p class="text-xs md:text-sm text-gray-500">{{ $t('profile.cvParser.subtitle') }}</p>
-        </div>
-
-        <!-- Upload Section -->
-        <div class="rounded-xl border border-dashed border-blue-300 bg-blue-50 p-4 md:p-6 mb-6">
-          <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-end">
-            <div class="flex-1">
-              <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1">
-                {{ $t('profile.cvParser.uploadLabel') }}
-              </label>
-              <input
-                type="file"
-                accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                ref="cvParserFileInput"
-                class="w-full text-xs md:text-sm rounded-lg border border-gray-200 bg-white px-3 py-2 min-h-10"
-              />
-              <p class="text-[10px] md:text-xs text-gray-500 mt-1">{{ $t('profile.cvParser.acceptedFormats') }}</p>
-            </div>
-            <button
-              @click="parseCVFile"
-              :disabled="cvParserLoading"
-              class="px-4 py-2 min-h-10 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
-            >
-              {{ cvParserLoading ? $t('profile.cvParser.parsing') : $t('profile.cvParser.parseButton') }}
-            </button>
-          </div>
-        </div>
-
-        <!-- Loading -->
-        <div v-if="cvParserLoading" class="flex items-center gap-3 py-8 justify-center text-blue-600">
-          <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
-          </svg>
-          <span class="text-sm font-medium">{{ $t('profile.cvParser.parsing') }}</span>
-        </div>
-
-        <!-- Error -->
-        <div v-else-if="cvParserError && !cvParsedData" class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
-          {{ cvParserError }}
-        </div>
-
-        <!-- Parsed Results -->
-        <div v-else-if="cvParsedData" class="space-y-6">
-          <div class="flex items-center gap-2 mb-2">
-            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span class="text-sm font-semibold text-gray-700">{{ $t('profile.cvParser.parseSuccess') }}</span>
-          </div>
-
-          <!-- Badge helper -->
-          <!-- Personal Info Section -->
-          <div class="border rounded-xl p-4">
-            <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 class="text-sm font-semibold text-gray-800">{{ $t('profile.personalInfo') }}</h3>
-              <button
-                @click="applyParsedPersonalInfo"
-                class="text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700"
-              >
-                {{ $t('profile.cvParser.applyToProfile') }}
-              </button>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div v-if="cvParsedData.name" class="bg-gray-50 rounded-lg px-3 py-2">
-                <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                  {{ $t('profile.cvParser.foundInCV') }}
-                </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.fullNameLabel') }}</p>
-                <p class="text-sm font-medium text-gray-800">{{ cvParsedData.name }}</p>
-              </div>
-              <div v-if="cvParsedData.email" class="bg-gray-50 rounded-lg px-3 py-2">
-                <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                  {{ $t('profile.cvParser.foundInCV') }}
-                </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.email') }}</p>
-                <p class="text-sm font-medium text-gray-800">{{ cvParsedData.email }}</p>
-              </div>
-              <div v-if="cvParsedData.phone || cvParsedData.telephone" class="bg-gray-50 rounded-lg px-3 py-2">
-                <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                  {{ $t('profile.cvParser.foundInCV') }}
-                </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.phone') }}</p>
-                <p class="text-sm font-medium text-gray-800">{{ cvParsedData.phone || cvParsedData.telephone }}</p>
-              </div>
-              <div v-if="cvParsedData.date_of_birth" class="bg-gray-50 rounded-lg px-3 py-2">
-                <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                  {{ $t('profile.cvParser.foundInCV') }}
-                </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.dateOfBirth') }}</p>
-                <p class="text-sm font-medium text-gray-800">{{ cvParsedData.date_of_birth }}</p>
-              </div>
-              <div v-if="cvParsedData.address" class="bg-gray-50 rounded-lg px-3 py-2 sm:col-span-2">
-                <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                  {{ $t('profile.cvParser.foundInCV') }}
-                </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.address') }}</p>
-                <p class="text-sm font-medium text-gray-800">{{ cvParsedData.address }}</p>
-              </div>
-              <div v-if="cvParsedData.summary || cvParsedData.profile_summary" class="bg-gray-50 rounded-lg px-3 py-2 sm:col-span-2">
-                <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-1">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                  {{ $t('profile.cvParser.foundInCV') }}
-                </span>
-                <p class="text-xs text-gray-500">{{ $t('profile.profileSummary') }}</p>
-                <p class="text-sm text-gray-800 line-clamp-4">{{ cvParsedData.summary || cvParsedData.profile_summary }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Skills Section -->
-          <div v-if="cvParsedData.skills && cvParsedData.skills.length" class="border rounded-xl p-4">
-            <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 class="text-sm font-semibold text-gray-800">{{ $t('profile.skills') }}</h3>
-              <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded">
-                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                {{ $t('profile.cvParser.foundInCV') }}
-              </span>
-            </div>
-            <div class="flex flex-wrap gap-2">
-              <span
-                v-for="(skill, idx) in cvParsedData.skills"
-                :key="idx"
-                class="bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1 rounded-full text-xs font-medium"
-              >
-                {{ typeof skill === 'string' ? skill : skill.name }}
-              </span>
-            </div>
-            <p class="text-xs text-gray-400 mt-2">{{ $t('profile.cvParser.skillsHint') }}</p>
-          </div>
-
-          <!-- Work Experience Section -->
-          <div v-if="cvParsedData.work_experiences && cvParsedData.work_experiences.length" class="border rounded-xl p-4">
-            <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 class="text-sm font-semibold text-gray-800">{{ $t('profile.workExperience') }}</h3>
-              <button
-                @click="applyAllParsedWorkExp"
-                class="text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700"
-              >
-                {{ $t('profile.cvParser.applyAll') }}
-              </button>
-            </div>
-            <div class="space-y-3">
-              <div
-                v-for="(exp, idx) in cvParsedData.work_experiences"
-                :key="idx"
-                class="bg-gray-50 rounded-lg p-3"
-              >
-                <div class="flex items-start justify-between gap-2">
-                  <div class="flex-1 min-w-0">
-                    <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-2">
-                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                      {{ $t('profile.cvParser.foundInCV') }}
-                    </span>
-                    <p class="text-sm font-semibold text-gray-800">{{ exp.job_title }}</p>
-                    <p class="text-xs text-gray-600">{{ exp.company_name }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">
-                      {{ exp.start_date }} – {{ exp.is_current ? $t('profile.currentlyWorkingHere') : (exp.end_date || '-') }}
-                    </p>
-                    <p v-if="exp.description" class="text-xs text-gray-600 mt-1 line-clamp-2">{{ exp.description }}</p>
-                  </div>
-                  <button
-                    @click="applyParsedWorkExp(exp)"
-                    class="shrink-0 text-xs px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
-                  >
-                    {{ $t('profile.cvParser.apply') }}
-                  </button>
-                </div>
-              </div>
-            </div>
-            <p class="text-xs text-gray-400 mt-2">{{ $t('profile.cvParser.applyHint') }}</p>
-          </div>
-
-          <!-- Education Section -->
-          <div v-if="cvParsedData.educations && cvParsedData.educations.length" class="border rounded-xl p-4">
-            <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 class="text-sm font-semibold text-gray-800">{{ $t('education') }}</h3>
-              <button
-                @click="applyAllParsedEducation"
-                class="text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700"
-              >
-                {{ $t('profile.cvParser.applyAll') }}
-              </button>
-            </div>
-            <div class="space-y-3">
-              <div
-                v-for="(edu, idx) in cvParsedData.educations"
-                :key="idx"
-                class="bg-gray-50 rounded-lg p-3"
-              >
-                <div class="flex items-start justify-between gap-2">
-                  <div class="flex-1 min-w-0">
-                    <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-2">
-                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                      {{ $t('profile.cvParser.foundInCV') }}
-                    </span>
-                    <p class="text-sm font-semibold text-gray-800">{{ edu.degree }} <span v-if="edu.major">– {{ edu.major }}</span></p>
-                    <p class="text-xs text-gray-600">{{ edu.institution_name }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">
-                      {{ edu.start_date }} – {{ edu.is_current ? $t('profile.currentlyStudyingHere') : (edu.end_date || '-') }}
-                    </p>
-                  </div>
-                  <button
-                    @click="applyParsedEducation(edu)"
-                    class="shrink-0 text-xs px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
-                  >
-                    {{ $t('profile.cvParser.apply') }}
-                  </button>
-                </div>
-              </div>
-            </div>
-            <p class="text-xs text-gray-400 mt-2">{{ $t('profile.cvParser.applyHint') }}</p>
-          </div>
-
-          <!-- Certifications Section -->
-          <div v-if="cvParsedData.certifications && cvParsedData.certifications.length" class="border rounded-xl p-4">
-            <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 class="text-sm font-semibold text-gray-800">{{ $t('profile.certifications') }}</h3>
-              <button
-                @click="applyAllParsedCertifications"
-                class="text-xs px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700"
-              >
-                {{ $t('profile.cvParser.applyAll') }}
-              </button>
-            </div>
-            <div class="space-y-3">
-              <div
-                v-for="(cert, idx) in cvParsedData.certifications"
-                :key="idx"
-                class="bg-gray-50 rounded-lg p-3"
-              >
-                <div class="flex items-start justify-between gap-2">
-                  <div class="flex-1 min-w-0">
-                    <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded mb-2">
-                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                      {{ $t('profile.cvParser.foundInCV') }}
-                    </span>
-                    <p class="text-sm font-semibold text-gray-800">{{ cert.name }}</p>
-                    <p class="text-xs text-gray-600">{{ cert.issuer }}</p>
-                    <p class="text-xs text-gray-400 mt-0.5">{{ cert.issue_date }}</p>
-                  </div>
-                  <button
-                    @click="applyParsedCertification(cert)"
-                    class="shrink-0 text-xs px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
-                  >
-                    {{ $t('profile.cvParser.apply') }}
-                  </button>
-                </div>
-              </div>
-            </div>
-            <p class="text-xs text-gray-400 mt-2">{{ $t('profile.cvParser.applyHint') }}</p>
-          </div>
-        </div>
-      </div>
 
       <div v-else-if="activeTab === 'applied'" class="space-y-4">
         <div v-if="loadingApplied" class="text-xs md:text-sm text-gray-500">
@@ -2796,7 +1962,7 @@ watch(activeTab, (newTab) => {
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 line-clamp-2">
-                  {{ stripHtml(job.description) || "-" }}
+                  {{ job.description || "-" }}
                 </p>
               </div>
               <div class="flex items-center">
@@ -2822,90 +1988,70 @@ watch(activeTab, (newTab) => {
       </div>
     </div>
 
-    <!-- Language Modal -->
+    <!-- Skills Modal -->
     <div
-      v-if="showLanguageModal"
+      v-if="showSkillModal"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      @click.self="closeLanguageModal"
+      @click.self="closeSkillModal"
     >
       <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-semibold">
-            {{ editingLanguageId ? $t('profile.editLanguage') : $t('profile.addLanguageButton') }}
-          </h3>
+          <h3 class="text-lg font-semibold">{{ $t('profile.addSkillsButton') }}</h3>
           <button
-            @click="closeLanguageModal"
+            @click="closeSkillModal"
             class="text-gray-400 hover:text-gray-600 text-xl"
           >
             ×
           </button>
         </div>
 
-        <!-- Language name with master suggestions -->
-        <label class="text-xs md:text-sm font-medium text-gray-700">
-          {{ $t('profile.languageName') }}
-        </label>
-        <div class="relative mb-3">
-          <input
-            :value="languageForm.language_name"
-            @input="handleLanguageSearch"
-            type="text"
-            :placeholder="$t('profile.searchOrTypeLanguage')"
-            class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <div
-            v-if="languageSuggestions.length"
-            class="absolute z-10 bg-white shadow-lg w-full mt-1 max-h-48 overflow-y-auto border border-gray-200 rounded-md"
-          >
-            <div
-              v-for="lang in languageSuggestions"
-              :key="lang.id"
-              @click="selectLanguageSuggestion(lang)"
-              class="px-3 py-2 text-sm cursor-pointer hover:bg-blue-50"
-            >
-              {{ lang.name }}
-            </div>
-          </div>
-          <p v-if="loadingLanguageOptions" class="text-xs text-gray-500 mt-1">
-            {{ $t('profile.loadingLanguages') }}
-          </p>
-        </div>
-
-        <!-- Proficiency level -->
-        <label class="text-xs md:text-sm font-medium text-gray-700">
-          {{ $t('profile.proficiencyLevel') }}
-        </label>
-        <select
-          v-model="languageForm.proficiency_level_id"
+        <!-- Search Input -->
+        <input
+          v-model="skillSearchQuery"
+          @input="handleSkillSearch"
+          @keydown.enter.prevent="handleSkillEnter"
+          type="text"
+          :placeholder="$t('profile.searchOrCreateSkill')"
           class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+        />
+
+        <!-- Suggestions -->
+        <div
+          v-if="skillSuggestions.length"
+          class="space-y-2 mb-4 max-h-48 overflow-y-auto"
         >
-          <option value="" disabled>{{ $t('profile.selectProficiency') }}</option>
-          <option v-for="level in proficiencyOptions" :key="level.id" :value="level.id">
-            {{ level.label }}
-          </option>
-        </select>
-
-        <!-- Primary language -->
-        <label class="flex items-center gap-2 text-sm text-gray-700 mb-4">
-          <input v-model="languageForm.is_primary" type="checkbox" class="rounded" />
-          {{ $t('profile.setAsPrimaryLanguage') }}
-        </label>
-
-        <div class="flex gap-2">
-          <button
-            @click="closeLanguageModal"
-            class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
+          <div
+            v-for="skill in skillSuggestions"
+            :key="skill.id"
+            @click="addSkillFromSuggestion(skill)"
+            class="p-2 border border-gray-200 rounded cursor-pointer hover:bg-blue-50 text-sm"
           >
-            {{ $t('profile.cancel') }}
-          </button>
+            {{ skill.name }}
+          </div>
+        </div>
+
+        <!-- Create New Skill -->
+        <div v-if="skillSearchQuery && !skillSuggestions.length" class="mb-3">
           <button
-            @click="saveLanguage"
-            :disabled="savingLanguage"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm disabled:opacity-50"
+            @click="createAndAddSkill(skillSearchQuery)"
+            class="w-full p-2 border-2 border-dashed border-green-300 rounded text-sm text-green-700 hover:bg-green-50"
           >
-            {{ savingLanguage ? $t('profile.saving') : $t('profile.save') }}
+            + {{ $t('profile.createSkill') }} "{{ skillSearchQuery }}"
           </button>
         </div>
+
+        <!-- Loading -->
+        <p v-if="loadingSkills" class="text-xs text-gray-500 text-center">
+          {{ $t('profile.loadingSkills') }}
+        </p>
+
+        <!-- Close Button -->
+        <button
+          @click="closeSkillModal"
+          class="w-full mt-4 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm"
+        >
+          {{ $t('profile.done') }}
+        </button>
       </div>
     </div>
   </div>

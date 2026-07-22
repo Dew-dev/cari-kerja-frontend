@@ -8,7 +8,6 @@ let hasShownSessionExpiredToastOnGuard = false;
 
 function isJwtExpired(token) {
   if (!token) return true;
-  if (token === "google-cookie-session") return false;
 
   try {
     const payloadBase64 = token.split(".")[1];
@@ -138,17 +137,6 @@ const routes = [
     component: () => import("../pages/auth/Login.vue"),
   },
   {
-    path: "/auth/callback",
-    name: "auth-callback",
-    component: () => import("../pages/auth/Callback.vue"),
-  },
-  {
-    path: "/auth/telegram-link",
-    name: "auth-telegram-link",
-    meta: { requiresAuth: true },
-    component: () => import("../pages/auth/TelegramLinkCallback.vue"),
-  },
-  {
     path: "/recruiter-login",
     name: "recruiter-login",
     meta: { blockRole: "recruiter" },
@@ -157,12 +145,6 @@ const routes = [
   {
     path: "/jobposts",
     component: () => import("../pages/Jobposts.vue"),
-  },
-  {
-    path: "/jobposts/hot",
-    name: "HotJobposts",
-    component: () => import("../pages/HotJobposts.vue"),
-    meta: { public: true },
   },
   {
     path: "/jobposts/:id",
@@ -233,40 +215,16 @@ const routes = [
     component: () => import("@/pages/auth/VerifyEmail.vue"),
   },
   {
-    path: "/unsubscribe",
-    name: "unsubscribe",
-    meta: { public: true },
-    component: () => import("@/pages/communication/Unsubscribe.vue"),
-  },
-  {
     path: "/search-workers",
     name: "search-workers",
     component: () => import("../pages/recruiter/SearchWorkers.vue"),
-    meta: { requiresAuth: true, role: "recruiter" },
+    // meta: { requiresAuth: true, role: "recruiter" },
   },
   {
     path: "/cv-reader-demo",
     name: "cv-reader-demo",
     component: () => import("../pages/CvReaderDemo.vue"),
     meta: { public: true },
-  },
-  {
-    path: "/chat",
-    name: "chat",
-    meta: { requiresAuth: true },
-    component: () => import("../pages/chat/ChatPage.vue"),
-  },
-  {
-    path: "/chat/blocks",
-    name: "chat-blocks",
-    meta: { requiresAuth: true },
-    component: () => import("../pages/chat/BlockedUsers.vue"),
-  },
-  {
-    path: "/chat/:conversationId",
-    name: "chat-detail",
-    meta: { requiresAuth: true },
-    component: () => import("../pages/chat/ChatPage.vue"),
   },
   {
     path: "/recruiter",
@@ -293,11 +251,6 @@ const routes = [
         component: () => import("../pages/recruiter/Applicants.vue"),
       },
       {
-        path: "jobs/:id/pipeline",
-        name: "recruiter-job-pipeline",
-        component: () => import("../pages/recruiter/CandidatePipeline.vue"),
-      },
-      {
         path: "jobs/:jobId/applicants/:applicationId",
         name: "recruiter-applicant-detail",
         component: () => import("../pages/recruiter/ApplicantDetail.vue"),
@@ -314,49 +267,7 @@ const routes = [
         component: () => import("@/pages/recruiter/Jobs.vue"),
         meta: { requiresAuth: true, role: "recruiter" },
       },
-      {
-        path: "pricing",
-        name: "recruiter-pricing",
-        component: () => import("../pages/recruiter/Pricing.vue"),
-      },
-      {
-        path: "checkout",
-        name: "recruiter-checkout",
-        component: () => import("../pages/recruiter/PaymentCheckout.vue"),
-      },
-      {
-        path: "orders",
-        name: "recruiter-orders",
-        component: () => import("../pages/recruiter/PaymentOrders.vue"),
-      },
-      {
-        path: "payment/success",
-        name: "recruiter-payment-success",
-        component: () => import("../pages/recruiter/PaymentSuccess.vue"),
-      },
-      {
-        path: "payment/failure",
-        name: "recruiter-payment-failure",
-        component: () => import("../pages/recruiter/PaymentFailure.vue"),
-      },
     ],
-  },
-  {
-    // OAuth failure landing (backend redirects here on invalid role_id or provider error)
-    path: "/error",
-    name: "auth-error",
-    component: () => import("../pages/auth/AuthError.vue"),
-  },
-  {
-    path: "/maintenance",
-    name: "maintenance",
-    meta: { public: true },
-    component: () => import("../pages/Maintenance.vue"),
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    name: "not-found",
-    component: () => import("../pages/NotFound.vue"),
   },
 ];
 

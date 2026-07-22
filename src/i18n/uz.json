@@ -1,4 +1,4 @@
-{
+﻿{
   "jobs": "Ish o'rinlari",
   "companies": "Kompaniyalar",
   "jobsByCompany": "Kompaniyalar bo'yicha ishlar",
@@ -351,9 +351,7 @@
   "add_responsibility": "Mas'uliyat qo'shish",
   "add_benefit": "Imtiyoz qo'shish",
   "add": "Qo'shish",
-  "questions": "Ariza savollari",
-  "questions_hint": "Nomzodlar ariza topshirganda javob beradigan saralash savollarini qo'shing.",
-  "questions_empty": "Hali savollar yo'q. Nomzodlarni erta saralash uchun qo'shing.",
+  "questions": "Savollar",
   "add_question": "Savol qo'shish",
   "question": "Savol",
   "question_text": "Savol matni",
@@ -373,7 +371,6 @@
   "chooseResume": "Rezyume tanlang",
   "noResumesAvailable": "Rezyume mavjud emas. Iltimos, avval rezyume yarating.",
   "coverLetterPlaceholder": "Ish beruvchiga nima uchun bu lavozim uchun juda mos ekanligingizni ayting...",
-  "coverLetterTooLong": "Motivatsiya xati ko'pi bilan {max} belgidan iborat bo'lishi kerak",
   "additionalQuestions": "Qo'shimcha savollar",
   "yourAnswer": "Sizning javobingiz...",
   "yes": "Ha",
@@ -449,34 +446,6 @@
     "jpgOrPngMax2MB": "JPG yoki PNG, maksimal 2MB",
     "fullName": "To'liq ism",
     "email": "Email manzili",
-    "emailNotificationPlaceholder": "email{'@'}example.com (ixtiyoriy)",
-    "emailTelegramHint": "Telegram login uchun bo'sh email normal. Email faqat bildirishnomalar uchun.",
-    "updateEmail": "Bildirishnoma emailini saqlash",
-    "notificationChannels": {
-      "title": "Bildirishnoma kanallari",
-      "subtitle": "Ish yangilanishlarini qanday olishingizni boshqaring. Login usuli bildirishnoma kanallaridan alohida.",
-      "loginMethod": "Login usuli",
-      "loginOnly": "Faqat login",
-      "providerLocal": "Email va parol",
-      "providerGoogle": "Google",
-      "providerTelegram": "Telegram",
-      "emailChannel": "Email",
-      "emailChannelHint": "Newsletter, parolni tiklash va ish yangilanishlari email orqali.",
-      "telegramChannel": "Telegram",
-      "telegramChannelHint": "Telegramda real vaqtda ish bildirishnomalari.",
-      "connected": "Ulangan",
-      "notConnected": "Ulanmagan",
-      "pendingVerification": "Tasdiqlash kutilmoqda",
-      "pendingVerificationHint": "Inboxni tekshiring va emailni ulashni yakunlash uchun tasdiqlash havolasini oching.",
-      "emailNotSet": "Bildirishnoma emaili hali yo'q",
-      "saveEmail": "Saqlash va emailni tasdiqlash",
-      "emailManagedByGoogle": "Email Google akkauntingizdan olinadi va bu yerda o'zgartirib bo'lmaydi.",
-      "telegramAsLogin": "Login usuli sifatida ishlatiladi",
-      "telegramLinked": "Bildirishnomalar uchun ulangan",
-      "telegramNotLinked": "Bildirishnomalar uchun ulanmagan",
-      "connectTelegram": "Telegramni ulash",
-      "telegramLoginHint": "Siz allaqachon Telegram orqali kirasiz. Bildirishnomalar uchun qo'shimcha ulash shart emas."
-    },
     "phone": "Telefon",
     "dateOfBirth": "Tug'ilgan sana",
     "gender": "Jins",
@@ -604,57 +573,10 @@
     "createSkill": "Yaratish",
     "loadingSkills": "Ko'nikmalar yuklanmoqda...",
     "done": "Tayyor",
-    "edit": "Tahrirlash",
-    "cancel": "Bekor qilish",
-    "languages": "Tillar",
-    "noLanguagesAdded": "Tillar qo'shilmagan.",
-    "addLanguageButton": "Til qo'shish",
-    "editLanguage": "Tilni tahrirlash",
-    "languageName": "Til",
-    "searchOrTypeLanguage": "Tilni qidiring yoki yozing...",
-    "loadingLanguages": "Tillar yuklanmoqda...",
-    "proficiencyLevel": "Bilish darajasi",
-    "selectProficiency": "Bilish darajasini tanlang",
-    "setAsPrimaryLanguage": "Asosiy til sifatida belgilash",
-    "primaryLanguage": "Asosiy",
-    "languageFormIncomplete": "Iltimos, til va bilish darajasini to'ldiring",
-    "languageAlreadyAdded": "Til allaqachon qo'shilgan",
-    "languageAdded": "Til qo'shildi",
-    "languageUpdated": "Til yangilandi",
-    "languageRemoved": "Til o'chirildi",
-    "failedToSaveLanguage": "Tilni saqlash muvaffaq bo'lmadi",
-    "failedToDeleteLanguage": "Tilni o'chirish muvaffaq bo'lmadi",
-    "proficiency": {
-      "beginner": "Boshlang'ich",
-      "intermediate": "O'rta",
-      "fluent": "Erkin",
-      "native": "Ona tili"
-    },
     "failedtoaddskill": "Ko'nikmani qo'shish muvaffaq bo'lmadi",
     "failedtoremoveskill": "Ko'nikmani o'chirish muvaffaq bo'lmadi",
     "skilladded": "Ko'nikma qo'shildi",
-    "skillremoved": "Ko'nikma o'chirildi",
-    "cvParser": {
-      "tab": "CV Tahlili",
-      "title": "CV Tahlilchi",
-      "subtitle": "Profil ma'lumotlarini avtomatik to'ldirish uchun CV yuklang. Saqlashdan oldin har bir bo'limni tekshiring.",
-      "uploadLabel": "CV yuklash (PDF yoki DOCX)",
-      "acceptedFormats": "Formatlar: PDF, DOCX – Maks. 10MB",
-      "parseButton": "CV Tahlil qilish",
-      "parsing": "Tahlil qilinmoqda...",
-      "selectFile": "CV faylini tanlang",
-      "invalidType": "Faqat PDF yoki DOCX fayllar ruxsat etiladi",
-      "failedToParse": "CVni tahlil qilish muvaffaq bo'lmadi",
-      "parseSuccess": "CV muvaffaqiyatli tahlil qilindi – quyidagi ma'lumotlarni tekshiring va qo'llang",
-      "foundInCV": "CV-ingizda topildi",
-      "applyToProfile": "Profilga qo'llash",
-      "apply": "Qo'llash",
-      "applyAll": "Hammasini qo'llash",
-      "appliedPersonalInfo": "Shaxsiy ma'lumotlar profilga qo'llandi. Tayyor bo'lgach saqlang.",
-      "appliedSection": "Profilga qo'llandi. Tabga o'ting va har bir yozuvni saqlang.",
-      "applyHint": "Ma'lumotlar hali saqlanmagan. Tabga o'ting va Saqlash tugmasini bosing.",
-      "skillsHint": "CV-ingizda topilgan ko'nikmalar. Ularni Profil tabidan qo'lda qo'shing."
-    }
+    "skillremoved": "Ko'nikma o'chirildi"
   },
   "about": {
     "pageTitle": "Biz haqida",
@@ -1610,36 +1532,20 @@
     }
   },
   "privacyPolicy": {
-    "pageTitle": "Cari Kerja - Maxfiylik siyosati",
     "title": "Maxfiylik siyosati",
-    "subtitle": "Cari Kerja'dan foydalanganingizda shaxsiy ma'lumotlaringizni qanday yig'ishimiz, ishlatishimiz va himoya qilishimiz.",
-    "lastUpdated": "Oxirgi yangilanish: 17 iyul 2026",
-    "onThisPage": "Ushbu sahifada",
-    "toc": {
-      "introduction": "Kirish",
-      "informationCollection": "Ma'lumot yig'ish",
-      "useOfData": "Ma'lumotdan foydalanish",
-      "security": "Xavfsizlik",
-      "cookies": "Cookie-lar",
-      "thirdPartyAccess": "Uchinchi tomon",
-      "disclosure": "Oshkor qilish",
-      "retention": "Saqlash muddati",
-      "rights": "Huquqlaringiz",
-      "changes": "Siyosat o'zgarishi",
-      "contact": "Bog'lanish"
-    },
+    "lastUpdated": "Oxirgi yangilanish: 4 fevral 2026",
     "introduction": {
       "title": "1. Kirish",
-      "content": "Cari Kerja (\"biz\") Cari Kerja ish portali platformasini boshqaradi. Ushbu sahifa siz xizmatdan foydalanganingizda shaxsiy ma'lumotlarni yig'ish, foydalanish va oshkor qilish bo'yicha siyosatimizni hamda ma'lumotlaringiz bo'yicha tanlovlaringizni tushuntiradi."
+      "content": "cari-kerja.id (\"biz\" yoki \"bizning\") cari-kerja.id veb-saytini boshqaradi. Ushbu sahifa siz xizmatdan foydalanganingizda shaxsiy ma'lumotlarni yig'ish, foydalanish va oshkor qilish bo'yicha bizning siyosatini va ularni qanday boshqarish haqida tushuntirib beradi."
     },
     "informationCollection": {
       "title": "2. Ma'lumot yig'ish va foydalanish",
-      "intro": "Biz xizmatni ko'rsatish va yaxshilash uchun bir necha turdagi ma'lumotlarni yig'amiz:",
+      "intro": "Biz xizmatni yaxshilash va ko'rsatish uchun turli turdagi ma'lumotlarni yig'aymiz:",
       "items": {
         "accountTitle": "Hisob ma'lumotlari:",
         "account": "ism, elektron pochta, telefon raqami va parol",
         "profileTitle": "Profil ma'lumotlari:",
-        "profile": "rezyume, ish tajribasi, ta'lim, ko'nikma va malaka",
+        "profile": "rezyume, ish tajribasi, ta'lim, ko'nikma va malakasi",
         "applicationTitle": "Ariza ma'lumotlari:",
         "application": "vakansiyalarga ariza, qo'shimcha xatlar va arizalar tarixi",
         "technicalTitle": "Texnik ma'lumotlar:",
@@ -1649,67 +1555,66 @@
       }
     },
     "useOfData": {
-      "title": "3. Ma'lumotlardan foydalanish",
-      "content": "Biz yig'ilgan ma'lumotlarni xizmatni ko'rsatish, o'zgarishlar haqida bildirish, qo'llab-quvvatlash, xizmatni tahlil qilish va yaxshilash, foydalanishni kuzatish hamda texnik muammolarni hal qilish uchun ishlatamiz.",
+      "title": "3. Ma'lumotlarni foydalanish",
+      "content": "Biz yig'ilgan ma'lumotlarni xizmatni ko'rsatish, o'zgarishlar haqida bildirishlash, qo'llab-quvvatlash, xizmatni tahlil qilish va yaxshilash, foydalanish kuzatish, va texnik muammolarni hal qilish uchun ishlatamiz.",
       "items": {
         "provide": "Xizmatni ko'rsatish va ta'minlash uchun",
-        "notify": "Xizmatdagi o'zgarishlar haqida bildirish uchun",
-        "support": "Foydalanuvchini qo'llab-quvvatlash uchun",
-        "analysis": "Xizmatni yaxshilash uchun tahlil yig'ish",
+        "notify": "Xizmatdagi o'zgarishlar haqida bildirishni yuboring",
+        "support": "Foydalanuvchi qo'llab-quvvatlashini ko'rsatish uchun",
+        "analysis": "Xizmatni yaxshilash uchun tahlil va qimmatli ma'lumot yig'ish",
         "monitor": "Xizmatdan foydalanishni kuzatish uchun",
         "technical": "Texnik muammolarni aniqlash, oldini olish va hal qilish",
-        "marketing": "Reklama xabarlarini yuborish (roziligingiz bilan)"
+        "marketing": "Reklama xabarlarini yuborish (sizning roziligingiz bilan)"
       }
     },
     "security": {
       "title": "4. Ma'lumotlarning xavfsizligi",
-      "content": "Ma'lumotlaringizning xavfsizligi biz uchun muhim. Tijoriy jihatdan qabul qilingan usullardan foydalansak ham, Internet orqali uzatish yoki elektron saqlash 100% xavfsiz emas."
+      "content": "Sizning ma'lumotlaringizning xavfsizligi biz uchun muhimdir. Ko'plab tijorat bo'yicha qabul qilingan usullardan foydalansak ham, Internet orqali uzatilshni yoki elektron saqlash to'liq xavfsiz emas."
     },
     "cookies": {
       "title": "5. Cookie-lar",
-      "content": "Biz saytdagi tajribangizni yaxshilash uchun cookie-lardan foydalanamiz. Brauzeringizni barcha cookie-larni rad etish yoki cookie yuborilganda ogohlantirish uchun sozlashingiz mumkin. Cookie-larni qabul qilmasangiz, ba'zi xizmatlar ishlamasligi mumkin."
+      "content": "Biz saytdagi tajribangizni yaxshilash uchun cookie-lardan foydalanaymiz. Brauzeringizni barcha cookie-larni rad etish uchun ko'rsatishlari mumkin. Cookie-larni qabul qilmasangiz, ba'zi xizmatlar ishlamay qolishi mumkin."
     },
     "thirdPartyAccess": {
-      "title": "6. Uchinchi tomon kirishi",
-      "content": "Biz ma'lumotlaringizni faqat ushbu siyosatda tasvirlangan yo'llar bilan uchinchi tomonlarga beramiz. Shaxsiy ma'lumotlaringizni sotmaymiz. Birlashtirilgan va anonim ma'lumotlar hamkorlar bilan bo'lishilishi mumkin."
+      "title": "6. Uchinchi tomon kirishiga ruxsat",
+      "content": "Biz sizning ma'lumotlaringizni faqat ushbu siyosatda tasvirlanagan yo'llar bilan uchinchi tomonlarga beramiz. Biz shaxsiy ma'lumotlaringizni uchinchi tomonlarga sotmaymiz. Birlashtirilgan va anonimiy ma'lumotlar hamkorlar bilan bo'linishi mumkin."
     },
     "disclosure": {
       "title": "7. Ma'lumotlarni oshkor qilish",
-      "intro": "Biz shaxsiy ma'lumotlaringizni quyidagi hollarda oshkor qilishimiz mumkin:",
+      "intro": "Biz sizning shaxsiy ma'lumotlaringizni quyidagi sharoitlarda oshkor qilishimiz mumkin:",
       "items": {
-        "byLaw": "Qonun talabi yoki yuridik jarayon bo'yicha",
-        "protect": "Kompaniyamiz huquqi, maxfiylik, xavfsizlik yoki mulkini himoya qilish uchun",
+        "byLaw": "Qonun qoidasi bo'yicha yoki yuridik jarayonda talab qilinganda",
+        "protect": "Bizning kompaniyamizning huquqi, maxfiylik, xavfsizlik yoki mulkini himoya qilish uchun",
         "merger": "Birlashma, sotib olish yoki aktivlarni sotish holatida",
-        "consent": "Aniq roziligingiz bilan boshqa maqsadlarda"
+        "consent": "Sizning aniq roziligingiz bilan boshqa maqsadlarda"
       }
     },
     "retention": {
       "title": "8. Ma'lumotlarni saqlash",
-      "content": "Biz shaxsiy ma'lumotlaringizni faqat xizmat ko'rsatish va ushbu siyosatda belgilangan maqsadlarni bajarish uchun zarur muddatda saqlaymiz. Istalgan vaqtda hisobingiz va bog'liq ma'lumotlarni o'chirishni so'rashingiz mumkin."
+      "content": "Biz shaxsiy ma'lumotlaringizni faqat xizmat ko'rsatish va ushbu siyosatda belgilangan maqsadlarni bajarishni davom ettiradigan vaqt uchun saqlaymiz. Siz istalgan vaqt hisobingizni va unga bog'liq ma'lumotlarni o'chirib tashlanishini so'rashingiz mumkin."
     },
     "rights": {
-      "title": "9. Sizning ma'lumot huquqlaringiz",
-      "intro": "Shaxsiy ma'lumotlaringiz bo'yicha quyidagi huquqlarga egasiz:",
+      "title": "9. Sizning ma'lumot huquqlari",
+      "intro": "Sizning shaxsiy ma'lumotlaringiz bo'yicha quyidagi huquqlarga egasiz:",
       "items": {
-        "access": "Shaxsiy ma'lumotlaringizga kirish huquqi",
+        "access": "Sizning shaxsiy ma'lumotlaringizga kirish huquqi",
         "correct": "Noto'g'ri ma'lumotlarni tuzatish huquqi",
-        "delete": "Ma'lumotlarni o'chirishni so'rash huquqi",
+        "delete": "Ma'lumotlarni o'chirilishini so'rash huquqi",
         "optOut": "Marketing xabarlaridan voz kechish huquqi",
-        "portable": "Ma'lumotlar nusxasini ko'chma formatda olish huquqi"
+        "portable": "Ma'lumotlaringizning nusxasini ko'chma formatda olish huquqi"
       }
     },
     "changes": {
-      "title": "10. Ushbu siyosatdagi o'zgarishlar",
-      "content": "Biz ushbu siyosatni vaqti-vaqti bilan yangilashimiz mumkin. Sezilarli o'zgarishlar haqida ushbu sahifada yangi siyosatni e'lon qilish va \"Oxirgi yangilanish\" sanasini o'zgartirish orqali xabar beramiz."
+      "title": "10. Ushbu siyosatdagi o'zgartirishlar",
+      "content": "Biz ushbu siyosatni vaqt-vaqti bilan yangilay olamiz. Sezilarli o'zgartirishlar haqida biz bu sahifada yangi siyosatni nashr etish va \"Oxirgi yangilanish\" sanasini o'zgartirib bildiramiz."
     },
     "contact": {
       "title": "11. Biz bilan bog'lanish",
-      "intro": "Ushbu maxfiylik siyosati haqida savollaringiz bo'lsa, iltimos biz bilan bog'laning:",
+      "intro": "Ushbu maxfiylik siyosati haqida savollar bo'lsa, iltimos biz bilan bog'lanish:",
       "emailLabel": "Elektron pochta",
-      "email": "privacy{'@'}cari-kerja.co.id",
+      "email": "privacy@cari-kerja.id",
       "addressLabel": "Manzil",
-      "address": "Jakarta, Indoneziya",
-      "contactPageLink": "Aloqa sahifasiga o'tish"
+      "address": "Toshkent, O'zbekiston"
     }
   },
   "termsOfService": {
@@ -1801,14 +1706,10 @@
     "emailLabel": "Email:",
     "phoneLabel": "Telefon:",
     "sendMessage": "Xabar yuborish",
-    "formHint": "Quyidagi formani to'ldiring — jamoamiz imkon qadar tezroq javob beradi.",
     "yourName": "Ismingiz",
     "fullNamePlaceholder": "To'liq ism",
     "email": "Email",
-    "emailPlaceholder": "you{'@'}example.com",
-    "phone": "Telefon",
-    "phonePlaceholder": "+62 812 3456 7890",
-    "optional": "ixtiyoriy",
+    "emailPlaceholder": "you@example.com",
     "subject": "Mavzu",
     "subjectPlaceholder": "Mavzu",
     "message": "Xabar",
@@ -1817,16 +1718,6 @@
     "sendMessageButton": "Xabar yuborish",
     "messageSent": "Xabaringiz muvaffaqiyatli yuborildi.",
     "sendFailed": "Xabar yuborilmadi. Qayta urinib ko'ring.",
-    "validation": {
-      "nameRequired": "Ism kiritilishi shart.",
-      "nameMax": "Ism 100 belgidan oshmasligi kerak.",
-      "emailRequired": "Email kiritilishi shart.",
-      "emailInvalid": "To'g'ri email manzilini kiriting.",
-      "phoneInvalid": "To'g'ri telefon raqamini kiriting.",
-      "subjectRequired": "Mavzu kiritilishi shart.",
-      "subjectMax": "Mavzu 255 belgidan oshmasligi kerak.",
-      "messageRequired": "Xabar kiritilishi shart."
-    },
     "ourLocation": "Joylashuvimiz",
     "mapPlaceholderTitle": "Xarita uchun joy",
     "mapPlaceholderSubtitle": "Bu yerga Google Maps iframe yoki statik xarita qo'shing",
@@ -1971,10 +1862,6 @@
     "goBack": "Orqaga qaytish"
   },
   "auth": {
-    "signInWithGoogle": "Google orqali kirish",
-    "signUpWithGoogle": "Google orqali ro'yxatdan o'tish",
-    "signInWithTelegram": "Telegram orqali kirish",
-    "signUpWithTelegram": "Telegram orqali ro'yxatdan o'tish",
     "emailLabel": "Elektron pochta manzili",
     "usernameLabel": "Foydalanuvchi nomi",
     "passwordLabel": "Parol",
@@ -2004,11 +1891,11 @@
     "phonePlaceholder": "+998 (XX) XXX-XX-XX",
     "passwordRequirements": "Kam bo'lmaganda 8 ta belgi, katta, kichik, raqam va simvol",
     "placeholders": {
-      "email": "you{'@'}example.com",
+      "email": "you@example.com",
       "name": "Abdullayev Abdullaxon",
       "username": "abdullaxon123",
       "companyUsername": "company123",
-      "recruiterEmail": "recruiter{'@'}company.com",
+      "recruiterEmail": "recruiter@company.com",
       "company": "Sizning Kompaniyasi LLC",
       "contactName": "Abdullaxon Menejer"
     },
@@ -2021,8 +1908,7 @@
       "sending": "Yuborilmoqda...",
       "resendVerification": "Tasdiqlash xatini qayta yuboring",
       "verify": "Tekshirilmoqda...",
-      "redirecting": "Kirishga yo'naltirilyapti…",
-      "redirectingToApp": "Hisobingizga kiritilmoqda…"
+      "redirecting": "Kirishga yo'naltirilyapti…"
     },
     "messages": {
       "emailNotVerified": "Sizning elektron pochta manzili tasdiqlanmadi.",
@@ -2039,73 +1925,10 @@
     "newPassword": "Yangi parol",
     "enterNewPassword": "Quyida yangi parolingizni kiriting.",
     "ifEmailExists": "Agar elektron pochta manzili mavjud bo'lsa, qayta o'rnatish havolasi yuboriladi.",
-    "resendIn": "Qayta yuboring",
-    "banners": {
-      "linkTelegram": "Eng yangi ish o'rinlari haqida real vaqtda xabar olish uchun Telegram akkauntingizni ulang.",
-      "linkTelegramAction": "Telegramni ulash",
-      "setupEmail": "Newsletter, parolni tiklash va ish yangilanishlarini email orqali olish uchun email qo'shing va tasdiqlang.",
-      "setupEmailAction": "Email qo'shish",
-      "setupEmailTitle": "Bildirishnoma emaili qo'shish",
-      "setupEmailHint": "Email faqat bildirishnomalar uchun. Login Telegram orqali qoladi.",
-      "saveEmail": "Saqlash va tasdiqlash yuborish",
-      "emailRequired": "Email majburiy",
-      "verificationEmailSent": "Tasdiqlash xati yuborildi. Pochta qutingizni tekshiring.",
-      "failedChangeEmail": "Emailni o'zgartirish muvaffaqiyatsiz",
-      "dismiss": "Yopish",
-      "cancel": "Bekor qilish",
-      "linkingTelegram": "Telegram ulanmoqda...",
-      "telegramLinked": "Telegram bildirishnomalar uchun ulandi.",
-      "failedLinkTelegram": "Telegramni ulash muvaffaqiyatsiz",
-      "missingTelegramCode": "Telegram OAuth kodi topilmadi.",
-      "loginRequiredForLink": "Telegramni ulash uchun avval tizimga kiring.",
-      "backToApp": "Ilovaga qaytish",
-      "linkInterrupted": "Telegram ulash uzildi va akkauntingiz almashtirilmadi. Profil orqali qayta urinib ko'ring.",
-      "telegramAlreadyLoginAccount": "Bu Telegram allaqachon login akkaunti sifatida ishlatiladi. Bildirishnomalar uchun boshqa Telegram ishlating.",
-      "telegramAlreadyLinked": "Bu Telegram boshqa akkauntga bildirishnoma uchun allaqachon ulangan."
-    }
-  },
-  "captcha": {
-    "required": "Iltimos, xavfsizlik tekshiruvini yakunlang va qaytadan yuboring.",
-    "rateLimited": "Juda ko'p urinish. Taxminan 15 daqiqa kutib, qayta urinib ko'ring."
-  },
-  "contentRejected": {
-    "disposableEmail": "Vaqtincha yoki bir martalik email manzillariga ruxsat berilmaydi. Doimiy email ishlating.",
-    "upload": "Fayl rad etildi (yaroqsiz yoki soxta tur). Qo'llab-quvvatlanadigan formatdagi asl faylni qayta yuklang."
-  },
-  "maintenance": {
-    "pageTitle": "Texnik xizmat — Cari Kerja",
-    "title": "Texnik xizmat ko'rsatilmoqda",
-    "description": "Rejalashtirilgan texnik xizmat sababli platforma vaqtincha mavjud emas. Keyinroq urinib ko'ring — sahifani tinmay yangilash shart emas.",
-    "backHome": "Bosh sahifaga",
-    "hint": "Tez orada qaytamiz."
-  },
-  "verification": {
-    "title": "Kompaniya tasdiqlanishi talab qilinadi",
-    "description": "Ish e'lonlarini chop etishdan oldin kompaniyangiz tasdiqlanishi kerak. E'lonni qoralama sifatida saqlashingiz mumkin, so'ngra kompaniyani tasdiqlash uchun biz bilan bog'laning.",
-    "banner": "Kompaniyangiz hali tasdiqlanmagan. Qoralama e'lonlar tayyorlashingiz mumkin, ammo tasdiqlash tugagunga qadar chop etish o'chirilgan.",
-    "cta": "Tasdiqlash uchun biz bilan bog'laning",
-    "saveDraft": "Qoralama sifatida saqlash",
-    "draftSaved": "E'lon qoralama sifatida saqlandi",
-    "close": "Yopish"
-  },
-  "moderation": {
-    "title": "E'lon kontent tekshiruvi uchun ushlab turildi",
-    "description": "E'loningiz darhol chop etilmadi. Tizimimiz uning mazmunini tekshirish uchun belgiladi, shuning uchun holati endi Pending. Tekshiruv tugagach e'lon chop etiladi — sizdan hech qanday harakat talab qilinmaydi.",
-    "flagsLabel": "Aniqlangan signallar",
-    "riskScore": "Xavf bahosi",
-    "viewJobs": "E'lonlarimni ko'rish",
-    "close": "Yopish"
-  },
-  "authError": {
-    "pageTitle": "Kirish xatosi",
-    "title": "Kirish muvaffaqiyatsiz tugadi",
-    "description": "Kirish jarayonida xatolik yuz berdi. Kirish so'rovi noto'g'ri yoki rad etildi. Iltimos, qayta urinib ko'ring.",
-    "backToLogin": "Kirish sahifasiga qaytish",
-    "backHome": "Bosh sahifaga qaytish"
+    "resendIn": "Qayta yuboring"
   },
   "notifications": {
     "sessionExpired": "Sessiya muddati tugadi, iltimos qayta kiring",
-    "accountSuspended": "Hisobingiz to'xtatilgan. Yordam uchun qo'llab-quvvatlash xizmatiga murojaat qiling.",
     "jobDeletedSuccessfully": "Ish muvaffaqiyatli o'chirildi",
     "actionFailed": "Amal muvaffaqiyatsiz tugadi. Iltimos qayta urinib ko'ring.",
     "failedToUpdateJobStatus": "Ish holatini yangilash muvaffaq bo'lmadi",
@@ -2131,349 +1954,5 @@
   "noAddressProvided": "Manzil berilmagan",
   "noContactNameProvided": "Aloqa shaxsi berilmagan",
   "noContactPhoneProvided": "Aloqa raqami berilmagan",
-  "noWebsiteProvided": "Veb-sayt berilmagan",
-  "notFound": {
-    "pageTitle": "Sahifa topilmadi",
-    "title": "404",
-    "subtitle": "Voy! Sahifa topilmadi",
-    "description": "Siz qidirayotgan sahifa o'chirilgan, nomi o'zgartirilgan yoki vaqtincha foydalanishga topshirilmagan bo'lishi mumkin.",
-    "backHome": "Bosh sahifaga qaytish",
-    "findJobs": "Ishlarni topish"
-  },
-  "payment": {
-    "pricing": "Tariflar va narxlar",
-    "pricingTitle": "Xodimlarni yollashni tezlashtiring",
-    "pricingTitleAccent": " cheksiz",
-    "pricingSubtitle": "Biznesingiz ehtiyojlariga mos keladigan tarifni tanlang — bepuldan tortib korporativgacha.",
-    "activePlan": "Faol tarif",
-    "maxPosts": "maks. faol e'lonlar",
-    "singleSlots": "bitta e'lon slotlari",
-    "loadingPlans": "Tariflar yuklanmoqda...",
-    "tabs": {
-      "subscription": "Obuna",
-      "singlePost": "Yagona e'lon",
-      "boost": "E'lonni ko'tarish"
-    },
-    "planName": {
-      "free": "Bepul",
-      "starter": "Boshlang'ich",
-      "pro": "Professional",
-      "business": "Biznes"
-    },
-    "features": {
-      "free": ["1 faol e'lon", "To'lovsiz", "Baza kirish"],
-      "starter": ["5 faol e'lon", "Muddati 30 kun", "Barcha standart funksiyalar"],
-      "pro": ["15 faol e'lon", "Muddati 30 kun", "Ustuvor qo'llab-quvvatlash"],
-      "business": ["25 faol e'lon", "Muddati 30 kun", "Premium qo'llab-quvvatlash"],
-      "activePosts": "faol e'lonlar bir vaqtning o'zida",
-      "durationDays": "kun faollashtirilganidan keyin",
-      "secureXendit": "Xendit orqali xavfsiz to'lov"
-    },
-    "priceFormat": {
-      "free": "Bepul",
-      "days": "kun"
-    },
-    "cta": {
-      "default": "Standart tarif",
-      "active": "Faol tarif",
-      "select": "Tarifni tanlash",
-      "details": "Tafsilotlarni ko'rish va sotib olish",
-      "boost": "E'lonlar sahifasida ko'tarish"
-    },
-    "singlePostDesc": "Obuna bo'lmasdan yagona e'lonlarni sotib oling. Vaqti-vaqti bilan xodim yollash ehtiyojlari uchun mos keladi.",
-    "slots": {
-      "available": "Mavjud yagona e'lon slotlari",
-      "expires": "Muddati tugaydi",
-      "hint": "E'lonlar sahifasida e'lon joylashtirishda ushbu slotni qo'llang."
-    },
-    "boostTitle": "E'lonni ko'tarish",
-    "boostSubtitle": "Ko'proq nomzodlarni jalb qilish uchun e'loningizning ko'rinuvchanligini oshiring.",
-    "boostTypes": {
-      "top10Title": "Boost Top-10",
-      "top10Desc": "E'loningiz xizmat muddati davomida har kuni eng yuqori 10 ta o'rinda turadi.",
-      "hotTitle": "Boost Hot (Eng yuqori pozitsiya)",
-      "hotDesc": "E'loningiz barcha e'lonlardan yuqorida — maksimal ko'rinuvchanlikda aks etadi."
-    },
-    "boostModal": {
-      "title": "E'lonni ko'tarish",
-      "info": "Ko'tarish tarifini tanlang, va siz narx tafsilotlari hamda to'lov usulini tanlash uchun rasmiylashtirish sahifasiga yo'naltirilasiz.",
-      "hot": "HOT — Eng yuqori pozitsiya",
-      "hotDesc": "Eng yuqori pozitsiya",
-      "top10": "Top-10 Kundalik",
-      "top10Desc": "Kuniga top-10",
-      "selectPay": "Tanlash",
-      "empty": "Ko'tarish tariflari mavjud emas",
-      "footer": "Xendit orqali xavfsiz to'lov · To'lovdan so'ng avtomatik faollashadi"
-    },
-    "history": "Tranzaksiyalarim tarixini ko'rish",
-    "checkout": {
-      "backToPlans": "Tariflarga qaytish",
-      "pendingCap": "Sizda kutilayotgan hisob-fakturalar juda ko'p. Yangisini yaratishdan oldin ularni to'lang yoki muddati tugashini kuting.",
-      "backToDetails": "Tafsilotlarga qaytish",
-      "stepPlanDetail": "Tarif tafsilotlari",
-      "stepMethod": "To'lov usuli",
-      "priceDetails": "Narx tafsilotlari",
-      "planPrice": "Tarif narxi",
-      "ppn": "QQS",
-      "subtotal": "Jami komissiyasiz",
-      "totalPay": "Umumiy to'lov",
-      "vatHint": "Narxlar Indoneziya soliq qonunchiligiga muvofiq 11% QQSni o'z ichiga oladi.",
-      "feeHint": "To'lov tizimi komissiyasi keyingi bosqichda hisoblab ko'rsatiladi.",
-      "continue": "Davom etish",
-      "selectedPlan": "Tanlangan tarif",
-      "qrisDesc": "GoPay, OVO, Dana, ShopeePay va b.",
-      "vaTitle": "Virtual Account orqali o'tkazish",
-      "vaDesc": "BCA, BNI, BRI, Mandiri, Permata, BSI",
-      "vaSelect": "Virtual Account yaratish uchun bankni tanlang:",
-      "cardTitle": "Kredit / Debet karta",
-      "cardDesc": "Visa, Mastercard, JCB",
-      "cardName": "Karta egasining ismi",
-      "cardNamePlaceholder": "Kartada yozilganidek",
-      "cardNumber": "Karta raqami",
-      "cardExpiry": "Amal qilish muddati",
-      "cardCvv": "CVV / CVC",
-      "cardCvvHint": "(3-4 raqam)",
-      "cardSecureHint": "Karta ma'lumotlaringiz shifrlangan Xendit to'lov sahifasida himoyalangan (PCI DSS).",
-      "totalCharged": "To'lov uchun jami",
-      "payButton": "Hisob-faktura yaratish",
-      "secureTransaction": "To'lov Xendit orqali xavfsiz amalga oshiriladi · PCI DSS Compliant",
-      "errors": {
-        "invalidParams": "Noto'g'ri tarif parametrlari",
-        "planNotFound": "Tarif topilmadi",
-        "fetchFailed": "Tarif tafsilotlarini yuklab bo'lmadi",
-        "selectMethod": "Iltimos, avval to'lov usulini tanlang",
-        "nameRequired": "Karta egasining ismi kiritilishi shart",
-        "cardNumberInvalid": "Noto'g'ri karta raqami",
-        "cardExpiryInvalid": "Muddati formati noto'g'ri (OO/YY)",
-        "cardCvvInvalid": "CVV kamida 3 ta raqam bo'lishi kerak"
-      }
-    },
-    "orders": {
-      "title": "Tranzaksiyalar tarixi",
-      "subtitle": "Hisobingizdagi barcha to'lov va hisob-kitob yozuvlari",
-      "buyPlan": "Tarifni sotib olish",
-      "allStatus": "Barcha holatlar",
-      "allTypes": "Barcha turlar",
-      "empty": "Tranzaksiyalar hali mavjud emas",
-      "emptyDesc": "Xodimlarni yollashni tezlashtirish uchun tarif rejasini sotib oling.",
-      "table": {
-        "date": "Sana",
-        "type": "Tur",
-        "plan": "Tarif",
-        "amount": "Miqdor",
-        "status": "Holat",
-        "action": "Harakat"
-      },
-      "status": {
-        "pending": "To'lov kutilmoqda",
-        "paid": "To'langan",
-        "expired": "Muddati o'tgan",
-        "failed": "Xatolik"
-      },
-      "types": {
-        "subscription": "Obuna",
-        "singlePost": "Yagona e'lon",
-        "boost": "Ko'tarish"
-      },
-      "actionPay": "To'lash",
-      "totalOrders": "jami tranzaksiyalar"
-    },
-    "success": {
-      "title": "To'lov muvaffaqiyatli amalga oshirildi!",
-      "desc": "Sizning xizmatlar paketingiz yaqin daqiqalarda avtomatik faollashtiriladi.",
-      "currentPlan": "Joriy faol tarif",
-      "maxPosts": "Maks. faol e'lonlar",
-      "expiresAt": "Gacha amal qiladi",
-      "activeProcess": "Paketingiz faollashtirilmoqda. Iltimos, bir necha daqiqadan so'ng tekshirib ko'ring yoki tranzaksiyalar tarixini ko'ring.",
-      "manageJobs": "E'lonlarimni boshqarish",
-      "history": "Tranzaksiyalar tarixi",
-      "amountPaid": "To'langan summa"
-    },
-    "failure": {
-      "title": "To'lov amalga oshmadi",
-      "desc": "Kechirasiz, tranzaksiyangizni qayta ishlab bo'lmadi yoki u bekor qilindi.",
-      "reason": "Muvaffaqiyatsizlik sababi",
-      "reasonDesc": "To'lovni amalga oshirib bo'lmadi. Iltimos, boshqa to'lov usulini sinab ko'ring yoki bankingiz bilan bog'laning.",
-      "tryAgain": "Qaytadan urinish",
-      "backPricing": "Tariflarga qaytish",
-      "support": "Yordam xizmati bilan bog'lanish"
-    }
-  },
-  "pipeline": {
-    "navLabel": "Pipeline",
-    "title": "Nomzodlar Pipeline",
-    "subtitle": "Ishga qabul qilishning har bir bosqichida nomzodlar jarayonini kuzatib boring va boshqaring",
-    "stages": {
-      "applied": "Ariza topshirdi",
-      "screening": "Skrining",
-      "interview": "Suhbat",
-      "offer": "Taklif",
-      "hired": "Ishga qabul qilindi",
-      "rejected": "Rad etildi",
-      "custom": "Maxsus bosqich"
-    },
-    "filters": {
-      "searchPlaceholder": "Nomzod ismini qidirish...",
-      "allPositions": "Barcha lavozimlar",
-      "reset": "Filtrlarni tozalash"
-    },
-    "analytics": {
-      "stageCounts": "Bosqichlar bo'yicha nomzodlar",
-      "total": "Jami {count} nomzod",
-      "conversionRate": "Konversiya darajasi",
-      "estimated": "taxminiy",
-      "estimatedHint": "Backend tahlili mavjud bo'lguncha joriy bosqich taqsimotidan taxminan hisoblangan"
-    },
-    "board": {
-      "emptyColumn": "Nomzodlar yo'q",
-      "noStages": "Hali bosqichlar sozlanmagan",
-      "moveFailed": "Nomzodni ko'chirish muvaffaqiyatsiz tugadi",
-      "fallbackHint": "Pipeline API ushbu muhitda hali mavjud emas — arizachilar eski endpoint orqali ko'rsatilmoqda. Drag-and-drop va bosqichlarni boshqarish uchun backend pipeline moduli deploy qilinishi kerak."
-    },
-    "card": {
-      "moveTo": "Ko'chirish",
-      "today": "Bugun ariza topshirdi",
-      "daysAgo": "{count} kun oldin ariza topshirdi"
-    },
-    "drawer": {
-      "title": "Nomzod tafsilotlari"
-    },
-    "timeline": {
-      "title": "Faoliyat vaqt jadvali",
-      "empty": "Hozircha faoliyat yo'q",
-      "addNotePlaceholder": "Ichki eslatma yoki fikr-mulohaza qo'shing...",
-      "addNote": "Eslatma qo'shish",
-      "saving": "Saqlanmoqda...",
-      "noteAdded": "Eslatma qo'shildi",
-      "noteFailed": "Eslatma qo'shilmadi",
-      "fallbackHint": "To'liq faoliyat tarixi ulanmaguncha soddalashtirilgan vaqt jadvali ko'rsatilmoqda.",
-      "events": {
-        "applied": "Shu lavozimga ariza topshirdi",
-        "note": "Eslatma qo'shildi"
-      }
-    },
-    "stageManager": {
-      "manageButton": "Bosqichlarni boshqarish",
-      "selectOneJobHint": "Bosqichlarini moslashtirish uchun bitta lavozimni tanlang",
-      "title": "Pipeline bosqichlarini boshqarish",
-      "hint": "Tartibni o'zgartirish uchun torting. Nomini o'zgartirish uchun bosqich nomini ikki marta bosing.",
-      "system": "Standart",
-      "newStagePlaceholder": "Yangi bosqich nomi...",
-      "add": "Qo'shish",
-      "created": "Bosqich yaratildi",
-      "renamed": "Bosqich nomi o'zgartirildi",
-      "deleted": "Bosqich o'chirildi",
-      "confirmDelete": "\"{name}\" bosqichini o'chirasizmi? Bu bosqichdagi nomzodlar avval ko'chirilishi kerak.",
-      "actionFailed": "Amal bajarilmadi",
-      "deleteFailed": "Bosqichni o'chirish muvaffaqiyatsiz tugadi"
-    }
-  },
-  "communication": {
-    "bulk": {
-      "selected": "{count} ta nomzod tanlandi",
-      "hint": "Bir xil pipeline bosqichidagi nomzodlarni tanlab birga email yuboring.",
-      "moveHint": "Tanlangan barcha nomzodlarni boshqa pipeline bosqichiga birga ko'chiring.",
-      "moveToPlaceholder": "Bosqichga ko'chirish…",
-      "moveSelected": "Ko'chirish",
-      "moving": "Ko'chirilmoqda…",
-      "moveSuccess": "{moved} ta nomzod {stage} bosqichiga ko'chirildi",
-      "movePartial": "{failed} ta nomzod ko'chirilmadi",
-      "moveFailed": "Tanlangan nomzodlarni ko'chirib bo'lmadi",
-      "singleStageRequired": "Ommaviy email faqat bir xil bosqichdagi nomzodlar uchun.",
-      "clear": "Tozalash",
-      "sendEmail": "Email yuborish",
-      "sendTitle": "Ommaviy email",
-      "recipientCount": "{count} ta qabul qiluvchi",
-      "subject": "Mavzu",
-      "subjectPlaceholder": "masalan: {'{'}{'{'}job_title{'}'}{'}'} bo'yicha keyingi qadamlar",
-      "body": "Xabar",
-      "defaultBody": "Salom {'{'}{'{'}candidate_name{'}'}{'}'},\n\n{'{'}{'{'}job_title{'}'}{'}'} ga ariza topshirganingiz uchun rahmat.\n\nHurmat bilan",
-      "mergeFieldsHint": "Maydonlar: {'{'}{'{'}candidate_name{'}'}{'}'}, {'{'}{'{'}job_title{'}'}{'}'}",
-      "preview": "Ko'rib chiqish (birinchi qabul qiluvchi)",
-      "gdprNotice": "Ommaviy emaildan voz kechgan nomzodlar avtomatik o'tkazib yuboriladi.",
-      "validationRequired": "Mavzu va xabar majburiy",
-      "noRecipients": "Qabul qiluvchilar tanlanmagan",
-      "sending": "Yuborilmoqda...",
-      "sendSuccess": "Navbatga qo'yildi: {queued}. O'tkazib yuborildi: {skipped}.",
-      "sendFailed": "Ommaviy email yuborilmadi. Communication API hali deploy qilinmagan bo'lishi mumkin.",
-      "selectCandidate": "Nomzodni tanlash",
-      "selectColumn": "Ushbu bosqichdagi barcha nomzodlarni tanlash"
-    },
-    "templates": {
-      "title": "Email shablonlari",
-      "manage": "Shablonlar",
-      "label": "Shablon",
-      "none": "Shablonsiz (qo'lda yozish)",
-      "unavailable": "Shablon API hali mavjud emas. Xabarni qo'lda yozishingiz mumkin.",
-      "popupHint": "Nomzodlarga ommaviy email yuborish uchun qayta ishlatiladigan shablonlar yarating.",
-      "localHint": "Server API mavjud bo'lguncha ushbu brauzerda saqlanadi.",
-      "create": "Shablon yaratish",
-      "edit": "Shablonni tahrirlash",
-      "list": "Saqlangan shablonlar",
-      "empty": "Hali shablonlar yo'q — yuqorida birinchisini yarating.",
-      "namePlaceholder": "Shablon nomi (masalan, Suhbat taklifi)",
-      "subjectPlaceholder": "Email mavzusi",
-      "bodyPlaceholder": "Email matni...",
-      "save": "Saqlash",
-      "saving": "Saqlanmoqda...",
-      "cancelEdit": "Bekor qilish",
-      "editAction": "Tahrirlash",
-      "deleteAction": "O'chirish",
-      "validationRequired": "Nom, mavzu va matn majburiy",
-      "created": "Shablon yaratildi",
-      "updated": "Shablon yangilandi",
-      "deleted": "Shablon o'chirildi",
-      "confirmDelete": "\"{name}\" shablonini o'chirasizmi?",
-      "saveFailed": "Shablon saqlanmadi",
-      "deleteFailed": "Shablon o'chirilmadi"
-    },
-    "history": {
-      "title": "Aloqa tarixi",
-      "subtitle": "Kimga, qachon va yuborish holati",
-      "empty": "Hali kampaniyalar yo'q",
-      "campaign": "Kampaniya",
-      "backToList": "Ro'yxatga qaytish",
-      "recipient": "Qabul qiluvchi",
-      "email": "Email",
-      "statusLabel": "Holat",
-      "sentAt": "Yuborilgan vaqt",
-      "recipientCount": "{count} ta qabul qiluvchi",
-      "status": {
-        "queued": "Navbatda",
-        "sent": "Yuborildi",
-        "failed": "Xato",
-        "skipped_opt_out": "O'tkazib yuborildi (opt-out)",
-        "skipped_no_email": "O'tkazib yuborildi (email yo'q)",
-        "completed": "Tugallandi",
-        "processing": "Jarayonda"
-      }
-    },
-    "preferences": {
-      "title": "Email sozlamalari",
-      "subtitle": "Rekruterlar ommaviy email yuborishi mumkinligini boshqaring.",
-      "emailOptOut": "Rekruter ommaviy emaillaridan voz kechish",
-      "emailOptOutHint": "Tranzaksiya emaillari (hisob, parol, ariza holati) hali ham yuborilishi mumkin.",
-      "optOutEnabled": "Siz rekruter ommaviy emaillaridan voz kechdingiz",
-      "optOutDisabled": "Siz yana rekruter ommaviy emaillarini qabul qilishingiz mumkin",
-      "saveFailed": "Sozlamalar saqlanmadi"
-    },
-    "unsubscribe": {
-      "title": "Email sozlamalari",
-      "processing": "Obunadan chiqish so'rovi qayta ishlanmoqda...",
-      "successDefault": "Ishga qabul xatlaridan obunadan chiqdingiz",
-      "missingToken": "Obunadan chiqish havolasi noto'g'ri yoki yo'q",
-      "failed": "So'rovni qayta ishlash mumkin emas. Havola muddati tugagan bo'lishi mumkin.",
-      "backHome": "Bosh sahifaga qaytish"
-    }
-  },
-  "jobAlerts": {
-    "title": "Ish o'rinlari haqida ogohlantirishlar",
-    "subtitle": "Profilingizga mos yangi ish o'rinlari haqida email oling.",
-    "enableLabel": "Ish ogohlantirishlarini yoqish",
-    "enableHint": "Mos ish o'rinlarini email orqali yuboramiz. Havolalar ish tafsilotlari sahifasini ochadi.",
-    "addEmailFirst": "Ogohlantirishlarni yoqish uchun avval email qo'shing.",
-    "enabledSuccess": "Ish ogohlantirishlari yoqildi",
-    "disabledSuccess": "Ish ogohlantirishlari o'chirildi",
-    "saveFailed": "Ogohlantirishlarni yangilab bo'lmadi"
-  }
+  "noWebsiteProvided": "Veb-sayt berilmagan"
 }
