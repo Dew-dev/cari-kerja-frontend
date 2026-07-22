@@ -67,18 +67,32 @@ export function isCaptchaError(err) {
 }
 
 export function isVerificationRequiredError(err) {
+  if (err?.response?.status !== 403) return false;
+  const message = responseMessage(err);
   return (
-    err?.response?.status === 403 &&
-    responseMessage(err).startsWith("VERIFICATION_REQUIRED")
+    message.startsWith("VERIFICATION_REQUIRED") ||
+    (message.startsWith("ACCOUNT_RESTRICTED") &&
+      message.includes("VERIFICATION_REQUIRED"))
   );
+}
+
+/**
+ * Soft-block KYC (boleh tetap login, hanya akses halaman verifikasi).
+ * Beda dari hard suspend yang harus logout.
+ */
+export function isVerificationRestrictedError(err) {
+  return isVerificationRequiredError(err) &&
+    responseMessage(err).includes("ACCOUNT_RESTRICTED");
 }
 
 /**
  * Akun ditangguhkan / dibatasi — biasanya 403 + ACCOUNT_RESTRICTED:.
  * Juga cocok untuk pesan socket connect_error.
+ * Soft KYC (`ACCOUNT_RESTRICTED: VERIFICATION_REQUIRED`) tidak dihitung hard-suspend.
  */
 export function isAccountRestrictedError(err) {
   const message = errorMessage(err);
+  if (message.includes("VERIFICATION_REQUIRED")) return false;
   if (message.includes("ACCOUNT_RESTRICTED")) return true;
   if (err?.response?.status === 403 && message.toLowerCase().includes("suspended")) {
     return true;
