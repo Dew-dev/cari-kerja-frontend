@@ -102,10 +102,12 @@ function onReset() {
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 space-y-4">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
       <div class="relative flex-1">
+        <label for="pipeline-search" class="sr-only">{{ t("pipeline.filters.searchPlaceholder") }}</label>
         <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
         </svg>
         <input
+          id="pipeline-search"
           v-model="searchInput"
           type="text"
           :placeholder="t('pipeline.filters.searchPlaceholder')"
@@ -114,10 +116,13 @@ function onReset() {
       </div>
 
       <div v-if="!lockedPosition" class="w-full sm:w-64">
+        <label for="pipeline-position" class="sr-only">{{ t("pipeline.filters.allPositions") }}</label>
         <SearchableSelect
+          id="pipeline-position"
           :options="positionOptions"
           :value="selectedPositionValue"
           :placeholder="t('pipeline.filters.allPositions')"
+          :aria-label="t('pipeline.filters.allPositions')"
           @change="onPositionChange"
         />
       </div>
@@ -135,8 +140,11 @@ function onReset() {
     <!-- Sort + min match (second row) -->
     <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
       <div class="w-full sm:w-56">
-        <label class="block text-xs font-medium text-gray-500 mb-1">{{ t("pipeline.filters.sortLabel") }}</label>
+        <label for="pipeline-sort" class="block text-xs font-medium text-gray-500 mb-1">
+          {{ t("pipeline.filters.sortLabel") }}
+        </label>
         <select
+          id="pipeline-sort"
           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           :value="sortBy"
           @change="emit('update:sortBy', $event.target.value)"
@@ -148,9 +156,12 @@ function onReset() {
       </div>
 
       <div class="w-full sm:w-48">
-        <label class="block text-xs font-medium text-gray-500 mb-1">{{ t("pipeline.filters.minMatch") }}</label>
+        <label for="pipeline-min-match" class="block text-xs font-medium text-gray-500 mb-1">
+          {{ t("pipeline.filters.minMatch") }}
+        </label>
         <div class="flex items-center gap-2">
           <input
+            id="pipeline-min-match"
             v-model="minMatchInput"
             type="number"
             min="0"
