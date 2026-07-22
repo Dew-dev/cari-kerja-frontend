@@ -2099,7 +2099,29 @@
     "filters": {
       "searchPlaceholder": "Cari nama kandidat...",
       "allPositions": "Semua Posisi",
-      "reset": "Reset filter"
+      "reset": "Reset filter",
+      "sortLabel": "Urutkan",
+      "sortByMatch": "Kecocokan tertinggi",
+      "sortByUpdated": "Terbaru diupdate",
+      "sortByApplied": "Tanggal apply",
+      "minMatch": "Skor minimum",
+      "minMatchAll": "Semua"
+    },
+    "match": {
+      "score": "{score}% Match",
+      "scoreAria": "Kecocokan {score} persen",
+      "scoreLabel": "kecocokan",
+      "pending": "Menghitung kecocokan…",
+      "insufficient": "Data profil kurang",
+      "failed": "Gagal menghitung",
+      "sectionTitle": "Kecocokan AI dengan lowongan",
+      "computedAt": "Dihitung {date}",
+      "breakdown": {
+        "semantic": "Kesamaan deskripsi",
+        "skills": "Kecocokan skill",
+        "experience": "Pengalaman",
+        "education": "Pendidikan"
+      }
     },
     "analytics": {
       "stageCounts": "Jumlah Kandidat per Tahap",
