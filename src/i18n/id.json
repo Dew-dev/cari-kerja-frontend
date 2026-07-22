@@ -521,7 +521,9 @@
     "email": "Email",
     "emailNotificationPlaceholder": "email{'@'}contoh.com (opsional)",
     "emailTelegramHint": "Email kosong wajar untuk login Telegram. Email hanya untuk notifikasi, bukan metode login.",
-    "updateEmail": "Simpan email notifikasi",
+    "telegramNotificationsOnly": "Notifikasi akun ini hanya dikirim lewat Telegram. Tidak ada channel notifikasi email.",
+    "emailManagedByGoogle": "Email berasal dari akun Google dan tidak dapat diubah di sini.",
+    "updateEmail": "Perbarui email",
     "notificationChannels": {
       "title": "Channel notifikasi",
       "subtitle": "Atur cara Anda menerima update lowongan. Metode login terpisah dari channel notifikasi.",

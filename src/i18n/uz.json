@@ -450,7 +450,9 @@
     "email": "Email manzili",
     "emailNotificationPlaceholder": "email{'@'}example.com (ixtiyoriy)",
     "emailTelegramHint": "Telegram login uchun bo'sh email normal. Email faqat bildirishnomalar uchun.",
-    "updateEmail": "Bildirishnoma emailini saqlash",
+    "telegramNotificationsOnly": "Bu akkaunt uchun bildirishnomalar faqat Telegram orqali yuboriladi. Email kanali yo'q.",
+    "emailManagedByGoogle": "Email Google akkauntingizdan olinadi va bu yerda o'zgartirib bo'lmaydi.",
+    "updateEmail": "Emailni yangilash",
     "notificationChannels": {
       "title": "Bildirishnoma kanallari",
       "subtitle": "Ish yangilanishlarini qanday olishingizni boshqaring. Login usuli bildirishnoma kanallaridan alohida.",

@@ -3,7 +3,6 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import AppFooter from "./components/layout/AppFooter.vue";
 import AppHeader from "./components/layout/AppHeader.vue";
-import NotificationChannelBanner from "./components/auth/NotificationChannelBanner.vue";
 import { useI18n } from "vue-i18n";
 import { Notivue, Notification } from "notivue";
 import "primeicons/primeicons.css";
@@ -20,7 +19,6 @@ const isChatRoute = computed(() => route.path.startsWith("/chat"));
     :class="isChatRoute ? 'h-dvh flex flex-col overflow-hidden' : 'min-h-screen'"
   >
     <AppHeader class="shrink-0" />
-    <NotificationChannelBanner />
     <div :class="isChatRoute ? 'flex-1 min-h-0 overflow-hidden' : ''">
       <router-view :key="$route.fullPath" />
     </div>

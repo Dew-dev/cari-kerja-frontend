@@ -451,7 +451,9 @@
     "email": "Адрес электронной почты",
     "emailNotificationPlaceholder": "email{'@'}example.com (необязательно)",
     "emailTelegramHint": "Пустой email нормален при входе через Telegram. Email только для уведомлений.",
-    "updateEmail": "Сохранить email для уведомлений",
+    "telegramNotificationsOnly": "Уведомления для этого аккаунта отправляются только через Telegram. Email-канал недоступен.",
+    "emailManagedByGoogle": "Email берётся из аккаунта Google и здесь изменить нельзя.",
+    "updateEmail": "Обновить email",
     "notificationChannels": {
       "title": "Каналы уведомлений",
       "subtitle": "Управляйте способом получения уведомлений о вакансиях. Способ входа отделён от каналов уведомлений.",

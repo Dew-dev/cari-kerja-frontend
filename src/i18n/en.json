@@ -525,7 +525,9 @@
     "email": "Email",
     "emailNotificationPlaceholder": "email{'@'}example.com (optional)",
     "emailTelegramHint": "Empty email is normal for Telegram login. Email is for notifications only, not a login method.",
-    "updateEmail": "Save notification email",
+    "telegramNotificationsOnly": "Notifications are sent via Telegram only for this account. No email notification channel.",
+    "emailManagedByGoogle": "Email comes from your Google account and cannot be changed here.",
+    "updateEmail": "Update email",
     "notificationChannels": {
       "title": "Notification channels",
       "subtitle": "Manage how you receive job alerts. Login method stays separate from notification channels.",
