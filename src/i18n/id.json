@@ -761,6 +761,27 @@
       "skillsHint": "Keahlian yang ditemukan di CV Anda. Tambahkan secara manual melalui tab Profil."
     }
   },
+  "news": {
+    "pageTitle": "Berita — Cari Kerja",
+    "title": "Berita",
+    "subtitle": "Update, tips, dan cerita dari tim Cari Kerja.",
+    "search": "Cari",
+    "searchPlaceholder": "Cari artikel…",
+    "featuredOnly": "Unggulan saja",
+    "featured": "Unggulan",
+    "allCategories": "Semua kategori",
+    "resultCount": "{count} artikel",
+    "loading": "Memuat…",
+    "empty": "Artikel tidak ditemukan.",
+    "noCover": "Tanpa gambar",
+    "readMore": "Baca selengkapnya",
+    "prev": "Sebelumnya",
+    "next": "Berikutnya",
+    "pageOf": "Halaman {page} dari {total}",
+    "loadFailed": "Gagal memuat berita.",
+    "notFound": "Artikel tidak ditemukan.",
+    "backToList": "Kembali ke berita"
+  },
   "about": {
     "pageTitle": "Tentang",
     "title": "Tentang Cari Kerja",

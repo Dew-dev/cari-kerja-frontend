@@ -97,7 +97,7 @@
     "contact": "Aloqa",
     "about": "Biz haqimizda",
     "career": "Karyera",
-    "news": "Work.ua yangiliklari",
+    "news": "Yangiliklar",
     "help": "Yordam",
     "terms": "Foydalanish shartlari",
     "faq": "Tez-tez so'raladigan savollar",
@@ -694,6 +694,27 @@
       "applyHint": "Ma'lumotlar hali saqlanmagan. Tabga o'ting va Saqlash tugmasini bosing.",
       "skillsHint": "CV-ingizda topilgan ko'nikmalar. Ularni Profil tabidan qo'lda qo'shing."
     }
+  },
+  "news": {
+    "pageTitle": "Yangiliklar — Cari Kerja",
+    "title": "Yangiliklar",
+    "subtitle": "Cari Kerja jamoasidan yangiliklar, maslahatlar va hikoyalar.",
+    "search": "Qidiruv",
+    "searchPlaceholder": "Maqolalarni qidirish…",
+    "featuredOnly": "Faqat tanlanganlar",
+    "featured": "Tanlangan",
+    "allCategories": "Barcha toifalar",
+    "resultCount": "{count} ta maqola",
+    "loading": "Yuklanmoqda…",
+    "empty": "Maqolalar topilmadi.",
+    "noCover": "Rasm yo'q",
+    "readMore": "Batafsil",
+    "prev": "Oldingi",
+    "next": "Keyingi",
+    "pageOf": "{page}/{total} sahifa",
+    "loadFailed": "Yangiliklarni yuklash muvaffaqiyatsiz.",
+    "notFound": "Maqola topilmadi.",
+    "backToList": "Yangiliklarga qaytish"
   },
   "about": {
     "pageTitle": "Biz haqida",

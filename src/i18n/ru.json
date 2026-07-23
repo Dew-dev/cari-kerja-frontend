@@ -695,6 +695,27 @@
       "skillsHint": "Навыки найдены в резюме. Добавьте их вручную через вкладку Профиль."
     }
   },
+  "news": {
+    "pageTitle": "Новости — Cari Kerja",
+    "title": "Новости",
+    "subtitle": "Обновления, советы и истории от команды Cari Kerja.",
+    "search": "Поиск",
+    "searchPlaceholder": "Поиск статей…",
+    "featuredOnly": "Только избранные",
+    "featured": "Избранное",
+    "allCategories": "Все категории",
+    "resultCount": "{count} статей",
+    "loading": "Загрузка…",
+    "empty": "Статьи не найдены.",
+    "noCover": "Нет изображения",
+    "readMore": "Читать далее",
+    "prev": "Назад",
+    "next": "Далее",
+    "pageOf": "Страница {page} из {total}",
+    "loadFailed": "Не удалось загрузить новости.",
+    "notFound": "Статья не найдена.",
+    "backToList": "К списку новостей"
+  },
   "about": {
     "pageTitle": "О нас",
     "title": "О cari-kerja.id",
