@@ -65,11 +65,12 @@ function setLang(lang) {
 
       <!-- LINKS -->
       <div class="flex flex-wrap items-center gap-4 mb-2">
-        <a href="/contact" class="hover:underline">{{ t("footer.contact") }}</a>
-        <a href="/about" class="hover:underline">{{ t("footer.about") }}</a>
-        <a href="/faq" class="hover:underline">{{ t("footer.faq") }}</a>
-        <a href="/terms-of-service" class="hover:underline">{{ t("footer.termsOfService") }}</a>
-        <a href="/privacy-policy" class="hover:underline">{{ t("footer.privacyPolicy") }}</a>
+        <router-link to="/contact" class="hover:underline">{{ t("footer.contact") }}</router-link>
+        <router-link to="/about" class="hover:underline">{{ t("footer.about") }}</router-link>
+        <router-link to="/news" class="hover:underline">{{ t("footer.news") }}</router-link>
+        <router-link to="/faq" class="hover:underline">{{ t("footer.faq") }}</router-link>
+        <router-link to="/terms-of-service" class="hover:underline">{{ t("footer.termsOfService") }}</router-link>
+        <router-link to="/privacy-policy" class="hover:underline">{{ t("footer.privacyPolicy") }}</router-link>
       </div>
 
       <!-- COPYRIGHT -->

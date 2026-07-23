@@ -67,6 +67,19 @@ const routes = [
     component: () => import("../pages/FAQ.vue"),
   },
   {
+    path: "/news",
+    name: "news",
+    meta: { public: true },
+    component: () => import("../pages/news/NewsList.vue"),
+  },
+  {
+    path: "/news/:slug",
+    name: "news-detail",
+    meta: { public: true },
+    props: true,
+    component: () => import("../pages/news/NewsDetail.vue"),
+  },
+  {
     path: "/terms-of-service",
     name: "terms-of-service",
     component: () => import("../pages/TermsOfService.vue"),

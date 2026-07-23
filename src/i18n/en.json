@@ -172,7 +172,7 @@
     "contact": "Contact",
     "about": "About",
     "career": "Career",
-    "news": "Work.ua news",
+    "news": "News",
     "help": "Help",
     "terms": "Terms of use",
     "faq": "FAQ",
@@ -768,6 +768,27 @@
       "applyHint": "Entries are not saved yet. Go to the tab and click Save on each entry.",
       "skillsHint": "Skills found in your CV. Add them manually via the Profile tab."
     }
+  },
+  "news": {
+    "pageTitle": "News — Cari Kerja",
+    "title": "News",
+    "subtitle": "Updates, tips, and stories from the Cari Kerja team.",
+    "search": "Search",
+    "searchPlaceholder": "Search articles…",
+    "featuredOnly": "Featured only",
+    "featured": "Featured",
+    "allCategories": "All categories",
+    "resultCount": "{count} articles",
+    "loading": "Loading…",
+    "empty": "No articles found.",
+    "noCover": "No image",
+    "readMore": "Read more",
+    "prev": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {total}",
+    "loadFailed": "Failed to load news.",
+    "notFound": "Article not found.",
+    "backToList": "Back to news"
   },
   "about": {
     "pageTitle": "About",
