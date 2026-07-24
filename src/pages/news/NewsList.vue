@@ -2,7 +2,12 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { getNews, getNewsCategories } from "@/services/news.api";
+import {
+  getNews,
+  getNewsCategories,
+  isNewsLocaleFallback,
+  resolveNewsLocale,
+} from "@/services/news.api";
 
 const { t, locale } = useI18n();
 const route = useRoute();
@@ -21,6 +26,7 @@ const limit = 10;
 const totalPages = ref(1);
 const totalData = ref(0);
 
+const newsLocale = computed(() => resolveNewsLocale(locale.value));
 const categorySlug = computed(() => String(route.query.category_slug || ""));
 const featuredOnly = computed(
   () => route.query.featured === "true" || route.query.featured === true,
@@ -50,7 +56,7 @@ function syncTitle() {
 
 async function loadCategories() {
   try {
-    const res = await getNewsCategories();
+    const res = await getNewsCategories({ locale: newsLocale.value });
     categories.value = res.data?.data || [];
   } catch {
     categories.value = [];
@@ -67,6 +73,7 @@ async function loadNews() {
       search: searchQuery.value || undefined,
       category_slug: categorySlug.value || undefined,
       featured: featuredOnly.value || undefined,
+      locale: newsLocale.value,
     });
     items.value = res.data?.data || [];
     const meta = res.data?.meta || {};
@@ -124,12 +131,24 @@ function syncFromRoute() {
   loadNews();
 }
 
+async function onLocaleChange() {
+  syncTitle();
+  // Category slugs are locale-specific — reset filter when language changes.
+  if (categorySlug.value) {
+    updateQuery({ category_slug: undefined, page: 1 });
+    await loadCategories();
+    return; // route watch will reload list
+  }
+  await loadCategories();
+  await loadNews();
+}
+
 watch(
   () => [route.query.page, route.query.search, route.query.category_slug, route.query.featured],
   () => syncFromRoute(),
 );
 
-watch(locale, syncTitle);
+watch(locale, onLocaleChange);
 
 onMounted(async () => {
   syncTitle();
@@ -264,6 +283,13 @@ onMounted(async () => {
                   class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-medium"
                 >
                   {{ t("news.featured") }}
+                </span>
+                <span
+                  v-if="isNewsLocaleFallback(item)"
+                  class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium"
+                  :title="t('news.localeFallbackHint', { locale: item.locale_resolved })"
+                >
+                  {{ t("news.localeFallback", { locale: String(item.locale_resolved || "").toUpperCase() }) }}
                 </span>
                 <span
                   v-if="item.category_name"

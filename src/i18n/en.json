@@ -805,7 +805,9 @@
     "backToList": "Back to news",
     "highlightTitle": "News Highlights",
     "highlightSubtitle": "Latest updates, tips, and stories from Cari Kerja.",
-    "viewAll": "View all news"
+    "viewAll": "View all news",
+    "localeFallback": "Shown in {locale}",
+    "localeFallbackHint": "This article is not available in your language yet; showing the {locale} version."
   },
   "about": {
     "pageTitle": "About",
