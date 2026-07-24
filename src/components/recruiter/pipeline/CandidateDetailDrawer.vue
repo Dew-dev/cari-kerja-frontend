@@ -58,18 +58,34 @@ async function loadMatchDetail({ silent = false } = {}) {
   if (!silent) loadingMatch.value = true;
   matchError.value = false;
 
+  const isStillPending = (match) =>
+    !!match &&
+    match.match_status === "pending" &&
+    match.match_score == null &&
+    !match.match_breakdown;
+
   try {
-    const data = await pipelineStore.fetchApplicationMatch(applicationId);
-    if (requestId !== matchRequestId) return;
+    // BE GET /match may lazy-compute synchronously, or enqueue then stay pending —
+    // retry once so the drawer picks up a freshly computed score.
+    const maxAttempts = 2;
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+      const data = await pipelineStore.fetchApplicationMatch(applicationId);
+      if (requestId !== matchRequestId) return;
 
-    const incoming = normalizeMatchFields(data || {});
-    const baseline = mergeMatchSources(props.candidate, matchDetail.value);
+      const incoming = normalizeMatchFields(data || {});
+      const baseline = mergeMatchSources(props.candidate, matchDetail.value);
 
-    if (shouldApplyMatchUpdate(incoming, baseline)) {
-      matchDetail.value = mergeMatchSources(baseline, incoming);
-      emit("match-updated", matchDetail.value);
+      if (shouldApplyMatchUpdate(incoming, baseline)) {
+        matchDetail.value = mergeMatchSources(baseline, incoming);
+        emit("match-updated", matchDetail.value);
+      }
+
+      const current = mergeMatchSources(props.candidate, matchDetail.value);
+      if (!isStillPending(current) || attempt === maxAttempts - 1) break;
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      if (requestId !== matchRequestId) return;
     }
-    // If API returned an empty pending stub, keep showing list/baseline data.
   } catch (err) {
     if (requestId !== matchRequestId) return;
     console.warn("[Pipeline] Optional match detail unavailable:", err);
@@ -109,18 +125,34 @@ const matchScore = computed(() =>
 const hasNumericScore = computed(() => matchScore.value != null && !Number.isNaN(matchScore.value));
 const matchTone = computed(() => getMatchScoreTone(matchScore.value));
 
-const showScoreBlock = computed(() => hasNumericScore.value);
-
 const breakdownRows = computed(() => {
   const b = matchSource.value.match_breakdown;
   if (!b || typeof b !== "object") return [];
+  // New scorer: semantic, skills, position, experience, salary, location.
+  // Keep education for older persisted scores.
   return [
     { key: "semantic", label: t("pipeline.match.breakdown.semantic"), value: b.semantic },
     { key: "skills", label: t("pipeline.match.breakdown.skills"), value: b.skills },
+    { key: "position", label: t("pipeline.match.breakdown.position"), value: b.position },
     { key: "experience", label: t("pipeline.match.breakdown.experience"), value: b.experience },
+    { key: "salary", label: t("pipeline.match.breakdown.salary"), value: b.salary },
+    { key: "location", label: t("pipeline.match.breakdown.location"), value: b.location },
     { key: "education", label: t("pipeline.match.breakdown.education"), value: b.education },
   ].filter((row) => row.value != null && !Number.isNaN(Number(row.value)));
 });
+
+/** Ready/pending numeric score — not insufficient_data (avoid a misleading red 0%). */
+const showScoreBlock = computed(
+  () => hasNumericScore.value && matchStatus.value !== "insufficient_data",
+);
+
+const isInsufficientData = computed(() => matchStatus.value === "insufficient_data");
+
+function breakdownBarClass(value) {
+  const n = Number(value);
+  if (isInsufficientData.value && (Number.isNaN(n) || n <= 0)) return "bg-gray-300";
+  return getMatchScoreTone(value).bar;
+}
 
 const matchReasons = computed(() => {
   const list = matchSource.value.match_reasons;
@@ -291,9 +323,49 @@ function refreshMatch() {
               </div>
             </div>
 
-            <p v-if="matchError && !showScoreBlock" class="text-sm text-gray-500">
+            <p v-if="matchError && !showScoreBlock && !isInsufficientData" class="text-sm text-gray-500">
               {{ t("pipeline.match.refreshFailed") }}
             </p>
+
+            <!-- insufficient_data: explain partial match — never a lone red 0% -->
+            <template v-else-if="isInsufficientData">
+              <div class="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 space-y-1">
+                <p class="text-sm font-medium text-amber-800">{{ t("pipeline.match.insufficient") }}</p>
+                <p class="text-xs text-amber-700/90">{{ t("pipeline.match.insufficientHint") }}</p>
+              </div>
+
+              <div v-if="breakdownRows.length" class="space-y-2.5 pt-1">
+                <p class="text-[11px] font-medium text-gray-500 uppercase">{{ t("pipeline.match.partialBreakdown") }}</p>
+                <div v-for="row in breakdownRows" :key="row.key">
+                  <div class="flex justify-between text-xs text-gray-600 mb-1">
+                    <span>{{ row.label }}</span>
+                    <span class="font-medium">{{ Math.round(Number(row.value)) }}%</span>
+                  </div>
+                  <div class="h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                    <div
+                      class="h-full rounded-full transition-all"
+                      :class="breakdownBarClass(row.value)"
+                      :style="{ width: barWidth(row.value) }"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <ul v-if="matchReasons.length" class="space-y-1.5 pt-1">
+                <li
+                  v-for="(reason, idx) in matchReasons"
+                  :key="reasonKey(reason, idx)"
+                  class="text-sm text-gray-700 flex gap-2"
+                >
+                  <span class="text-amber-600 shrink-0">•</span>
+                  <span>{{ reasonLabel(reason) }}</span>
+                </li>
+              </ul>
+
+              <p v-if="computedAtLabel" class="text-[11px] text-gray-400 pt-1">
+                {{ t("pipeline.match.computedAt", { date: computedAtLabel }) }}
+              </p>
+            </template>
 
             <template v-else-if="showScoreBlock">
               <div class="flex items-end gap-2">
@@ -301,11 +373,7 @@ function refreshMatch() {
                 <span class="text-sm text-gray-500 pb-0.5">{{ t("pipeline.match.scoreLabel") }}</span>
               </div>
 
-              <p
-                v-if="statusMessage"
-                class="text-sm"
-                :class="matchStatus === 'insufficient_data' ? 'text-amber-700' : 'text-gray-500'"
-              >
+              <p v-if="statusMessage" class="text-sm text-gray-500">
                 {{ statusMessage }}
               </p>
 
@@ -318,7 +386,7 @@ function refreshMatch() {
                   <div class="h-1.5 rounded-full bg-gray-100 overflow-hidden">
                     <div
                       class="h-full rounded-full transition-all"
-                      :class="getMatchScoreTone(row.value).bar"
+                      :class="breakdownBarClass(row.value)"
                       :style="{ width: barWidth(row.value) }"
                     />
                   </div>
@@ -347,10 +415,7 @@ function refreshMatch() {
             </template>
 
             <template v-else>
-              <p
-                class="text-sm"
-                :class="matchStatus === 'insufficient_data' ? 'text-amber-700' : 'text-gray-500'"
-              >
+              <p class="text-sm text-gray-500">
                 {{ statusMessage || t("pipeline.match.failed") }}
               </p>
 

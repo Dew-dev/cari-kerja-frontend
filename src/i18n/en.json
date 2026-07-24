@@ -2552,6 +2552,8 @@
       "scoreLabel": "match",
       "pending": "Calculating…",
       "insufficient": "Profile data incomplete",
+      "insufficientHint": "Match is only partial — add more profile or job detail so every dimension can be scored.",
+      "partialBreakdown": "Available dimensions",
       "failed": "Could not calculate match",
       "sectionTitle": "AI match with job",
       "computedAt": "Calculated {date}",
@@ -2566,7 +2568,10 @@
       "breakdown": {
         "semantic": "Description similarity",
         "skills": "Skills match",
+        "position": "Role / title fit",
         "experience": "Experience",
+        "salary": "Salary fit",
+        "location": "Location fit",
         "education": "Education"
       }
     },
