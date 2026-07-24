@@ -91,6 +91,37 @@ async function enrichUserProfile(token) {
   }
 }
 
+/**
+ * Refresh JWT + lengkapi profil di background.
+ * Jangan pernah block redirect OAuth.
+ */
+async function finalizeSessionInBackground(initialToken) {
+  try {
+    await auth.refreshSession({ logoutOnFail: false });
+  } catch (refreshError) {
+    console.warn(
+      "OAuth token refresh failed, continuing with initial token:",
+      refreshError,
+    );
+  }
+
+  await enrichUserProfile(auth.token || initialToken);
+
+  if (auth.user?.role === "recruiter" && !auth.restrictedVerification) {
+    try {
+      const landing = await resolveRecruiterLandingPath();
+      if (
+        landing === "/recruiter/verification" &&
+        router.currentRoute.value.path !== landing
+      ) {
+        await router.replace(landing);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
 onMounted(async () => {
   const token = route.query.token;
   const refreshToken = route.query.refreshToken;
@@ -133,31 +164,19 @@ onMounted(async () => {
     auth.user = user;
     localStorage.setItem("user", JSON.stringify(auth.user));
 
-    // Ambil nama profil SEBELUM redirect (jangan biarkan header kosong)
-    await enrichUserProfile(token);
-
-    // Refresh untuk dapat restricted_verification + lengkapi JWT
-    try {
-      await auth.refreshToken({ logoutOnFail: false });
-      if (!auth.user?.name) {
-        await enrichUserProfile(auth.token || token);
-      }
-    } catch (refreshError) {
-      console.warn(
-        "OAuth token refresh failed, continuing with initial token:",
-        refreshError,
-      );
-    }
-
+    // Redirect segera — jangan tunggu refresh/profile (bisa hang)
     let destination = "/jobposts";
     if (auth.user.role === "recruiter") {
       destination = auth.restrictedVerification
         ? "/recruiter/verification"
-        : await resolveRecruiterLandingPath();
+        : "/recruiter/jobs";
     }
 
     push.success(t("auth.messages.loginSuccess") || "Login successful!");
     await router.replace(destination);
+
+    // Background: lengkapi JWT + nama profil
+    void finalizeSessionInBackground(token);
   } catch (error) {
     console.error("Callback parsing error:", error);
     push.error(

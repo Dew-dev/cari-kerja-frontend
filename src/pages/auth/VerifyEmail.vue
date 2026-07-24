@@ -22,7 +22,7 @@ onMounted(async () => {
       success.value = true;
       if (auth.isLoggedIn) {
         try {
-          await auth.refreshToken({ logoutOnFail: false });
+          await auth.refreshSession({ logoutOnFail: false });
         } catch {
           /* ignore */
         }

@@ -103,6 +103,14 @@ function processQueue(error, token = null) {
 }
 
 api.interceptors.request.use((config) => {
+  const headers = config.headers || {};
+  const existingAuth = headers.Authorization || headers.authorization;
+
+  // Jangan timpa Basic auth (login / register / refresh-token)
+  if (existingAuth && String(existingAuth).startsWith("Basic ")) {
+    return config;
+  }
+
   const token = localStorage.getItem("token");
   if (token && token !== "google-cookie-session") {
     config.headers.Authorization = `Bearer ${token}`;
@@ -159,6 +167,12 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    const requestUrl = String(originalRequest?.url || "");
+    // Endpoint refresh sendiri gagal → biarkan pemanggil (refreshSession) yang putuskan logout
+    if (requestUrl.includes("/users/refresh-token")) {
+      return Promise.reject(error);
+    }
+
     // 🚫 sudah retry → logout
     if (originalRequest._retry) {
       logoutAndRedirectToLogin(auth, { notifySessionExpired: true });
@@ -181,7 +195,7 @@ api.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      const newToken = await auth.refreshToken();
+      const newToken = await auth.refreshSession();
       processQueue(null, newToken);
 
       originalRequest.headers.Authorization = `Bearer ${newToken}`;

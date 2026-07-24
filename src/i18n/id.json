@@ -1885,7 +1885,9 @@
       "passwordResetSuccess": "Kata sandi berhasil direset.",
       "noPassword": "Kata sandi wajib diisi",
       "passwordMismatch": "Konfirmasi kata sandi tidak cocok",
-      "failedReset": "Gagal mereset kata sandi"
+      "failedReset": "Gagal mereset kata sandi",
+      "loginSuccess": "Login berhasil!",
+      "signInError": "Terjadi kesalahan saat masuk."
     },
     "sendResetLinkSubtitle": "Masukkan email dan kami akan mengirim tautan reset.",
     "newPassword": "Kata Sandi Baru",
