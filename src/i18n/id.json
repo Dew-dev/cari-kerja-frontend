@@ -780,7 +780,10 @@
     "pageOf": "Halaman {page} dari {total}",
     "loadFailed": "Gagal memuat berita.",
     "notFound": "Artikel tidak ditemukan.",
-    "backToList": "Kembali ke berita"
+    "backToList": "Kembali ke berita",
+    "highlightTitle": "Sorotan Berita",
+    "highlightSubtitle": "Update, tips, dan cerita terbaru dari Cari Kerja.",
+    "viewAll": "Lihat semua berita"
   },
   "about": {
     "pageTitle": "Tentang",

@@ -2,6 +2,7 @@
   <HeroSearch @search="handleSearch" />
   <QuickLinks />
   <CompanyLogos />
+  <NewsHighlight />
 </template>
 
 <script setup>
@@ -9,6 +10,7 @@ import { useRouter } from "vue-router";
 import HeroSearch from "../components/home/HeroSearch.vue";
 import QuickLinks from "../components/home/QuickLinks.vue";
 import CompanyLogos from "../components/home/CompanyLogos.vue";
+import NewsHighlight from "../components/home/NewsHighlight.vue";
 
 const router = useRouter();
 

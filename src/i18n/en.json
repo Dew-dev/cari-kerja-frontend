@@ -788,7 +788,10 @@
     "pageOf": "Page {page} of {total}",
     "loadFailed": "Failed to load news.",
     "notFound": "Article not found.",
-    "backToList": "Back to news"
+    "backToList": "Back to news",
+    "highlightTitle": "News Highlights",
+    "highlightSubtitle": "Latest updates, tips, and stories from Cari Kerja.",
+    "viewAll": "View all news"
   },
   "about": {
     "pageTitle": "About",
