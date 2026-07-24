@@ -2254,7 +2254,10 @@
       "breakdown": {
         "semantic": "Kesamaan deskripsi",
         "skills": "Kecocokan skill",
+        "position": "Kecocokan posisi / jabatan",
         "experience": "Pengalaman",
+        "salary": "Kecocokan gaji",
+        "location": "Kecocokan lokasi",
         "education": "Pendidikan"
       }
     },

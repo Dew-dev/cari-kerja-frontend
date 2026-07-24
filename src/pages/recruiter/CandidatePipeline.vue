@@ -133,18 +133,28 @@ async function handleRematch() {
     setTimeout(async () => {
       await pipelineStore.fetchCandidates();
       if (drawerOpen.value && drawerCandidate.value?.application_id) {
-        const fresh = pipelineStore.candidates.find(
-          (c) => String(c.application_id) === String(drawerCandidate.value.application_id),
-        );
-        if (fresh) {
+        const appId = drawerCandidate.value.application_id;
+        try {
+          // Re-hit GET /match (lazy-compute) so drawer isn't stuck on pending.
+          const matchPayload = await pipelineStore.fetchApplicationMatch(appId);
           drawerCandidate.value = {
             ...drawerCandidate.value,
-            ...mergeMatchSources(drawerCandidate.value, fresh),
-            name: fresh.name || drawerCandidate.value.name,
-            stage_id: fresh.stage_id ?? drawerCandidate.value.stage_id,
-            stage_name: fresh.stage_name || drawerCandidate.value.stage_name,
-            stage_type: fresh.stage_type || drawerCandidate.value.stage_type,
+            ...mergeMatchSources(drawerCandidate.value, matchPayload),
           };
+        } catch {
+          const fresh = pipelineStore.candidates.find(
+            (c) => String(c.application_id) === String(appId),
+          );
+          if (fresh) {
+            drawerCandidate.value = {
+              ...drawerCandidate.value,
+              ...mergeMatchSources(drawerCandidate.value, fresh),
+              name: fresh.name || drawerCandidate.value.name,
+              stage_id: fresh.stage_id ?? drawerCandidate.value.stage_id,
+              stage_name: fresh.stage_name || drawerCandidate.value.stage_name,
+              stage_type: fresh.stage_type || drawerCandidate.value.stage_type,
+            };
+          }
         }
       }
     }, 4000);

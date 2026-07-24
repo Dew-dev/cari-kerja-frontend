@@ -2561,7 +2561,10 @@
       "breakdown": {
         "semantic": "Description similarity",
         "skills": "Skills match",
+        "position": "Role / title fit",
         "experience": "Experience",
+        "salary": "Salary fit",
+        "location": "Location fit",
         "education": "Education"
       }
     },

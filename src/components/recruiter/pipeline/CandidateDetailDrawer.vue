@@ -58,18 +58,34 @@ async function loadMatchDetail({ silent = false } = {}) {
   if (!silent) loadingMatch.value = true;
   matchError.value = false;
 
+  const isStillPending = (match) =>
+    !!match &&
+    match.match_status === "pending" &&
+    match.match_score == null &&
+    !match.match_breakdown;
+
   try {
-    const data = await pipelineStore.fetchApplicationMatch(applicationId);
-    if (requestId !== matchRequestId) return;
+    // BE GET /match may lazy-compute synchronously, or enqueue then stay pending —
+    // retry once so the drawer picks up a freshly computed score.
+    const maxAttempts = 2;
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+      const data = await pipelineStore.fetchApplicationMatch(applicationId);
+      if (requestId !== matchRequestId) return;
 
-    const incoming = normalizeMatchFields(data || {});
-    const baseline = mergeMatchSources(props.candidate, matchDetail.value);
+      const incoming = normalizeMatchFields(data || {});
+      const baseline = mergeMatchSources(props.candidate, matchDetail.value);
 
-    if (shouldApplyMatchUpdate(incoming, baseline)) {
-      matchDetail.value = mergeMatchSources(baseline, incoming);
-      emit("match-updated", matchDetail.value);
+      if (shouldApplyMatchUpdate(incoming, baseline)) {
+        matchDetail.value = mergeMatchSources(baseline, incoming);
+        emit("match-updated", matchDetail.value);
+      }
+
+      const current = mergeMatchSources(props.candidate, matchDetail.value);
+      if (!isStillPending(current) || attempt === maxAttempts - 1) break;
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      if (requestId !== matchRequestId) return;
     }
-    // If API returned an empty pending stub, keep showing list/baseline data.
   } catch (err) {
     if (requestId !== matchRequestId) return;
     console.warn("[Pipeline] Optional match detail unavailable:", err);
@@ -114,10 +130,15 @@ const showScoreBlock = computed(() => hasNumericScore.value);
 const breakdownRows = computed(() => {
   const b = matchSource.value.match_breakdown;
   if (!b || typeof b !== "object") return [];
+  // New scorer: semantic, skills, position, experience, salary, location.
+  // Keep education for older persisted scores.
   return [
     { key: "semantic", label: t("pipeline.match.breakdown.semantic"), value: b.semantic },
     { key: "skills", label: t("pipeline.match.breakdown.skills"), value: b.skills },
+    { key: "position", label: t("pipeline.match.breakdown.position"), value: b.position },
     { key: "experience", label: t("pipeline.match.breakdown.experience"), value: b.experience },
+    { key: "salary", label: t("pipeline.match.breakdown.salary"), value: b.salary },
+    { key: "location", label: t("pipeline.match.breakdown.location"), value: b.location },
     { key: "education", label: t("pipeline.match.breakdown.education"), value: b.education },
   ].filter((row) => row.value != null && !Number.isNaN(Number(row.value)));
 });
