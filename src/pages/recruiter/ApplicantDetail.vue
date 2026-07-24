@@ -11,6 +11,7 @@ import { resolveWorkerProfileId, resolveWorkerUserId } from "@/utils/chatIdentit
 import { chatErrorI18nKey } from "@/utils/apiErrors";
 import { useChatStore } from "@/stores/chatStore";
 import { getWorkerById } from "@/services/workers.api";
+import { resolveUploadUrl } from "@/utils/mediaUrl";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -25,8 +26,6 @@ const stages = ref([]);
 
 const notes = ref([]);
 const noteInput = ref("");
-
-const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
 
 function formatAnswer(answer) {
   if (!answer) return "";
@@ -170,7 +169,7 @@ async function startChat() {
               <div class="w-32 h-32 rounded-full bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center overflow-hidden mb-4 shadow-lg">
                 <img
                   v-if="worker.avatar_url"
-                  :src="linkStorageUrl + worker.avatar_url"
+                  :src="resolveUploadUrl(worker.avatar_url)"
                   class="w-full h-full object-cover"
                   :alt="worker.name"
                 />
@@ -311,8 +310,9 @@ async function startChat() {
               </p>
               
               <a
-                :href="linkStorageUrl + worker.resume_url"
+                :href="resolveUploadUrl(worker.resume_url)"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
