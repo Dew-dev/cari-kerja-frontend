@@ -19,9 +19,23 @@ const ALLOWED_TAGS = [
   "blockquote",
   "code",
   "pre",
+  "img",
+  "hr",
+  "mark",
+  "span",
+  "div",
 ];
 
-const ALLOWED_ATTR = ["href", "target", "rel", "class"];
+const ALLOWED_ATTR = [
+  "href",
+  "target",
+  "rel",
+  "class",
+  "style",
+  "src",
+  "alt",
+  "title",
+];
 
 export function stripHtml(html = "") {
   if (!html) return "";

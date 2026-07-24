@@ -61,6 +61,19 @@ const plainText = computed(() => stripHtml(props.html));
   font-weight: 700;
   color: #111827;
   margin: 0.75rem 0 0.35rem;
+  line-height: 1.3;
+}
+
+.rich-text-content :deep(h1) {
+  font-size: 1.875rem;
+}
+
+.rich-text-content :deep(h2) {
+  font-size: 1.5rem;
+}
+
+.rich-text-content :deep(h3) {
+  font-size: 1.25rem;
 }
 
 .rich-text-content :deep(a) {
@@ -73,5 +86,50 @@ const plainText = computed(() => stripHtml(props.html));
   padding-left: 0.75rem;
   color: #4b5563;
   margin: 0.5rem 0;
+}
+
+.rich-text-content :deep(img) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+}
+
+.rich-text-content :deep(hr) {
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+  margin: 1.5rem 0;
+}
+
+.rich-text-content :deep(mark) {
+  background-color: #fef08a;
+  color: inherit;
+  padding: 0.05em 0.2em;
+  border-radius: 0.15rem;
+}
+
+.rich-text-content :deep(code) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875em;
+  background-color: #f3f4f6;
+  padding: 0.15em 0.35em;
+  border-radius: 0.25rem;
+}
+
+.rich-text-content :deep(pre) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875em;
+  background-color: #f3f4f6;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.rich-text-content :deep(pre code) {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
 }
 </style>
