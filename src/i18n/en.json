@@ -2194,6 +2194,15 @@
       "loginSuccess": "Login successful!",
       "signInError": "An error occurred during sign in."
     },
+    "oauth": {
+      "failed": "Google/Telegram login failed. Please try again.",
+      "providerConflict": {
+        "local": "This email is already registered with email/password login. Please sign in with your email and password.",
+        "google": "This email is already registered with Google login. Please continue with Google.",
+        "telegram": "This email is already registered with Telegram login. Please continue with Telegram.",
+        "default": "This email is already registered with another login method. Please use your existing sign-in method."
+      }
+    },
     "sendResetLinkSubtitle": "Enter your email and we'll send you a reset link.",
     "newPassword": "New Password",
     "enterNewPassword": "Enter your new password below.",
