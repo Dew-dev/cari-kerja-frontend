@@ -2116,7 +2116,9 @@
       "passwordResetSuccess": "Parol muvaffaqiyatli qayta o'natildi.",
       "noPassword": "Parol talab qilinadi",
       "passwordMismatch": "Parol tasdiqlovi mos kelmadi",
-      "failedReset": "Parolni qayta o'rnatish muvaffaq bo'lmadi"
+      "failedReset": "Parolni qayta o'rnatish muvaffaq bo'lmadi",
+      "loginSuccess": "Muvaffaqiyatli kirdingiz!",
+      "signInError": "Kirishda xatolik yuz berdi."
     },
     "sendResetLinkSubtitle": "O'z elektron pochta manzilingizni kiriting, biz sizga qayta o'rnatish havolasini yuboramiz.",
     "newPassword": "Yangi parol",

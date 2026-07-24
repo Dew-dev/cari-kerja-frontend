@@ -111,7 +111,7 @@ async function ensureWorkerAuthContext() {
   if (!tokenNeedsWorkerContext(token)) return;
 
   try {
-    await auth.refreshToken({ logoutOnFail: false });
+    await auth.refreshSession({ logoutOnFail: false });
   } catch (error) {
     console.warn("Could not refresh worker_id into access token:", error);
   }

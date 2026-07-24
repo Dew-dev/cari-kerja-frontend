@@ -82,7 +82,7 @@ export const useAuthStore = defineStore("auth", {
         const { token, refreshToken, user } = data;
 
         this.token = token;
-        this.refreshToken = refreshToken;
+        this.$patch({ refreshToken });
         this.user = {
           ...user,
           login_provider:
@@ -151,7 +151,7 @@ export const useAuthStore = defineStore("auth", {
     logout() {
       disconnectSocket();
       this.token = null;
-      this.refreshToken = null;
+      this.$patch({ refreshToken: null });
       this.user = null;
       this.captchaRequired = false;
       this.needVerifyEmail = false;
@@ -165,7 +165,11 @@ export const useAuthStore = defineStore("auth", {
       localStorage.removeItem(RESTRICTED_KEY);
     },
 
-    async refreshToken({ logoutOnFail = true } = {}) {
+    /**
+     * Refresh access token. Named differently from state `refreshToken`
+     * to avoid Pinia state/action name collision.
+     */
+    async refreshSession({ logoutOnFail = true } = {}) {
       try {
         const res = await refreshApi();
         const payload = res.data.data;
