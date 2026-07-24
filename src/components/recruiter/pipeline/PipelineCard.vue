@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useI18n } from "vue-i18n";
 import { getMatchScoreTone } from "@/constants/matchScore";
+import { resolveUploadUrl } from "@/utils/mediaUrl";
 
 const { t } = useI18n();
 
@@ -16,10 +17,10 @@ const props = defineProps({
 
 const emit = defineEmits(["move", "open", "chat", "toggle-select"]);
 
-const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
-
 const menuOpen = ref(false);
 const rootRef = ref(null);
+
+const avatarUrl = computed(() => resolveUploadUrl(props.candidate?.avatar_url));
 
 function onClickOutside(e) {
   if (rootRef.value && !rootRef.value.contains(e.target)) menuOpen.value = false;
@@ -122,7 +123,7 @@ function moveTo(column) {
 
       <div class="flex items-start gap-2.5 flex-1 min-w-0" @click="emit('open', candidate)">
         <div class="w-9 h-9 rounded-full bg-gray-200 shrink-0 flex items-center justify-center overflow-hidden">
-          <img v-if="candidate.avatar_url" :src="linkStorageUrl + candidate.avatar_url" class="w-full h-full object-cover" />
+          <img v-if="avatarUrl" :src="avatarUrl" class="w-full h-full object-cover" />
           <span v-else class="text-xs font-semibold text-gray-600">{{ candidate.name?.charAt(0)?.toUpperCase() }}</span>
         </div>
 

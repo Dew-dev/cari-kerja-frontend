@@ -10,6 +10,7 @@ import {
   shouldApplyMatchUpdate,
 } from "@/constants/matchScore";
 import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
+import { resolveUploadUrl } from "@/utils/mediaUrl";
 import CandidateTimeline from "./CandidateTimeline.vue";
 
 const { t, locale } = useI18n();
@@ -22,7 +23,6 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "chat", "match-updated"]);
 
-const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
 const detail = ref(null);
 const loading = ref(false);
 const matchDetail = ref(null);
@@ -164,9 +164,13 @@ const stageStyles = computed(() =>
 
 const displayName = computed(() => detail.value?.name || props.candidate?.name || "");
 const displayEmail = computed(() => detail.value?.email || props.candidate?.email || "");
-const displayAvatar = computed(() => detail.value?.avatar_url || props.candidate?.avatar_url || null);
+const displayAvatar = computed(() =>
+  resolveUploadUrl(detail.value?.avatar_url || props.candidate?.avatar_url || ""),
+);
 const displayPhone = computed(() => detail.value?.telephone || detail.value?.phone || "");
-const resumeUrl = computed(() => detail.value?.resume_url || props.candidate?.resume_url || null);
+const resumeUrl = computed(() =>
+  resolveUploadUrl(detail.value?.resume_url || props.candidate?.resume_url || ""),
+);
 
 function reasonKey(reason, idx) {
   return reason.code || reason.type || idx;
@@ -216,7 +220,7 @@ function refreshMatch() {
         <div class="flex-1 overflow-y-auto px-5 py-4 space-y-5">
           <div class="flex items-center gap-3">
             <div class="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden shrink-0">
-              <img v-if="displayAvatar" :src="linkStorageUrl + displayAvatar" class="w-full h-full object-cover" />
+              <img v-if="displayAvatar" :src="displayAvatar" class="w-full h-full object-cover" />
               <span v-else class="text-lg font-semibold text-gray-600">{{ displayName?.charAt(0)?.toUpperCase() }}</span>
             </div>
             <div class="min-w-0">
@@ -248,8 +252,9 @@ function refreshMatch() {
 
             <a
               v-if="resumeUrl"
-              :href="linkStorageUrl + resumeUrl"
+              :href="resumeUrl"
               target="_blank"
+              rel="noopener noreferrer"
               class="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 transition"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

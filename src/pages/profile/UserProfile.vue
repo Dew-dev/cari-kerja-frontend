@@ -15,6 +15,7 @@ import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
 import { displayEmail } from "@/utils/authFlags";
 import { isContentRejectedError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors";
 import { stripHtml } from "@/utils/richText";
+import { resolveUploadUrl } from "@/utils/mediaUrl";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -2428,7 +2429,7 @@ watch(activeTab, (newTab) => {
             </div>
             <div class="flex flex-wrap items-center gap-2 shrink-0">
               <a
-                :href="`${linkStorageUrl}${resume.resume_url}`"
+                :href="resolveUploadUrl(resume.resume_url)"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50 transition duration-200"

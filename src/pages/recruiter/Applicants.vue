@@ -10,6 +10,7 @@ import { resolveWorkerProfileId, resolveWorkerUserId } from "@/utils/chatIdentit
 import { chatErrorI18nKey } from "@/utils/apiErrors";
 import { useChatStore } from "@/stores/chatStore";
 import { getWorkerById } from "@/services/workers.api";
+import { resolveUploadUrl } from "@/utils/mediaUrl";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -129,7 +130,6 @@ async function startChat(applicant) {
     chattingId.value = null;
   }
 }
-const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
 </script>
 
 <template>
@@ -193,8 +193,9 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
               <td class="px-4 py-9 text-gray-700">
                 <a
                   v-if="a.resume_url"
-                  :href="linkStorageUrl + a.resume_url"
+                  :href="resolveUploadUrl(a.resume_url)"
                   target="_blank"
+                  rel="noopener noreferrer"
                   class="text-blue-600 hover:underline"
                 >
                   {{ $t('viewResume') }}
