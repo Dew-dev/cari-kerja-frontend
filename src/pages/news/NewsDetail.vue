@@ -2,7 +2,11 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { getNewsBySlug } from "@/services/news.api";
+import {
+  getNewsBySlug,
+  isNewsLocaleFallback,
+  resolveNewsLocale,
+} from "@/services/news.api";
 import RichTextContent from "@/components/common/RichTextContent.vue";
 
 const props = defineProps({
@@ -23,6 +27,8 @@ const loading = ref(false);
 const error = ref("");
 
 const activeSlug = computed(() => props.slug || String(route.params.slug || ""));
+const newsLocale = computed(() => resolveNewsLocale(locale.value));
+const showLocaleFallback = computed(() => isNewsLocaleFallback(article.value));
 
 function resolveCover(url) {
   if (!url) return null;
@@ -57,12 +63,27 @@ async function loadArticle() {
   error.value = "";
   article.value = null;
   try {
-    const res = await getNewsBySlug(activeSlug.value);
+    const res = await getNewsBySlug(activeSlug.value, {
+      locale: newsLocale.value,
+    });
     article.value = res.data?.data || null;
     if (!article.value) {
       error.value = t("news.notFound");
+      return;
     }
     syncTitle();
+    // Prefer locale-specific slug in the URL when it differs.
+    const resolvedSlug = article.value.slug;
+    if (
+      resolvedSlug &&
+      resolvedSlug !== activeSlug.value &&
+      !isNewsLocaleFallback(article.value)
+    ) {
+      router.replace({
+        name: "news-detail",
+        params: { slug: resolvedSlug },
+      });
+    }
   } catch (err) {
     const status = err?.response?.status;
     error.value =
@@ -76,7 +97,8 @@ async function loadArticle() {
 
 watch(activeSlug, () => loadArticle());
 watch(locale, () => {
-  if (!article.value) syncTitle();
+  syncTitle();
+  loadArticle();
 });
 
 onMounted(loadArticle);
@@ -117,6 +139,13 @@ onMounted(loadArticle);
             class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-medium"
           >
             {{ t("news.featured") }}
+          </span>
+          <span
+            v-if="showLocaleFallback"
+            class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium"
+            :title="t('news.localeFallbackHint', { locale: article.locale_resolved })"
+          >
+            {{ t("news.localeFallback", { locale: String(article.locale_resolved || "").toUpperCase() }) }}
           </span>
           <router-link
             v-if="article.category_slug"

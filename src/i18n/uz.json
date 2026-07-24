@@ -731,7 +731,9 @@
     "backToList": "Yangiliklarga qaytish",
     "highlightTitle": "Yangiliklar",
     "highlightSubtitle": "Cari Kerja'dan so'nggi yangiliklar, maslahatlar va hikoyalar.",
-    "viewAll": "Barcha yangiliklar"
+    "viewAll": "Barcha yangiliklar",
+    "localeFallback": "{locale} tilida ko'rsatilmoqda",
+    "localeFallbackHint": "Maqola hali tilingizda mavjud emas; {locale} versiyasi ko'rsatilmoqda."
   },
   "about": {
     "pageTitle": "Biz haqida",

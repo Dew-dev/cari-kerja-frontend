@@ -731,7 +731,9 @@
     "backToList": "К списку новостей",
     "highlightTitle": "Новости",
     "highlightSubtitle": "Последние обновления, советы и истории от Cari Kerja.",
-    "viewAll": "Все новости"
+    "viewAll": "Все новости",
+    "localeFallback": "Показано на {locale}",
+    "localeFallbackHint": "Статья пока недоступна на вашем языке; показана версия {locale}."
   },
   "about": {
     "pageTitle": "О нас",

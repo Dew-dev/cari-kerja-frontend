@@ -66,6 +66,13 @@
                 {{ t("news.featured") }}
               </span>
               <span
+                v-if="isNewsLocaleFallback(item)"
+                class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium"
+                :title="t('news.localeFallbackHint', { locale: item.locale_resolved })"
+              >
+                {{ t("news.localeFallback", { locale: String(item.locale_resolved || "").toUpperCase() }) }}
+              </span>
+              <span
                 v-if="item.category_name"
                 class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium"
               >
@@ -99,9 +106,13 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { getNews } from "@/services/news.api";
+import {
+  getNews,
+  isNewsLocaleFallback,
+  resolveNewsLocale,
+} from "@/services/news.api";
 
 const { t, locale } = useI18n();
 
@@ -130,7 +141,11 @@ function formatDate(value) {
 async function loadLatest() {
   loading.value = true;
   try {
-    const res = await getNews({ page: 1, limit: 3 });
+    const res = await getNews({
+      page: 1,
+      limit: 3,
+      locale: resolveNewsLocale(locale.value),
+    });
     items.value = res.data?.data || [];
   } catch (error) {
     console.error("Failed to load news highlight:", error);
@@ -140,5 +155,6 @@ async function loadLatest() {
   }
 }
 
+watch(locale, loadLatest);
 onMounted(loadLatest);
 </script>
