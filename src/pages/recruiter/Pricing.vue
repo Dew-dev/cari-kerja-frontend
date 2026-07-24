@@ -13,6 +13,11 @@ const activePlan = ref(null);
 const loading   = ref(true);
 const activeTab = ref("subscription");
 
+/** Boost Top 10 dihentikan — hanya tampilkan paket Hot (boost_priority === 1). */
+const boostPlans = computed(() =>
+  (plans.value.boost || []).filter((p) => p.boost_priority === 1),
+);
+
 onMounted(async () => {
   try {
     const [plansRes, activePlanRes] = await Promise.all([
@@ -289,17 +294,8 @@ function getPlanFeatures(planName) {
         <div v-if="activeTab === 'boost'" class="max-w-4xl mx-auto">
           <p class="text-center text-gray-500 text-sm mb-7">{{ t("payment.boostSubtitle") }}</p>
 
-          <!-- Info cards -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-7">
-            <div class="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-xl p-4">
-              <div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                <i class="pi pi-chart-line text-blue-600"></i>
-              </div>
-              <div>
-                <div class="text-gray-800 font-semibold text-sm">{{ t("payment.boostTypes.top10Title") }}</div>
-                <div class="text-gray-500 text-xs mt-1">{{ t("payment.boostTypes.top10Desc") }}</div>
-              </div>
-            </div>
+          <!-- Info card -->
+          <div class="max-w-xl mx-auto mb-7">
             <div class="flex items-start gap-3 bg-amber-50 border border-amber-100 rounded-xl p-4">
               <div class="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
                 <i class="pi pi-star-fill text-amber-500"></i>
@@ -311,26 +307,23 @@ function getPlanFeatures(planName) {
             </div>
           </div>
 
-          <!-- Boost plan cards -->
+          <!-- Boost plan cards (Hot only) -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <div
-              v-for="plan in plans.boost"
+              v-for="plan in boostPlans"
               :key="plan.id"
-              :class="[
-                'bg-white rounded-2xl border flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1',
-                plan.boost_priority === 1 ? 'border-amber-200' : 'border-gray-200',
-              ]"
+              class="bg-white rounded-2xl border border-amber-200 flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             >
               <!-- Top bar -->
-              <div :class="`h-1.5 w-full ${plan.boost_priority === 1 ? 'bg-gradient-to-r from-amber-400 to-orange-500' : 'bg-gradient-to-r from-blue-500 to-blue-700'}`"></div>
+              <div class="h-1.5 w-full bg-gradient-to-r from-amber-400 to-orange-500"></div>
               <div class="p-5 flex flex-col flex-1">
                 <!-- Badge row -->
                 <div class="flex items-center gap-2 mb-4">
-                  <div :class="`w-9 h-9 rounded-lg flex items-center justify-center ${plan.boost_priority === 1 ? 'bg-amber-100' : 'bg-blue-100'}`">
-                    <i :class="`pi ${plan.boost_priority === 1 ? 'pi-star-fill text-amber-500' : 'pi-chart-line text-blue-600'} text-sm`"></i>
+                  <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-amber-100">
+                    <i class="pi pi-star-fill text-amber-500 text-sm"></i>
                   </div>
-                  <span :class="['text-xs font-bold px-2.5 py-0.5 rounded-full border', plan.boost_priority === 1 ? 'bg-amber-50 text-amber-600 border-amber-200' : 'bg-blue-50 text-blue-600 border-blue-100']">
-                    {{ plan.boost_priority === 1 ? t("payment.boostModal.hot") : t("payment.boostModal.top10") }}
+                  <span class="text-xs font-bold px-2.5 py-0.5 rounded-full border bg-amber-50 text-amber-600 border-amber-200">
+                    {{ t("payment.boostModal.hot") }}
                   </span>
                 </div>
 
@@ -344,12 +337,7 @@ function getPlanFeatures(planName) {
 
                 <router-link
                   to="/recruiter/jobs"
-                  :class="[
-                    'w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 flex items-center justify-center gap-2 hover:shadow-md hover:scale-[1.02] active:scale-95',
-                    plan.boost_priority === 1
-                      ? 'bg-gradient-to-r from-amber-400 to-orange-500'
-                      : 'bg-gradient-to-r from-blue-500 to-blue-700',
-                  ]"
+                  class="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 flex items-center justify-center gap-2 hover:shadow-md hover:scale-[1.02] active:scale-95 bg-gradient-to-r from-amber-400 to-orange-500"
                 >
                   <i class="pi pi-briefcase text-xs"></i> {{ t("payment.cta.boost") }}
                 </router-link>

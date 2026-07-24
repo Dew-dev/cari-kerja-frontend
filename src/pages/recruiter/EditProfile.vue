@@ -53,7 +53,7 @@ const onLogoChange = (e) => {
   if (!file) return;
 
   if (file.size > 500 * 1024) {
-    push.warning(t("notifications.maxFileSize500KB") || "Ukuran foto maksimal 500 KB");
+    push.warning(t("notifications.fileTooLarge", { size: "500 KB" }));
     e.target.value = "";
     return;
   }

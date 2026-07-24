@@ -28,7 +28,6 @@ onMounted(async () => {
 });
 
 const hotPlans  = computed(() => boostPlans.value.filter((p) => p.boost_priority === 1));
-const top10Plans = computed(() => boostPlans.value.filter((p) => p.boost_priority !== 1));
 
 function formatRupiah(amount) {
   return new Intl.NumberFormat("id-ID", {
@@ -125,39 +124,8 @@ function close() { emit("close"); }
               </div>
             </div>
 
-            <!-- Top-10 Plans -->
-            <div v-if="top10Plans.length">
-              <div class="flex items-center gap-1.5 mb-2">
-                <span class="w-5 h-5 bg-blue-100 rounded flex items-center justify-center">
-                  <i class="pi pi-chart-line text-blue-500 text-[10px]"></i>
-                </span>
-                <span class="text-xs font-bold text-gray-700 uppercase tracking-wide">{{ t("payment.boostModal.top10") }}</span>
-              </div>
-              <div class="space-y-2">
-                <div
-                  v-for="plan in top10Plans"
-                  :key="plan.id"
-                  class="flex items-center justify-between gap-3 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3"
-                >
-                  <div class="min-w-0">
-                    <div class="font-semibold text-gray-800 text-sm truncate">{{ plan.display_name }}</div>
-                    <div class="text-xs text-gray-500 mt-0.5">{{ plan.duration_days }} {{ t("payment.priceFormat.days") }} • {{ t("payment.boostModal.top10Desc") }}</div>
-                  </div>
-                  <div class="flex items-center gap-2 flex-shrink-0">
-                    <span class="text-blue-600 font-bold text-sm">{{ formatRupiah(plan.price_idr) }}</span>
-                    <button
-                      @click="goToCheckout(plan)"
-                      class="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white text-xs font-bold rounded-lg transition-all shadow-sm hover:shadow flex items-center gap-1"
-                    >
-                      <i class="pi pi-chart-line text-[10px]"></i> {{ t("payment.boostModal.selectPay") }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <!-- Empty -->
-            <div v-if="!hotPlans.length && !top10Plans.length" class="text-center py-6 text-gray-400 text-sm">
+            <div v-if="!hotPlans.length" class="text-center py-6 text-gray-400 text-sm">
               <i class="pi pi-info-circle text-xl mb-2 block"></i>
               {{ t("payment.boostModal.empty") }}
             </div>

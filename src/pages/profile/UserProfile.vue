@@ -153,6 +153,54 @@ const showExpectedCurrencyDropdown = ref(false);
 let currentCurrencyTimeout = null;
 let expectedCurrencyTimeout = null;
 const DEFAULT_CURRENCY_CODE = "IDR";
+const salaryCompareError = ref("");
+const MIN_AGE_YEARS = 17;
+
+function formatDateInputValue(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+/** Tanggal lahir maksimal: hari ini dikurangi 17 tahun (usia minimal 17). */
+const maxDateOfBirth = computed(() => {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - MIN_AGE_YEARS);
+  return formatDateInputValue(d);
+});
+
+function validateDateOfBirth() {
+  if (!form.date_of_birth) return true;
+  if (form.date_of_birth > maxDateOfBirth.value) {
+    push.warning(t("profile.dateOfBirthMinAge", { age: MIN_AGE_YEARS }));
+    form.date_of_birth = "";
+    return false;
+  }
+  return true;
+}
+
+function validateExpectedSalary() {
+  const current = String(form.current_salary ?? "").replace(/\D/g, "");
+  const expected = String(form.expected_salary ?? "").replace(/\D/g, "");
+  if (!current || !expected) {
+    salaryCompareError.value = "";
+    return true;
+  }
+  if (Number(expected) < Number(current)) {
+    salaryCompareError.value = t("profile.expectedSalaryTooLow");
+    return false;
+  }
+  salaryCompareError.value = "";
+  return true;
+}
+
+watch(
+  () => [form.current_salary, form.expected_salary],
+  () => {
+    validateExpectedSalary();
+  },
+);
 
 const appliedJobs = ref([]);
 const savedJobs = ref([]);
@@ -309,6 +357,14 @@ async function loadProfile() {
 
 async function saveProfile() {
   try {
+    if (!validateDateOfBirth()) {
+      return;
+    }
+    if (!validateExpectedSalary()) {
+      push.warning(t("profile.expectedSalaryTooLow"));
+      return;
+    }
+
     savingProfile.value = true;
 
     const formData = new FormData();
@@ -396,7 +452,7 @@ async function addResume(file, title, isDefault) {
     }
 
     if (file.size > CV_MAX_MB * 1024 * 1024) {
-      push.error(t("profile.maxSizeMB", { size: CV_MAX_MB }));
+      push.error(t("profile.fileTooLarge", { size: `${CV_MAX_MB} MB` }));
       return;
     }
 
@@ -496,7 +552,20 @@ async function setPrimaryResume(id) {
 }
 
 function onResumeFileChange(e) {
-  resumeFile.value = e.target.files?.[0] || null;
+  const file = e.target.files?.[0] || null;
+  if (!file) {
+    resumeFile.value = null;
+    return;
+  }
+
+  if (file.size > CV_MAX_MB * 1024 * 1024) {
+    push.error(t("profile.fileTooLarge", { size: `${CV_MAX_MB} MB` }));
+    resumeFile.value = null;
+    if (resumeFileInput.value) resumeFileInput.value.value = "";
+    return;
+  }
+
+  resumeFile.value = file;
 }
 
 function handleAddResume() {
@@ -1187,7 +1256,8 @@ function onAvatarChange(e) {
   if (!file) return;
 
   if (file.size > 2 * 1024 * 1024) {
-     push.warning(t('profile.maxFileSize2MB'));
+    push.warning(t("profile.fileTooLarge", { size: "2 MB" }));
+    e.target.value = "";
     return;
   }
 
@@ -1302,6 +1372,11 @@ async function parseCVFile() {
     push.error(t('profile.cvParser.invalidType'));
     return;
   }
+  if (file.size > 10 * 1024 * 1024) {
+    push.error(t("profile.fileTooLarge", { size: "10 MB" }));
+    if (cvParserFileInput.value) cvParserFileInput.value.value = "";
+    return;
+  }
 
   try {
     cvParserLoading.value = true;
@@ -1345,7 +1420,13 @@ function applyParsedPersonalInfo() {
   if (d.phone || d.telephone) form.telephone = d.phone || d.telephone;
   if (d.address) form.address = d.address;
   if (d.summary || d.profile_summary) form.profile_summary = d.summary || d.profile_summary;
-  if (d.date_of_birth) form.date_of_birth = formatDateForInput(d.date_of_birth);
+  if (d.date_of_birth) {
+    form.date_of_birth = formatDateForInput(d.date_of_birth);
+    if (!validateDateOfBirth()) {
+      activeTab.value = "profile";
+      return;
+    }
+  }
   activeTab.value = 'profile';
   push.success(t('profile.cvParser.appliedPersonalInfo'));
 }
@@ -1830,9 +1911,14 @@ watch(activeTab, (newTab) => {
                 <input
                   v-model="form.date_of_birth"
                   type="date"
+                  :max="maxDateOfBirth"
                   class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
                   required
+                  @change="validateDateOfBirth"
                 />
+                <p class="mt-1.5 text-xs text-slate-500">
+                  {{ $t('profile.dateOfBirthMinAgeHint', { age: MIN_AGE_YEARS }) }}
+                </p>
               </div>
 
               <div>
@@ -1952,7 +2038,12 @@ watch(activeTab, (newTab) => {
                   <MaskedNumberInput
                     v-model="form.expected_salary"
                     :placeholder="$t('profile.salaryExample')"
-                    input-class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                    :input-class="[
+                      'w-full rounded-xl border bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600',
+                      salaryCompareError
+                        ? 'border-red-400 focus:ring-red-500/20 focus:border-red-500'
+                        : 'border-slate-200',
+                    ].join(' ')"
                   />
                   <div class="relative currency-dropdown-expected">
                     <input
@@ -1980,6 +2071,9 @@ watch(activeTab, (newTab) => {
                     </p>
                   </div>
                 </div>
+                <p v-if="salaryCompareError" class="mt-1.5 text-xs text-red-600">
+                  {{ salaryCompareError }}
+                </p>
               </div>
             </div>
           </section>
