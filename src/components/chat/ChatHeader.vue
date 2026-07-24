@@ -125,17 +125,15 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
       />
     </div>
 
-    <!-- Name + Status -->
+    <!-- Name + Status (online / blocked only — no offline label) -->
     <div class="flex-1 min-w-0 cursor-pointer" @click="goToProfile">
       <p class="text-sm font-semibold text-gray-800 truncate">{{ name }}</p>
-      <p class="text-xs" :class="isBlocked ? 'text-red-500' : online ? 'text-green-500' : 'text-gray-400'">
-        {{
-          isBlocked
-            ? $t('chat.blockedStatus')
-            : online
-              ? $t('chat.online')
-              : $t('chat.offline')
-        }}
+      <p
+        v-if="isBlocked || online"
+        class="text-xs"
+        :class="isBlocked ? 'text-red-500' : 'text-green-500'"
+      >
+        {{ isBlocked ? $t('chat.blockedStatus') : $t('chat.online') }}
       </p>
     </div>
 
