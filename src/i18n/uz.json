@@ -2120,6 +2120,15 @@
       "loginSuccess": "Muvaffaqiyatli kirdingiz!",
       "signInError": "Kirishda xatolik yuz berdi."
     },
+    "oauth": {
+      "failed": "Google/Telegram orqali kirish muvaffaqiyatsiz. Qayta urinib ko'ring.",
+      "providerConflict": {
+        "local": "Bu email allaqachon email/parol orqali ro'yxatdan o'tgan. Email va parol bilan kiring.",
+        "google": "Bu email allaqachon Google orqali ro'yxatdan o'tgan. Google bilan davom eting.",
+        "telegram": "Bu email allaqachon Telegram orqali ro'yxatdan o'tgan. Telegram bilan davom eting.",
+        "default": "Bu email boshqa kirish usuli bilan ro'yxatdan o'tgan. Mavjud usuldan foydalaning."
+      }
+    },
     "sendResetLinkSubtitle": "O'z elektron pochta manzilingizni kiriting, biz sizga qayta o'rnatish havolasini yuboramiz.",
     "newPassword": "Yangi parol",
     "enterNewPassword": "Quyida yangi parolingizni kiriting.",

@@ -1889,6 +1889,15 @@
       "loginSuccess": "Login berhasil!",
       "signInError": "Terjadi kesalahan saat masuk."
     },
+    "oauth": {
+      "failed": "Login Google/Telegram gagal. Coba lagi.",
+      "providerConflict": {
+        "local": "Email ini sudah terdaftar dengan login email/password. Silakan masuk dengan email dan kata sandi.",
+        "google": "Email ini sudah terdaftar dengan login Google. Silakan lanjutkan dengan Google.",
+        "telegram": "Email ini sudah terdaftar dengan login Telegram. Silakan lanjutkan dengan Telegram.",
+        "default": "Email ini sudah terdaftar dengan metode login lain. Silakan gunakan cara masuk yang sudah ada."
+      }
+    },
     "sendResetLinkSubtitle": "Masukkan email dan kami akan mengirim tautan reset.",
     "newPassword": "Kata Sandi Baru",
     "enterNewPassword": "Masukkan kata sandi baru di bawah.",

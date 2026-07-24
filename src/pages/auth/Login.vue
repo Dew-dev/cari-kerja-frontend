@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/authStore.js";
 
@@ -9,8 +9,9 @@ import api from "@/services/api";
 import TurnstileWidget from "@/components/common/TurnstileWidget.vue";
 import { isRateLimitedError } from "@/utils/apiErrors";
 import { resolveRecruiterLandingPath } from "@/utils/recruiterLanding";
+import { consumeOAuthErrorQuery } from "@/utils/oauthErrorQuery";
 
-const { t } = useI18n();
+const { t, te } = useI18n();
 const loading = ref(false);
 const showPassword = ref(false);
 const resendCooldown = ref(0);
@@ -26,6 +27,18 @@ const form = reactive({
 
 const captchaToken = ref("");
 const turnstileRef = ref(null);
+
+function handleOAuthErrorQuery() {
+  consumeOAuthErrorQuery({ route, router, t, te });
+}
+
+onMounted(handleOAuthErrorQuery);
+watch(
+  () => route.query.error,
+  (error) => {
+    if (error) handleOAuthErrorQuery();
+  },
+);
 
 function onCaptchaVerified(token) {
   captchaToken.value = token;
