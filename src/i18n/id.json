@@ -2240,6 +2240,8 @@
       "scoreLabel": "kecocokan",
       "pending": "Menghitung kecocokan…",
       "insufficient": "Data profil kurang",
+      "insufficientHint": "Kecocokan masih parsial — lengkapi profil kandidat atau detail lowongan agar semua dimensi bisa dinilai.",
+      "partialBreakdown": "Dimensi yang tersedia",
       "failed": "Gagal menghitung",
       "sectionTitle": "Kecocokan AI dengan lowongan",
       "computedAt": "Dihitung {date}",

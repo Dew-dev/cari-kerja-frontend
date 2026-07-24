@@ -69,7 +69,7 @@ const matchBadge = computed(() => {
     return {
       show: true,
       label: t("pipeline.match.insufficient"),
-      className: "bg-gray-100 text-gray-500 border-gray-200",
+      className: "bg-amber-50 text-amber-800 border-amber-200",
       aria: t("pipeline.match.insufficient"),
     };
   }
