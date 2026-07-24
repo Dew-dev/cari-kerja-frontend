@@ -601,7 +601,7 @@
     "selectStatus": "Pilih Status",
     "currentSalary": "Gaji Saat Ini",
     "expectedSalary": "Ekspektasi Gaji",
-    "salaryExample": "contoh: 5000000",
+    "salaryExample": "contoh: 5,000,000",
     "selectCurrency": "Pilih Mata Uang",
     "loadingCurrencies": "Memuat mata uang...",
     "address": "Alamat",
