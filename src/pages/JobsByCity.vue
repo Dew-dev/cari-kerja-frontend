@@ -218,11 +218,14 @@ const activeTab = ref("alphabetical");
 const cities = ref([]);
 
 const filteredCities = computed(() => {
+  const withVacancies = cities.value.filter(
+    (city) => Number(city.jobs_count) > 0
+  );
   if (!searchQuery.value.trim()) {
-    return cities.value;
+    return withVacancies;
   }
   const search = searchQuery.value.toLowerCase();
-  return cities.value.filter(
+  return withVacancies.filter(
     (city) =>
       city.name.toLowerCase().includes(search) ||
       city.province_name.toLowerCase().includes(search)
