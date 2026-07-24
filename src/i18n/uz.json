@@ -263,6 +263,20 @@
     }
   },
   "recruiterProfile": "Ishga yollash profili",
+  "recruiterEdit": {
+    "uploadLogo": "Logotip yuklash",
+    "logoHint": "JPG yoki PNG, 1:1 nisbat, min. 128×128 px, maks. 500 KB",
+    "sectionCompany": "Kompaniya",
+    "sectionContact": "Aloqa",
+    "sectionSocial": "Ijtimoiy tarmoqlar",
+    "sectionAbout": "Haqida",
+    "employeeCount": "Xodimlar soni",
+    "employeeCountPlaceholder": "masalan: 50",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "wordCount": "{count} so'z",
+    "wordCountHint": "(min. 60 – maks. 130)"
+  },
   "recruiterPublic": {
     "visitWebsite": "Saytga o'tish",
     "openPositions": "Ochiq vakansiyalar",

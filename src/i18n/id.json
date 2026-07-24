@@ -336,6 +336,20 @@
     }
   },
   "recruiterProfile": "Profil Perekrut",
+  "recruiterEdit": {
+    "uploadLogo": "Unggah logo",
+    "logoHint": "JPG atau PNG, rasio 1:1, min. 128×128 px, maks. 500 KB",
+    "sectionCompany": "Perusahaan",
+    "sectionContact": "Kontak",
+    "sectionSocial": "Media sosial",
+    "sectionAbout": "Tentang",
+    "employeeCount": "Jumlah karyawan",
+    "employeeCountPlaceholder": "contoh: 50",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "wordCount": "{count} kata",
+    "wordCountHint": "(min. 60 – maks. 130)"
+  },
   "recruiterPublic": {
     "visitWebsite": "Kunjungi Website",
     "openPositions": "Posisi Terbuka",

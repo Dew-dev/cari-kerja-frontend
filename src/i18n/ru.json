@@ -264,6 +264,20 @@
     }
   },
   "recruiterProfile": "Профиль рекрутера",
+  "recruiterEdit": {
+    "uploadLogo": "Загрузить логотип",
+    "logoHint": "JPG или PNG, соотношение 1:1, мин. 128×128 px, макс. 500 KB",
+    "sectionCompany": "Компания",
+    "sectionContact": "Контакты",
+    "sectionSocial": "Соцсети",
+    "sectionAbout": "О компании",
+    "employeeCount": "Количество сотрудников",
+    "employeeCountPlaceholder": "напр. 50",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "wordCount": "{count} слов",
+    "wordCountHint": "(мин. 60 – макс. 130)"
+  },
   "recruiterPublic": {
     "visitWebsite": "Перейти на сайт",
     "openPositions": "Открытые вакансии",

@@ -337,6 +337,20 @@
     }
   },
   "recruiterProfile": "Recruiter Profile",
+  "recruiterEdit": {
+    "uploadLogo": "Upload logo",
+    "logoHint": "JPG or PNG, 1:1 ratio, min. 128×128 px, max. 500 KB",
+    "sectionCompany": "Company",
+    "sectionContact": "Contact",
+    "sectionSocial": "Social media",
+    "sectionAbout": "About",
+    "employeeCount": "Number of employees",
+    "employeeCountPlaceholder": "e.g. 50",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "wordCount": "{count} words",
+    "wordCountHint": "(min. 60 – max. 130)"
+  },
   "recruiterPublic": {
     "visitWebsite": "Visit Website",
     "openPositions": "Open Positions",
