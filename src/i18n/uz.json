@@ -714,7 +714,10 @@
     "pageOf": "{page}/{total} sahifa",
     "loadFailed": "Yangiliklarni yuklash muvaffaqiyatsiz.",
     "notFound": "Maqola topilmadi.",
-    "backToList": "Yangiliklarga qaytish"
+    "backToList": "Yangiliklarga qaytish",
+    "highlightTitle": "Yangiliklar",
+    "highlightSubtitle": "Cari Kerja'dan so'nggi yangiliklar, maslahatlar va hikoyalar.",
+    "viewAll": "Barcha yangiliklar"
   },
   "about": {
     "pageTitle": "Biz haqida",

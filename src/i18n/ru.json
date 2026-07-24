@@ -714,7 +714,10 @@
     "pageOf": "Страница {page} из {total}",
     "loadFailed": "Не удалось загрузить новости.",
     "notFound": "Статья не найдена.",
-    "backToList": "К списку новостей"
+    "backToList": "К списку новостей",
+    "highlightTitle": "Новости",
+    "highlightSubtitle": "Последние обновления, советы и истории от Cari Kerja.",
+    "viewAll": "Все новости"
   },
   "about": {
     "pageTitle": "О нас",
