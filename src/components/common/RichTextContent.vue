@@ -132,4 +132,18 @@ const plainText = computed(() => stripHtml(props.html));
   padding: 0;
   font-size: inherit;
 }
+
+/* Inline editor styles (color / align) win; keep block layout predictable */
+.rich-text-content :deep(div),
+.rich-text-content :deep(span) {
+  max-width: 100%;
+}
+
+.rich-text-content :deep(p[style*="text-align"]),
+.rich-text-content :deep(div[style*="text-align"]),
+.rich-text-content :deep(h1[style*="text-align"]),
+.rich-text-content :deep(h2[style*="text-align"]),
+.rich-text-content :deep(h3[style*="text-align"]) {
+  display: block;
+}
 </style>
