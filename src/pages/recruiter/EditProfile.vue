@@ -7,7 +7,6 @@ import { push } from "notivue";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import { isContentRejectedError } from "@/utils/apiErrors";
-import { countWordsHtml } from "@/utils/richText";
 
 const auth = useAuthStore();
 const { t } = useI18n();
@@ -23,13 +22,6 @@ const form = reactive({
   employee_count: "",
   instagram_url: "",
   tiktok_url: "",
-});
-
-const descWordCount = computed(() => countWordsHtml(form.description));
-const descWordCountColor = computed(() => {
-  if (descWordCount.value < 60) return "text-red-600";
-  if (descWordCount.value > 130) return "text-red-600";
-  return "text-green-600";
 });
 
 const industries = ref([]);
@@ -400,10 +392,6 @@ onMounted(loadProfile);
               :placeholder="t('companyDescription')"
               min-height="140px"
             />
-            <p class="mt-1.5 text-xs" :class="descWordCountColor">
-              {{ t("recruiterEdit.wordCount", { count: descWordCount }) }}
-              <span class="text-slate-400 ml-1">{{ t("recruiterEdit.wordCountHint") }}</span>
-            </p>
           </div>
         </section>
 
