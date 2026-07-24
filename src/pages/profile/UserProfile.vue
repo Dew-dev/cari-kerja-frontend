@@ -9,6 +9,7 @@ import { changeEmail } from "@/services/auth.api";
 import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
+import MaskedNumberInput from "@/components/common/MaskedNumberInput.vue";
 import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
 import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
 import { displayEmail } from "@/utils/authFlags";
@@ -150,6 +151,7 @@ const showCurrentCurrencyDropdown = ref(false);
 const showExpectedCurrencyDropdown = ref(false);
 let currentCurrencyTimeout = null;
 let expectedCurrencyTimeout = null;
+const DEFAULT_CURRENCY_CODE = "IDR";
 
 const appliedJobs = ref([]);
 const savedJobs = ref([]);
@@ -269,6 +271,11 @@ async function loadProfile() {
     }
     if (data.expected_salary_currency) {
       expectedCurrencyInput.value = `${data.expected_salary_currency.name} (${data.expected_salary_currency.code})`;
+    }
+
+    // Default to IDR when profile has no currency yet
+    if (!form.current_salary_currency_id || !form.expected_salary_currency_id) {
+      await setDefaultCurrencies();
     }
 
     avatarFromBackend.value = data.avatar_url ?? null;
@@ -1514,6 +1521,31 @@ function selectExpectedCurrency(currency) {
   }, 0);
 }
 
+async function setDefaultCurrencies() {
+  try {
+    const res = await api.get(`/currencies/${DEFAULT_CURRENCY_CODE}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const data = res?.data?.data || [];
+    const list = Array.isArray(data) ? data : [data];
+    const idr =
+      list.find((c) => String(c.code).toUpperCase() === DEFAULT_CURRENCY_CODE) ||
+      list[0];
+    if (!idr) return;
+
+    if (!form.current_salary_currency_id) {
+      selectCurrentCurrency(idr);
+    }
+    if (!form.expected_salary_currency_id) {
+      selectExpectedCurrency(idr);
+    }
+  } catch (err) {
+    console.error("Failed to set default currencies:", err);
+  }
+}
+
 watch(currentCurrencyInput, (val) => {
   if (isSelectingCurrentCurrency.value) return;
 
@@ -1876,11 +1908,10 @@ watch(activeTab, (newTab) => {
                   </label
                 >
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input
+                  <MaskedNumberInput
                     v-model="form.current_salary"
-                    type="number"
-                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
                     :placeholder="$t('profile.salaryExample')"
+                    input-class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
                   />
                   <div class="relative currency-dropdown-current">
                     <input
@@ -1917,11 +1948,10 @@ watch(activeTab, (newTab) => {
                   </label
                 >
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input
+                  <MaskedNumberInput
                     v-model="form.expected_salary"
-                    type="number"
-                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
                     :placeholder="$t('profile.salaryExample')"
+                    input-class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
                   />
                   <div class="relative currency-dropdown-expected">
                     <input

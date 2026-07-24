@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, watch } from "vue";
+import { reactive, ref, watch, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/stores/authStore.js";
 
@@ -11,6 +11,7 @@ import { useRouter } from "vue-router";
 import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
 import ContentFlaggedModal from "@/components/recruiter/ContentFlaggedModal.vue";
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
+import MaskedNumberInput from "@/components/common/MaskedNumberInput.vue";
 import {
   isContentFlaggedResponse,
   isRateLimitedError,
@@ -18,6 +19,7 @@ import {
 } from "@/utils/apiErrors";
 const router = useRouter();
 
+const DEFAULT_CURRENCY_CODE = "IDR";
 const showVerificationModal = ref(false);
 const isSubmitting = ref(false);
 const showContentFlaggedModal = ref(false);
@@ -412,6 +414,24 @@ function selectCurrency(currency) {
   }, 0);
 }
 
+async function setDefaultCurrency() {
+  try {
+    const res = await api.get(`/currencies/${DEFAULT_CURRENCY_CODE}`);
+    const data = res?.data?.data || [];
+    const list = Array.isArray(data) ? data : [data];
+    const idr =
+      list.find((c) => String(c.code).toUpperCase() === DEFAULT_CURRENCY_CODE) ||
+      list[0];
+    if (idr) selectCurrency(idr);
+  } catch (err) {
+    console.error("Failed to set default currency:", err);
+  }
+}
+
+onMounted(() => {
+  setDefaultCurrency();
+});
+
 /* ======================
    CATEGORY SEARCH STATE
 ====================== */
@@ -783,20 +803,16 @@ function closeContentFlaggedModal() {
           </label>
 
           <div class="grid md:grid-cols-3 gap-4 mt-1">
-            <input
+            <MaskedNumberInput
               v-model="form.salary_min"
-              type="number"
-              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('min_salary')"
-              @input="validateSalary"
+              input-class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
-            <input
+            <MaskedNumberInput
               v-model="form.salary_max"
-              type="number"
-              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('max_salary')"
-              @input="validateSalary"
+              input-class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             <div class="relative">

@@ -11,6 +11,7 @@ import { useRouter, useRoute } from "vue-router";
 import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
 import ContentFlaggedModal from "@/components/recruiter/ContentFlaggedModal.vue";
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
+import MaskedNumberInput from "@/components/common/MaskedNumberInput.vue";
 import {
   isContentFlaggedResponse,
   isVerificationRequiredError,
@@ -867,20 +868,16 @@ function saveAsDraft() {
           </label>
 
           <div class="grid md:grid-cols-3 gap-4 mt-1">
-            <input
+            <MaskedNumberInput
               v-model="form.salary_min"
-              type="number"
-              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('min_salary')"
-              @input="validateSalary"
+              input-class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
-            <input
+            <MaskedNumberInput
               v-model="form.salary_max"
-              type="number"
-              class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               :placeholder="t('max_salary')"
-              @input="validateSalary"
+              input-class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             <div class="relative">

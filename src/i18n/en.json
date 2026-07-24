@@ -605,7 +605,7 @@
     "selectStatus": "Select Status",
     "currentSalary": "Current Salary",
     "expectedSalary": "Expected Salary",
-    "salaryExample": "e.g. 5000000",
+    "salaryExample": "e.g. 5,000,000",
     "selectCurrency": "Select Currency",
     "loadingCurrencies": "Loading currencies...",
     "address": "Address",
