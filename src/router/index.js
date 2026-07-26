@@ -163,13 +163,15 @@ const routes = [
   },
   {
     path: "/jobposts",
+    name: "jobposts",
     component: () => import("../pages/Jobposts.vue"),
+    meta: { denyRole: "recruiter" },
   },
   {
     path: "/jobposts/hot",
     name: "HotJobposts",
     component: () => import("../pages/HotJobposts.vue"),
-    meta: { public: true },
+    meta: { public: true, denyRole: "recruiter" },
   },
   {
     path: "/jobposts/:id",
@@ -411,6 +413,16 @@ router.beforeEach((to) => {
   if (to.meta.blockRole && auth.role === to.meta.blockRole) {
     auth.logout();
     return "/login";
+  }
+
+  // 🚫 DENY ROLE - redirect tanpa logout (mis. recruiter tidak boleh browse all jobposts)
+  if (to.meta.denyRole && auth.isLoggedIn && auth.role === to.meta.denyRole) {
+    if (auth.role === "recruiter") {
+      return auth.restrictedVerification
+        ? { path: "/recruiter/verification", replace: true }
+        : { path: "/recruiter/jobs", replace: true };
+    }
+    return { path: "/", replace: true };
   }
 
   // 🔐 PROTECTED ROUTE
