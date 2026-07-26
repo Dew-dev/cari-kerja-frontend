@@ -1,8 +1,14 @@
 /**
  * Display-only thousand separators (comma). Stored/submitted value stays digits-only.
+ * Backend may return decimals like "5000000.00" — drop the fractional part first
+ * so unmasking does not turn it into "500000000".
  */
 export function unmaskNumber(value) {
-  return String(value ?? "").replace(/\D/g, "");
+  const str = String(value ?? "").trim();
+  if (!str) return "";
+  // Drop decimal fraction (backend uses "."); keep thousand-sep commas out via \D
+  const integerPart = str.split(".")[0];
+  return integerPart.replace(/\D/g, "");
 }
 
 export function maskNumber(value) {
