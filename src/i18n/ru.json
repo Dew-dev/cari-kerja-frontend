@@ -128,7 +128,9 @@
   "contactActions": {
     "email": "Эл. почта",
     "whatsapp": "WhatsApp",
-    "call": "Позвонить"
+    "call": "Позвонить",
+    "telegram": "Telegram",
+    "telegramChat": "Чат в Telegram"
   },
 
   "job_description": "Описание работы",
@@ -492,6 +494,14 @@
     "emailNotificationPlaceholder": "email{'@'}example.com (необязательно)",
     "emailTelegramHint": "Пустой email нормален при входе через Telegram. Email только для уведомлений.",
     "telegramNotificationsOnly": "Уведомления для этого аккаунта отправляются только через Telegram. Email-канал недоступен.",
+    "telegramNotifications": {
+      "title": "Уведомления Telegram",
+      "subtitle": "Получайте оповещения о вакансиях в Telegram после активации бота.",
+      "active": "Уведомления Telegram активны",
+      "activateButton": "Включить уведомления Telegram",
+      "activateHint": "Откройте Telegram и запустите бота, чтобы включить уведомления о вакансиях.",
+      "connectedPending": "Telegram привязан. Завершите активацию уведомлений кнопкой выше, когда она доступна."
+    },
     "emailManagedByGoogle": "Email берётся из аккаунта Google и здесь изменить нельзя.",
     "updateEmail": "Обновить email",
     "notificationChannels": {
@@ -2629,10 +2639,13 @@
   },
   "jobAlerts": {
     "title": "Оповещения о вакансиях",
-    "subtitle": "Получайте письма о новых вакансиях, подходящих вашему профилю.",
+    "subtitle": "Получайте уведомления о подходящих вакансиях по email или в Telegram.",
     "enableLabel": "Включить оповещения о вакансиях",
-    "enableHint": "Мы будем присылать подходящие вакансии. Ссылки открывают страницу вакансии.",
+    "enableHint": "Мы уведомим вас о подходящих вакансиях. Ссылки открывают страницу вакансии.",
     "addEmailFirst": "Сначала добавьте email, чтобы включить оповещения.",
+    "addChannelFirst": "Сначала добавьте email или включите уведомления Telegram.",
+    "channelEmail": "Email-канал подключён",
+    "channelTelegram": "Уведомления Telegram доступны",
     "enabledSuccess": "Оповещения о вакансиях включены",
     "disabledSuccess": "Оповещения о вакансиях выключены",
     "saveFailed": "Не удалось обновить оповещения"

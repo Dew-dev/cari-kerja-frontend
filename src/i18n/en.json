@@ -204,7 +204,9 @@
   "contactActions": {
     "email": "Email",
     "whatsapp": "WhatsApp",
-    "call": "Call"
+    "call": "Call",
+    "telegram": "Telegram",
+    "telegramChat": "Chat via Telegram"
   },
   "job_description": "Job Description",
   "job_title": "Job Title",
@@ -566,6 +568,14 @@
     "emailNotificationPlaceholder": "email{'@'}example.com (optional)",
     "emailTelegramHint": "Empty email is normal for Telegram login. Email is for notifications only, not a login method.",
     "telegramNotificationsOnly": "Notifications are sent via Telegram only for this account. No email notification channel.",
+    "telegramNotifications": {
+      "title": "Telegram notifications",
+      "subtitle": "Receive job alerts through Telegram when your bot chat is active.",
+      "active": "Telegram notifications are active",
+      "activateButton": "Enable Telegram notifications",
+      "activateHint": "Open Telegram and start the bot to enable job notifications for this account.",
+      "connectedPending": "Telegram is linked. Finish activating notifications with the button above when available."
+    },
     "emailManagedByGoogle": "Email comes from your Google account and cannot be changed here.",
     "updateEmail": "Update email",
     "notificationChannels": {
@@ -2735,10 +2745,13 @@
   },
   "jobAlerts": {
     "title": "Job alerts",
-    "subtitle": "Get email notifications when new jobs match your profile.",
+    "subtitle": "Get notifications when new jobs match your profile via email or Telegram.",
     "enableLabel": "Enable job alerts",
-    "enableHint": "We will email you relevant openings. Links open the job detail page.",
+    "enableHint": "We notify you about relevant openings. Links open the job detail page.",
     "addEmailFirst": "Add an email address first to enable job alerts.",
+    "addChannelFirst": "Add an email or enable Telegram notifications first to turn on job alerts.",
+    "channelEmail": "Email channel linked",
+    "channelTelegram": "Telegram notifications available",
     "enabledSuccess": "Job alerts enabled",
     "disabledSuccess": "Job alerts disabled",
     "saveFailed": "Failed to update job alerts"

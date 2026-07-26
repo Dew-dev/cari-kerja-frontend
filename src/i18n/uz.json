@@ -129,7 +129,9 @@
   "contactActions": {
     "email": "Email",
     "whatsapp": "WhatsApp",
-    "call": "Qo'ng'iroq"
+    "call": "Qo'ng'iroq",
+    "telegram": "Telegram",
+    "telegramChat": "Telegram orqali chat"
   },
   "job_description": "Ish tavsifi",
   "job_title": "Ish nomi",
@@ -491,6 +493,14 @@
     "emailNotificationPlaceholder": "email{'@'}example.com (ixtiyoriy)",
     "emailTelegramHint": "Telegram login uchun bo'sh email normal. Email faqat bildirishnomalar uchun.",
     "telegramNotificationsOnly": "Bu akkaunt uchun bildirishnomalar faqat Telegram orqali yuboriladi. Email kanali yo'q.",
+    "telegramNotifications": {
+      "title": "Telegram bildirishnomalari",
+      "subtitle": "Bot faol bo'lgach, ish ogohlantirishlarini Telegram orqali oling.",
+      "active": "Telegram bildirishnomalari faol",
+      "activateButton": "Telegram bildirishnomalarini yoqish",
+      "activateHint": "Ish bildirishnomalarini yoqish uchun Telegramni oching va botni boshlang.",
+      "connectedPending": "Telegram ulangan. Mavjud bo'lganda yuqoridagi tugma orqali bildirishnomalarni faollashtiring."
+    },
     "emailManagedByGoogle": "Email Google akkauntingizdan olinadi va bu yerda o'zgartirib bo'lmaydi.",
     "updateEmail": "Emailni yangilash",
     "notificationChannels": {
@@ -2627,10 +2637,13 @@
   },
   "jobAlerts": {
     "title": "Ish o'rinlari haqida ogohlantirishlar",
-    "subtitle": "Profilingizga mos yangi ish o'rinlari haqida email oling.",
+    "subtitle": "Mos ish o'rinlari haqida email yoki Telegram orqali xabar oling.",
     "enableLabel": "Ish ogohlantirishlarini yoqish",
-    "enableHint": "Mos ish o'rinlarini email orqali yuboramiz. Havolalar ish tafsilotlari sahifasini ochadi.",
+    "enableHint": "Mos ish o'rinlari haqida xabar beramiz. Havolalar ish tafsilotlari sahifasini ochadi.",
     "addEmailFirst": "Ogohlantirishlarni yoqish uchun avval email qo'shing.",
+    "addChannelFirst": "Ogohlantirishlarni yoqish uchun avval email qo'shing yoki Telegram bildirishnomalarini faollashtiring.",
+    "channelEmail": "Email kanali ulangan",
+    "channelTelegram": "Telegram bildirishnomalari mavjud",
     "enabledSuccess": "Ish ogohlantirishlari yoqildi",
     "disabledSuccess": "Ish ogohlantirishlari o'chirildi",
     "saveFailed": "Ogohlantirishlarni yangilab bo'lmadi"

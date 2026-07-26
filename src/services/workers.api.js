@@ -35,11 +35,12 @@ export const getWorkerFilters = async () => {
 
 /** Job alert preference for the authenticated worker. */
 export function getJobAlerts() {
-  // → { enabled: boolean, has_email: boolean }
+  // → { enabled, has_email, telegram_available }
+  // Alerts can be active when email or Telegram is linked.
   return api.get("/workers/me/job-alerts");
 }
 
 export function updateJobAlerts(payload) {
-  // { enabled: boolean }
+  // { enabled: boolean } — request contract unchanged
   return api.put("/workers/me/job-alerts", payload);
 }

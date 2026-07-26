@@ -204,7 +204,9 @@
   "contactActions": {
     "email": "Email",
     "whatsapp": "WhatsApp",
-    "call": "Telepon"
+    "call": "Telepon",
+    "telegram": "Telegram",
+    "telegramChat": "Chat via Telegram"
   },
   "job_description": "Deskripsi Pekerjaan",
   "job_title": "Jabatan",
@@ -562,6 +564,14 @@
     "emailNotificationPlaceholder": "email{'@'}contoh.com (opsional)",
     "emailTelegramHint": "Email kosong wajar untuk login Telegram. Email hanya untuk notifikasi, bukan metode login.",
     "telegramNotificationsOnly": "Notifikasi akun ini hanya dikirim lewat Telegram. Tidak ada channel notifikasi email.",
+    "telegramNotifications": {
+      "title": "Notifikasi Telegram",
+      "subtitle": "Terima peringatan lowongan lewat Telegram setelah bot aktif.",
+      "active": "Notifikasi Telegram sudah aktif",
+      "activateButton": "Aktifkan notifikasi Telegram",
+      "activateHint": "Buka Telegram dan mulai bot untuk mengaktifkan notifikasi lowongan akun ini.",
+      "connectedPending": "Telegram sudah terhubung. Selesaikan aktivasi notifikasi dengan tombol di atas bila tersedia."
+    },
     "emailManagedByGoogle": "Email berasal dari akun Google dan tidak dapat diubah di sini.",
     "updateEmail": "Perbarui email",
     "notificationChannels": {
@@ -2430,10 +2440,13 @@
   },
   "jobAlerts": {
     "title": "Peringatan lowongan",
-    "subtitle": "Terima notifikasi email saat ada lowongan baru yang cocok dengan profil Anda.",
+    "subtitle": "Terima notifikasi lowongan yang cocok via email atau Telegram.",
     "enableLabel": "Aktifkan peringatan lowongan",
-    "enableHint": "Kami akan mengirim email lowongan relevan. Tautan membuka halaman detail lowongan.",
+    "enableHint": "Kami akan memberi tahu lowongan relevan. Tautan membuka halaman detail lowongan.",
     "addEmailFirst": "Tambahkan email dulu untuk mengaktifkan peringatan lowongan.",
+    "addChannelFirst": "Tambahkan email atau aktifkan notifikasi Telegram dulu untuk menyalakan peringatan lowongan.",
+    "channelEmail": "Channel email terhubung",
+    "channelTelegram": "Notifikasi Telegram tersedia",
     "enabledSuccess": "Peringatan lowongan diaktifkan",
     "disabledSuccess": "Peringatan lowongan dinonaktifkan",
     "saveFailed": "Gagal memperbarui peringatan lowongan"

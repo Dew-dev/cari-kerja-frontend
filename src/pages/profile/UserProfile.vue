@@ -12,6 +12,7 @@ import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import MaskedNumberInput from "@/components/common/MaskedNumberInput.vue";
 import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
 import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
+import TelegramNotificationsCard from "@/components/worker/TelegramNotificationsCard.vue";
 import { displayEmail } from "@/utils/authFlags";
 import { isContentRejectedError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors";
 import { stripHtml } from "@/utils/richText";
@@ -2414,6 +2415,7 @@ watch(activeTab, (newTab) => {
         </form>
         </div>
 
+        <TelegramNotificationsCard />
         <JobAlertsCard />
         <CommunicationPreferencesCard />
       </div>
