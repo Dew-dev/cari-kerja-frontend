@@ -25,7 +25,8 @@ function buildUserFromToken(token) {
 
   if (roleId === 2) {
     return {
-      id: decoded.recruiter_id || decoded.id,
+      // Profile id only — never fall back to users.id (breaks /recruiters/:id)
+      id: decoded.recruiter_id || null,
       user_id: decoded.id,
       name: decoded.name || decoded.contact_name || "",
       email: displayEmail(decoded.email),
@@ -36,7 +37,8 @@ function buildUserFromToken(token) {
   }
 
   return {
-    id: decoded.worker_id || decoded.id,
+    // Profile id only — never fall back to users.id (breaks /workers/:id)
+    id: decoded.worker_id || null,
     user_id: decoded.id,
     name: decoded.name || "",
     email: displayEmail(decoded.email),

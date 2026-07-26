@@ -18,6 +18,11 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  /** users.id — used to avoid navigating with the wrong id type */
+  userId: {
+    type: String,
+    default: null,
+  },
   profileRole: {
     type: String,
     default: null, // 'worker' | 'recruiter'
@@ -47,6 +52,8 @@ const menuOpen = ref(false)
 
 function goToProfile() {
   if (!props.profileId || !props.profileRole) return
+  // Guard: profile id must be workers.id / recruiters.id, not users.id
+  if (props.userId && String(props.profileId) === String(props.userId)) return
   if (props.profileRole === 'worker') {
     router.push(`/workers/${props.profileId}`)
   } else if (props.profileRole === 'recruiter') {

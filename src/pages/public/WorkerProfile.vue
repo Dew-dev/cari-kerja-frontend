@@ -15,10 +15,12 @@ const linkStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || ''
 const fetchWorkerProfile = async () => {
   try {
     loading.value = true
+    // route.params.id must be workers.id (not users.id)
     const response = await getWorkerById(route.params.id)
     worker.value = response.data
   } catch (error) {
     console.error('Failed to fetch worker profile:', error)
+    worker.value = null
   } finally {
     loading.value = false
   }

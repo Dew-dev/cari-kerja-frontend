@@ -555,6 +555,7 @@ watch(peerUserId, () => {
         :name="participant?.name || participant?.company_name || '...'"
         :avatar-url="participant?.avatar_url"
         :profile-id="participant?.id"
+        :user-id="peerUserId"
         :profile-role="participant?.role || (auth.user?.role === 'recruiter' ? 'worker' : 'recruiter')"
         :is-blocked="isPeerBlocked"
         :action-loading="actionLoading"

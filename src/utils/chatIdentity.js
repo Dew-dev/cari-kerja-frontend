@@ -60,14 +60,18 @@ export function getSenderKey(message) {
   )
 }
 
-/** Worker profile id (workers.id) — for matching conversation.worker.id in the list. */
+/** Worker profile id (workers.id) — for GET /workers/:id and conversation.worker.id. */
 export function resolveWorkerProfileId(source) {
   if (!source) return null
 
+  const userId =
+    source.worker?.user_id || source.user_id || source.worker_user_id || null
+
   const candidates = [
     source.worker?.id,
-    source.worker_id,
     source.worker_profile_id,
+    // Prefer nested profile; top-level worker_id is ambiguous (sometimes users.id in chat)
+    source.worker?.id ? null : source.worker_id,
     // Only treat top-level id as worker profile when it's clearly a worker record
     source.role === 'worker' || source.role === 'user' ? source.id : null,
     // Applicants API often returns worker profile as `id` (not application_id)
@@ -78,10 +82,10 @@ export function resolveWorkerProfileId(source) {
 
   for (const id of candidates) {
     if (id == null || id === '') continue
-    // Never send application id as worker_id
+    // Never send application id as worker profile id
     if (source.application_id && isSameId(id, source.application_id)) continue
-    // Never send users.id when we have a distinct profile id available
-    if (source.user_id && isSameId(id, source.user_id) && source.worker?.id) continue
+    // Never use users.id as workers.id
+    if (userId && isSameId(id, userId)) continue
     return id
   }
 
