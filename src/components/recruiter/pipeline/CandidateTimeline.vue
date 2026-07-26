@@ -17,6 +17,9 @@ const usingFallback = ref(false);
 const noteInput = ref("");
 const submittingNote = ref(false);
 
+let timelineRequestId = 0;
+let timelineSafetyTimer = null;
+
 const EVENT_META = {
   applied: { icon: "briefcase", color: "text-blue-600 bg-blue-50" },
   stage_change: { icon: "arrow", color: "text-purple-600 bg-purple-50" },
@@ -67,16 +70,31 @@ async function loadFallbackTimeline() {
 
 async function fetchTimeline() {
   if (!props.applicationId) return;
+
+  const requestId = ++timelineRequestId;
   loading.value = true;
   usingFallback.value = false;
+  if (timelineSafetyTimer) clearTimeout(timelineSafetyTimer);
+  timelineSafetyTimer = setTimeout(() => {
+    if (requestId === timelineRequestId && loading.value) {
+      loading.value = false;
+    }
+  }, 8000);
+
   try {
     const res = await getApplicationTimeline(props.applicationId);
+    if (requestId !== timelineRequestId) return;
     events.value = sortByDateDesc(res.data?.data || []);
   } catch (err) {
+    if (requestId !== timelineRequestId) return;
     console.warn("[Pipeline] Timeline endpoint unavailable, using fallback:", err?.message);
     await loadFallbackTimeline();
   } finally {
-    loading.value = false;
+    if (timelineSafetyTimer) {
+      clearTimeout(timelineSafetyTimer);
+      timelineSafetyTimer = null;
+    }
+    if (requestId === timelineRequestId) loading.value = false;
   }
 }
 

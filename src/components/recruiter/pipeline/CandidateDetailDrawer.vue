@@ -33,6 +33,7 @@ const matchFetchSettled = ref(false);
 
 let detailRequestId = 0;
 let matchRequestId = 0;
+let detailSafetyTimer = null;
 
 async function loadDetail() {
   const applicationId = props.candidate?.application_id;
@@ -40,6 +41,13 @@ async function loadDetail() {
 
   const requestId = ++detailRequestId;
   loading.value = true;
+  if (detailSafetyTimer) clearTimeout(detailSafetyTimer);
+  detailSafetyTimer = setTimeout(() => {
+    if (requestId === detailRequestId && loading.value) {
+      loading.value = false;
+    }
+  }, 8000);
+
   try {
     const res = await getWorkerByApplication(applicationId);
     if (requestId !== detailRequestId) return;
@@ -48,6 +56,10 @@ async function loadDetail() {
     if (requestId !== detailRequestId) return;
     console.error("[Pipeline] Failed to fetch candidate detail:", err);
   } finally {
+    if (detailSafetyTimer) {
+      clearTimeout(detailSafetyTimer);
+      detailSafetyTimer = null;
+    }
     if (requestId === detailRequestId) loading.value = false;
   }
 }
@@ -454,13 +466,19 @@ function refreshMatch() {
             </template>
           </section>
 
-          <div v-if="loading" class="flex justify-center py-4">
-            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+          <div
+            v-if="loading && !(detail?.cover_letter || candidate.cover_letter)"
+            class="flex justify-center py-2"
+          >
+            <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
           </div>
 
           <div v-if="detail?.cover_letter || candidate.cover_letter">
             <h3 class="text-xs font-semibold text-gray-500 uppercase mb-1.5">{{ t("coverLetter") }}</h3>
             <p class="text-sm text-gray-700 whitespace-pre-line">{{ detail?.cover_letter || candidate.cover_letter }}</p>
+          </div>
+          <div v-else-if="!loading" class="text-sm text-gray-400">
+            {{ t("noCoverLetterProvided") }}
           </div>
 
           <div>
