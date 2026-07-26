@@ -11,6 +11,7 @@ const telegramAvailable = ref(false);
 const telegramUsername = ref("");
 const telegramDisplayName = ref("");
 const telegramBotStartUrl = ref("");
+let httpsFallbackTimer = null;
 
 const needsActivation = computed(
   () =>
@@ -44,9 +45,46 @@ async function refreshTelegramStatus() {
   }
 }
 
+function clearHttpsFallbackTimer() {
+  if (httpsFallbackTimer != null) {
+    clearTimeout(httpsFallbackTimer);
+    httpsFallbackTimer = null;
+  }
+}
+
 function openBotStart() {
-  if (!telegramBotStartUrl.value) return;
-  window.open(telegramBotStartUrl.value, "_blank", "noopener,noreferrer");
+  const httpsUrl = telegramBotStartUrl.value;
+  if (!httpsUrl) return;
+
+  clearHttpsFallbackTimer();
+
+  try {
+    const u = new URL(httpsUrl);
+    // https://t.me/BotName?start=xxx → domain = BotName
+    const domain = u.pathname.replace(/^\//, "").split("/")[0];
+    if (domain) {
+      const start = u.searchParams.get("start") || "";
+      const tgUrl = start
+        ? `tg://resolve?domain=${encodeURIComponent(domain)}&start=${encodeURIComponent(start)}`
+        : `tg://resolve?domain=${encodeURIComponent(domain)}`;
+
+      // Prefer opening the Telegram app directly (more reliable on mobile)
+      window.location.href = tgUrl;
+
+      // If the app did not take over, fall back to the https t.me link
+      httpsFallbackTimer = window.setTimeout(() => {
+        httpsFallbackTimer = null;
+        if (document.visibilityState === "visible") {
+          window.open(httpsUrl, "_blank", "noopener,noreferrer");
+        }
+      }, 900);
+      return;
+    }
+  } catch {
+    // Invalid URL — use https below
+  }
+
+  window.open(httpsUrl, "_blank", "noopener,noreferrer");
 }
 
 function onWindowFocus() {
@@ -73,6 +111,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
+  clearHttpsFallbackTimer();
   window.removeEventListener("focus", onWindowFocus);
   document.removeEventListener("visibilitychange", onVisibilityChange);
 });
