@@ -45,6 +45,12 @@ const formatDate = (date) => {
   })
 }
 
+function openTelegramChat() {
+  const url = worker.value?.telegram_chat_url
+  if (!url) return
+  window.open(url, '_blank', 'noopener,noreferrer')
+}
+
 onMounted(fetchWorkerProfile)
 </script>
 
@@ -126,8 +132,30 @@ onMounted(fetchWorkerProfile)
                   <span>{{ worker.gender_name }}</span>
                 </div>
 
+                <!-- Telegram (recruiter view of GET /workers/:id) -->
+                <div
+                  v-if="worker.telegram_available || worker.telegram_username || worker.telegram_display_name"
+                  class="flex items-start gap-2 text-gray-600"
+                >
+                  <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                  </svg>
+                  <span>
+                    {{ worker.telegram_display_name || (worker.telegram_username ? `@${worker.telegram_username}` : $t('contactActions.telegram')) }}
+                    <span
+                      v-if="worker.telegram_display_name && worker.telegram_username"
+                      class="text-gray-400"
+                    >
+                      (@{{ worker.telegram_username }})
+                    </span>
+                  </span>
+                </div>
+
                 <!-- Contact Buttons -->
-                <div v-if="worker.email || worker.telephone" class="flex justify-around flex-wrap items-center gap-3 pt-3 border-t mt-4">
+                <div
+                  v-if="worker.email || worker.telephone || worker.telegram_chat_url"
+                  class="flex justify-around flex-wrap items-center gap-3 pt-3 border-t mt-4"
+                >
                   <a
                     v-if="worker.telephone"
                     :href="`tel:${worker.telephone}`"
@@ -161,6 +189,18 @@ onMounted(fetchWorkerProfile)
                     </svg>
                     {{ $t('contactActions.whatsapp') }}
                   </a>
+
+                  <button
+                    v-if="worker.telegram_chat_url"
+                    type="button"
+                    class="flex items-center justify-center gap-2 flex-1 text-[#229ED9] hover:text-[#1b8bc0] hover:bg-sky-50 font-medium text-sm py-2 px-3 rounded-lg transition-colors border border-sky-200 min-w-fit"
+                    @click="openTelegramChat"
+                  >
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                    {{ $t('contactActions.telegramChat') }}
+                  </button>
                 </div>
               </div>
             </div>
