@@ -28,6 +28,8 @@ const loading = ref(false);
 const matchDetail = ref(null);
 const loadingMatch = ref(false);
 const matchError = ref(false);
+/** True after the latest GET /match attempt finished (success or error). */
+const matchFetchSettled = ref(false);
 
 let detailRequestId = 0;
 let matchRequestId = 0;
@@ -57,6 +59,7 @@ async function loadMatchDetail({ silent = false } = {}) {
   const requestId = ++matchRequestId;
   if (!silent) loadingMatch.value = true;
   matchError.value = false;
+  matchFetchSettled.value = false;
 
   const isStillPending = (match) =>
     !!match &&
@@ -92,7 +95,10 @@ async function loadMatchDetail({ silent = false } = {}) {
     matchError.value = true;
     // Keep existing matchDetail / list fields — do not clear on refresh failure.
   } finally {
-    if (requestId === matchRequestId) loadingMatch.value = false;
+    if (requestId === matchRequestId) {
+      loadingMatch.value = false;
+      matchFetchSettled.value = true;
+    }
   }
 }
 
@@ -108,6 +114,7 @@ watch(
       detail.value = null;
       matchDetail.value = null;
       matchError.value = false;
+      matchFetchSettled.value = false;
     }
 
     loadDetail();
@@ -118,11 +125,23 @@ watch(
 
 const matchSource = computed(() => mergeMatchSources(props.candidate, matchDetail.value));
 
-const matchStatus = computed(() => matchSource.value.match_status || "pending");
 const matchScore = computed(() =>
   matchSource.value.match_score == null ? null : Math.round(Number(matchSource.value.match_score)),
 );
 const hasNumericScore = computed(() => matchScore.value != null && !Number.isNaN(matchScore.value));
+
+/**
+ * Prefer explicit API status. After GET /match settles, never invent "pending"
+ * just because score is missing — show failed (or ready when score exists).
+ */
+const matchStatus = computed(() => {
+  const explicit = matchSource.value.match_status;
+  if (explicit) return explicit;
+  if (hasNumericScore.value) return "ready";
+  if (loadingMatch.value || !matchFetchSettled.value) return "pending";
+  return "failed";
+});
+
 const matchTone = computed(() => getMatchScoreTone(matchScore.value));
 
 const breakdownRows = computed(() => {
@@ -170,13 +189,16 @@ const computedAtLabel = computed(() => {
 });
 
 const statusMessage = computed(() => {
-  // Avoid "Calculating…" under an already-visible score during soft refresh.
-  if (hasNumericScore.value && matchStatus.value === "pending" && loadingMatch.value) {
+  // After GET /match settles: never keep "Calculating…" for failed or numeric scores (incl. 0).
+  if (hasNumericScore.value) return "";
+  if (matchStatus.value === "failed") return t("pipeline.match.failed");
+  if (matchFetchSettled.value && !loadingMatch.value && matchStatus.value !== "pending") {
+    if (matchStatus.value === "insufficient_data") return t("pipeline.match.insufficient");
     return "";
   }
   switch (matchStatus.value) {
     case "pending":
-      return hasNumericScore.value ? "" : t("pipeline.match.pending");
+      return t("pipeline.match.pending");
     case "insufficient_data":
       return t("pipeline.match.insufficient");
     case "failed":
@@ -436,7 +458,7 @@ function refreshMatch() {
             <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
           </div>
 
-          <div v-else-if="detail?.cover_letter || candidate.cover_letter">
+          <div v-if="detail?.cover_letter || candidate.cover_letter">
             <h3 class="text-xs font-semibold text-gray-500 uppercase mb-1.5">{{ t("coverLetter") }}</h3>
             <p class="text-sm text-gray-700 whitespace-pre-line">{{ detail?.cover_letter || candidate.cover_letter }}</p>
           </div>
