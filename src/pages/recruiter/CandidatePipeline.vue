@@ -375,7 +375,6 @@ async function handleChat(candidate) {
       <PipelineAnalytics
         :columns="pipelineStore.boardColumns"
         :stage-counts-map="pipelineStore.stageCountsMap"
-        :conversion-rates="pipelineStore.analytics.conversion_rates"
         :loading="pipelineStore.loadingAnalytics"
       />
 

@@ -45,8 +45,11 @@ const matchBadge = computed(() => {
   const score = props.candidate.match_score;
   const hasNumericScore = score !== null && score !== undefined && score !== "";
 
-  // Include 0% for ready/pending — do not treat 0 as missing.
-  if ((status === "ready" || status === "pending") && hasNumericScore) {
+  // Include 0% for ready/pending (or missing status with a concrete score).
+  if (
+    hasNumericScore &&
+    (status === "ready" || status === "pending" || status == null || status === "")
+  ) {
     const rounded = Math.round(Number(score));
     if (!Number.isNaN(rounded)) {
       return {

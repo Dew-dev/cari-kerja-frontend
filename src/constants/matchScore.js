@@ -67,7 +67,9 @@ export function normalizeMatchFields(raw = {}) {
 
   return {
     match_score: score != null && !Number.isNaN(score) ? score : null,
-    match_status: raw.match_status || (score == null ? "pending" : "ready"),
+    // Do not invent "pending" when status is missing — callers that need a
+    // loading placeholder decide that from request state, not from null status.
+    match_status: raw.match_status || (score != null && !Number.isNaN(score) ? "ready" : null),
     match_computed_at: raw.match_computed_at || raw.computed_at || null,
     match_breakdown: breakdown,
     match_reasons: reasons,
