@@ -17,6 +17,8 @@ import { displayEmail } from "@/utils/authFlags";
 import { isContentRejectedError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors";
 import { stripHtml } from "@/utils/richText";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
+import { matchJobTitle } from "@/services/job_titles.api";
+import JobTitleAutocomplete from "@/components/common/JobTitleAutocomplete.vue";
 
 const router = useRouter();
 const auth = useAuthStore();
@@ -80,6 +82,7 @@ const savingWork = ref(false);
 const workForm = reactive({
   company_name: "",
   job_title: "",
+  job_title_id: null,
   start_date: "",
   end_date: "",
   is_current: false,
@@ -598,6 +601,7 @@ function resetWorkForm() {
   editingWorkKey.value = null;
   workForm.company_name = "";
   workForm.job_title = "";
+  workForm.job_title_id = null;
   workForm.start_date = "";
   workForm.end_date = "";
   workForm.is_current = false;
@@ -608,7 +612,8 @@ function openWorkForm(item = null) {
   if (item) {
     editingWorkKey.value = profileItemKey(item);
     workForm.company_name = item.company_name || "";
-    workForm.job_title = item.job_title || "";
+    workForm.job_title = item.job_title || item.job_title_ref?.name || "";
+    workForm.job_title_id = item.job_title_id || item.job_title_ref?.id || null;
     workForm.start_date = formatDateForInput(item.start_date);
     workForm.end_date = item.is_current ? "" : formatDateForInput(item.end_date);
     workForm.is_current = Boolean(item.is_current);
@@ -638,6 +643,9 @@ async function saveWorkExp() {
     is_current: Boolean(workForm.is_current),
     description: workForm.description || null,
   };
+  if (workForm.job_title_id) {
+    payload.job_title_id = workForm.job_title_id;
+  }
 
   try {
     savingWork.value = true;
@@ -646,10 +654,14 @@ async function saveWorkExp() {
     );
 
     if (existing?.id) {
-      await api.put(`/workers/work-exp/${existing.id}`, payload, {
+      const res = await api.put(`/workers/work-exp/${existing.id}`, payload, {
         headers: authHeaders(),
       });
-      Object.assign(existing, payload);
+      const saved = res.data?.data || {};
+      Object.assign(existing, payload, {
+        job_title_id: saved.job_title_id ?? payload.job_title_id ?? null,
+        job_title_ref: saved.job_title_ref ?? existing.job_title_ref ?? null,
+      });
       push.success(t("profile.workExperienceAdded"));
     } else if (existing?._pending || existing?._localKey) {
       const res = await api.post("/workers/work-exp", payload, {
@@ -663,6 +675,8 @@ async function saveWorkExp() {
         workExperiences.value[idx] = {
           ...payload,
           id: saved.id,
+          job_title_id: saved.job_title_id ?? payload.job_title_id ?? null,
+          job_title_ref: saved.job_title_ref || null,
           start_date: formatDateForInput(saved.start_date || payload.start_date),
           end_date: payload.is_current
             ? null
@@ -678,6 +692,8 @@ async function saveWorkExp() {
       workExperiences.value.unshift({
         ...payload,
         id: saved.id,
+        job_title_id: saved.job_title_id ?? payload.job_title_id ?? null,
+        job_title_ref: saved.job_title_ref || null,
         start_date: formatDateForInput(saved.start_date || payload.start_date),
         end_date: payload.is_current
           ? null
@@ -1432,10 +1448,17 @@ function applyParsedPersonalInfo() {
   push.success(t('profile.cvParser.appliedPersonalInfo'));
 }
 
-function applyParsedWorkExp(exp) {
+async function applyParsedWorkExp(exp, { notify = true } = {}) {
+  const title = exp.job_title || "";
+  let jobTitleId = exp.job_title_id || null;
+  if (!jobTitleId && title) {
+    const matched = await matchJobTitle(title);
+    if (matched?.id) jobTitleId = matched.id;
+  }
   workExperiences.value.unshift({
     company_name: exp.company_name || "",
-    job_title: exp.job_title || "",
+    job_title: title,
+    job_title_id: jobTitleId,
     start_date: formatDateForInput(exp.start_date),
     end_date: exp.is_current ? null : formatDateForInput(exp.end_date),
     is_current: exp.is_current || false,
@@ -1444,24 +1467,15 @@ function applyParsedWorkExp(exp) {
     _localKey: createLocalKey(),
   });
   activeTab.value = "work";
-  push.success(t("profile.cvParser.appliedSection"));
+  if (notify) push.success(t("profile.cvParser.appliedSection"));
 }
 
-function applyAllParsedWorkExp() {
+async function applyAllParsedWorkExp() {
   const exps = cvParsedData.value?.work_experiences || [];
   if (!exps.length) return;
-  exps.forEach((exp) => {
-    workExperiences.value.unshift({
-      company_name: exp.company_name || "",
-      job_title: exp.job_title || "",
-      start_date: formatDateForInput(exp.start_date),
-      end_date: exp.is_current ? null : formatDateForInput(exp.end_date),
-      is_current: exp.is_current || false,
-      description: exp.description || "",
-      _pending: true,
-      _localKey: createLocalKey(),
-    });
-  });
+  for (const exp of exps) {
+    await applyParsedWorkExp(exp, { notify: false });
+  }
   activeTab.value = "work";
   push.success(t("profile.cvParser.appliedSection"));
 }
@@ -2643,11 +2657,11 @@ watch(activeTab, (newTab) => {
               :placeholder="$t('profile.companyName')"
               class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
             />
-            <input
+            <JobTitleAutocomplete
               v-model="workForm.job_title"
-              type="text"
+              v-model:title-id="workForm.job_title_id"
               :placeholder="$t('profile.jobTitle')"
-              class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+              input-class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 w-full"
             />
             <input
               v-model="workForm.start_date"
