@@ -92,6 +92,30 @@
                 </div>
               </div>
 
+              <!-- Job title role (taxonomy) + min years — must be paired -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('searchWorkers.jobTitleRole') }}</label>
+                <JobTitleAutocomplete
+                  v-model="jobTitleFilterText"
+                  v-model:title-id="filters.job_title_id"
+                  :placeholder="$t('searchWorkers.jobTitleRolePlaceholder')"
+                  input-class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('searchWorkers.minYearsInRole') }}</label>
+                <input
+                  v-model.number="filters.min_years"
+                  type="number"
+                  min="0"
+                  step="1"
+                  :placeholder="$t('searchWorkers.minYearsInRolePlaceholder')"
+                  class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <p v-if="roleFilterError" class="text-xs text-red-600 mt-1">{{ roleFilterError }}</p>
+              </div>
+
               <!-- Gender -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('searchWorkers.gender') }}</label>
@@ -446,12 +470,15 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { searchWorkers } from '@/services/workers.api'
 import api from '@/services/api'
 import { stripHtml } from '@/utils/richText'
+import JobTitleAutocomplete from '@/components/common/JobTitleAutocomplete.vue'
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 
 // State
@@ -474,6 +501,9 @@ const nationalitySearchQuery = ref('')
 const showNationalityDropdown = ref(false)
 let nationalitySearchTimeout = null
 
+const jobTitleFilterText = ref('')
+const roleFilterError = ref('')
+
 const filters = ref({
   search: '',
   skills: '',
@@ -481,6 +511,8 @@ const filters = ref({
   nationality: '',
   experience_years: null,
   education_level: '',
+  job_title_id: null,
+  min_years: null,
   min_salary: null,
   max_salary: null,
   sort_by: 'created_at',
@@ -618,7 +650,21 @@ const updateSkills = () => {
     .join(',')
 }
 
+const hasRoleFilterId = () => !!filters.value.job_title_id
+const hasRoleFilterYears = () => {
+  const y = filters.value.min_years
+  return y !== null && y !== undefined && y !== '' && !Number.isNaN(Number(y))
+}
+
 const applyFilters = async (resetPage = true) => {
+  const hasId = hasRoleFilterId()
+  const hasYears = hasRoleFilterYears()
+  if (hasId !== hasYears) {
+    roleFilterError.value = t('searchWorkers.jobTitleYearsPairRequired')
+    return
+  }
+  roleFilterError.value = ''
+
   try {
     loading.value = true
     
@@ -660,6 +706,8 @@ const resetFilters = () => {
     nationality: '',
     experience_years: null,
     education_level: '',
+    job_title_id: null,
+    min_years: null,
     min_salary: null,
     max_salary: null,
     sort_by: 'created_at',
@@ -671,6 +719,8 @@ const resetFilters = () => {
   selectedSkills.value = []
   skillSearchQuery.value = ''
   nationalitySearchQuery.value = ''
+  jobTitleFilterText.value = ''
+  roleFilterError.value = ''
   currentPage.value = 1
   
   // Reload with fresh filters

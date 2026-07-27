@@ -12,6 +12,7 @@ import VerificationRequiredModal from "@/components/recruiter/VerificationRequir
 import ContentFlaggedModal from "@/components/recruiter/ContentFlaggedModal.vue";
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import MaskedNumberInput from "@/components/common/MaskedNumberInput.vue";
+import JobTitleAutocomplete from "@/components/common/JobTitleAutocomplete.vue";
 import {
   isContentFlaggedResponse,
   isRateLimitedError,
@@ -223,6 +224,8 @@ function deleteSkill(skillId) {
 ====================== */
 const form = reactive({
   title: "",
+  job_title: "",
+  job_title_id: null,
   tags: [],
   salary_min: "",
   salary_max: "",
@@ -240,6 +243,12 @@ const form = reactive({
   job_post_questions: [],
   is_remote: false,
 });
+
+function onJobTitleSelect(opt) {
+  if (!form.title.trim() && opt?.name) {
+    form.title = opt.name;
+  }
+}
 
 const QUESTION_TYPES = [
   { id: 1, label: "TEXT" },
@@ -649,6 +658,12 @@ async function submit(statusId = 1) {
     city: form.is_remote ? null : form.city,
     is_remote: form.is_remote,
   };
+  if (form.job_title_id) {
+    payload.job_title_id = form.job_title_id;
+  }
+  if (form.job_title?.trim()) {
+    payload.job_title = form.job_title.trim();
+  }
 
   try {
     const res = await api.post("/job-posts", payload, authHeaders);
@@ -721,17 +736,34 @@ function closeContentFlaggedModal() {
       </p>
 
       <form @submit.prevent="submit(1)" class="space-y-6">
-        <!-- JOB TITLE -->
+        <!-- TAXONOMY JOB TITLE -->
         <div>
           <label class="block text-sm font-medium text-gray-700">
-            {{ t("job_title") }}
+            {{ t("jobTitles.taxonomyLabel") }}
+            <span class="ml-2 text-xs text-gray-400">{{ t("optional") }}</span>
+          </label>
+          <JobTitleAutocomplete
+            v-model="form.job_title"
+            v-model:title-id="form.job_title_id"
+            class="mt-1"
+            input-class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            :placeholder="t('jobTitles.taxonomyPlaceholder')"
+            @select="onJobTitleSelect"
+          />
+        </div>
+
+        <!-- POSTING HEADLINE -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            {{ t("jobTitles.headlineLabel") }}
             <span class="text-red-500 ml-1">*</span>
             <span class="ml-2 text-xs text-gray-400">{{ t("required") }}</span>
           </label>
           <input
             v-model="form.title"
             class="mt-1 w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            :placeholder="t('job_title_placeholder')"
+            :placeholder="t('jobTitles.headlinePlaceholder')"
+            required
           />
         </div>
 
