@@ -18,7 +18,7 @@
                   @click="enableRecommendations()"
                   :class="[
                     'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
-                    selectedCategory === '' && recommendations
+                    selectedCategoryId == null && recommendations
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700',
                   ]"
@@ -32,7 +32,7 @@
                   @click="disableRecommendations()"
                   :class="[
                     'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
-                    selectedCategory === '' && !recommendations
+                    selectedCategoryId == null && !recommendations
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700',
                   ]"
@@ -45,12 +45,12 @@
               <li v-for="category in visibleCategories" :key="category.id">
                 <button
                   @click="
-                    selectedCategory = category.name;
+                    selectedCategoryId = category.id;
                     handleFilterChange();
                   "
                   :class="[
                     'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
-                    selectedCategory === category.name
+                    Number(selectedCategoryId) === Number(category.id)
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700',
                   ]"
@@ -607,7 +607,7 @@ import { useRoute, useRouter } from "vue-router";
 import { getEmploymentTypes } from "../services/employment_types.api";
 import { stripHtml } from "@/utils/richText";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const auth = useAuthStore();
 const route = useRoute();
 const router = useRouter();
@@ -618,7 +618,10 @@ const jobs = ref([]);
 const categories = ref([]);
 const loading = ref(true);
 const searchQuery = ref("");
-const selectedCategory = ref("");
+/** @type {import('vue').Ref<number|null>} */
+const selectedCategoryId = ref(null);
+/** Legacy ?category=name until resolved against localized list */
+const legacyCategoryName = ref("");
 const showFilters = ref(false);
 const sortBy = ref("highest-salary");
 const currentPage = ref(1);
@@ -876,7 +879,17 @@ const jobService = {
         hasActiveFilters = true;
       }
 
-      if (filters.category !== "") {
+      if (filters.categoryId != null && filters.categoryId !== "") {
+        params.category_id = filters.categoryId;
+        hasActiveFilters = true;
+        const match = categories.value.find(
+          (c) => Number(c.id) === Number(filters.categoryId),
+        );
+        // Current BE filters by translation name; keep until category_id is supported.
+        if (match?.name) {
+          params.category = match.name;
+        }
+      } else if (filters.category) {
         params.category = filters.category;
         hasActiveFilters = true;
       }
@@ -941,9 +954,9 @@ const jobService = {
     }
   },
 
-  async fetchCategories() {
+  async fetchCategories(localeCode) {
     try {
-      const response = await getCategoriesWithJobcount();
+      const response = await getCategoriesWithJobcount({ locale: localeCode });
       return response.data;
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -969,7 +982,8 @@ const loadJobs = async () => {
     const data = await jobService.fetchJobs({
       search: searchQuery.value,
       // location: locationFilter.value,
-      category: selectedCategory.value,
+      categoryId: selectedCategoryId.value,
+      category: legacyCategoryName.value,
       employmentTypes: selectedEmploymentTypes.value,
       province_name: selectedProvince.value,
       cities_name: selectedCity.value,
@@ -991,10 +1005,27 @@ const loadJobs = async () => {
   }
 };
 
+const resolveLegacyCategoryName = () => {
+  if (selectedCategoryId.value != null || !legacyCategoryName.value) return;
+  const name = String(legacyCategoryName.value).toLowerCase();
+  const match = categories.value.find(
+    (c) => String(c.name || "").toLowerCase() === name,
+  );
+  if (match) {
+    selectedCategoryId.value = match.id;
+    legacyCategoryName.value = "";
+  }
+};
+
 const loadCategories = async () => {
   try {
-    const data = await jobService.fetchCategories();
-    categories.value = data.data;
+    const data = await jobService.fetchCategories(locale.value);
+    categories.value = data.data || [];
+    resolveLegacyCategoryName();
+    // Re-run job fetch once names are available for category_id → name mapping
+    if (selectedCategoryId.value != null || legacyCategoryName.value) {
+      await loadJobs();
+    }
   } catch (error) {
     console.error("Error loading categories:", error);
   }
@@ -1077,10 +1108,11 @@ const goToPage = (page) => {
 const handleFilterChange = () => {
   searchQuery.value = ""; // Reset search saat filter diubah
   recommendations.value = false; // Disable recommendations when any filter changes
+  legacyCategoryName.value = "";
   router.push({
     query: {
       sort_by: sortBy.value || undefined,
-      category: selectedCategory.value || undefined,
+      category_id: selectedCategoryId.value || undefined,
       search: undefined, // Hapus search dari query
       employment_types: selectedEmploymentTypes.value.length
         ? selectedEmploymentTypes.value.join(",")
@@ -1098,7 +1130,8 @@ const handleFilterChange = () => {
 
 const resetFilters = () => {
   searchQuery.value = "";
-  selectedCategory.value = "";
+  selectedCategoryId.value = null;
+  legacyCategoryName.value = "";
   selectedEmploymentTypes.value = [];
   selectedProvince.value = "";
   selectedCity.value = "";
@@ -1117,13 +1150,15 @@ const resetFilters = () => {
 };
 
 const resetCategory = () => {
-  selectedCategory.value = ""; // Reset state internal
+  selectedCategoryId.value = null;
+  legacyCategoryName.value = "";
 
   // Buat copy dari query saat ini
   const query = { ...route.query };
   
   // Hapus key category dan recommendations dari object query
   delete query.category;
+  delete query.category_id;
   delete query.recommendations;
 
   // Reset ke halaman 1 saat ganti kategori
@@ -1137,7 +1172,8 @@ const enableRecommendations = () => {
   if (!canUseRecommendations.value) return;
 
   recommendations.value = true;
-  selectedCategory.value = "";
+  selectedCategoryId.value = null;
+  legacyCategoryName.value = "";
   selectedEmploymentTypes.value = [];
   selectedProvince.value = "";
   selectedCity.value = "";
@@ -1185,7 +1221,17 @@ watch(
   () => route.query,
   (q) => {
     searchQuery.value = q.search || "";
-    selectedCategory.value = q.category || "";
+    if (q.category_id != null && q.category_id !== "") {
+      selectedCategoryId.value = Number(q.category_id);
+      legacyCategoryName.value = "";
+    } else if (q.category) {
+      selectedCategoryId.value = null;
+      legacyCategoryName.value = q.category;
+      resolveLegacyCategoryName();
+    } else {
+      selectedCategoryId.value = null;
+      legacyCategoryName.value = "";
+    }
     sortBy.value = q.sort_by || "";
     selectedEmploymentTypes.value = q.employment_types
       ? q.employment_types.split(",")
@@ -1209,6 +1255,7 @@ watch(
     const hasActiveFilters = !!(
       q.search ||
       q.category ||
+      q.category_id ||
       (q.employment_types && q.employment_types.length > 0) ||
       (q.sort_by && q.sort_by !== "" && q.sort_by !== "created_at") ||
       q.province_name ||
@@ -1256,6 +1303,10 @@ onMounted(() => {
   loadCategories();
   loadEmploymentTypes();
   fetchHotJobs();
+});
+
+watch(locale, () => {
+  loadCategories();
 });
 </script>
 

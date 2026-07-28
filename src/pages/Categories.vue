@@ -99,7 +99,7 @@
         <div
           v-for="category in filteredCategories"
           :key="category.id"
-          @click="goToCategoryJobs(category.name)"
+          @click="goToCategoryJobs(category)"
           class="bg-white rounded-lg shadow hover:shadow-xl transition-all p-6 cursor-pointer group"
         >
           <div class="flex items-start justify-between mb-3">
@@ -175,12 +175,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { getCategoriesWithJobcount } from "../services/categories.api";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const router = useRouter();
 
 // State
@@ -197,7 +197,7 @@ const filteredCategories = computed(() => {
   if (searchQuery.value.trim()) {
     const query = searchQuery.value.toLowerCase();
     filtered = filtered.filter((cat) =>
-      cat.name.toLowerCase().includes(query)
+      String(cat.name || "").toLowerCase().includes(query)
     );
   }
 
@@ -205,10 +205,10 @@ const filteredCategories = computed(() => {
   const sorted = [...filtered];
   switch (sortBy.value) {
     case "name-asc":
-      sorted.sort((a, b) => a.name.localeCompare(b.name));
+      sorted.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
       break;
     case "name-desc":
-      sorted.sort((a, b) => b.name.localeCompare(a.name));
+      sorted.sort((a, b) => String(b.name || "").localeCompare(String(a.name || "")));
       break;
     case "jobs-desc":
       sorted.sort((a, b) => b.job_count - a.job_count);
@@ -225,9 +225,9 @@ const filteredCategories = computed(() => {
 const loadCategories = async () => {
   try {
     loading.value = true;
-    const response = await getCategoriesWithJobcount();
+    const response = await getCategoriesWithJobcount({ locale: locale.value });
     // Filter only categories with at least 1 job
-    categories.value = response.data.data.filter((cat) => cat.job_count > 0);
+    categories.value = (response.data.data || []).filter((cat) => cat.job_count > 0);
   } catch (error) {
     console.error("Error loading categories:", error);
   } finally {
@@ -243,10 +243,10 @@ const sortCategories = () => {
   // Sorting is handled by computed property
 };
 
-const goToCategoryJobs = (categoryName) => {
+const goToCategoryJobs = (category) => {
   router.push({
     path: "/jobposts",
-    query: { category: categoryName },
+    query: { category_id: category.id },
   });
 };
 
@@ -256,6 +256,10 @@ const clearSearch = () => {
 
 // Lifecycle
 onMounted(() => {
+  loadCategories();
+});
+
+watch(locale, () => {
   loadCategories();
 });
 </script>

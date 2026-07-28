@@ -3,7 +3,7 @@ import { onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/stores/authStore.js";
 import { push } from "notivue";
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const auth = useAuthStore();
 import api from "@/services/api"; // axios instance
 import { updateJob } from "@/services/jobposts.api";
@@ -13,6 +13,7 @@ import ContentFlaggedModal from "@/components/recruiter/ContentFlaggedModal.vue"
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import MaskedNumberInput from "@/components/common/MaskedNumberInput.vue";
 import JobTitleAutocomplete from "@/components/common/JobTitleAutocomplete.vue";
+import { getCategories, getCategoryById } from "@/services/categories.api";
 import {
   isContentFlaggedResponse,
   isVerificationRequiredError,
@@ -426,9 +427,19 @@ async function fetchJob() {
       name: res.data?.data?.currency,
       code: res.data?.data?.currency_code,
     })
+    const categoryId = res.data?.data?.category_id;
+    let categoryLabel = res.data?.data?.category_name || "";
+    if (categoryId) {
+      try {
+        const catRes = await getCategoryById(categoryId, { locale: locale.value });
+        categoryLabel = catRes.data?.data?.name || categoryLabel;
+      } catch {
+        // keep job.category_name fallback
+      }
+    }
     selectCategory({
-      id: res.data?.data?.category_id,
-      name: res.data?.data?.category_name,
+      id: categoryId,
+      name: categoryLabel,
     })
 
   } catch (err) {
@@ -514,7 +525,12 @@ async function fetchCategories(keyword = "") {
   try {
     categoryLoading.value = true;
 
-    const res = await api.get(`/categories/name/${keyword}`);
+    const res = await getCategories({
+      search: keyword || undefined,
+      page: 1,
+      limit: 50,
+      locale: locale.value,
+    });
     const data = res?.data?.data || [];
 
     categoryOptions.value = data.map((item) => ({
