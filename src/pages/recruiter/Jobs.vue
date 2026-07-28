@@ -967,6 +967,19 @@ async function fetchJobs() {
     countit.value = false;
   } catch (err) {
     console.error("Failed to fetch recruiter jobs", err);
+    const message =
+      err?.response?.data?.message ||
+      err?.response?.data?.error ||
+      t("notifications.actionFailed");
+    push.error(
+      err?.response?.status
+        ? `[${err.response.status}] ${message}`
+        : message,
+    );
+    if (!countit.value && activeTab.value === "active") {
+      jobs.value = [];
+      totalPages.value = 1;
+    }
   } finally {
     loading.value = false;
   }
@@ -988,6 +1001,19 @@ async function archivedJobs() {
     countit.value = false;
   } catch (err) {
     console.error("Failed to count archived jobs", err);
+    const message =
+      err?.response?.data?.message ||
+      err?.response?.data?.error ||
+      t("notifications.actionFailed");
+    push.error(
+      err?.response?.status
+        ? `[${err.response.status}] ${message}`
+        : message,
+    );
+    if (!countit.value && activeTab.value === "archived") {
+      jobs.value = [];
+      totalPages.value = 1;
+    }
   }
 }
 
