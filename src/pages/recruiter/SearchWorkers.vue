@@ -92,26 +92,36 @@
                 </div>
               </div>
 
-              <!-- Job title role (taxonomy) + min years — must be paired -->
+              <!-- Category + min years — must be paired; min_years enabled after category -->
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('searchWorkers.jobTitleRole') }}</label>
-                <JobTitleAutocomplete
-                  v-model="jobTitleFilterText"
-                  v-model:title-id="filters.job_title_id"
-                  :placeholder="$t('searchWorkers.jobTitleRolePlaceholder')"
-                  input-class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('searchWorkers.categoryRole') }}</label>
+                <select
+                  v-model="filters.category_id"
+                  class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  @change="onCategoryFilterChange"
+                >
+                  <option value="">{{ $t('searchWorkers.allCategories') }}</option>
+                  <option
+                    v-for="cat in categoryOptions"
+                    :key="cat.id"
+                    :value="String(cat.id)"
+                  >
+                    {{ cat.name }}
+                  </option>
+                </select>
+                <p v-if="categoriesLoading" class="text-xs text-gray-500 mt-1">{{ $t('searchWorkers.loadingCategories') }}</p>
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('searchWorkers.minYearsInRole') }}</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('searchWorkers.minYearsInCategory') }}</label>
                 <input
                   v-model.number="filters.min_years"
                   type="number"
                   min="0"
                   step="1"
+                  :disabled="!filters.category_id"
                   :placeholder="$t('searchWorkers.minYearsInRolePlaceholder')"
-                  class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
                 />
                 <p v-if="roleFilterError" class="text-xs text-red-600 mt-1">{{ roleFilterError }}</p>
               </div>
@@ -468,17 +478,17 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { searchWorkers } from '@/services/workers.api'
 import api from '@/services/api'
 import { stripHtml } from '@/utils/richText'
-import JobTitleAutocomplete from '@/components/common/JobTitleAutocomplete.vue'
+import { getCategories } from '@/services/categories.api'
 
 const router = useRouter()
 const route = useRoute()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 
 // State
@@ -501,7 +511,8 @@ const nationalitySearchQuery = ref('')
 const showNationalityDropdown = ref(false)
 let nationalitySearchTimeout = null
 
-const jobTitleFilterText = ref('')
+const categoryOptions = ref([])
+const categoriesLoading = ref(false)
 const roleFilterError = ref('')
 
 const filters = ref({
@@ -511,7 +522,7 @@ const filters = ref({
   nationality: '',
   experience_years: null,
   education_level: '',
-  job_title_id: null,
+  category_id: '',
   min_years: null,
   min_salary: null,
   max_salary: null,
@@ -650,17 +661,46 @@ const updateSkills = () => {
     .join(',')
 }
 
-const hasRoleFilterId = () => !!filters.value.job_title_id
+const fetchCategories = async () => {
+  try {
+    categoriesLoading.value = true
+    const res = await getCategories({
+      page: 1,
+      limit: 100,
+      locale: locale.value,
+    })
+    categoryOptions.value = res.data?.data || []
+  } catch (err) {
+    console.error('Failed to fetch categories:', err)
+    categoryOptions.value = []
+  } finally {
+    categoriesLoading.value = false
+  }
+}
+
+const onCategoryFilterChange = () => {
+  roleFilterError.value = ''
+  if (!filters.value.category_id) {
+    filters.value.category_id = ''
+    filters.value.min_years = null
+  }
+}
+
+const hasCategoryFilter = () =>
+  filters.value.category_id !== null &&
+  filters.value.category_id !== undefined &&
+  filters.value.category_id !== ''
+
 const hasRoleFilterYears = () => {
   const y = filters.value.min_years
   return y !== null && y !== undefined && y !== '' && !Number.isNaN(Number(y))
 }
 
 const applyFilters = async (resetPage = true) => {
-  const hasId = hasRoleFilterId()
+  const hasId = hasCategoryFilter()
   const hasYears = hasRoleFilterYears()
   if (hasId !== hasYears) {
-    roleFilterError.value = t('searchWorkers.jobTitleYearsPairRequired')
+    roleFilterError.value = t('searchWorkers.categoryYearsPairRequired')
     return
   }
   roleFilterError.value = ''
@@ -676,6 +716,9 @@ const applyFilters = async (resetPage = true) => {
     const params = {
       ...filters.value,
       page: currentPage.value,
+    }
+    if (hasId) {
+      params.category_id = Number(filters.value.category_id)
     }
 
     // Remove empty values
@@ -706,7 +749,7 @@ const resetFilters = () => {
     nationality: '',
     experience_years: null,
     education_level: '',
-    job_title_id: null,
+    category_id: '',
     min_years: null,
     min_salary: null,
     max_salary: null,
@@ -719,7 +762,6 @@ const resetFilters = () => {
   selectedSkills.value = []
   skillSearchQuery.value = ''
   nationalitySearchQuery.value = ''
-  jobTitleFilterText.value = ''
   roleFilterError.value = ''
   currentPage.value = 1
   
@@ -764,16 +806,26 @@ const formatCurrency = (amount, currencyObj) => {
 onMounted(() => {
   fetchSkills()
   fetchNationalities()
+  fetchCategories()
   
   // Load initial results if there are filters in route query
   if (Object.keys(route.query).length > 0) {
     Object.assign(filters.value, route.query)
+    if (route.query.category_id != null && route.query.category_id !== '') {
+      filters.value.category_id = String(route.query.category_id)
+    } else {
+      filters.value.category_id = ''
+    }
   }
   // Always load initial results on component mount
   applyFilters()
   
   // Add click outside listener
   document.addEventListener('click', handleClickOutside)
+})
+
+watch(locale, () => {
+  fetchCategories()
 })
 
 onBeforeUnmount(() => {

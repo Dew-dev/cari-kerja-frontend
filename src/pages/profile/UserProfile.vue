@@ -19,10 +19,11 @@ import { stripHtml } from "@/utils/richText";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
 import { matchJobTitle } from "@/services/job_titles.api";
 import JobTitleAutocomplete from "@/components/common/JobTitleAutocomplete.vue";
+import { getCategories } from "@/services/categories.api";
 
 const router = useRouter();
 const auth = useAuthStore();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const activeTab = ref(localStorage.getItem("profileActiveTab") || "profile");
 const loadingProfile = ref(false);
@@ -81,6 +82,8 @@ const editingWorkKey = ref(null);
 const savingWork = ref(false);
 const workForm = reactive({
   company_name: "",
+  category_id: "",
+  category_name: "",
   job_title: "",
   job_title_id: null,
   start_date: "",
@@ -88,6 +91,9 @@ const workForm = reactive({
   is_current: false,
   description: "",
 });
+
+const workCategoryOptions = ref([]);
+const workCategoriesLoading = ref(false);
 
 const showEducationPanel = ref(false);
 const editingEducationKey = ref(null);
@@ -600,6 +606,8 @@ function formatProfileDateRange(start, end, isCurrent) {
 function resetWorkForm() {
   editingWorkKey.value = null;
   workForm.company_name = "";
+  workForm.category_id = "";
+  workForm.category_name = "";
   workForm.job_title = "";
   workForm.job_title_id = null;
   workForm.start_date = "";
@@ -608,10 +616,52 @@ function resetWorkForm() {
   workForm.description = "";
 }
 
+function resolveWorkCategoryId(item) {
+  return (
+    item?.category_id ??
+    item?.job_title_ref?.category_id ??
+    null
+  );
+}
+
+function resolveWorkCategoryName(item) {
+  return item?.category_name || "";
+}
+
+async function loadWorkCategories() {
+  try {
+    workCategoriesLoading.value = true;
+    const res = await getCategories({
+      page: 1,
+      limit: 100,
+      locale: locale.value,
+    });
+    workCategoryOptions.value = res.data?.data || [];
+  } catch (err) {
+    console.error("Failed to load categories for work experience", err);
+    workCategoryOptions.value = [];
+  } finally {
+    workCategoriesLoading.value = false;
+  }
+}
+
+function onWorkCategoryChange() {
+  const match = workCategoryOptions.value.find(
+    (c) => Number(c.id) === Number(workForm.category_id),
+  );
+  workForm.category_name = match?.name || "";
+  // Title taxonomy is scoped to category — clear selected id on change
+  workForm.job_title_id = null;
+}
+
 function openWorkForm(item = null) {
   if (item) {
     editingWorkKey.value = profileItemKey(item);
     workForm.company_name = item.company_name || "";
+    workForm.category_id = resolveWorkCategoryId(item)
+      ? String(resolveWorkCategoryId(item))
+      : "";
+    workForm.category_name = resolveWorkCategoryName(item);
     workForm.job_title = item.job_title || item.job_title_ref?.name || "";
     workForm.job_title_id = item.job_title_id || item.job_title_ref?.id || null;
     workForm.start_date = formatDateForInput(item.start_date);
@@ -622,6 +672,7 @@ function openWorkForm(item = null) {
     resetWorkForm();
   }
   showWorkPanel.value = true;
+  loadWorkCategories();
 }
 
 function closeWorkForm() {
@@ -630,13 +681,20 @@ function closeWorkForm() {
 }
 
 async function saveWorkExp() {
-  if (!workForm.company_name.trim() || !workForm.job_title.trim()) {
+  if (
+    !workForm.company_name.trim() ||
+    !workForm.job_title.trim() ||
+    workForm.category_id === null ||
+    workForm.category_id === undefined ||
+    workForm.category_id === ""
+  ) {
     push.warning(t("profile.workFormIncomplete"));
     return;
   }
 
   const payload = {
     company_name: workForm.company_name.trim(),
+    category_id: Number(workForm.category_id),
     job_title: workForm.job_title.trim(),
     start_date: workForm.start_date || null,
     end_date: workForm.is_current ? null : workForm.end_date || null,
@@ -653,13 +711,22 @@ async function saveWorkExp() {
       (w) => profileItemKey(w) === editingWorkKey.value,
     );
 
+    const mergeSaved = (saved = {}) => ({
+      category_id:
+        saved.category_id ??
+        saved.job_title_ref?.category_id ??
+        payload.category_id,
+      category_name: saved.category_name ?? workForm.category_name ?? null,
+      job_title_id: saved.job_title_id ?? payload.job_title_id ?? null,
+      job_title_ref: saved.job_title_ref ?? null,
+    });
+
     if (existing?.id) {
       const res = await api.put(`/workers/work-exp/${existing.id}`, payload, {
         headers: authHeaders(),
       });
       const saved = res.data?.data || {};
-      Object.assign(existing, payload, {
-        job_title_id: saved.job_title_id ?? payload.job_title_id ?? null,
+      Object.assign(existing, payload, mergeSaved(saved), {
         job_title_ref: saved.job_title_ref ?? existing.job_title_ref ?? null,
       });
       push.success(t("profile.workExperienceAdded"));
@@ -675,8 +742,7 @@ async function saveWorkExp() {
         workExperiences.value[idx] = {
           ...payload,
           id: saved.id,
-          job_title_id: saved.job_title_id ?? payload.job_title_id ?? null,
-          job_title_ref: saved.job_title_ref || null,
+          ...mergeSaved(saved),
           start_date: formatDateForInput(saved.start_date || payload.start_date),
           end_date: payload.is_current
             ? null
@@ -692,8 +758,7 @@ async function saveWorkExp() {
       workExperiences.value.unshift({
         ...payload,
         id: saved.id,
-        job_title_id: saved.job_title_id ?? payload.job_title_id ?? null,
-        job_title_ref: saved.job_title_ref || null,
+        ...mergeSaved(saved),
         start_date: formatDateForInput(saved.start_date || payload.start_date),
         end_date: payload.is_current
           ? null
@@ -1450,13 +1515,16 @@ function applyParsedPersonalInfo() {
 
 async function applyParsedWorkExp(exp, { notify = true } = {}) {
   const title = exp.job_title || "";
+  const categoryId = exp.category_id || exp.job_title_ref?.category_id || null;
   let jobTitleId = exp.job_title_id || null;
   if (!jobTitleId && title) {
-    const matched = await matchJobTitle(title);
+    const matched = await matchJobTitle(title, { category_id: categoryId });
     if (matched?.id) jobTitleId = matched.id;
   }
   workExperiences.value.unshift({
     company_name: exp.company_name || "",
+    category_id: categoryId,
+    category_name: exp.category_name || "",
     job_title: title,
     job_title_id: jobTitleId,
     start_date: formatDateForInput(exp.start_date),
@@ -2609,6 +2677,9 @@ watch(activeTab, (newTab) => {
               </div>
               <p class="text-sm text-slate-600 mt-0.5">
                 {{ work.company_name || $t('profile.companyName') }}
+                <span v-if="work.category_name" class="text-slate-400">
+                  · {{ work.category_name }}
+                </span>
               </p>
               <p class="text-xs text-slate-500 mt-1">
                 {{ formatProfileDateRange(work.start_date, work.end_date, work.is_current) }}
@@ -2657,9 +2728,30 @@ watch(activeTab, (newTab) => {
               :placeholder="$t('profile.companyName')"
               class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
             />
+            <div>
+              <select
+                v-model="workForm.category_id"
+                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600"
+                @change="onWorkCategoryChange"
+              >
+                <option value="">{{ $t('profile.selectCategory') }}</option>
+                <option
+                  v-for="cat in workCategoryOptions"
+                  :key="cat.id"
+                  :value="String(cat.id)"
+                >
+                  {{ cat.name }}
+                </option>
+              </select>
+              <p v-if="workCategoriesLoading" class="text-xs text-slate-500 mt-1">
+                {{ $t('profile.loadingCategories') }}
+              </p>
+            </div>
             <JobTitleAutocomplete
               v-model="workForm.job_title"
               v-model:title-id="workForm.job_title_id"
+              :category-id="workForm.category_id"
+              require-category
               :placeholder="$t('profile.jobTitle')"
               input-class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 w-full"
             />
