@@ -953,18 +953,19 @@ const jobDetailService = {
   //   }
   // },
 
-  async fetchSimilarJobs(jobId, category) {
+  async fetchSimilarJobs(jobId, { categoryId, categoryName } = {}) {
     try {
-      // PLACEHOLDER - Ganti dengan endpoint backend Anda
-      // const response = await axios.get(`http://your-api.com/api/jobs/${jobId}/similar`, {
-      //   params: { category }
-      // });
-      // return response.data;
       const params = {
-        category: category,
         exclude_id: jobId,
         limit: 3,
       };
+      if (categoryId != null && categoryId !== "") {
+        params.category_id = categoryId;
+      }
+      // Current BE filters by translation name; keep until category_id is supported.
+      if (categoryName) {
+        params.category = categoryName;
+      }
       const response = await getJobPosts(params);
       return response.data;
 
@@ -1229,7 +1230,10 @@ const loadSimilarJobs = async () => {
     if (!job.value) return;
     const response = await jobDetailService.fetchSimilarJobs(
       jobId.value,
-      job.value.category_name,
+      {
+        categoryId: job.value.category_id,
+        categoryName: job.value.category_name,
+      },
     );
     similarJobs.value = response.data;
   } catch (error) {
