@@ -45,7 +45,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "update:titleId", "select"]);
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const inputValue = ref(props.modelValue || "");
 const options = ref([]);
@@ -100,6 +100,12 @@ watch(
   },
 );
 
+watch(locale, () => {
+  if (inputValue.value.trim().length >= 2 && !isDisabled.value) {
+    scheduleSearch(inputValue.value);
+  }
+});
+
 function emitText(text, clearId = false) {
   emit("update:modelValue", text);
   if (clearId) emit("update:titleId", null);
@@ -137,6 +143,7 @@ async function fetchOptions(q) {
       page: 1,
       limit: 20,
       category_id: hasCategory.value ? props.categoryId : undefined,
+      locale: locale.value,
     });
     if (id !== requestId) return;
     options.value = res.data?.data || [];
