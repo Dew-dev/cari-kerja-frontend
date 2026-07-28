@@ -14,6 +14,16 @@ const props = defineProps({
     type: [String, null],
     default: null,
   },
+  /** Scope autocomplete to this category (required for WE forms). */
+  categoryId: {
+    type: [Number, String, null],
+    default: null,
+  },
+  /** When true, require categoryId before searching. */
+  requireCategory: {
+    type: Boolean,
+    default: false,
+  },
   placeholder: {
     type: String,
     default: "",
@@ -47,18 +57,46 @@ const inputRef = ref(null);
 let searchTimeout = null;
 let requestId = 0;
 
-const emptyHint = computed(() =>
-  loading.value
-    ? t("jobTitles.searching")
-    : inputValue.value.trim().length < 2
-      ? t("jobTitles.typeToSearch")
-      : t("jobTitles.noResults"),
+const hasCategory = computed(
+  () =>
+    props.categoryId !== null &&
+    props.categoryId !== undefined &&
+    props.categoryId !== "",
 );
+
+const isDisabled = computed(
+  () => props.disabled || (props.requireCategory && !hasCategory.value),
+);
+
+const emptyHint = computed(() => {
+  if (props.requireCategory && !hasCategory.value) {
+    return t("jobTitles.selectCategoryFirst");
+  }
+  if (loading.value) return t("jobTitles.searching");
+  if (inputValue.value.trim().length < 2) return t("jobTitles.typeToSearch");
+  return t("jobTitles.noResults");
+});
 
 watch(
   () => props.modelValue,
   (val) => {
     if (val !== inputValue.value) inputValue.value = val || "";
+  },
+);
+
+watch(
+  () => props.categoryId,
+  () => {
+    options.value = [];
+    if (props.requireCategory && !hasCategory.value) {
+      isOpen.value = false;
+      loading.value = false;
+      clearTimeout(searchTimeout);
+      return;
+    }
+    if (inputValue.value.trim().length >= 2 && !isDisabled.value) {
+      scheduleSearch(inputValue.value);
+    }
   },
 );
 
@@ -76,6 +114,11 @@ function onInput() {
 
 function scheduleSearch(text) {
   clearTimeout(searchTimeout);
+  if (props.requireCategory && !hasCategory.value) {
+    options.value = [];
+    loading.value = false;
+    return;
+  }
   const q = String(text || "").trim();
   if (q.length < 2) {
     options.value = [];
@@ -89,7 +132,12 @@ function scheduleSearch(text) {
 async function fetchOptions(q) {
   const id = ++requestId;
   try {
-    const res = await getJobTitles({ search: q, page: 1, limit: 20 });
+    const res = await getJobTitles({
+      search: q,
+      page: 1,
+      limit: 20,
+      category_id: hasCategory.value ? props.categoryId : undefined,
+    });
     if (id !== requestId) return;
     options.value = res.data?.data || [];
   } catch {
@@ -113,6 +161,7 @@ function selectOption(opt) {
 }
 
 function onFocus() {
+  if (isDisabled.value) return;
   isOpen.value = true;
   if (inputValue.value.trim().length >= 2) scheduleSearch(inputValue.value);
 }
@@ -134,18 +183,25 @@ onBeforeUnmount(() => {
       :id="id"
       ref="inputRef"
       type="text"
-      :class="inputClass"
-      :placeholder="placeholder || t('jobTitles.placeholder')"
-      :disabled="disabled"
+      :class="[
+        inputClass,
+        isDisabled ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : '',
+      ]"
+      :placeholder="
+        requireCategory && !hasCategory
+          ? t('jobTitles.selectCategoryFirst')
+          : placeholder || t('jobTitles.placeholder')
+      "
+      :disabled="isDisabled"
       :value="inputValue"
       autocomplete="off"
       @input="inputValue = $event.target.value; onInput()"
       @focus="onFocus"
-      @click="isOpen = true"
+      @click="!isDisabled && (isOpen = true)"
     />
 
     <div
-      v-if="isOpen && !disabled"
+      v-if="isOpen && !isDisabled"
       class="absolute z-50 mt-1 w-full rounded-lg border bg-white shadow-lg max-h-56 overflow-auto"
     >
       <div
