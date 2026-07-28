@@ -92,7 +92,7 @@
                 </div>
               </div>
 
-              <!-- Category + min years — must be paired; min_years enabled after category -->
+              <!-- Category; min_years optional (enabled after category) -->
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('searchWorkers.categoryRole') }}</label>
                 <select
@@ -113,7 +113,10 @@
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">{{ $t('searchWorkers.minYearsInCategory') }}</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {{ $t('searchWorkers.minYearsInCategory') }}
+                  <span class="text-xs font-normal text-gray-400 ml-1">{{ $t('optional') }}</span>
+                </label>
                 <input
                   v-model.number="filters.min_years"
                   type="number"
@@ -123,7 +126,6 @@
                   :placeholder="$t('searchWorkers.minYearsInRolePlaceholder')"
                   class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
                 />
-                <p v-if="roleFilterError" class="text-xs text-red-600 mt-1">{{ roleFilterError }}</p>
               </div>
 
               <!-- Gender -->
@@ -488,7 +490,7 @@ import { getCategories } from '@/services/categories.api'
 
 const router = useRouter()
 const route = useRoute()
-const { t, locale } = useI18n()
+const { locale } = useI18n()
 const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 
 // State
@@ -513,7 +515,6 @@ let nationalitySearchTimeout = null
 
 const categoryOptions = ref([])
 const categoriesLoading = ref(false)
-const roleFilterError = ref('')
 
 const filters = ref({
   search: '',
@@ -679,32 +680,13 @@ const fetchCategories = async () => {
 }
 
 const onCategoryFilterChange = () => {
-  roleFilterError.value = ''
   if (!filters.value.category_id) {
     filters.value.category_id = ''
     filters.value.min_years = null
   }
 }
 
-const hasCategoryFilter = () =>
-  filters.value.category_id !== null &&
-  filters.value.category_id !== undefined &&
-  filters.value.category_id !== ''
-
-const hasRoleFilterYears = () => {
-  const y = filters.value.min_years
-  return y !== null && y !== undefined && y !== '' && !Number.isNaN(Number(y))
-}
-
 const applyFilters = async (resetPage = true) => {
-  const hasId = hasCategoryFilter()
-  const hasYears = hasRoleFilterYears()
-  if (hasId !== hasYears) {
-    roleFilterError.value = t('searchWorkers.categoryYearsPairRequired')
-    return
-  }
-  roleFilterError.value = ''
-
   try {
     loading.value = true
     
@@ -717,8 +699,25 @@ const applyFilters = async (resetPage = true) => {
       ...filters.value,
       page: currentPage.value,
     }
-    if (hasId) {
+
+    const hasCategory =
+      filters.value.category_id !== null &&
+      filters.value.category_id !== undefined &&
+      filters.value.category_id !== ''
+
+    if (hasCategory) {
       params.category_id = Number(filters.value.category_id)
+      const y = filters.value.min_years
+      const hasYears =
+        y !== null && y !== undefined && y !== '' && !Number.isNaN(Number(y))
+      if (hasYears) {
+        params.min_years = Number(y)
+      } else {
+        delete params.min_years
+      }
+    } else {
+      delete params.category_id
+      delete params.min_years
     }
 
     // Remove empty values
@@ -762,7 +761,6 @@ const resetFilters = () => {
   selectedSkills.value = []
   skillSearchQuery.value = ''
   nationalitySearchQuery.value = ''
-  roleFilterError.value = ''
   currentPage.value = 1
   
   // Reload with fresh filters
