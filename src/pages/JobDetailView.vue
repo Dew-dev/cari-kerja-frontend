@@ -721,7 +721,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
   getJobPostBenefits,
@@ -751,7 +751,7 @@ import {
 
 const COVER_LETTER_MAX = 5000;
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
@@ -953,7 +953,7 @@ const jobDetailService = {
   //   }
   // },
 
-  async fetchSimilarJobs(jobId, { categoryId, categoryName } = {}) {
+  async fetchSimilarJobs(jobId, { categoryId } = {}) {
     try {
       const params = {
         exclude_id: jobId,
@@ -961,10 +961,6 @@ const jobDetailService = {
       };
       if (categoryId != null && categoryId !== "") {
         params.category_id = categoryId;
-      }
-      // Current BE filters by translation name; keep until category_id is supported.
-      if (categoryName) {
-        params.category = categoryName;
       }
       const response = await getJobPosts(params);
       return response.data;
@@ -1232,7 +1228,6 @@ const loadSimilarJobs = async () => {
       jobId.value,
       {
         categoryId: job.value.category_id,
-        categoryName: job.value.category_name,
       },
     );
     similarJobs.value = response.data;
@@ -1335,6 +1330,10 @@ const goToJob = (id) => {
 
 // Lifecycle
 onMounted(() => {
+  loadJobDetail();
+});
+
+watch(locale, () => {
   loadJobDetail();
 });
 </script>
