@@ -3,7 +3,7 @@ import { reactive, ref, watch, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/stores/authStore.js";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const auth = useAuthStore();
 import { push } from "notivue";
 import api from "@/services/api"; // axios instance
@@ -13,6 +13,7 @@ import ContentFlaggedModal from "@/components/recruiter/ContentFlaggedModal.vue"
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import MaskedNumberInput from "@/components/common/MaskedNumberInput.vue";
 import JobTitleAutocomplete from "@/components/common/JobTitleAutocomplete.vue";
+import { getCategories } from "@/services/categories.api";
 import {
   isContentFlaggedResponse,
   isRateLimitedError,
@@ -454,7 +455,12 @@ async function fetchCategories(keyword = "") {
   try {
     categoryLoading.value = true;
 
-    const res = await api.get(`/categories/name/${keyword}`);
+    const res = await getCategories({
+      search: keyword || undefined,
+      page: 1,
+      limit: 50,
+      locale: locale.value,
+    });
     const data = res?.data?.data || [];
 
     categoryOptions.value = data.map((item) => ({
