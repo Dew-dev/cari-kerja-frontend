@@ -882,16 +882,10 @@ const jobService = {
       if (filters.categoryId != null && filters.categoryId !== "") {
         params.category_id = filters.categoryId;
         hasActiveFilters = true;
-        const match = categories.value.find(
-          (c) => Number(c.id) === Number(filters.categoryId),
-        );
-        // Current BE filters by translation name; keep until category_id is supported.
-        if (match?.name) {
-          params.category = match.name;
-        }
-      } else if (filters.category) {
-        params.category = filters.category;
-        hasActiveFilters = true;
+      }
+
+      if (filters.locale) {
+        params.locale = filters.locale;
       }
 
       if (filters.employmentTypes?.length) {
@@ -983,7 +977,6 @@ const loadJobs = async () => {
       search: searchQuery.value,
       // location: locationFilter.value,
       categoryId: selectedCategoryId.value,
-      category: legacyCategoryName.value,
       employmentTypes: selectedEmploymentTypes.value,
       province_name: selectedProvince.value,
       cities_name: selectedCity.value,
@@ -993,6 +986,7 @@ const loadJobs = async () => {
       sortBy: sortBy.value,
       page: currentPage.value,
       recommendations: recommendations.value,
+      locale: locale.value,
       limit: 5,
     });
     jobs.value = data.data;
@@ -1022,8 +1016,8 @@ const loadCategories = async () => {
     const data = await jobService.fetchCategories(locale.value);
     categories.value = data.data || [];
     resolveLegacyCategoryName();
-    // Re-run job fetch once names are available for category_id → name mapping
-    if (selectedCategoryId.value != null || legacyCategoryName.value) {
+    // After resolving legacy ?category=name → id, refresh the job list
+    if (selectedCategoryId.value != null) {
       await loadJobs();
     }
   } catch (error) {
@@ -1290,7 +1284,7 @@ const loadingHot = ref(false);
 async function fetchHotJobs() {
   loadingHot.value = true;
   try {
-    const res = await getHotJobPosts({ limit: 5, page: 1 });
+    const res = await getHotJobPosts({ limit: 5, page: 1, locale: locale.value });
     hotJobs.value = res.data?.data || [];
   } catch (err) {
     console.error("Error loading hot jobs:", err);
@@ -1307,6 +1301,8 @@ onMounted(() => {
 
 watch(locale, () => {
   loadCategories();
+  loadJobs();
+  fetchHotJobs();
 });
 </script>
 
