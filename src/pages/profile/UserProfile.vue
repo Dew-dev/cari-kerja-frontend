@@ -1518,7 +1518,10 @@ async function applyParsedWorkExp(exp, { notify = true } = {}) {
   const categoryId = exp.category_id || exp.job_title_ref?.category_id || null;
   let jobTitleId = exp.job_title_id || null;
   if (!jobTitleId && title) {
-    const matched = await matchJobTitle(title, { category_id: categoryId });
+    const matched = await matchJobTitle(title, {
+      category_id: categoryId,
+      locale: locale.value,
+    });
     if (matched?.id) jobTitleId = matched.id;
   }
   workExperiences.value.unshift({
