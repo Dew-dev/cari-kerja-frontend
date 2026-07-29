@@ -15,18 +15,20 @@
             :key="company.id"
             type="button"
             @click="goToRecruiterProfile(company)"
-            class="text-center hover:scale-105 transition duration-200 cursor-pointer"
+            class="text-center hover:opacity-90 transition duration-200 cursor-pointer group"
           >
-            <div class="h-16 flex items-center justify-center mb-2">
+            <div
+              class="h-20 w-full flex items-center justify-center mb-3 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm group-hover:border-blue-200 group-hover:shadow"
+            >
               <img
                 v-if="company.logo"
                 :src="company.logo"
                 :alt="company.name"
-                class="h-14 w-14 rounded-full object-contain"
+                class="max-h-14 max-w-full w-auto object-contain"
               />
               <span
                 v-else
-                class="text-xl font-bold text-blue-600 bg-blue-50 rounded-full h-14 w-14 flex items-center justify-center"
+                class="text-lg font-bold text-blue-600 bg-blue-50 rounded-md h-14 w-14 flex items-center justify-center"
               >
                 {{ getInitials(company.name) }}
               </span>

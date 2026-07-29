@@ -100,17 +100,21 @@
                 class="bg-white rounded-lg shadow hover:shadow-lg transition-all p-4 text-left group"
               >
                 <div class="flex items-center gap-3">
-                  <img
-                    v-if="getAvatarUrl(recruiter)"
-                    :src="getAvatarUrl(recruiter)"
-                    :alt="recruiter.company_name || recruiter.name"
-                    class="h-12 w-12 rounded-full object-contain"
-                  />
                   <div
-                    v-else
-                    class="h-12 w-12 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center"
+                    class="h-14 w-20 shrink-0 flex items-center justify-center rounded-lg border border-gray-200 bg-white px-2 py-1.5"
                   >
-                    {{ getInitials(recruiter.company_name || recruiter.name || "Company") }}
+                    <img
+                      v-if="getAvatarUrl(recruiter)"
+                      :src="getAvatarUrl(recruiter)"
+                      :alt="recruiter.company_name || recruiter.name"
+                      class="max-h-10 max-w-full w-auto object-contain"
+                    />
+                    <div
+                      v-else
+                      class="h-10 w-10 rounded-md bg-blue-50 text-blue-600 font-bold flex items-center justify-center text-sm"
+                    >
+                      {{ getInitials(recruiter.company_name || recruiter.name || "Company") }}
+                    </div>
                   </div>
 
                   <div class="min-w-0">
