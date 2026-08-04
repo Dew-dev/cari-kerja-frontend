@@ -20,16 +20,58 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Verify deploy secrets
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+        run: |
+          set -euo pipefail
+          missing=0
+          if [ -z "${VPS_HOST}" ]; then echo "::error::Missing repository secret VPS_HOST"; missing=1; fi
+          if [ -z "${VPS_USER}" ]; then echo "::error::Missing repository secret VPS_USER"; missing=1; fi
+          if [ -z "${VPS_PORT}" ]; then echo "::error::Missing repository secret VPS_PORT"; missing=1; fi
+          if [ -z "${VPS_SSH_PRIVATE_KEY}" ] && [ -z "${VPS_PASSWORD}" ]; then
+            echo "::error::Missing auth secret: set VPS_SSH_PRIVATE_KEY (preferred, reuse BE key) or VPS_PASSWORD"
+            missing=1
+          fi
+          if [ "$missing" -ne 0 ]; then
+            echo "Add secrets at: Settings → Secrets and variables → Actions"
+            echo "Copy VPS_* from cari-kerja-backend, or see docs/DEPLOY.md"
+            exit 1
+          fi
+          echo "Deploy secrets present (values not printed)"
+
+      - name: Probe VPS SSH port
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          set -euo pipefail
+          echo "Probing ${#VPS_HOST}-char host on port ${VPS_PORT} (values redacted)"
+          for i in 1 2 3 4 5 6; do
+            if timeout 10 bash -c "echo >/dev/tcp/${VPS_HOST}/${VPS_PORT}" 2>/dev/null; then
+              echo "TCP probe OK (attempt $i)"
+              exit 0
+            fi
+            echo "TCP probe failed (attempt $i); retrying..."
+            sleep 5
+          done
+          echo "::error::Cannot reach VPS SSH from GitHub runner (dial blocked/timeout). Confirm VPS_HOST/VPS_PORT match cari-kerja-backend secrets and firewall allows GitHub Actions egress."
+          exit 1
+
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           protocol: tcp
-          timeout: 2m
-          script_stop: true
+          timeout: 5m
           command_timeout: 25m
           script: |
             set -euo pipefail
@@ -38,10 +80,10 @@ jobs:
             SCRIPT_SRC="${PROJECT_DIR}/${FRONTEND_DIR}/scripts/deploy/staging-fe-remote.sh"
 
             cd "$PROJECT_DIR"
-            # Ensure latest develop (includes deploy script) is on disk before invoking it.
+            # Sync to origin/develop even if VPS checkout has local edits.
             git -C "$FRONTEND_DIR" fetch origin
             git -C "$FRONTEND_DIR" checkout develop
-            git -C "$FRONTEND_DIR" pull --ff-only origin develop
+            git -C "$FRONTEND_DIR" reset --hard origin/develop
 
             if [[ -f "$SCRIPT_SRC" ]]; then
               chmod +x "$SCRIPT_SRC"
