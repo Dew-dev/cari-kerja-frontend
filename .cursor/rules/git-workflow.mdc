@@ -1,5 +1,5 @@
 ---
-description: Git workflow — branch baru dari develop, commit granular, Conventional Commits, jangan push ke develop
+description: Git workflow — branch dari develop, commit otomatis, Conventional Commits, auto PR ke develop
 alwaysApply: true
 ---
 
@@ -19,4 +19,12 @@ Aturan ini mewajibkan setiap perubahan kode atau penambahan fitur agar mematuhi 
    - `style:` untuk perubahan formatting (spasi, titik koma, dsb) yang tidak mengubah logika kode.
    - `refactor:` untuk perubahan kode yang tidak menambah fitur atau memperbaiki bug.
    - `chore:` untuk pembaruan pada proses build atau alat bantu lainnya.
-4. **Tidak Mendorong Langsung ke Develop**: Agen tidak boleh melakukan push langsung ke branch utama (`develop`). Push hanya dilakukan pada branch fitur, kemudian berikan instruksi kepada user (atau buatkan pull request jika diinstruksikan) untuk melakukan merge/review ke branch `develop`.
+4. **Tidak Mendorong Langsung ke Develop**: Agen tidak boleh melakukan push langsung ke branch utama (`develop`). Push hanya pada branch fitur/fix/chore.
+5. **Auto commit + PR (wajib, tanpa bertanya)**: Setelah pekerjaan pada task selesai (fitur, fix, chore, docs, rules), agen **harus otomatis**:
+   - Commit perubahan dengan Conventional Commits (granular bila masuk akal)
+   - Push branch ke remote (`-u` bila branch baru)
+   - Buat pull request ke `develop` dengan `gh pr create` (summary + test plan)
+   - Balas user dengan **link PR**
+   - **Jangan pernah bertanya** apakah perlu commit/PR — default-nya selalu lakukan
+   - Kesalahan boleh di-review di PR atau di-rollback setelah merge; itu tanggung jawab user, bukan alasan menunda ship
+6. **Pengecualian**: Jangan commit `.env`, private key, credentials, atau file rahasia lain. Jangan push ke `develop`/`main` secara langsung.

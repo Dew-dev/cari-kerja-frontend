@@ -18,17 +18,17 @@
             class="text-center hover:opacity-90 transition duration-200 cursor-pointer group"
           >
             <div
-              class="h-20 w-full flex items-center justify-center mb-3 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm group-hover:border-blue-200 group-hover:shadow"
+              class="mb-3 flex aspect-[2/1] w-full items-center justify-center rounded-lg border border-gray-200 bg-white p-3 shadow-sm group-hover:border-blue-200 group-hover:shadow"
             >
               <img
                 v-if="company.logo"
                 :src="company.logo"
                 :alt="company.name"
-                class="max-h-14 max-w-full w-auto object-contain"
+                class="h-auto max-h-full w-auto max-w-full object-contain object-center"
               />
               <span
                 v-else
-                class="text-lg font-bold text-blue-600 bg-blue-50 rounded-md h-14 w-14 flex items-center justify-center"
+                class="flex h-12 w-12 items-center justify-center rounded-md bg-blue-50 text-lg font-bold text-blue-600"
               >
                 {{ getInitials(company.name) }}
               </span>
