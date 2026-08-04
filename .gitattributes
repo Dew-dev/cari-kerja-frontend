@@ -1,0 +1,2 @@
+# Keep deploy shell scripts LF on Windows checkouts / CI.
+*.sh text eol=lf
