@@ -19,9 +19,10 @@ cd "$PROJECT_DIR"
 
 echo ""
 echo "[1/4] Updating frontend repository ($BRANCH)..."
+# Staging checkout must match origin; discard local VPS edits (e.g. manual Dockerfile tweaks).
 git -C "$FRONTEND_DIR" fetch origin
 git -C "$FRONTEND_DIR" checkout "$BRANCH"
-git -C "$FRONTEND_DIR" pull --ff-only origin "$BRANCH"
+git -C "$FRONTEND_DIR" reset --hard "origin/$BRANCH"
 echo "Revision: $(git -C "$FRONTEND_DIR" rev-parse --short HEAD)"
 
 echo ""
