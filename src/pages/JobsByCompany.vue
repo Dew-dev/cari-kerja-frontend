@@ -101,17 +101,17 @@
               >
                 <div class="flex items-center gap-3">
                   <div
-                    class="h-14 w-20 shrink-0 flex items-center justify-center rounded-lg border border-gray-200 bg-white px-2 py-1.5"
+                    class="flex h-16 w-28 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white p-2"
                   >
                     <img
                       v-if="getAvatarUrl(recruiter)"
                       :src="getAvatarUrl(recruiter)"
                       :alt="recruiter.company_name || recruiter.name"
-                      class="max-h-10 max-w-full w-auto object-contain"
+                      class="h-auto max-h-full w-auto max-w-full object-contain object-center"
                     />
                     <div
                       v-else
-                      class="h-10 w-10 rounded-md bg-blue-50 text-blue-600 font-bold flex items-center justify-center text-sm"
+                      class="flex h-10 w-10 items-center justify-center rounded-md bg-blue-50 text-sm font-bold text-blue-600"
                     >
                       {{ getInitials(recruiter.company_name || recruiter.name || "Company") }}
                     </div>
@@ -141,17 +141,19 @@
               class="w-full overflow-hidden rounded-xl border border-gray-200 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-lg group"
             >
               <div class="flex items-start gap-6">
-                <!-- Logo/Avatar Section -->
-                <div class="shrink-0">
+                <!-- Logo: landscape frame + object-contain so full mark is visible -->
+                <div
+                  class="flex h-20 w-32 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white p-2.5 ring-1 ring-gray-100"
+                >
                   <img
                     v-if="getAvatarUrl(company)"
                     :src="getAvatarUrl(company)"
                     :alt="company.company_name || company.name"
-                    class="h-20 w-20 rounded-xl object-contain ring-1 ring-gray-200"
+                    class="h-auto max-h-full w-auto max-w-full object-contain object-center"
                   />
                   <div
                     v-else
-                    class="h-20 w-20 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 font-bold text-xl flex items-center justify-center"
+                    class="flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 text-xl font-bold text-blue-600"
                   >
                     {{ getInitials(company.company_name || company.name || "Company") }}
                   </div>
