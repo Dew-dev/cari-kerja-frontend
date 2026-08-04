@@ -20,16 +20,40 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Verify deploy secrets
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+        run: |
+          set -euo pipefail
+          missing=0
+          if [ -z "${VPS_HOST}" ]; then echo "::error::Missing repository secret VPS_HOST"; missing=1; fi
+          if [ -z "${VPS_USER}" ]; then echo "::error::Missing repository secret VPS_USER"; missing=1; fi
+          if [ -z "${VPS_PORT}" ]; then echo "::error::Missing repository secret VPS_PORT"; missing=1; fi
+          if [ -z "${VPS_SSH_PRIVATE_KEY}" ] && [ -z "${VPS_PASSWORD}" ]; then
+            echo "::error::Missing auth secret: set VPS_SSH_PRIVATE_KEY (preferred, reuse BE key) or VPS_PASSWORD"
+            missing=1
+          fi
+          if [ "$missing" -ne 0 ]; then
+            echo "Add secrets at: Settings → Secrets and variables → Actions"
+            echo "Copy VPS_* from cari-kerja-backend, or see docs/DEPLOY.md"
+            exit 1
+          fi
+          echo "Deploy secrets present (values not printed)"
+
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           protocol: tcp
           timeout: 2m
-          script_stop: true
           command_timeout: 25m
           script: |
             set -euo pipefail

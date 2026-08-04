@@ -58,7 +58,10 @@ Repo → **Settings → Secrets and variables → Actions** → **New repository
 | `VPS_HOST` | VPS hostname or IP (same as backend) |
 | `VPS_PORT` | SSH port (usually `22`) |
 | `VPS_USER` | SSH user (usually `root`) |
-| `VPS_SSH_PRIVATE_KEY` | Full private key PEM (reuse backend staging deploy key) |
+| `VPS_SSH_PRIVATE_KEY` | Full private key PEM (preferred; reuse backend staging deploy key) |
+| `VPS_PASSWORD` | Optional fallback if key is not available yet |
+
+Deploy fails fast with `missing server host` / clear secret errors when these are empty. Copy the four `VPS_*` secrets from `cari-kerja-backend` into this repo (Settings → Secrets and variables → Actions).
 
 ### 3. Compose build args (VPS)
 
