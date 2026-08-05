@@ -77,16 +77,18 @@ function onError(event) {
 </script>
 
 <style scoped>
-/* Fixed frame + object-fit:contain so the full logo is always visible (never cropped). */
+/*
+  Logos must never crop.
+  Avoid flex+img width/height 100%: intrinsic min-size can exceed the frame,
+  then overflow:hidden clips the mark. Absolute + max-width/max-height fixes that.
+*/
 .company-logo {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
   box-sizing: border-box;
   background: #fff;
-  overflow: hidden;
+  /* overflow visible — do not clip; image is constrained by max-* below */
+  overflow: visible;
 }
 
 .company-logo--bordered {
@@ -94,16 +96,24 @@ function onError(event) {
 }
 
 .company-logo__img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: block;
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  width: auto;
+  height: auto;
+  max-width: calc(100% - 0.7rem);
+  max-height: calc(100% - 0.7rem);
   object-fit: contain;
   object-position: center;
 }
 
 .company-logo__fallback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,48 +126,47 @@ function onError(event) {
   font-size: 0.875rem;
 }
 
-/* Landscape frames — wide enough for typical company wordmarks */
 .company-logo--sm {
-  width: 4.5rem;
-  height: 2.75rem;
-  padding: 0.35rem;
+  width: 5rem;
+  height: 3rem;
+}
+
+.company-logo--sm .company-logo__img {
+  max-width: calc(100% - 0.5rem);
+  max-height: calc(100% - 0.5rem);
 }
 
 .company-logo--md {
-  width: 7rem;
-  height: 4rem;
-  padding: 0.5rem;
+  width: 7.5rem;
+  height: 4.25rem;
 }
 
 .company-logo--lg {
-  width: 9rem;
-  height: 5rem;
-  padding: 0.6rem;
+  width: 10rem;
+  height: 5.5rem;
 }
 
 .company-logo--hero {
-  width: 10rem;
-  height: 5.5rem;
-  padding: 0.75rem;
+  width: 11rem;
+  height: 6rem;
 }
 
 @media (min-width: 640px) {
   .company-logo--hero {
-    width: 11.5rem;
-    height: 6.5rem;
+    width: 13rem;
+    height: 7rem;
   }
 }
 
 .company-logo--card {
   width: 100%;
   height: 10rem;
-  padding: 0.75rem;
 }
 
 @media (min-width: 640px) {
   .company-logo--card {
-    width: 8rem;
-    height: 5.5rem;
+    width: 9rem;
+    height: 6rem;
   }
 }
 
@@ -165,16 +174,14 @@ function onError(event) {
   width: 100%;
   aspect-ratio: 2 / 1;
   height: auto;
-  padding: 0.75rem;
 }
 
-.company-logo--fluid .company-logo__img {
-  position: absolute;
-  inset: 0.75rem;
-  width: auto;
-  height: auto;
-  max-width: calc(100% - 1.5rem);
-  max-height: calc(100% - 1.5rem);
-  margin: auto;
+.company-logo--fluid .company-logo__img,
+.company-logo--card .company-logo__img,
+.company-logo--lg .company-logo__img,
+.company-logo--hero .company-logo__img,
+.company-logo--md .company-logo__img {
+  max-width: calc(100% - 1rem);
+  max-height: calc(100% - 1rem);
 }
 </style>
