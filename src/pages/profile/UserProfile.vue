@@ -13,6 +13,7 @@ import MaskedNumberInput from "@/components/common/MaskedNumberInput.vue";
 import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
 import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
 import TelegramNotificationsCard from "@/components/worker/TelegramNotificationsCard.vue";
+import CompanyLogo from "@/components/common/CompanyLogo.vue";
 import { displayEmail } from "@/utils/authFlags";
 import { isContentRejectedError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors";
 import { stripHtml } from "@/utils/richText";
@@ -3432,15 +3433,15 @@ watch(activeTab, (newTab) => {
           >
             <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
               <div class="shrink-0 self-start">
-                <img
+                <CompanyLogo
+                  size="md"
+                  rounded="rounded-xl"
                   :src="
                     (item.job?.avatar_url || item.avatar_url)
                       ? `${linkStorageUrl}${item.job?.avatar_url || item.avatar_url}`
-                      : '/company-default-image.png'
+                      : ''
                   "
-                  @error="(e) => (e.target.src = '/company-default-image.png')"
-                  :alt="item.job?.company_name || item.company_name"
-                  class="w-14 h-14 md:w-16 md:h-16 rounded-xl object-cover border border-slate-100"
+                  :alt="item.job?.company_name || item.company_name || 'Company'"
                 />
               </div>
               <div class="flex-1 min-w-0">
@@ -3581,15 +3582,11 @@ watch(activeTab, (newTab) => {
           >
             <div class="flex flex-col sm:flex-row gap-3 md:gap-4">
               <div class="shrink-0 self-start">
-                <img
-                  :src="
-                    job.recruiter_avatar_url
-                      ? `${linkStorageUrl}${job.recruiter_avatar_url}`
-                      : '/company-default-image.png'
-                  "
-                  @error="(e) => (e.target.src = '/company-default-image.png')"
-                  :alt="job.company_name"
-                  class="w-14 h-14 md:w-16 md:h-16 rounded-xl object-cover border border-slate-100"
+                <CompanyLogo
+                  size="md"
+                  rounded="rounded-xl"
+                  :src="job.recruiter_avatar_url ? `${linkStorageUrl}${job.recruiter_avatar_url}` : ''"
+                  :alt="job.company_name || 'Company'"
                 />
               </div>
               <div class="flex-1 min-w-0">

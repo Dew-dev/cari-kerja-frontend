@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import api from "@/services/api"
 import RichTextContent from "@/components/common/RichTextContent.vue"
+import CompanyLogo from "@/components/common/CompanyLogo.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -74,17 +75,14 @@ onMounted(fetchRecruiter)
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5">
 
           <!-- Company Logo -->
-          <div class="h-20 w-20 sm:h-28 sm:w-28 rounded-xl overflow-hidden shadow-lg bg-white shrink-0">
-            <img
-              v-if="recruiter.avatar_url"
-              :src="`${fileStorageUrl}${recruiter.avatar_url}`"
-              class="h-full w-full object-contain"
-              :alt="recruiter.company_name"
-            />
-            <div v-else class="h-full w-full flex items-center justify-center text-blue-600 text-3xl font-bold">
-              {{ recruiter.company_name?.charAt(0) }}
-            </div>
-          </div>
+          <CompanyLogo
+            class="shadow-lg"
+            size="hero"
+            rounded="rounded-xl"
+            :src="recruiter.avatar_url ? `${fileStorageUrl}${recruiter.avatar_url}` : ''"
+            :alt="recruiter.company_name"
+            fallback="initials"
+          />
 
           <!-- Info -->
           <div class="flex-1 min-w-0">

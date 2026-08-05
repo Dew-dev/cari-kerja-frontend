@@ -40,17 +40,12 @@
           <!-- Job Header Card -->
           <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex gap-4 mb-6">
-              <div class="shrink-0">
-                <img
-                  :src="
-                    fileStorageUrl + job.avatar_url ||
-                    '/company-default-image.png'
-                  "
-                  @error="(e) => (e.target.src = '/company-default-image.png')"
-                  :alt="job.company_name"
-                  class="w-20 h-20 rounded-lg shadow-sm object-contain"
-                />
-              </div>
+              <CompanyLogo
+                class="shadow-sm"
+                size="lg"
+                :src="job.avatar_url ? fileStorageUrl + job.avatar_url : ''"
+                :alt="job.company_name"
+              />
               <div class="flex-1">
                 <h1 class="text-2xl font-bold text-gray-900 mb-2">
                   {{ job.title }}
@@ -301,14 +296,11 @@
               {{ $t("aboutCompany") }}
             </h3>
             <div class="flex items-center gap-3 mb-4">
-              <img
-                :src="
-                  fileStorageUrl + job.avatar_url ||
-                  '/company-default-image.png'
-                "
-                @error="(e) => (e.target.src = '/company-default-image.png')"
+              <CompanyLogo
+                class="shadow-sm"
+                size="md"
+                :src="job.avatar_url ? fileStorageUrl + job.avatar_url : ''"
                 :alt="job.company_name"
-                class="w-16 h-16 rounded-lg shadow-sm object-contain"
               />
               <div>
                 <h4 class="font-semibold text-gray-900">
@@ -741,6 +733,7 @@ import { push } from "notivue";
 import { useAuthStore } from "../stores/authStore";
 import api from "@/services/api";
 import TurnstileWidget from "@/components/common/TurnstileWidget.vue";
+import CompanyLogo from "@/components/common/CompanyLogo.vue";
 import RichTextContent from "@/components/common/RichTextContent.vue";
 import {
   isCaptchaError,

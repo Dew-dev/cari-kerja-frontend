@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { getHotJobPosts } from "@/services/jobposts.api";
+import CompanyLogo from "@/components/common/CompanyLogo.vue";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -96,14 +97,13 @@ function timeAgo(date) {
           <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
             
             <!-- Company Logo -->
-            <div class="w-16 h-16 bg-white border border-gray-150 rounded-xl flex items-center justify-center p-2 flex-shrink-0 shadow-2xs">
-              <img
-                :src="job.avatar_url ? fileStorageUrl + job.avatar_url : '/company-default-image.png'"
-                @error="(e) => (e.target.src = '/company-default-image.png')"
-                :alt="job.company_name"
-                class="max-w-full max-h-full object-contain"
-              />
-            </div>
+            <CompanyLogo
+              class="shadow-2xs"
+              size="md"
+              rounded="rounded-xl"
+              :src="job.avatar_url ? fileStorageUrl + job.avatar_url : ''"
+              :alt="job.company_name"
+            />
 
             <!-- Job details -->
             <div class="flex-1 min-w-0">

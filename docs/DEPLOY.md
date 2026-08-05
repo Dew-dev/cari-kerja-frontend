@@ -25,7 +25,7 @@ Staging API (do **not** deploy from this repo): https://be-stage.cari-kerja.co.i
 
 - Runs on push to `develop` and via **Actions → Deploy Staging → Run workflow**
 - Uses **repository secrets** only (no GitHub Environment)
-- SSHs into the VPS and runs [`scripts/deploy/staging-fe-remote.sh`](../scripts/deploy/staging-fe-remote.sh):
+- SSHs into the VPS (connect timeout 5m; no hard TCP probe — runners to this VPS are occasionally flaky) and runs [`scripts/deploy/staging-fe-remote.sh`](../scripts/deploy/staging-fe-remote.sh):
   1. `git fetch` + `reset --hard origin/develop` on `fe-stage-cari-kerja` (discards local VPS edits)
   2. `docker compose up -d --build fe-stage` (FE only)
   3. Soft `docker image prune -f` (no aggressive `-a` / builder prune)
