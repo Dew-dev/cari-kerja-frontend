@@ -128,7 +128,7 @@
               :key="company.id"
               type="button"
               @click="goToRecruiterProfile(company)"
-              class="w-full overflow-hidden rounded-xl border border-gray-200 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-lg group"
+              class="w-full rounded-xl border border-gray-200 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-lg group"
             >
               <div class="flex items-start gap-6">
                 <CompanyLogo
