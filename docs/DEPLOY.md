@@ -65,7 +65,14 @@ Deploy fails fast with `missing server host` / clear secret errors when these ar
 
 ### 3. Compose build args (VPS)
 
-Vite embeds `VITE_*` at **image build** time. Ensure `fe-stage` in `/var/www/cari-kerja/docker-compose.yml` passes args such as:
+Vite embeds `VITE_*` at **image build** time. Staging deploy script always passes:
+
+- `VITE_API_BASE_URL=https://be-stage.cari-kerja.co.id/api/v1`
+- `VITE_FILE_STORAGE_URL=https://be-stage.cari-kerja.co.id`
+- `VITE_SOCKET_URL=https://be-stage.cari-kerja.co.id`
+- `VITE_APP_NAME=cari-kerja.id`
+
+Optionally mirror the same under `fe-stage.build.args` in `/var/www/cari-kerja/docker-compose.yml` so manual `docker compose up --build fe-stage` stays correct:
 
 ```yaml
 fe-stage:
@@ -76,9 +83,9 @@ fe-stage:
       VITE_FILE_STORAGE_URL: https://be-stage.cari-kerja.co.id
       VITE_SOCKET_URL: https://be-stage.cari-kerja.co.id
       VITE_APP_NAME: cari-kerja.id
-      # VITE_TURNSTILE_SITE_KEY: <optional>
 ```
 
+If build args are missing, the SPA falls back to relative `/api/v1` on the FE host and **shows no data**.
 ### 4. Smoke test
 
 1. Add the four secrets above (reuse BE key).
