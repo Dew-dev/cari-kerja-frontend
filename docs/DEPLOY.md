@@ -103,6 +103,21 @@ bash /var/www/cari-kerja/fe-stage-cari-kerja/scripts/deploy/staging-fe-remote.sh
 
 Prefer this FE-only script over the older all-in-one `/var/www/cari-kerja/deploy-stage.sh`.
 
+## Browser cache (setelah deploy)
+
+Agar **semua browser** (Edge, Chrome, Brave, Firefox) selalu mengambil UI terbaru setelah deploy:
+
+| Resource | Cache policy | Alasan |
+|----------|--------------|--------|
+| `index.html` (dan SPA fallback) | `Cache-Control: no-store, no-cache, must-revalidate, max-age=0` (+ `Pragma` / `Expires`) | Entry HTML tidak boleh disimpan; harus fetch ulang tiap buka/siteload |
+| `/assets/*` (JS/CSS Vite ber-hash) | `public, max-age=31536000, immutable` | Nama file berubah tiap build → aman di-cache keras |
+
+Setiap build juga menyisipkan `<meta name="build-id" …>` di `index.html` supaya isi HTML selalu unik antar deploy.
+
+**Satu kali saja** untuk browser yang sempat menyimpan HTML lama *sebelum* header ini aktif (mis. Edge): hard refresh (`Ctrl+Shift+R`) atau *Settings → Privacy → Clear browsing data → Cached images and files* untuk `fe-stage.cari-kerja.co.id`. Setelah itu reload biasa cukup.
+
+Pastikan nginx host (reverse proxy TLS di VPS) **tidak** mengaktifkan `proxy_cache` untuk `fe-stage`, dan meneruskan header `Cache-Control` dari container.
+
 ## Docker notes
 
 - Image builds from context `./fe-stage-cari-kerja` using this repo’s `Dockerfile` (Node 22 builder → nginx).
