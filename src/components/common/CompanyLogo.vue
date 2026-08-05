@@ -7,19 +7,21 @@
       bordered ? 'company-logo--bordered' : '',
     ]"
   >
-    <img
-      v-if="displaySrc"
-      :src="displaySrc"
-      :alt="alt"
-      class="company-logo__img"
-      @error="onError"
-    />
-    <span
-      v-else
-      class="company-logo__fallback"
-    >
-      {{ initials }}
-    </span>
+    <div class="company-logo__frame">
+      <img
+        v-if="displaySrc"
+        :src="displaySrc"
+        :alt="alt"
+        class="company-logo__img"
+        @error="onError"
+      />
+      <span
+        v-else
+        class="company-logo__fallback"
+      >
+        {{ initials }}
+      </span>
+    </div>
   </div>
 </template>
 
@@ -78,47 +80,56 @@ function onError(event) {
 
 <style scoped>
 /*
-  Logos must never crop.
-  Avoid flex+img width/height 100%: intrinsic min-size can exceed the frame,
-  then overflow:hidden clips the mark. Absolute + max-width/max-height fixes that.
+  Full logo always visible inside the wrapper.
+  Outer = fixed box + padding. Inner frame fills content box.
+  Img uses width/height 100% + object-fit:contain so the mark scales
+  down to the wrapper width/height and is never cropped.
 */
 .company-logo {
-  position: relative;
-  flex-shrink: 0;
   box-sizing: border-box;
+  flex-shrink: 1;
+  min-width: 0;
+  min-height: 0;
+  /* Never exceed the parent wrapper — this was causing visible “cropping”. */
+  max-width: 100%;
+  max-height: 100%;
+  padding: 0.5rem;
   background: #fff;
-  /* overflow visible — do not clip; image is constrained by max-* below */
-  overflow: visible;
 }
 
 .company-logo--bordered {
   border: 1px solid #e5e7eb;
 }
 
-.company-logo__img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.company-logo__frame {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
   display: block;
-  width: auto;
-  height: auto;
-  max-width: calc(100% - 0.7rem);
-  max-height: calc(100% - 0.7rem);
+  position: relative;
+}
+
+.company-logo__img {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
   object-fit: contain;
-  object-position: center;
+  object-position: center center;
 }
 
 .company-logo__fallback {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 100%;
+  height: 100%;
   border-radius: 0.375rem;
   background: #eff6ff;
   color: #2563eb;
@@ -127,46 +138,44 @@ function onError(event) {
 }
 
 .company-logo--sm {
-  width: 5rem;
-  height: 3rem;
-}
-
-.company-logo--sm .company-logo__img {
-  max-width: calc(100% - 0.5rem);
-  max-height: calc(100% - 0.5rem);
+  width: 5.5rem;
+  height: 3.25rem;
+  padding: 0.35rem;
 }
 
 .company-logo--md {
-  width: 7.5rem;
-  height: 4.25rem;
+  width: 8rem;
+  height: 4.5rem;
 }
 
 .company-logo--lg {
-  width: 10rem;
-  height: 5.5rem;
-}
-
-.company-logo--hero {
   width: 11rem;
   height: 6rem;
 }
 
+.company-logo--hero {
+  width: 12rem;
+  height: 6.5rem;
+  padding: 0.65rem;
+}
+
 @media (min-width: 640px) {
   .company-logo--hero {
-    width: 13rem;
-    height: 7rem;
+    width: 14rem;
+    height: 7.5rem;
   }
 }
 
 .company-logo--card {
   width: 100%;
   height: 10rem;
+  padding: 0.75rem;
 }
 
 @media (min-width: 640px) {
   .company-logo--card {
-    width: 9rem;
-    height: 6rem;
+    width: 10rem;
+    height: 6.5rem;
   }
 }
 
@@ -174,14 +183,6 @@ function onError(event) {
   width: 100%;
   aspect-ratio: 2 / 1;
   height: auto;
-}
-
-.company-logo--fluid .company-logo__img,
-.company-logo--card .company-logo__img,
-.company-logo--lg .company-logo__img,
-.company-logo--hero .company-logo__img,
-.company-logo--md .company-logo__img {
-  max-width: calc(100% - 1rem);
-  max-height: calc(100% - 1rem);
+  padding: 0.75rem;
 }
 </style>
