@@ -100,22 +100,12 @@
                 class="bg-white rounded-lg shadow hover:shadow-lg transition-all p-4 text-left group"
               >
                 <div class="flex items-center gap-3">
-                  <div
-                    class="flex h-16 w-28 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white p-2"
-                  >
-                    <img
-                      v-if="getAvatarUrl(recruiter)"
-                      :src="getAvatarUrl(recruiter)"
-                      :alt="recruiter.company_name || recruiter.name"
-                      class="h-auto max-h-full w-auto max-w-full object-contain object-center"
-                    />
-                    <div
-                      v-else
-                      class="flex h-10 w-10 items-center justify-center rounded-md bg-blue-50 text-sm font-bold text-blue-600"
-                    >
-                      {{ getInitials(recruiter.company_name || recruiter.name || "Company") }}
-                    </div>
-                  </div>
+                  <CompanyLogo
+                    size="md"
+                    :src="getAvatarUrl(recruiter)"
+                    :alt="recruiter.company_name || recruiter.name || 'Company'"
+                    fallback="initials"
+                  />
 
                   <div class="min-w-0">
                     <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition line-clamp-1">
@@ -141,23 +131,14 @@
               class="w-full overflow-hidden rounded-xl border border-gray-200 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-lg group"
             >
               <div class="flex items-start gap-6">
-                <!-- Logo: landscape frame + object-contain so full mark is visible -->
-                <div
-                  class="flex h-20 w-32 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white p-2.5 ring-1 ring-gray-100"
-                >
-                  <img
-                    v-if="getAvatarUrl(company)"
-                    :src="getAvatarUrl(company)"
-                    :alt="company.company_name || company.name"
-                    class="h-auto max-h-full w-auto max-w-full object-contain object-center"
-                  />
-                  <div
-                    v-else
-                    class="flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 text-xl font-bold text-blue-600"
-                  >
-                    {{ getInitials(company.company_name || company.name || "Company") }}
-                  </div>
-                </div>
+                <CompanyLogo
+                  class="ring-1 ring-gray-100"
+                  size="lg"
+                  rounded="rounded-xl"
+                  :src="getAvatarUrl(company)"
+                  :alt="company.company_name || company.name || 'Company'"
+                  fallback="initials"
+                />
 
                 <!-- Main Content Section -->
                 <div class="min-w-0 flex-1">
@@ -267,6 +248,7 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import CompanyLogo from "@/components/common/CompanyLogo.vue";
 import {
   getRecruiterCompanies,
   getRecruitersGroupedByIndustry,
@@ -316,15 +298,6 @@ function normalizeGroups(payload) {
   }
 
   return [];
-}
-
-function getInitials(name) {
-  return String(name || "C")
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
 }
 
 function getAvatarUrl(recruiter) {

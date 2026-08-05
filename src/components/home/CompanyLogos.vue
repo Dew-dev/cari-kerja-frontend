@@ -18,20 +18,15 @@
             class="text-center hover:opacity-90 transition duration-200 cursor-pointer group"
           >
             <div
-              class="mb-3 flex aspect-[2/1] w-full items-center justify-center rounded-lg border border-gray-200 bg-white p-3 shadow-sm group-hover:border-blue-200 group-hover:shadow"
+              class="mb-3"
             >
-              <img
-                v-if="company.logo"
+              <CompanyLogo
+                class="shadow-sm group-hover:border-blue-200 group-hover:shadow"
+                size="fluid"
                 :src="company.logo"
                 :alt="company.name"
-                class="h-auto max-h-full w-auto max-w-full object-contain object-center"
+                fallback="initials"
               />
-              <span
-                v-else
-                class="flex h-12 w-12 items-center justify-center rounded-md bg-blue-50 text-lg font-bold text-blue-600"
-              >
-                {{ getInitials(company.name) }}
-              </span>
             </div>
             <div class="text-sm font-semibold text-gray-700 line-clamp-2">{{ company.name }}</div>
           </button>
@@ -59,6 +54,7 @@
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { getRecruitersGroupedByIndustry } from "@/services/recruiters.api";
+import CompanyLogo from "@/components/common/CompanyLogo.vue";
 
 const router = useRouter();
 const loading = ref(false);
@@ -128,15 +124,6 @@ async function fetchCompanies() {
   } finally {
     loading.value = false;
   }
-}
-
-function getInitials(name) {
-  return String(name || "C")
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
 }
 
 function goToRecruiterProfile(company) {

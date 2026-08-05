@@ -324,14 +324,12 @@
               >
                 <div>
                   <div class="flex items-start justify-between gap-2 mb-3">
-                    <div class="w-10 h-10 bg-white border border-gray-150 rounded-lg flex items-center justify-center p-1.5 flex-shrink-0 shadow-2xs">
-                      <img
-                        :src="job.avatar_url ? fileStorageUrl + job.avatar_url : '/company-default-image.png'"
-                        @error="(e) => (e.target.src = '/company-default-image.png')"
-                        :alt="job.company_name"
-                        class="max-w-full max-h-full object-contain"
-                      />
-                    </div>
+                    <CompanyLogo
+                      class="shadow-2xs"
+                      size="sm"
+                      :src="job.avatar_url ? fileStorageUrl + job.avatar_url : ''"
+                      :alt="job.company_name"
+                    />
                     <span class="px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-extrabold rounded-full flex items-center gap-0.5 whitespace-nowrap shadow-3xs">
                       <i class="pi pi-star-fill text-[7px]"></i> HOT
                     </span>
@@ -402,23 +400,14 @@
               >
                 <!-- Mobile-first card: image on top, content below -->
                 <div class="flex flex-col gap-3">
-                  <div class="w-full sm:w-28 sm:shrink-0">
-                    <div
-                      class="w-full h-40 sm:h-20 overflow-hidden rounded shadow-sm bg-gray-50 flex items-center justify-center"
-                    >
-                      <img
-                        :src="
-                          job.avatar_url
-                            ? fileStorageUrl + job.avatar_url
-                            : '/company-default-image.png'
-                        "
-                        @error="
-                          (e) => (e.target.src = '/company-default-image.png')
-                        "
-                        :alt="job.company_name"
-                        class="max-w-full max-h-full object-contain"
-                      />
-                    </div>
+                  <div class="w-full sm:w-auto sm:shrink-0">
+                    <CompanyLogo
+                      class="shadow-sm"
+                      size="card"
+                      rounded="rounded"
+                      :src="job.avatar_url ? fileStorageUrl + job.avatar_url : ''"
+                      :alt="job.company_name"
+                    />
                   </div>
 
                   <div class="flex items-start justify-between gap-4">
@@ -600,6 +589,7 @@ import { ref, onMounted, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../stores/authStore";
 import HeroSearch from "../components/home/HeroSearch.vue";
+import CompanyLogo from "../components/common/CompanyLogo.vue";
 import { getJobPosts, getHotJobPosts } from "../services/jobposts.api";
 import { getCategoriesWithJobcount } from "../services/categories.api";
 import api from "../services/api";

@@ -6,6 +6,7 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
+import CompanyLogo from "@/components/common/CompanyLogo.vue";
 import { isContentRejectedError } from "@/utils/apiErrors";
 
 const auth = useAuthStore();
@@ -201,22 +202,13 @@ onMounted(loadProfile);
           </h2>
 
           <div class="flex flex-col sm:flex-row sm:items-center gap-5">
-            <div
-              class="h-24 w-24 rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0 flex items-center justify-center"
-            >
-              <img
-                v-if="avatarPreview || avatarFromBackend"
-                :src="avatarPreview || `${fileStorageUrl}${avatarFromBackend}`"
-                class="h-full w-full object-contain"
-                :alt="t('companyLogo')"
-              />
-              <span
-                v-else
-                class="text-2xl font-semibold text-slate-400"
-              >
-                {{ form.company_name?.charAt(0)?.toUpperCase() || "?" }}
-              </span>
-            </div>
+            <CompanyLogo
+              size="hero"
+              rounded="rounded-2xl"
+              :src="avatarPreview || (avatarFromBackend ? `${fileStorageUrl}${avatarFromBackend}` : '')"
+              :alt="form.company_name || t('companyLogo')"
+              fallback="initials"
+            />
 
             <div class="flex-1 min-w-0">
               <label :class="labelClass">{{ t("recruiterEdit.uploadLogo") }}</label>
