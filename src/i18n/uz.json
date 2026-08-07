@@ -450,6 +450,16 @@
   "companiesHiring": "Faol yollanayotgan kompaniyalar",
   "browseAllCompanies": "Barcha kompaniyalarni ko'rish",
   "featuredJobs": "Ajoyib ish o'rinlari",
+  "jobsNearYou": {
+    "title": "Yaqin atrofdagi ishlar",
+    "titleWithCity": "{city} dagi ishlar",
+    "subtitleWithCity": "{location} dagi eng yangi e'lonlar",
+    "subtitleEmpty": "Yaqin atrofdagi ishlarni ko'rish uchun shaharni tanlang.",
+    "chooseCity": "Shaharni tanlash",
+    "chooseCityHint": "Afzal shahar hali tanlanmagan. Yaqin atrofdagi ishlarni ko'rish uchun shaharni tanlang.",
+    "seeAll": "Hammasini ko'rish",
+    "empty": "{city} da hozircha ish yo'q. Barcha ishlarni ko'rib chiqing."
+  },
   "bestJobsAvailable": "Eng yaxshi ish imkoniyatlarini ko'rish",
   "browseAllJobs": "Barcha ishlarni ko'rish",
   "seeAllJobs": "Barcha ishlarni ko'rish",

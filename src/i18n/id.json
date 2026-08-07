@@ -521,6 +521,16 @@
   "companiesHiring": "Perusahaan yang sedang merekrut",
   "browseAllCompanies": "Lihat semua perusahaan",
   "featuredJobs": "Lowongan Unggulan",
+  "jobsNearYou": {
+    "title": "Lowongan di Kotamu",
+    "titleWithCity": "Lowongan di {city}",
+    "subtitleWithCity": "Lowongan terbaru di {location}",
+    "subtitleEmpty": "Pilih kota agar kami bisa menampilkan lowongan terdekat.",
+    "chooseCity": "Pilih kota",
+    "chooseCityHint": "Belum ada kota preferensi. Pilih kota untuk melihat lowongan di sekitarmu.",
+    "seeAll": "Lihat semua",
+    "empty": "Belum ada lowongan di {city}. Coba jelajahi semua lowongan."
+  },
   "bestJobsAvailable": "Lihat peluang kerja terbaik",
   "browseAllJobs": "Lihat Semua Lowongan",
   "seeAllJobs": "Lihat Semua Lowongan",
