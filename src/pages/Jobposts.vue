@@ -301,6 +301,31 @@
             </div>
           </div>
 
+          <!-- GPS location filter banner -->
+          <div
+            v-if="gpsLoading || gpsFilterActive || gpsError"
+            class="mb-4 rounded-lg border px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+            :class="gpsError && !gpsFilterActive ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'"
+          >
+            <div class="flex items-center gap-2 text-sm min-w-0">
+              <i class="pi pi-map-marker shrink-0" :class="gpsError && !gpsFilterActive ? 'text-amber-600' : 'text-emerald-600'"></i>
+              <span v-if="gpsLoading" class="text-slate-600">{{ $t("gpsLocation.detecting") }}</span>
+              <span v-else-if="gpsFilterActive" class="text-emerald-800 truncate">
+                {{ $t("gpsLocation.showingNear", { city: gpsCity }) }}
+                <span v-if="gpsProvince" class="text-emerald-700/80"> · {{ gpsProvince }}</span>
+              </span>
+              <span v-else class="text-amber-800">{{ gpsError }}</span>
+            </div>
+            <button
+              v-if="gpsFilterActive"
+              type="button"
+              class="shrink-0 text-xs font-semibold text-emerald-800 hover:text-emerald-950 underline"
+              @click="clearGpsCityFilter"
+            >
+              {{ $t("gpsLocation.showAll") }}
+            </button>
+          </div>
+
           <!-- HOT Jobs Section -->
           <div v-if="hotJobs.length > 0" class="mb-8">
             <div class="flex items-center justify-between mb-4">
@@ -596,6 +621,9 @@ import api from "../services/api";
 import { useRoute, useRouter } from "vue-router";
 import { getEmploymentTypes } from "../services/employment_types.api";
 import { stripHtml } from "@/utils/richText";
+import { detectCityFromGps } from "@/utils/geoCity";
+
+const GPS_SKIP_KEY = "jobpostsGpsSkipped";
 
 const { t, locale } = useI18n();
 const auth = useAuthStore();
@@ -638,6 +666,13 @@ let cityTimeout = null;
 const salaryMin = ref(null);
 const salaryMax = ref(null);
 const salaryCurrency = ref("ALL");
+
+/** GPS-detected city applied as cities_name filter */
+const gpsCity = ref("");
+const gpsProvince = ref("");
+const gpsLoading = ref(false);
+const gpsError = ref("");
+const gpsFilterActive = ref(false);
 
 // Computed
 const displaySalaryMin = computed({
@@ -1287,7 +1322,98 @@ onMounted(() => {
   loadCategories();
   loadEmploymentTypes();
   fetchHotJobs();
+  applyGpsCityFilterIfNeeded();
 });
+
+function normalizeCityName(name = "") {
+  return String(name)
+    .replace(/^(kota|kabupaten|kab\.?)\s+/i, "")
+    .trim();
+}
+
+async function resolveCityAgainstCatalog(rawCity) {
+  const normalized = normalizeCityName(rawCity);
+  if (!normalized) return rawCity;
+
+  try {
+    const res = await api.get("/locations/search", {
+      params: { search: normalized, type: "cities" },
+    });
+    const cities = res.data?.data?.cities || [];
+    if (!cities.length) return normalized;
+
+    const exact = cities.find(
+      (c) => normalizeCityName(c.name).toLowerCase() === normalized.toLowerCase(),
+    );
+    return exact?.name || cities[0].name || normalized;
+  } catch {
+    return normalized;
+  }
+}
+
+async function applyGpsCityFilterIfNeeded() {
+  const q = route.query;
+  // Jangan override kalau user sudah pilih lokasi / skip GPS session ini
+  if (q.cities_name || q.province_name) return;
+  if (sessionStorage.getItem(GPS_SKIP_KEY) === "1") return;
+  if (gpsLoading.value) return;
+
+  gpsLoading.value = true;
+  gpsError.value = "";
+  try {
+    const detected = await detectCityFromGps();
+    if (!detected?.city) {
+      gpsError.value = t("gpsLocation.undetected");
+      return;
+    }
+
+    // User may have set location while GPS was resolving
+    if (route.query.cities_name || route.query.province_name) return;
+
+    const matchedCity = await resolveCityAgainstCatalog(detected.city);
+    gpsCity.value = matchedCity;
+    gpsProvince.value = detected.province || "";
+    gpsFilterActive.value = true;
+
+    router.replace({
+      query: {
+        ...route.query,
+        cities_name: matchedCity,
+        recommendations: "false",
+        page: 1,
+      },
+    });
+  } catch (err) {
+    console.warn("GPS city filter skipped:", err);
+    // Permission denied / unavailable — biarkan list default
+    if (err?.code === 1) {
+      gpsError.value = t("gpsLocation.denied");
+    }
+  } finally {
+    gpsLoading.value = false;
+  }
+}
+
+function clearGpsCityFilter() {
+  sessionStorage.setItem(GPS_SKIP_KEY, "1");
+  gpsFilterActive.value = false;
+  gpsCity.value = "";
+  gpsProvince.value = "";
+
+  const query = { ...route.query };
+  delete query.cities_name;
+  query.page = 1;
+  router.push({ query });
+}
+
+watch(
+  () => route.query.cities_name,
+  (name) => {
+    if (gpsFilterActive.value && name !== gpsCity.value) {
+      gpsFilterActive.value = false;
+    }
+  },
+);
 
 watch(locale, () => {
   loadCategories();
