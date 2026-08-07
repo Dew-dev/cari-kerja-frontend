@@ -10,6 +10,7 @@ import { useAuthStore } from "@/stores/authStore.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import MaskedNumberInput from "@/components/common/MaskedNumberInput.vue";
+import ProfileSidebar from "@/components/profile/ProfileSidebar.vue";
 import CommunicationPreferencesCard from "@/components/worker/CommunicationPreferencesCard.vue";
 import JobAlertsCard from "@/components/worker/JobAlertsCard.vue";
 import TelegramNotificationsCard from "@/components/worker/TelegramNotificationsCard.vue";
@@ -1828,7 +1829,7 @@ watch(activeTab, (newTab) => {
 
 <template>
   <div class="bg-slate-50 min-h-screen py-6 md:py-10">
-    <div class="max-w-6xl mx-auto px-3 md:px-4 sm:max-w-md md:max-w-2xl lg:max-w-4xl">
+    <div class="max-w-6xl mx-auto px-3 md:px-4">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div>
           <h1 class="text-xl md:text-2xl font-semibold text-slate-900">{{ $t('profile.myProfile') }}</h1>
@@ -1844,8 +1845,9 @@ watch(activeTab, (newTab) => {
         </RouterLink>
       </div>
 
+      <!-- Mobile / tablet: horizontal tabs -->
       <div
-        class="bg-white w-full rounded-2xl shadow-sm border border-slate-100 p-1.5 flex gap-1 mb-6 md:mb-8 overflow-x-auto flex-nowrap scrollbar-thin"
+        class="lg:hidden bg-white w-full rounded-2xl shadow-sm border border-slate-100 p-1.5 flex gap-1 mb-6 overflow-x-auto flex-nowrap scrollbar-thin"
       >
         <button
           v-for="tab in profileTabs"
@@ -1864,6 +1866,14 @@ watch(activeTab, (newTab) => {
         </button>
       </div>
 
+      <div class="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-6 lg:items-start">
+        <!-- Desktop sidebar -->
+        <aside class="hidden lg:block">
+          <ProfileSidebar v-model="activeTab" :tabs="profileTabs" />
+        </aside>
+
+        <!-- Tab content -->
+        <div class="min-w-0 space-y-6">
       <!-- PERSONAL INFO TAB -->
       <div
         v-if="activeTab === 'profile'"
@@ -3683,6 +3693,8 @@ watch(activeTab, (newTab) => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
         </div>
       </div>
     </div>
