@@ -71,7 +71,6 @@
               :class="{ 'bg-blue-50 text-blue-600': selectedLocation?.id === location.id }"
             >
               {{ location.name }}
-              <span v-if="location.province_name" class="text-gray-400"> · {{ location.province_name }}</span>
             </button>
             <div v-if="locationLoading" class="px-4 py-3 text-sm text-gray-500 text-center">
               Loading...
@@ -100,12 +99,9 @@ import { ref, watch, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { getJobPosts } from "@/services/jobposts.api";
 import api from "@/services/api";
-import { usePreferredLocation } from "@/composables/usePreferredLocation";
 
 const { t } = useI18n();
 const router = useRouter();
-const { preferredLocation, setPreferredLocation, clearPreferredLocation } =
-  usePreferredLocation();
 
 const props = defineProps({
   modelValue: {
@@ -118,7 +114,7 @@ const emit = defineEmits(["update:modelValue", "search", "locationChange"]);
 const keyword = ref(props.modelValue || "");
 const isLoadingPickup = ref(false);
 
-// Location state (cities)
+// Location state
 const showLocationDropdown = ref(false);
 const selectedLocation = ref(null);
 const locationSearch = ref("");
@@ -130,10 +126,9 @@ let searchTimeout = null;
 
 const selectedLocationText = computed(() => {
   if (!selectedLocation.value) {
-    return t("allLocations") || "All Locations";
+    return t('allLocations') || 'All Locations';
   }
-  const loc = selectedLocation.value;
-  return loc.province_name ? `${loc.name}, ${loc.province_name}` : loc.name;
+  return selectedLocation.value.name;
 });
 
 const filteredLocations = computed(() => {
@@ -141,10 +136,8 @@ const filteredLocations = computed(() => {
     return locations.value;
   }
   const search = locationSearch.value.toLowerCase();
-  return locations.value.filter(
-    (loc) =>
-      loc.name.toLowerCase().includes(search) ||
-      (loc.province_name || "").toLowerCase().includes(search),
+  return locations.value.filter(loc => 
+    loc.name.toLowerCase().includes(search)
   );
 });
 
@@ -154,7 +147,7 @@ watch(
     if (value !== keyword.value) {
       keyword.value = value || "";
     }
-  },
+  },    
 );
 
 watch(keyword, (value) => {
@@ -164,9 +157,12 @@ watch(keyword, (value) => {
 function toggleLocationDropdown() {
   isTogglingDropdown.value = true;
   showLocationDropdown.value = !showLocationDropdown.value;
+  console.log('Toggling dropdown:', showLocationDropdown.value);
   if (showLocationDropdown.value && locations.value.length === 0) {
     fetchLocations();
   }
+  
+  console.log('Toggle dropdown called. Current state:', showLocationDropdown.value);
   setTimeout(() => {
     isTogglingDropdown.value = false;
   }, 100);
@@ -175,12 +171,8 @@ function toggleLocationDropdown() {
 function selectLocation(location) {
   selectedLocation.value = location;
   showLocationDropdown.value = false;
-  if (location) {
-    setPreferredLocation(location);
-  } else {
-    clearPreferredLocation();
-  }
-  handleSearch();
+  // locationSearch.value = "";
+  handleSearch(); // Trigger search immediately on location select
   emit("locationChange", location);
 }
 
@@ -190,10 +182,10 @@ async function fetchLocations(search = "") {
     const res = await api.get("/locations/search", {
       params: {
         search: search || "_",
-        type: "cities",
+        type: "provinces",
       },
     });
-    locations.value = res.data?.data?.cities || [];
+    locations.value = res.data?.data?.provinces || [];
   } catch (err) {
     console.error("Failed to fetch locations:", err);
     locations.value = [];
@@ -211,29 +203,17 @@ function searchLocations() {
 
 function handleClickOutside(event) {
   if (isTogglingDropdown.value) return;
-  if (
-    locationDropdownRef.value &&
-    !locationDropdownRef.value.contains(event.target) &&
-    showLocationDropdown.value
-  ) {
+  if (locationDropdownRef.value && !locationDropdownRef.value.contains(event.target) && showLocationDropdown.value) {
     showLocationDropdown.value = false;
   }
 }
 
 onMounted(() => {
-  document.addEventListener("click", handleClickOutside);
-  // Restore preferred city into the hero selector
-  if (preferredLocation.value?.city) {
-    selectedLocation.value = {
-      name: preferredLocation.value.city,
-      province_name: preferredLocation.value.province || "",
-      province_id: preferredLocation.value.provinceId,
-    };
-  }
+  document.addEventListener('click', handleClickOutside);
 });
 
 onBeforeUnmount(() => {
-  document.removeEventListener("click", handleClickOutside);
+  document.removeEventListener('click', handleClickOutside);
 });
 
 function handleSearch() {

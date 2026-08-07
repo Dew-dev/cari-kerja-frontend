@@ -27,6 +27,13 @@
   "next": "Next",
   "previous": "Previous",
   "allLocations": "All Locations",
+  "gpsLocation": {
+    "detecting": "Detecting GPS location…",
+    "showingNear": "Showing jobs in {city}",
+    "showAll": "Show all locations",
+    "denied": "Location permission denied. Showing jobs without a city filter.",
+    "undetected": "Could not detect a city from GPS."
+  },
   "searchLocation": "Search location...",
   "browseByCity": "Browse Jobs by City",
   "browseByCitySubtitle": "Find jobs in your city or explore opportunities across the country",
@@ -525,16 +532,6 @@
   "companiesHiring": "Companies actively hiring",
   "browseAllCompanies": "Browse all companies",
   "featuredJobs": "Featured Jobs",
-  "jobsNearYou": {
-    "title": "Jobs near you",
-    "titleWithCity": "Jobs in {city}",
-    "subtitleWithCity": "Latest openings in {location}",
-    "subtitleEmpty": "Choose a city so we can show nearby jobs.",
-    "chooseCity": "Choose city",
-    "chooseCityHint": "No preferred city yet. Pick a city to see jobs near you.",
-    "seeAll": "See all",
-    "empty": "No jobs in {city} yet. Try browsing all jobs."
-  },
   "bestJobsAvailable": "Check out the best job opportunities",
   "browseAllJobs": "Browse All Jobs",
   "seeAllJobs": "See All Jobs",

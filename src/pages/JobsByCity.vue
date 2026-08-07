@@ -210,10 +210,8 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import api from "../services/api";
-import { usePreferredLocation } from "@/composables/usePreferredLocation";
 
 const router = useRouter();
-const { setPreferredLocation } = usePreferredLocation();
 const loading = ref(true);
 const searchQuery = ref("");
 const activeTab = ref("alphabetical");
@@ -298,11 +296,6 @@ function filterCities() {
 }
 
 function goToCityJobs(city) {
-  setPreferredLocation({
-    name: city.name,
-    province_name: city.province_name,
-    province_id: city.province_id,
-  });
   router.push({
     path: "/jobposts",
     query: {
