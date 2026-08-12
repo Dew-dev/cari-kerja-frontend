@@ -32,6 +32,7 @@
     "detecting": "GPS joylashuvi aniqlanmoqda…",
     "showingNear": "{city} shahridagi ishlar",
     "showAll": "Barcha joylarni ko‘rsatish",
+    "useMyLocation": "Joylashuvimdan foydalanish",
     "denied": "Joylashuv ruxsati rad etildi. Shahar filtrisiz ishlar ko‘rsatiladi.",
     "undetected": "GPS orqali shahar aniqlanmadi."
   },

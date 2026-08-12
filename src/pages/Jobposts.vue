@@ -301,7 +301,7 @@
             </div>
           </div>
 
-          <!-- GPS location filter banner — only when auto-filter berhasil diterapkan -->
+          <!-- Location: opt-in GPS (tidak auto-filter saat load) -->
           <div
             v-if="gpsFilterActive"
             class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
@@ -319,6 +319,20 @@
               @click="clearGpsCityFilter"
             >
               {{ $t("gpsLocation.showAll") }}
+            </button>
+          </div>
+          <div
+            v-else
+            class="mb-3 flex justify-end"
+          >
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-blue-700 disabled:opacity-50"
+              :disabled="gpsLoading"
+              @click="applyGpsCityFilter"
+            >
+              <i class="pi pi-map-marker text-[11px]"></i>
+              {{ gpsLoading ? $t("gpsLocation.detecting") : $t("gpsLocation.useMyLocation") }}
             </button>
           </div>
 
@@ -991,8 +1005,10 @@ const jobService = {
 
 // Methods
 const loadJobs = async () => {
+  // Jangan kosongkan list yang sudah tampil — biar tidak "nongol-ilang" saat refetch
+  const blocking = jobs.value.length === 0;
   try {
-    loading.value = true;
+    if (blocking) loading.value = true;
     const data = await jobService.fetchJobs({
       search: searchQuery.value,
       // location: locationFilter.value,
@@ -1317,7 +1333,7 @@ onMounted(() => {
   loadCategories();
   loadEmploymentTypes();
   fetchHotJobs();
-  applyGpsCityFilterIfNeeded();
+  // GPS tidak auto-jalan saat mount — default tampilkan semua lowongan.
 });
 
 function normalizeCityName(name = "") {
@@ -1346,28 +1362,14 @@ async function resolveCityAgainstCatalog(rawCity) {
   }
 }
 
-async function applyGpsCityFilterIfNeeded() {
-  const q = route.query;
-  // Jangan override kalau user sudah pilih lokasi / skip GPS session ini
-  if (q.cities_name || q.province_name) return;
-  if (sessionStorage.getItem(GPS_SKIP_KEY) === "1") return;
+/**
+ * Opt-in GPS city filter. Default page load shows ALL jobs (no auto-GPS).
+ */
+async function applyGpsCityFilter() {
   if (gpsLoading.value) return;
 
-  // Permission sudah denied → tampilkan semua, jangan ganggu user
-  try {
-    if (navigator.permissions?.query) {
-      const status = await navigator.permissions.query({ name: "geolocation" });
-      if (status.state === "denied") {
-        sessionStorage.setItem(GPS_SKIP_KEY, "1");
-        return;
-      }
-    }
-  } catch {
-    // Permissions API tidak tersedia — lanjut coba GPS
-  }
-
   if (!navigator.geolocation) {
-    sessionStorage.setItem(GPS_SKIP_KEY, "1");
+    console.warn("Geolocation not supported");
     return;
   }
 
@@ -1375,18 +1377,15 @@ async function applyGpsCityFilterIfNeeded() {
   try {
     const detected = await detectCityFromGps();
     if (!detected?.city) {
-      // GPS gagal / kota tidak terbaca → default tampil semua
-      sessionStorage.setItem(GPS_SKIP_KEY, "1");
+      console.warn("GPS city undetected — keeping all jobs");
       return;
     }
-
-    // User may have set location while GPS was resolving
-    if (route.query.cities_name || route.query.province_name) return;
 
     const matchedCity = await resolveCityAgainstCatalog(detected.city);
     gpsCity.value = matchedCity;
     gpsProvince.value = detected.province || "";
     gpsFilterActive.value = true;
+    sessionStorage.removeItem(GPS_SKIP_KEY);
 
     router.replace({
       query: {
@@ -1397,7 +1396,6 @@ async function applyGpsCityFilterIfNeeded() {
       },
     });
   } catch (err) {
-    // Permission denied / timeout / unavailable → diam-diam tampil semua
     console.warn("GPS city filter skipped, showing all jobs:", err);
     sessionStorage.setItem(GPS_SKIP_KEY, "1");
   } finally {

@@ -31,6 +31,7 @@
     "detecting": "Detecting GPS location…",
     "showingNear": "Showing jobs in {city}",
     "showAll": "Show all locations",
+    "useMyLocation": "Use my location",
     "denied": "Location permission denied. Showing jobs without a city filter.",
     "undetected": "Could not detect a city from GPS."
   },

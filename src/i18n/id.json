@@ -31,6 +31,7 @@
     "detecting": "Mendeteksi lokasi GPS…",
     "showingNear": "Menampilkan lowongan di {city}",
     "showAll": "Tampilkan semua lokasi",
+    "useMyLocation": "Gunakan lokasi saya",
     "denied": "Izin lokasi ditolak. Lowongan ditampilkan tanpa filter kota.",
     "undetected": "Kota tidak terdeteksi dari GPS."
   },
