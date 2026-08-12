@@ -139,6 +139,22 @@
     "telegram": "Telegram",
     "telegramChat": "Чат в Telegram"
   },
+  "contactReveal": {
+    "show": "Показать",
+    "showing": "Загрузка…",
+    "rateLimited": "Слишком много запросов. Повторите через {seconds} с.",
+    "failed": "Не удалось показать контакт.",
+    "loginRequired": "Войдите, чтобы увидеть контакты.",
+    "maskedEmail": "Email скрыт",
+    "maskedPhone": "Телефон скрыт"
+  },
+  "resumeLink": {
+    "opening": "Открытие…",
+    "unavailable": "Резюме временно недоступно. Попробуйте снова."
+  },
+  "jobSearch": {
+    "rateLimited": "Слишком много поисковых запросов. Подождите {seconds} с."
+  },
 
   "job_description": "Описание работы",
   "job_title": "Название вакансии",

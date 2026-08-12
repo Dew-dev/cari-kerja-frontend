@@ -140,6 +140,22 @@
     "telegram": "Telegram",
     "telegramChat": "Telegram orqali chat"
   },
+  "contactReveal": {
+    "show": "Ko'rsatish",
+    "showing": "Yuklanmoqda…",
+    "rateLimited": "Juda ko'p so'rov. {seconds}s dan keyin qayta urinib ko'ring.",
+    "failed": "Kontaktni ochib bo'lmadi.",
+    "loginRequired": "Kontaktni ko'rish uchun tizimga kiring.",
+    "maskedEmail": "Email yashirilgan",
+    "maskedPhone": "Telefon yashirilgan"
+  },
+  "resumeLink": {
+    "opening": "Ochilmoqda…",
+    "unavailable": "Rezyume vaqtincha mavjud emas. Qayta urinib ko'ring."
+  },
+  "jobSearch": {
+    "rateLimited": "Juda ko'p qidiruv so'rovi. {seconds}s kuting."
+  },
   "job_description": "Ish tavsifi",
   "job_title": "Ish nomi",
   "jobTitles": {
