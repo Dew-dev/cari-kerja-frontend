@@ -19,6 +19,7 @@ import { displayEmail } from "@/utils/authFlags";
 import { isContentRejectedError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors";
 import { stripHtml } from "@/utils/richText";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
+import ResumeLink from "@/components/common/ResumeLink.vue";
 import { matchJobTitle } from "@/services/job_titles.api";
 import JobTitleAutocomplete from "@/components/common/JobTitleAutocomplete.vue";
 import { getCategories } from "@/services/categories.api";
@@ -2620,14 +2621,12 @@ watch(activeTab, (newTab) => {
               </p>
             </div>
             <div class="flex flex-wrap items-center gap-2 shrink-0">
-              <a
-                :href="resolveUploadUrl(resume.resume_url)"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50 transition duration-200"
+              <ResumeLink
+                :resume="resume"
+                button-class="rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50 transition duration-200 disabled:opacity-50"
               >
                 {{ $t('profile.view') }}
-              </a>
+              </ResumeLink>
               <button
                 v-if="!resume.is_default"
                 type="button"
