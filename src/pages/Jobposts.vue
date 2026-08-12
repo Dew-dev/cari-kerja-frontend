@@ -318,28 +318,38 @@
             </div>
           </div>
 
-          <!-- GPS location filter banner -->
+          <!-- Location: opt-in GPS (tidak auto-filter saat load) -->
           <div
-            v-if="gpsLoading || gpsFilterActive || gpsError"
-            class="mb-4 rounded-lg border px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-            :class="gpsError && !gpsFilterActive ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'"
+            v-if="gpsFilterActive"
+            class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
           >
             <div class="flex items-center gap-2 text-sm min-w-0">
-              <i class="pi pi-map-marker shrink-0" :class="gpsError && !gpsFilterActive ? 'text-amber-600' : 'text-emerald-600'"></i>
-              <span v-if="gpsLoading" class="text-slate-600">{{ $t("gpsLocation.detecting") }}</span>
-              <span v-else-if="gpsFilterActive" class="text-emerald-800 truncate">
+              <i class="pi pi-map-marker shrink-0 text-emerald-600"></i>
+              <span class="text-emerald-800 truncate">
                 {{ $t("gpsLocation.showingNear", { city: gpsCity }) }}
                 <span v-if="gpsProvince" class="text-emerald-700/80"> · {{ gpsProvince }}</span>
               </span>
-              <span v-else class="text-amber-800">{{ gpsError }}</span>
             </div>
             <button
-              v-if="gpsFilterActive"
               type="button"
               class="shrink-0 text-xs font-semibold text-emerald-800 hover:text-emerald-950 underline"
               @click="clearGpsCityFilter"
             >
               {{ $t("gpsLocation.showAll") }}
+            </button>
+          </div>
+          <div
+            v-else
+            class="mb-3 flex justify-end"
+          >
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-blue-700 disabled:opacity-50"
+              :disabled="gpsLoading"
+              @click="applyGpsCityFilter"
+            >
+              <i class="pi pi-map-marker text-[11px]"></i>
+              {{ gpsLoading ? $t("gpsLocation.detecting") : $t("gpsLocation.useMyLocation") }}
             </button>
           </div>
 
@@ -693,7 +703,6 @@ const salaryCurrency = ref("ALL");
 const gpsCity = ref("");
 const gpsProvince = ref("");
 const gpsLoading = ref(false);
-const gpsError = ref("");
 const gpsFilterActive = ref(false);
 
 // Computed
@@ -1023,7 +1032,7 @@ const loadJobs = async () => {
     return;
   }
   try {
-    loading.value = true;
+    if (blocking) loading.value = true;
     const data = await jobService.fetchJobs({
       search: searchQuery.value,
       // location: locationFilter.value,
@@ -1375,7 +1384,7 @@ onMounted(() => {
   loadCategories();
   loadEmploymentTypes();
   fetchHotJobs();
-  applyGpsCityFilterIfNeeded();
+  // GPS tidak auto-jalan saat mount — default tampilkan semua lowongan.
 });
 
 function normalizeCityName(name = "") {
@@ -1404,29 +1413,30 @@ async function resolveCityAgainstCatalog(rawCity) {
   }
 }
 
-async function applyGpsCityFilterIfNeeded() {
-  const q = route.query;
-  // Jangan override kalau user sudah pilih lokasi / skip GPS session ini
-  if (q.cities_name || q.province_name) return;
-  if (sessionStorage.getItem(GPS_SKIP_KEY) === "1") return;
+/**
+ * Opt-in GPS city filter. Default page load shows ALL jobs (no auto-GPS).
+ */
+async function applyGpsCityFilter() {
   if (gpsLoading.value) return;
 
+  if (!navigator.geolocation) {
+    console.warn("Geolocation not supported");
+    return;
+  }
+
   gpsLoading.value = true;
-  gpsError.value = "";
   try {
     const detected = await detectCityFromGps();
     if (!detected?.city) {
-      gpsError.value = t("gpsLocation.undetected");
+      console.warn("GPS city undetected — keeping all jobs");
       return;
     }
-
-    // User may have set location while GPS was resolving
-    if (route.query.cities_name || route.query.province_name) return;
 
     const matchedCity = await resolveCityAgainstCatalog(detected.city);
     gpsCity.value = matchedCity;
     gpsProvince.value = detected.province || "";
     gpsFilterActive.value = true;
+    sessionStorage.removeItem(GPS_SKIP_KEY);
 
     router.replace({
       query: {
@@ -1437,11 +1447,8 @@ async function applyGpsCityFilterIfNeeded() {
       },
     });
   } catch (err) {
-    console.warn("GPS city filter skipped:", err);
-    // Permission denied / unavailable — biarkan list default
-    if (err?.code === 1) {
-      gpsError.value = t("gpsLocation.denied");
-    }
+    console.warn("GPS city filter skipped, showing all jobs:", err);
+    sessionStorage.setItem(GPS_SKIP_KEY, "1");
   } finally {
     gpsLoading.value = false;
   }
