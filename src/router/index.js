@@ -162,6 +162,13 @@ const routes = [
     component: () => import("../pages/auth/RecruiterLogin.vue"),
   },
   {
+    path: "/jobs/:id",
+    name: "JobDetail",
+    component: () => import("../pages/JobDetailView.vue"),
+    props: true,
+    meta: { public: true },
+  },
+  {
     path: "/jobposts",
     name: "jobposts",
     component: () => import("../pages/Jobposts.vue"),
@@ -175,10 +182,7 @@ const routes = [
   },
   {
     path: "/jobposts/:id",
-    name: "JobDetail",
-    component: () => import("../pages/JobDetailView.vue"), // Sesuaikan path-nya
-    props: true, // Mengizinkan ID dari URL masuk sebagai props ke komponen
-    meta: { public: true }, // Accessible tanpa login
+    redirect: (to) => ({ name: "JobDetail", params: { id: to.params.id }, query: to.query }),
   },
   {
     path: "/categories",

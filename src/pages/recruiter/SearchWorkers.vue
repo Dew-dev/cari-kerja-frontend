@@ -333,7 +333,7 @@
                     <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
                       <img
                         v-if="worker.avatar_url"
-                        :src="`${fileStorageUrl}${worker.avatar_url}`"
+                        :src="resolveUploadUrl(worker.avatar_url)"
                         :alt="worker.name"
                         class="w-full h-full object-cover"
                       />
@@ -487,11 +487,11 @@ import { searchWorkers } from '@/services/workers.api'
 import api from '@/services/api'
 import { stripHtml } from '@/utils/richText'
 import { getCategories } from '@/services/categories.api'
+import { resolveUploadUrl } from '@/utils/mediaUrl'
 
 const router = useRouter()
 const route = useRoute()
 const { locale } = useI18n()
-const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 
 // State
 const workers = ref([])

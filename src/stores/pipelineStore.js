@@ -59,7 +59,9 @@ function mapApplicantToCandidate(applicant, jobPostId, stages) {
     worker_id: workerId,
     user_id: applicant.user_id || applicant.worker?.user_id || null,
     name: applicant.name,
-    email: applicant.email,
+    email_masked: applicant.email_masked || null,
+    telephone_masked: applicant.telephone_masked || null,
+    contact_revealable: applicant.contact_revealable || null,
     avatar_url: applicant.avatar_url || null,
     job_post_id: jobPostId,
     job_post_title: null,
@@ -69,6 +71,7 @@ function mapApplicantToCandidate(applicant, jobPostId, stages) {
     applied_at: applicant.applied_at,
     updated_at: applicant.applied_at,
     resume_url: applicant.resume_url,
+    resume_id: applicant.resume_id || null,
     cover_letter: applicant.cover_letter,
     ...mapMatchFields(applicant),
   };

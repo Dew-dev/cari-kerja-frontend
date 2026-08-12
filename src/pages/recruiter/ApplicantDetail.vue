@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
@@ -12,6 +12,9 @@ import { chatErrorI18nKey } from "@/utils/apiErrors";
 import { useChatStore } from "@/stores/chatStore";
 import { getWorkerById } from "@/services/workers.api";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
+import ContactRevealFields from "@/components/common/ContactRevealFields.vue";
+import ResumeLink from "@/components/common/ResumeLink.vue";
+
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -19,6 +22,14 @@ const chatStore = useChatStore();
 
 const loading = ref(false);
 const worker = ref(null);
+
+// Ensure ContactRevealFields gets workers.id
+const workerForContact = computed(() => {
+  const w = worker.value;
+  if (!w) return null;
+  const id = resolveWorkerProfileId(w) || w.id;
+  return { ...w, id, email: undefined, telephone: undefined };
+});
 
 // Stages are customizable per job post — fetched dynamically instead of
 // relying on a hardcoded/global status list (see GET /job-posts/:id/stages).
@@ -34,17 +45,24 @@ function formatAnswer(answer) {
   return "";
 }
 async function enrichTelegramFields(profileId) {
-  if (!profileId || worker.value?.telegram_chat_url) return;
+  if (!profileId) return;
   try {
     const res = await getWorkerById(profileId);
     const data = res?.data || res || {};
     worker.value = {
       ...worker.value,
+      id: worker.value?.id || data.id || profileId,
       telegram_available: data.telegram_available,
       telegram_username: data.telegram_username,
       telegram_display_name: data.telegram_display_name,
       telegram_chat_url: data.telegram_chat_url,
       user_id: worker.value?.user_id || data.user_id,
+      email_masked: data.email_masked ?? worker.value?.email_masked,
+      telephone_masked: data.telephone_masked ?? worker.value?.telephone_masked,
+      contact_revealable: data.contact_revealable ?? worker.value?.contact_revealable,
+      // Strip any plaintext contact that may still arrive from application payload
+      email: undefined,
+      telephone: undefined,
     };
   } catch (err) {
     console.warn("[Telegram] Failed to enrich worker telegram fields:", err);
@@ -55,7 +73,14 @@ async function fetchWorker() {
   try {
     loading.value = true;
     const res = await getWorkerByApplication(route.params.applicationId);
-    worker.value = res.data?.data;
+    const data = res.data?.data;
+    worker.value = data
+      ? {
+          ...data,
+          email: undefined,
+          telephone: undefined,
+        }
+      : null;
 
     const jobPostId = worker.value?.job_post?.id;
     if (jobPostId) {
@@ -265,58 +290,11 @@ async function startChat() {
                 </div>
               </div>
 
-              <!-- Contact Info -->
+              <!-- Contact Info (masked + click-to-reveal) -->
               <div class="w-full space-y-2 text-sm text-left border-t pt-4">
-                <div class="flex items-center gap-2 text-gray-600">
-                  <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                  </svg>
-                  <span class="break-all">{{ worker.email }}</span>
-                </div>
-                
-                <div v-if="worker.telephone" class="flex items-center gap-2 text-gray-600">
-                  <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                  </svg>
-                  <span>{{ worker.telephone }}</span>
-                </div>
+                <ContactRevealFields v-if="workerForContact" :worker="workerForContact" />
 
                 <div class="flex items-center gap-4 text-gray-600 mt-4 pt-3 border-t flex-wrap justify-around">
-                  <a
-                    v-if="worker.telephone"
-                    :href="`tel:${worker.telephone}`"
-                    class="flex items-center justify-center gap-2 text-orange-600 hover:text-orange-700 font-medium text-sm transition-colors"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                    </svg>
-                    {{ $t('contactActions.call') }}
-                  </a>
-
-                  <a
-                    v-if="worker.email"
-                    :href="`mailto:${worker.email}`"
-                    class="flex items-center justify-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                    {{ $t('contactActions.email') }}
-                  </a>
-
-                  <a
-                    v-if="worker.telephone"
-                    :href="`https://wa.me/${worker.telephone.replace(/\D/g, '')}`"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="flex items-center justify-center gap-2 text-green-600 hover:text-green-700 font-medium text-sm transition-colors"
-                  >
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.272-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.006a9.87 9.87 0 00-5.031 1.378c-3.055 2.013-5.555 5.169-5.555 8.426 0 5.668 4.616 10.282 10.282 10.282 1.693 0 3.351-.397 4.906-1.158l3.537 1.237-1.297-4.41c.895-1.624 1.414-3.508 1.414-5.524 0-5.668-4.616-10.282-10.282-10.282"/>
-                    </svg>
-                    {{ $t('contactActions.whatsapp') }}
-                  </a>
-
                   <button
                     v-if="resolveTelegramChatUrl(worker)"
                     type="button"
@@ -354,23 +332,21 @@ async function startChat() {
               {{ $t('resume') }}
             </h3>
 
-            <div v-if="worker.resume_url" class="space-y-3">
+            <div v-if="worker.resume_url || worker.resume_id" class="space-y-3">
               <p class="text-sm font-medium text-gray-700">
                 {{ worker.resume_title || 'Resume.pdf' }}
               </p>
               
-              <a
-                :href="resolveUploadUrl(worker.resume_url)"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors"
+              <ResumeLink
+                :resume="{ id: worker.resume_id, resume_url: worker.resume_url }"
+                button-class="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors disabled:opacity-60"
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                 </svg>
                 {{ $t('viewDownloadResume') }}
-              </a>
+              </ResumeLink>
             </div>
 
             <div v-else class="text-center py-4">
