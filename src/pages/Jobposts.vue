@@ -301,23 +301,19 @@
             </div>
           </div>
 
-          <!-- GPS location filter banner -->
+          <!-- GPS location filter banner — only when auto-filter berhasil diterapkan -->
           <div
-            v-if="gpsLoading || gpsFilterActive || gpsError"
-            class="mb-4 rounded-lg border px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-            :class="gpsError && !gpsFilterActive ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'"
+            v-if="gpsFilterActive"
+            class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
           >
             <div class="flex items-center gap-2 text-sm min-w-0">
-              <i class="pi pi-map-marker shrink-0" :class="gpsError && !gpsFilterActive ? 'text-amber-600' : 'text-emerald-600'"></i>
-              <span v-if="gpsLoading" class="text-slate-600">{{ $t("gpsLocation.detecting") }}</span>
-              <span v-else-if="gpsFilterActive" class="text-emerald-800 truncate">
+              <i class="pi pi-map-marker shrink-0 text-emerald-600"></i>
+              <span class="text-emerald-800 truncate">
                 {{ $t("gpsLocation.showingNear", { city: gpsCity }) }}
                 <span v-if="gpsProvince" class="text-emerald-700/80"> · {{ gpsProvince }}</span>
               </span>
-              <span v-else class="text-amber-800">{{ gpsError }}</span>
             </div>
             <button
-              v-if="gpsFilterActive"
               type="button"
               class="shrink-0 text-xs font-semibold text-emerald-800 hover:text-emerald-950 underline"
               @click="clearGpsCityFilter"
@@ -671,7 +667,6 @@ const salaryCurrency = ref("ALL");
 const gpsCity = ref("");
 const gpsProvince = ref("");
 const gpsLoading = ref(false);
-const gpsError = ref("");
 const gpsFilterActive = ref(false);
 
 // Computed
@@ -1358,12 +1353,30 @@ async function applyGpsCityFilterIfNeeded() {
   if (sessionStorage.getItem(GPS_SKIP_KEY) === "1") return;
   if (gpsLoading.value) return;
 
+  // Permission sudah denied → tampilkan semua, jangan ganggu user
+  try {
+    if (navigator.permissions?.query) {
+      const status = await navigator.permissions.query({ name: "geolocation" });
+      if (status.state === "denied") {
+        sessionStorage.setItem(GPS_SKIP_KEY, "1");
+        return;
+      }
+    }
+  } catch {
+    // Permissions API tidak tersedia — lanjut coba GPS
+  }
+
+  if (!navigator.geolocation) {
+    sessionStorage.setItem(GPS_SKIP_KEY, "1");
+    return;
+  }
+
   gpsLoading.value = true;
-  gpsError.value = "";
   try {
     const detected = await detectCityFromGps();
     if (!detected?.city) {
-      gpsError.value = t("gpsLocation.undetected");
+      // GPS gagal / kota tidak terbaca → default tampil semua
+      sessionStorage.setItem(GPS_SKIP_KEY, "1");
       return;
     }
 
@@ -1384,11 +1397,9 @@ async function applyGpsCityFilterIfNeeded() {
       },
     });
   } catch (err) {
-    console.warn("GPS city filter skipped:", err);
-    // Permission denied / unavailable — biarkan list default
-    if (err?.code === 1) {
-      gpsError.value = t("gpsLocation.denied");
-    }
+    // Permission denied / timeout / unavailable → diam-diam tampil semua
+    console.warn("GPS city filter skipped, showing all jobs:", err);
+    sessionStorage.setItem(GPS_SKIP_KEY, "1");
   } finally {
     gpsLoading.value = false;
   }
