@@ -10,7 +10,7 @@ import { resolveWorkerProfileId, resolveWorkerUserId } from "@/utils/chatIdentit
 import { chatErrorI18nKey } from "@/utils/apiErrors";
 import { useChatStore } from "@/stores/chatStore";
 import { getWorkerById } from "@/services/workers.api";
-import { resolveUploadUrl } from "@/utils/mediaUrl";
+import ResumeLink from "@/components/common/ResumeLink.vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -186,20 +186,15 @@ async function startChat(applicant) {
                   {{ a.name }}
                 </div>
                 <div class="text-xs text-gray-500">
-                  {{ a.email }}
+                  {{ a.email_masked || $t("contactReveal.maskedEmail") }}
                 </div>
               </td>
 
               <td class="px-4 py-9 text-gray-700">
-                <a
-                  v-if="a.resume_url"
-                  :href="resolveUploadUrl(a.resume_url)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-blue-600 hover:underline"
-                >
-                  {{ $t('viewResume') }}
-                </a>
+                <ResumeLink
+                  v-if="a.resume_url || a.resume_id"
+                  :resume="{ id: a.resume_id, resume_url: a.resume_url }"
+                />
                 <span v-else class="text-gray-500 italic"
                   >{{ $t('noResumeProvided') }}</span
                 >

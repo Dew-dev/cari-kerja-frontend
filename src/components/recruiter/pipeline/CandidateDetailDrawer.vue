@@ -11,6 +11,8 @@ import {
 } from "@/constants/matchScore";
 import { getStageColorStyles, resolveStageColor } from "@/constants/pipeline";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
+import ContactRevealFields from "@/components/common/ContactRevealFields.vue";
+import ResumeLink from "@/components/common/ResumeLink.vue";
 import CandidateTimeline from "./CandidateTimeline.vue";
 
 const { t, locale } = useI18n();
@@ -51,7 +53,12 @@ async function loadDetail() {
   try {
     const res = await getWorkerByApplication(applicationId);
     if (requestId !== detailRequestId) return;
-    detail.value = res.data?.data;
+    detail.value = {
+      ...(res.data?.data || {}),
+      email: undefined,
+      telephone: undefined,
+      phone: undefined,
+    };
   } catch (err) {
     if (requestId !== detailRequestId) return;
     console.error("[Pipeline] Failed to fetch candidate detail:", err);
@@ -229,14 +236,33 @@ const stageStyles = computed(() =>
 );
 
 const displayName = computed(() => detail.value?.name || props.candidate?.name || "");
-const displayEmail = computed(() => detail.value?.email || props.candidate?.email || "");
+const contactWorker = computed(() => {
+  const base = detail.value || props.candidate || {};
+  return {
+    ...base,
+    id: base.id || base.worker_id || props.candidate?.worker_id,
+    email: undefined,
+    telephone: undefined,
+    phone: undefined,
+  };
+});
 const displayAvatar = computed(() =>
   resolveUploadUrl(detail.value?.avatar_url || props.candidate?.avatar_url || ""),
 );
-const displayPhone = computed(() => detail.value?.telephone || detail.value?.phone || "");
-const resumeUrl = computed(() =>
-  resolveUploadUrl(detail.value?.resume_url || props.candidate?.resume_url || ""),
+const hasResume = computed(
+  () =>
+    !!(
+      detail.value?.resume_id ||
+      props.candidate?.resume_id ||
+      detail.value?.resume_url ||
+      props.candidate?.resume_url
+    ),
 );
+const resumePayload = computed(() => ({
+  id: detail.value?.resume_id || props.candidate?.resume_id,
+  resume_url: detail.value?.resume_url || props.candidate?.resume_url,
+}));
+
 
 function reasonKey(reason, idx) {
   return reason.code || reason.type || idx;
@@ -291,8 +317,12 @@ function refreshMatch() {
             </div>
             <div class="min-w-0">
               <div class="font-semibold text-gray-900 truncate">{{ displayName }}</div>
-              <div v-if="displayEmail" class="text-sm text-gray-500 truncate">{{ displayEmail }}</div>
-              <div v-if="displayPhone" class="text-sm text-gray-500 truncate">{{ displayPhone }}</div>
+              <ContactRevealFields
+                v-if="contactWorker?.id || contactWorker?.email_masked || contactWorker?.telephone_masked || contactWorker?.contact_revealable"
+                :worker="contactWorker"
+                :show-actions="false"
+                compact
+              />
               <div v-if="candidate.job_post_title" class="text-xs text-blue-600 truncate mt-0.5">{{ candidate.job_post_title }}</div>
               <span
                 v-if="stageLabel"
@@ -316,18 +346,16 @@ function refreshMatch() {
               {{ t("chat.chatButton") }}
             </button>
 
-            <a
-              v-if="resumeUrl"
-              :href="resumeUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 transition"
+            <ResumeLink
+              v-if="hasResume"
+              :resume="resumePayload"
+              button-class="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 transition disabled:opacity-50"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               {{ t("viewResume") }}
-            </a>
+            </ResumeLink>
           </div>
 
           <!-- AI Match section -->

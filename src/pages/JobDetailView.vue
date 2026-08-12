@@ -43,7 +43,7 @@
               <CompanyLogo
                 class="shadow-sm"
                 size="lg"
-                :src="job.avatar_url ? fileStorageUrl + job.avatar_url : ''"
+                :src="resolveUploadUrl(job.avatar_url)"
                 :alt="job.company_name"
               />
               <div class="flex-1">
@@ -299,7 +299,7 @@
               <CompanyLogo
                 class="shadow-sm"
                 size="md"
-                :src="job.avatar_url ? fileStorageUrl + job.avatar_url : ''"
+                :src="resolveUploadUrl(job.avatar_url)"
                 :alt="job.company_name"
               />
               <div>
@@ -713,7 +713,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
   getJobPostBenefits,
@@ -741,6 +741,11 @@ import {
   isRateLimitedError,
   getRetryAfterSeconds,
 } from "@/utils/apiErrors";
+import { resolveUploadUrl } from "@/utils/mediaUrl";
+import {
+  upsertJobPostingJsonLd,
+  removeJobPostingJsonLd,
+} from "@/utils/jobPostingJsonLd";
 
 const COVER_LETTER_MAX = 5000;
 
@@ -748,7 +753,6 @@ const { t, locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const auth = useAuthStore();
-const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 
 // State
 const props = defineProps(["id"]);
@@ -1015,6 +1019,15 @@ const loadJobDetail = async () => {
     const response = await jobDetailService.fetchJobDetail(jobId.value);
     job.value = response.data;
 
+    const pageUrl =
+      typeof window !== "undefined"
+        ? `${window.location.origin}/jobs/${jobId.value}`
+        : `/jobs/${jobId.value}`;
+    upsertJobPostingJsonLd(job.value, pageUrl);
+    if (job.value?.title) {
+      document.title = `${job.value.title} — Cari Kerja`;
+    }
+
     const savedState = syncSavedState(jobId.value, job.value);
     savedJobId.value = savedState.savedJobId;
     isSaved.value = savedState.isSaved;
@@ -1039,6 +1052,7 @@ const loadJobDetail = async () => {
   } catch (error) {
     console.error("Error loading job detail:", error);
     job.value = null;
+    removeJobPostingJsonLd();
   } finally {
     loading.value = false;
   }
@@ -1324,6 +1338,10 @@ const goToJob = (id) => {
 // Lifecycle
 onMounted(() => {
   loadJobDetail();
+});
+
+onBeforeUnmount(() => {
+  removeJobPostingJsonLd();
 });
 
 watch(locale, () => {

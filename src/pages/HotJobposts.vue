@@ -2,16 +2,19 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { push } from "notivue";
 import { getHotJobPosts } from "@/services/jobposts.api";
 import CompanyLogo from "@/components/common/CompanyLogo.vue";
+import { resolveUploadUrl } from "@/utils/mediaUrl";
+import { isRateLimitedError } from "@/utils/apiErrors";
+import { useRateLimitCooldown } from "@/composables/useRateLimitCooldown";
 
 const router = useRouter();
 const { t } = useI18n();
 
 const jobs = ref([]);
 const loading = ref(true);
-
-const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL || "";
+const { cooldownSeconds, isCoolingDown, startFromError } = useRateLimitCooldown(300);
 
 onMounted(async () => {
   try {
@@ -19,13 +22,17 @@ onMounted(async () => {
     jobs.value = res.data?.data || [];
   } catch (err) {
     console.error("Failed to load hot jobs", err);
+    if (isRateLimitedError(err)) {
+      startFromError(err, 300);
+      push.warning(t("jobSearch.rateLimited", { seconds: cooldownSeconds.value || 300 }));
+    }
   } finally {
     loading.value = false;
   }
 });
 
 function viewJobDetail(id) {
-  router.push(`/jobposts/${id}`);
+  router.push({ name: "JobDetail", params: { id } });
 }
 
 function formatNumber(n) {
@@ -62,6 +69,14 @@ function timeAgo(date) {
         <i class="pi pi-arrow-left text-xs group-hover:-translate-x-1 transition-transform"></i>
         Kembali ke Lowongan Kerja
       </button>
+
+      <div
+        v-if="isCoolingDown"
+        class="mb-4 rounded-lg border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3 text-sm"
+        role="status"
+      >
+        {{ $t("jobSearch.rateLimited", { seconds: cooldownSeconds }) }}
+      </div>
 
       <!-- Page Header -->
       <div class="mb-8">
@@ -101,7 +116,7 @@ function timeAgo(date) {
               class="shadow-2xs"
               size="md"
               rounded="rounded-xl"
-              :src="job.avatar_url ? fileStorageUrl + job.avatar_url : ''"
+              :src="resolveUploadUrl(job.avatar_url)"
               :alt="job.company_name"
             />
 
@@ -118,22 +133,15 @@ function timeAgo(date) {
                 <span class="flex items-center gap-1"><i class="pi pi-building text-xs"></i> {{ job.company_name }}</span>
                 <span class="flex items-center gap-1"><i class="pi pi-map-marker text-xs"></i> {{ job.location }}</span>
               </div>
-            </div>
-
-            <!-- Salary & Stats -->
-            <div class="md:text-right shrink-0">
-              <div class="text-orange-600 font-extrabold text-base">
-                {{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }}
-              </div>
-              <div class="text-gray-400 text-xs mt-1">
-                {{ job.currency }} · {{ job.employment_type }} · {{ timeAgo(job.created_at) }}
+              
+              <div class="flex items-center gap-4 text-xs text-gray-500 mt-2">
+                <span>{{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }} {{ job.currency_code }}</span>
+                <span>{{ timeAgo(job.created_at) }}</span>
               </div>
             </div>
-
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>

@@ -1,10 +1,27 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <HeroSearch v-model="searchQuery" @search="handleSearch" />
+    <HeroSearch
+      v-model="searchQuery"
+      :disabled="isCoolingDown"
+      @search="handleSearch"
+    />
+
+    <div
+      v-if="isCoolingDown"
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4"
+    >
+      <div
+        class="rounded-lg border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3 text-sm flex items-center justify-between gap-3"
+        role="status"
+      >
+        <span>{{ $t("jobSearch.rateLimited", { seconds: searchCooldown }) }}</span>
+        <span class="font-semibold tabular-nums shrink-0">{{ searchCooldown }}s</span>
+      </div>
+    </div>
 
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div class="flex flex-col lg:flex-row gap-6">
+      <div class="flex flex-col lg:flex-row gap-6" :class="{ 'pointer-events-none opacity-60': isCoolingDown }">
         <!-- Sidebar - Categories & Filters -->
         <aside :class="['shrink-0 w-full lg:w-64', showFilters ? 'block' : 'hidden lg:block']">
           <div class="bg-white rounded-lg shadow p-4 sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
@@ -362,7 +379,7 @@
                     <CompanyLogo
                       class="shadow-2xs"
                       size="sm"
-                      :src="job.avatar_url ? fileStorageUrl + job.avatar_url : ''"
+                      :src="resolveUploadUrl(job.avatar_url)"
                       :alt="job.company_name"
                     />
                     <span class="px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-extrabold rounded-full flex items-center gap-0.5 whitespace-nowrap shadow-3xs">
@@ -440,7 +457,7 @@
                       class="shadow-sm"
                       size="card"
                       rounded="rounded"
-                      :src="job.avatar_url ? fileStorageUrl + job.avatar_url : ''"
+                      :src="resolveUploadUrl(job.avatar_url)"
                       :alt="job.company_name"
                     />
                   </div>
@@ -632,6 +649,10 @@ import { useRoute, useRouter } from "vue-router";
 import { getEmploymentTypes } from "../services/employment_types.api";
 import { stripHtml } from "@/utils/richText";
 import { detectCityFromGps } from "@/utils/geoCity";
+import { resolveUploadUrl } from "@/utils/mediaUrl";
+import { isRateLimitedError } from "@/utils/apiErrors";
+import { useRateLimitCooldown } from "@/composables/useRateLimitCooldown";
+import { push } from "notivue";
 
 const GPS_SKIP_KEY = "jobpostsGpsSkipped";
 
@@ -639,9 +660,10 @@ const { t, locale } = useI18n();
 const auth = useAuthStore();
 const route = useRoute();
 const router = useRouter();
+const { cooldownSeconds: searchCooldown, isCoolingDown, startFromError: startSearchCooldown } =
+  useRateLimitCooldown(300);
 
 // State
-const fileStorageUrl = import.meta.env.VITE_FILE_STORAGE_URL;
 const jobs = ref([]);
 const categories = ref([]);
 const loading = ref(true);
@@ -1005,8 +1027,10 @@ const jobService = {
 
 // Methods
 const loadJobs = async () => {
-  // Jangan kosongkan list yang sudah tampil — biar tidak "nongol-ilang" saat refetch
-  const blocking = jobs.value.length === 0;
+  if (isCoolingDown.value) {
+    push.warning(t("jobSearch.rateLimited", { seconds: searchCooldown.value }));
+    return;
+  }
   try {
     if (blocking) loading.value = true;
     const data = await jobService.fetchJobs({
@@ -1030,10 +1054,24 @@ const loadJobs = async () => {
     totalData.value = data.meta.total;
   } catch (error) {
     console.error("Error loading jobs:", error);
+    if (isRateLimitedError(error)) {
+      startSearchCooldown(error, 300);
+      push.warning(
+        t("jobSearch.rateLimited", {
+          seconds: searchCooldown.value || getRetryAfterSecondsFallback(error),
+        }),
+      );
+    }
   } finally {
     loading.value = false;
   }
 };
+
+function getRetryAfterSecondsFallback(error) {
+  const nested = error?.response?.data?.data?.retry_after_seconds;
+  if (nested != null) return Number(nested);
+  return 300;
+}
 
 const resolveLegacyCategoryName = () => {
   if (selectedCategoryId.value != null || !legacyCategoryName.value) return;
@@ -1094,6 +1132,10 @@ const handleSearchFromHero = (value) => {
 };
 
 function handleSearch(keyword, location) {
+  if (isCoolingDown.value) {
+    push.warning(t("jobSearch.rateLimited", { seconds: searchCooldown.value }));
+    return;
+  }
   const query = { page: 1, recommendations: "false" };
 
   if (keyword && keyword.trim()) {
@@ -1108,7 +1150,7 @@ function handleSearch(keyword, location) {
 }
 const viewJobDetail = (jobId) => {
   router.push({
-    name: "JobDetail", // Harus match dengan 'name' di router/index.js
+    name: "JobDetail",
     params: { id: jobId },
   });
 };
@@ -1136,6 +1178,10 @@ const goToPage = (page) => {
 };
 
 const handleFilterChange = () => {
+  if (isCoolingDown.value) {
+    push.warning(t("jobSearch.rateLimited", { seconds: searchCooldown.value }));
+    return;
+  }
   searchQuery.value = ""; // Reset search saat filter diubah
   recommendations.value = false; // Disable recommendations when any filter changes
   legacyCategoryName.value = "";
@@ -1318,12 +1364,17 @@ const hotJobs = ref([]);
 const loadingHot = ref(false);
 
 async function fetchHotJobs() {
+  if (isCoolingDown.value) return;
   loadingHot.value = true;
   try {
     const res = await getHotJobPosts({ limit: 5, page: 1, locale: locale.value });
     hotJobs.value = res.data?.data || [];
   } catch (err) {
     console.error("Error loading hot jobs:", err);
+    if (isRateLimitedError(err)) {
+      startSearchCooldown(err, 300);
+      push.warning(t("jobSearch.rateLimited", { seconds: searchCooldown.value || 300 }));
+    }
   } finally {
     loadingHot.value = false;
   }

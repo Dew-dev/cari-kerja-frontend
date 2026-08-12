@@ -216,6 +216,22 @@
     "telegram": "Telegram",
     "telegramChat": "Chat via Telegram"
   },
+  "contactReveal": {
+    "show": "Tampilkan",
+    "showing": "Memuat…",
+    "rateLimited": "Terlalu banyak permintaan. Coba lagi dalam {seconds}d.",
+    "failed": "Gagal menampilkan kontak.",
+    "loginRequired": "Masuk untuk melihat detail kontak.",
+    "maskedEmail": "Email disembunyikan",
+    "maskedPhone": "Telepon disembunyikan"
+  },
+  "resumeLink": {
+    "opening": "Membuka…",
+    "unavailable": "CV sementara tidak tersedia. Silakan coba lagi."
+  },
+  "jobSearch": {
+    "rateLimited": "Terlalu banyak permintaan pencarian. Tunggu {seconds}d sebelum mencoba lagi."
+  },
   "job_description": "Deskripsi Pekerjaan",
   "job_title": "Jabatan",
   "jobTitles": {

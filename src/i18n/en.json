@@ -216,6 +216,22 @@
     "telegram": "Telegram",
     "telegramChat": "Chat via Telegram"
   },
+  "contactReveal": {
+    "show": "Show",
+    "showing": "Revealing…",
+    "rateLimited": "Too many reveals. Try again in {seconds}s.",
+    "failed": "Could not reveal contact details.",
+    "loginRequired": "Sign in to view contact details.",
+    "maskedEmail": "Email hidden",
+    "maskedPhone": "Phone hidden"
+  },
+  "resumeLink": {
+    "opening": "Opening…",
+    "unavailable": "Resume is temporarily unavailable. Please try again."
+  },
+  "jobSearch": {
+    "rateLimited": "Too many search requests. Please wait {seconds}s before trying again."
+  },
   "job_description": "Job Description",
   "job_title": "Job Title",
   "jobTitles": {

@@ -22,6 +22,23 @@ export const getWorkerById = async (workerId) => {
   }
 }
 
+/**
+ * Click-to-reveal worker contact (Bearer required).
+ * GET /workers/:id/contact/email|telephone → { worker_id, field, value }
+ */
+export function revealWorkerContact(workerId, field) {
+  const normalized = field === "telephone" || field === "phone" ? "telephone" : "email";
+  return api.get(`/workers/${workerId}/contact/${normalized}`);
+}
+
+/**
+ * Temporary signed URL for CV download/preview (~15 min).
+ * GET /workers/resumes/:id/signed-url → { url, expires_in, resume_id }
+ */
+export function getResumeSignedUrl(resumeId) {
+  return api.get(`/workers/resumes/${resumeId}/signed-url`);
+}
+
 // Get available filter options
 export const getWorkerFilters = async () => {
   try {
