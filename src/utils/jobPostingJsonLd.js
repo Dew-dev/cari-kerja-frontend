@@ -114,12 +114,15 @@ export function removeJobPostingJsonLd() {
 function stripToPlainText(htmlOrText) {
   if (!htmlOrText) return "";
   const raw = String(htmlOrText);
+  const htmlEntities = {
+    nbsp: " ",
+    amp: "&",
+    lt: "<",
+    gt: ">",
+  };
   return raw
     .replace(/<[^>]*>/g, " ")
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
+    .replace(/&(nbsp|amp|lt|gt);/gi, (match, entity) => htmlEntities[entity.toLowerCase()] ?? match)
     .replace(/\s+/g, " ")
     .trim();
 }
