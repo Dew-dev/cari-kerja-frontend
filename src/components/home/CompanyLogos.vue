@@ -74,11 +74,12 @@ const previewCompanies = computed(() => {
   const seen = new Set();
 
   for (const recruiter of flat) {
-    const recruiterId = recruiter.id || recruiter.recruiter_id;
-    if (!recruiterId || seen.has(recruiterId)) continue;
-    seen.add(recruiterId);
+    const companyId = recruiter.company_id || recruiter.id || recruiter.recruiter_id;
+    if (!companyId || seen.has(companyId)) continue;
+    seen.add(companyId);
     unique.push({
-      id: recruiterId,
+      id: companyId,
+      companyId: recruiter.company_id || null,
       name: recruiter.company_name || recruiter.name || "Company",
       logo: resolveMediaUrl(recruiter.logo_url || recruiter.avatar_url || ""),
     });
@@ -129,11 +130,18 @@ async function fetchCompanies() {
 function goToRecruiterProfile(company) {
   if (!company?.id) return;
 
+  if (company.companyId) {
+    router.push({
+      name: "public-company-profile",
+      params: { id: company.companyId },
+    });
+    return;
+  }
+
+  // Prefer companies route when directory already uses company ids
   router.push({
-    name: "public-recruiter-profile",
-    params: {
-      id: company.id,
-    },
+    name: "public-company-profile",
+    params: { id: company.id },
   });
 }
 

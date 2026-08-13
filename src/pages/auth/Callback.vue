@@ -8,6 +8,7 @@ import api from "@/services/api";
 import { decodeAccessToken } from "@/utils/jwt";
 import { displayEmail } from "@/utils/authFlags";
 import { resolveRecruiterLandingPath } from "@/utils/recruiterLanding";
+import { normalizeRecruiterSessionUser } from "@/utils/companyPermissions";
 
 const route = useRoute();
 const router = useRouter();
@@ -24,16 +25,19 @@ function buildUserFromToken(token) {
   const roleId = Number(decoded.role_id);
 
   if (roleId === 2) {
-    return {
-      // Profile id only — never fall back to users.id (breaks /recruiters/:id)
+    return normalizeRecruiterSessionUser({
       id: decoded.recruiter_id || null,
       user_id: decoded.id,
+      recruiter_id: decoded.recruiter_id || null,
+      company_id: decoded.company_id ?? null,
+      company_role: decoded.company_role ?? null,
       name: decoded.name || decoded.contact_name || "",
       email: displayEmail(decoded.email),
       avatar_url: decoded.avatar_url || null,
       role: "recruiter",
+      role_id: 2,
       login_provider: provider,
-    };
+    });
   }
 
   return {
@@ -55,21 +59,31 @@ async function enrichUserProfile(token) {
       const profileRes = await api.get(`/users/${decoded.id}/recruiters`);
       const recruiterData = profileRes.data?.data;
       if (!recruiterData) return;
-      auth.mergeUser({
-        id: recruiterData.id,
-        user_id: recruiterData.user_id,
-        name:
-          recruiterData.contact_name ||
-          recruiterData.company_name ||
-          auth.user?.name,
-        email: displayEmail(decoded.email || recruiterData.email),
-        avatar_url: recruiterData.avatar_url,
-        role: "recruiter",
-        login_provider:
-          auth.user?.login_provider ||
-          decoded.login_provider ||
-          resolveLoginProvider(decoded),
-      });
+      auth.mergeUser(
+        normalizeRecruiterSessionUser({
+          id: recruiterData.id,
+          user_id: recruiterData.user_id ?? decoded.id,
+          recruiter_id: recruiterData.id,
+          company_id:
+            recruiterData.company_id ?? decoded.company_id ?? auth.user?.company_id,
+          company_role:
+            recruiterData.company_role ??
+            decoded.company_role ??
+            auth.user?.company_role,
+          name:
+            recruiterData.contact_name ||
+            recruiterData.company_name ||
+            auth.user?.name,
+          email: displayEmail(decoded.email || recruiterData.email),
+          avatar_url: recruiterData.avatar_url,
+          role: "recruiter",
+          role_id: 2,
+          login_provider:
+            auth.user?.login_provider ||
+            decoded.login_provider ||
+            resolveLoginProvider(decoded),
+        }),
+      );
       return;
     }
 

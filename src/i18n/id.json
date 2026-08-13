@@ -28,7 +28,7 @@
   "previous": "Sebelumnya",
   "allLocations": "Semua Lokasi",
   "gpsLocation": {
-    "detecting": "Mendeteksi lokasi GPS…",
+    "detecting": "Mendeteksi lokasi GPSâ€¦",
     "showingNear": "Menampilkan lowongan di {city}",
     "showAll": "Tampilkan semua lokasi",
     "useMyLocation": "Gunakan lokasi saya",
@@ -218,7 +218,7 @@
   },
   "contactReveal": {
     "show": "Tampilkan",
-    "showing": "Memuat…",
+    "showing": "Memuatâ€¦",
     "rateLimited": "Terlalu banyak permintaan. Coba lagi dalam {seconds}d.",
     "failed": "Gagal menampilkan kontak.",
     "loginRequired": "Masuk untuk melihat detail kontak.",
@@ -226,7 +226,7 @@
     "maskedPhone": "Telepon disembunyikan"
   },
   "resumeLink": {
-    "opening": "Membuka…",
+    "opening": "Membukaâ€¦",
     "unavailable": "CV sementara tidak tersedia. Silakan coba lagi."
   },
   "jobSearch": {
@@ -238,7 +238,7 @@
     "placeholder": "Cari jabatan...",
     "searching": "Mencari...",
     "typeToSearch": "Ketik minimal 2 karakter",
-    "noResults": "Tidak ada jabatan cocok — tetap bisa ketik bebas",
+    "noResults": "Tidak ada jabatan cocok â€” tetap bisa ketik bebas",
     "freeTextHint": "Pilih saran atau lanjut ketik bebas",
     "selectCategoryFirst": "Pilih kategori terlebih dahulu",
     "taxonomyLabel": "Jabatan (taksonomi)",
@@ -297,7 +297,7 @@
     "resultSingular": "hasil",
     "resultPlural": "hasil",
     "resultsFoundFor": "ditemukan untuk",
-    "noResults": "Tidak ada hasil untuk \"{query}\" — coba kata kunci lain",
+    "noResults": "Tidak ada hasil untuk \"{query}\" â€” coba kata kunci lain",
     "categories": {
       "seekers": {
         "title": "Untuk pencari kerja",
@@ -351,7 +351,7 @@
         "tag": "Perusahaan"
       },
       {
-        "q": "Saya lupa kata sandi — apa yang harus dilakukan?",
+        "q": "Saya lupa kata sandi â€” apa yang harus dilakukan?",
         "a": "Gunakan tautan <strong>Lupa Kata Sandi</strong> di halaman login untuk menerima email dengan instruksi reset.",
         "tag": "Akun"
       }
@@ -376,7 +376,7 @@
   "recruiterProfile": "Profil Perekrut",
   "recruiterEdit": {
     "uploadLogo": "Unggah logo",
-    "logoHint": "JPG atau PNG, rasio 1:1, min. 128×128 px, maks. 500 KB",
+    "logoHint": "JPG atau PNG, rasio 1:1, min. 128Ã—128 px, maks. 500 KB",
     "sectionCompany": "Perusahaan",
     "sectionContact": "Kontak",
     "sectionSocial": "Media sosial",
@@ -386,7 +386,7 @@
     "instagram": "Instagram",
     "tiktok": "TikTok",
     "wordCount": "{count} kata",
-    "wordCountHint": "(min. 60 – maks. 130)"
+    "wordCountHint": "(min. 60 â€“ maks. 130)"
   },
   "recruiterPublic": {
     "visitWebsite": "Kunjungi Website",
@@ -466,7 +466,7 @@
   "alreadyAppliedMessage": "Anda sudah melamar lowongan ini.",
   "applyNow": "Lamar Sekarang",
   "applying": "Melamar...",
-  "loadingApplicants": "Memuat pelamar…",
+  "loadingApplicants": "Memuat pelamarâ€¦",
   "postedJustNow": "Baru saja diposting",
   "postedAgo": "Diposting {time} lalu",
   "failedToUpdateStatus": "Gagal memperbarui status pelamar",
@@ -571,7 +571,7 @@
     "sectionCompensationHint": "Gaji saat ini dan yang diharapkan membantu mencocokkan lowongan.",
     "sectionAbout": "Tentang Anda",
     "sectionAboutHint": "Alamat dan ringkasan singkat latar belakang Anda.",
-    "skillsSectionHint": "Tambahkan keahlian yang menonjolkan kekuatan Anda. Klik × untuk menghapus.",
+    "skillsSectionHint": "Tambahkan keahlian yang menonjolkan kekuatan Anda. Klik Ã— untuk menghapus.",
     "appliedJobsHint": "Lacak lowongan yang sudah Anda lamar.",
     "savedJobsHint": "Lowongan yang Anda simpan untuk nanti.",
     "changePasswordPage": {
@@ -680,7 +680,7 @@
     "noWorkExperienceAdded": "Belum ada pengalaman kerja",
     "companyName": "Nama Perusahaan",
     "selectCategory": "Pilih kategori",
-    "loadingCategories": "Memuat kategori…",
+    "loadingCategories": "Memuat kategoriâ€¦",
     "jobTitle": "Jabatan",
     "startDate": "Tanggal Mulai",
     "endDate": "Tanggal Selesai",
@@ -810,13 +810,13 @@
       "title": "Parser CV",
       "subtitle": "Unggah CV Anda untuk mendeteksi dan mengisi data profil secara otomatis. Tinjau setiap bagian sebelum menyimpan.",
       "uploadLabel": "Unggah CV (PDF atau DOCX)",
-      "acceptedFormats": "Format diterima: PDF, DOCX – Maks 10MB",
+      "acceptedFormats": "Format diterima: PDF, DOCX â€“ Maks 10MB",
       "parseButton": "Parse CV",
       "parsing": "Memproses...",
       "selectFile": "Silakan pilih file CV",
       "invalidType": "Hanya file PDF atau DOCX yang diizinkan",
       "failedToParse": "Gagal memproses CV",
-      "parseSuccess": "CV berhasil diproses – tinjau dan terapkan data di bawah ini",
+      "parseSuccess": "CV berhasil diproses â€“ tinjau dan terapkan data di bawah ini",
       "foundInCV": "Ditemukan di CV Anda",
       "applyToProfile": "Terapkan ke Profil",
       "apply": "Terapkan",
@@ -828,16 +828,16 @@
     }
   },
   "news": {
-    "pageTitle": "Berita — Cari Kerja",
+    "pageTitle": "Berita â€” Cari Kerja",
     "title": "Berita",
     "subtitle": "Update, tips, dan cerita dari tim Cari Kerja.",
     "search": "Cari",
-    "searchPlaceholder": "Cari artikel…",
+    "searchPlaceholder": "Cari artikelâ€¦",
     "featuredOnly": "Unggulan saja",
     "featured": "Unggulan",
     "allCategories": "Semua kategori",
     "resultCount": "{count} artikel",
-    "loading": "Memuat…",
+    "loading": "Memuatâ€¦",
     "empty": "Artikel tidak ditemukan.",
     "noCover": "Tanpa gambar",
     "readMore": "Baca selengkapnya",
@@ -889,12 +889,30 @@
       "heroTitle": "Cara Meningkatkan CV",
       "heroSubtitle": "CV yang baik sangat penting untuk mendapat wawancara. Pelajari tips agar CV Anda menonjol.",
       "toc": {
-        "format": { "title": "Pilih Format yang Tepat", "desc": "Pelajari standar format" },
-        "summary": { "title": "Tulis Ringkasan yang Kuat", "desc": "Tarik perhatian di bagian pertama" },
-        "achievements": { "title": "Tonjolkan Pencapaian", "desc": "Tunjukkan hasil, bukan hanya tanggung jawab" },
-        "education": { "title": "Pendidikan & Sertifikasi", "desc": "Cantumkan kualifikasi dengan efektif" },
-        "ats": { "title": "Optimalkan untuk ATS", "desc": "Pastikan sistem bisa membaca CV Anda" },
-        "upload": { "title": "Unggah CV Anda", "desc": "Agar ditemukan perekrut" }
+        "format": {
+          "title": "Pilih Format yang Tepat",
+          "desc": "Pelajari standar format"
+        },
+        "summary": {
+          "title": "Tulis Ringkasan yang Kuat",
+          "desc": "Tarik perhatian di bagian pertama"
+        },
+        "achievements": {
+          "title": "Tonjolkan Pencapaian",
+          "desc": "Tunjukkan hasil, bukan hanya tanggung jawab"
+        },
+        "education": {
+          "title": "Pendidikan & Sertifikasi",
+          "desc": "Cantumkan kualifikasi dengan efektif"
+        },
+        "ats": {
+          "title": "Optimalkan untuk ATS",
+          "desc": "Pastikan sistem bisa membaca CV Anda"
+        },
+        "upload": {
+          "title": "Unggah CV Anda",
+          "desc": "Agar ditemukan perekrut"
+        }
       },
       "sections": {
         "format": {
@@ -960,11 +978,26 @@
       "heroTitle": "Lacak Lamaran Kerja Anda",
       "heroSubtitle": "Tetap terorganisir dan tindak lanjuti semua lamaran secara efektif.",
       "toc": {
-        "track": { "title": "Cara Melacak Lamaran", "desc": "Lihat semua lamaran yang terkirim" },
-        "status": { "title": "Status Lamaran", "desc": "Pahami arti setiap status" },
-        "notes": { "title": "Buat Catatan", "desc": "Dokumentasikan progress lamaran" },
-        "followUp": { "title": "Tindak Lanjut", "desc": "Praktik terbaik untuk follow up" },
-        "keepApplying": { "title": "Tetap Melamar", "desc": "Jangan tunggu satu balasan" }
+        "track": {
+          "title": "Cara Melacak Lamaran",
+          "desc": "Lihat semua lamaran yang terkirim"
+        },
+        "status": {
+          "title": "Status Lamaran",
+          "desc": "Pahami arti setiap status"
+        },
+        "notes": {
+          "title": "Buat Catatan",
+          "desc": "Dokumentasikan progress lamaran"
+        },
+        "followUp": {
+          "title": "Tindak Lanjut",
+          "desc": "Praktik terbaik untuk follow up"
+        },
+        "keepApplying": {
+          "title": "Tetap Melamar",
+          "desc": "Jangan tunggu satu balasan"
+        }
       },
       "sections": {
         "track": {
@@ -1010,11 +1043,26 @@
       "heroTitle": "Cara Mencari CV",
       "heroSubtitle": "Temukan kandidat yang tepat dengan cepat.",
       "toc": {
-        "filters": { "title": "Gunakan Filter", "desc": "Persempit berdasarkan keahlian, lokasi, pengalaman" },
-        "keywords": { "title": "Pencarian Kata Kunci", "desc": "Temukan kandidat dengan keahlian spesifik" },
-        "review": { "title": "Tinjau Profil", "desc": "Cek CV, pengalaman, dan keahlian" },
-        "shortlist": { "title": "Buat Daftar Pendek", "desc": "Simpan profil menjanjikan" },
-        "contact": { "title": "Hubungi Kandidat", "desc": "Jangkau langsung atau undang melamar" }
+        "filters": {
+          "title": "Gunakan Filter",
+          "desc": "Persempit berdasarkan keahlian, lokasi, pengalaman"
+        },
+        "keywords": {
+          "title": "Pencarian Kata Kunci",
+          "desc": "Temukan kandidat dengan keahlian spesifik"
+        },
+        "review": {
+          "title": "Tinjau Profil",
+          "desc": "Cek CV, pengalaman, dan keahlian"
+        },
+        "shortlist": {
+          "title": "Buat Daftar Pendek",
+          "desc": "Simpan profil menjanjikan"
+        },
+        "contact": {
+          "title": "Hubungi Kandidat",
+          "desc": "Jangkau langsung atau undang melamar"
+        }
       },
       "sections": {
         "filters": {
@@ -1060,12 +1108,30 @@
       "heroTitle": "Harga & Paket",
       "heroSubtitle": "Pilih paket terbaik untuk kebutuhan rekrutmen Anda.",
       "toc": {
-        "plans": { "title": "Paket Kami", "desc": "Opsi gratis dan premium" },
-        "credits": { "title": "Kredit Posting", "desc": "Cara kerja kredit" },
-        "team": { "title": "Akun Tim", "desc": "Kelola beberapa perekrut" },
-        "billing": { "title": "Penagihan", "desc": "Metode pembayaran dan faktur" },
-        "trials": { "title": "Uji Coba Gratis", "desc": "Coba fitur premium tanpa risiko" },
-        "custom": { "title": "Paket Kustom", "desc": "Untuk organisasi besar" }
+        "plans": {
+          "title": "Paket Kami",
+          "desc": "Opsi gratis dan premium"
+        },
+        "credits": {
+          "title": "Kredit Posting",
+          "desc": "Cara kerja kredit"
+        },
+        "team": {
+          "title": "Akun Tim",
+          "desc": "Kelola beberapa perekrut"
+        },
+        "billing": {
+          "title": "Penagihan",
+          "desc": "Metode pembayaran dan faktur"
+        },
+        "trials": {
+          "title": "Uji Coba Gratis",
+          "desc": "Coba fitur premium tanpa risiko"
+        },
+        "custom": {
+          "title": "Paket Kustom",
+          "desc": "Untuk organisasi besar"
+        }
       },
       "sections": {
         "plans": {
@@ -1115,11 +1181,26 @@
       "heroTitle": "Cara Mendaftar",
       "heroSubtitle": "Buat akun dan mulai melamar atau posting lowongan.",
       "toc": {
-        "type": { "title": "Pilih Tipe Akun", "desc": "Pencari kerja atau perekrut" },
-        "registration": { "title": "Langkah Pendaftaran", "desc": "Isi formulir dan kirim" },
-        "verify": { "title": "Verifikasi Email", "desc": "Cek kotak masuk" },
-        "profile": { "title": "Lengkapi Profil", "desc": "Tambah detail untuk memulai" },
-        "security": { "title": "Tips Keamanan", "desc": "Jaga keamanan akun" }
+        "type": {
+          "title": "Pilih Tipe Akun",
+          "desc": "Pencari kerja atau perekrut"
+        },
+        "registration": {
+          "title": "Langkah Pendaftaran",
+          "desc": "Isi formulir dan kirim"
+        },
+        "verify": {
+          "title": "Verifikasi Email",
+          "desc": "Cek kotak masuk"
+        },
+        "profile": {
+          "title": "Lengkapi Profil",
+          "desc": "Tambah detail untuk memulai"
+        },
+        "security": {
+          "title": "Tips Keamanan",
+          "desc": "Jaga keamanan akun"
+        }
       },
       "sections": {
         "type": {
@@ -1174,11 +1255,26 @@
       "heroTitle": "Cara Reset Kata Sandi",
       "heroSubtitle": "Lupa kata sandi? Ikuti langkah berikut.",
       "toc": {
-        "start": { "title": "Mulai Proses Reset", "desc": "Klik Lupa Kata Sandi di halaman login" },
-        "email": { "title": "Cek Email", "desc": "Cari tautan reset" },
-        "password": { "title": "Atur Kata Sandi Baru", "desc": "Pilih kata sandi yang kuat" },
-        "issues": { "title": "Pemecahan Masalah", "desc": "Jika tidak berhasil" },
-        "security": { "title": "Praktik Keamanan", "desc": "Jaga keamanan akun" }
+        "start": {
+          "title": "Mulai Proses Reset",
+          "desc": "Klik Lupa Kata Sandi di halaman login"
+        },
+        "email": {
+          "title": "Cek Email",
+          "desc": "Cari tautan reset"
+        },
+        "password": {
+          "title": "Atur Kata Sandi Baru",
+          "desc": "Pilih kata sandi yang kuat"
+        },
+        "issues": {
+          "title": "Pemecahan Masalah",
+          "desc": "Jika tidak berhasil"
+        },
+        "security": {
+          "title": "Praktik Keamanan",
+          "desc": "Jaga keamanan akun"
+        }
       },
       "sections": {
         "start": {
@@ -1237,11 +1333,26 @@
       "heroTitle": "Cara Melaporkan Masalah",
       "heroSubtitle": "Menemukan bug? Beri tahu kami.",
       "toc": {
-        "describe": { "title": "Deskripsikan Masalah", "desc": "Jelaskan apa yang terjadi" },
-        "steps": { "title": "Langkah Reproduksi", "desc": "Bantu kami memahami kejadiannya" },
-        "screenshots": { "title": "Tangkapan Layar", "desc": "Bukti visual membantu" },
-        "device": { "title": "Info Perangkat & Browser", "desc": "Ceritakan setup Anda" },
-        "response": { "title": "Selanjutnya", "desc": "Proses dukungan kami" }
+        "describe": {
+          "title": "Deskripsikan Masalah",
+          "desc": "Jelaskan apa yang terjadi"
+        },
+        "steps": {
+          "title": "Langkah Reproduksi",
+          "desc": "Bantu kami memahami kejadiannya"
+        },
+        "screenshots": {
+          "title": "Tangkapan Layar",
+          "desc": "Bukti visual membantu"
+        },
+        "device": {
+          "title": "Info Perangkat & Browser",
+          "desc": "Ceritakan setup Anda"
+        },
+        "response": {
+          "title": "Selanjutnya",
+          "desc": "Proses dukungan kami"
+        }
       },
       "sections": {
         "describe": {
@@ -1287,22 +1398,49 @@
       "heroTitle": "Browser yang Didukung",
       "heroSubtitle": "Gunakan browser modern untuk pengalaman terbaik.",
       "toc": {
-        "browsers": { "title": "Browser Direkomendasikan", "desc": "Browser yang kami dukung" },
-        "requirements": { "title": "Persyaratan Minimum", "desc": "Versi dan pengaturan" },
-        "cookies": { "title": "Aktifkan Cookie", "desc": "Diperlukan untuk login" },
-        "cache": { "title": "Hapus Cache", "desc": "Perbaiki masalah pemuatan" },
-        "mobile": { "title": "Browser Mobile", "desc": "Di ponsel" }
+        "browsers": {
+          "title": "Browser Direkomendasikan",
+          "desc": "Browser yang kami dukung"
+        },
+        "requirements": {
+          "title": "Persyaratan Minimum",
+          "desc": "Versi dan pengaturan"
+        },
+        "cookies": {
+          "title": "Aktifkan Cookie",
+          "desc": "Diperlukan untuk login"
+        },
+        "cache": {
+          "title": "Hapus Cache",
+          "desc": "Perbaiki masalah pemuatan"
+        },
+        "mobile": {
+          "title": "Browser Mobile",
+          "desc": "Di ponsel"
+        }
       },
       "sections": {
         "browsers": {
           "title": "Browser yang Direkomendasikan",
           "body": "Cari Kerja bekerja terbaik di:",
-          "bullets": ["Google Chrome", "Mozilla Firefox", "Microsoft Edge", "Safari (macOS dan iOS)", "Opera"],
+          "bullets": [
+            "Google Chrome",
+            "Mozilla Firefox",
+            "Microsoft Edge",
+            "Safari (macOS dan iOS)",
+            "Opera"
+          ],
           "note": "Selalu perbarui browser untuk keamanan terbaik."
         },
         "requirements": {
           "title": "Persyaratan Minimum",
-          "bullets": ["Chrome 90+", "Firefox 88+", "Edge 90+", "Safari 14+", "Opera 76+"],
+          "bullets": [
+            "Chrome 90+",
+            "Firefox 88+",
+            "Edge 90+",
+            "Safari 14+",
+            "Opera 76+"
+          ],
           "body": "Versi lama mungkin mengalami masalah."
         },
         "cookies": {
@@ -1322,7 +1460,11 @@
         "mobile": {
           "title": "Browser Mobile",
           "body": "Cari Kerja sepenuhnya responsif. Rekomendasi:",
-          "bullets": ["Safari di iOS", "Chrome di Android", "Firefox di Android"],
+          "bullets": [
+            "Safari di iOS",
+            "Chrome di Android",
+            "Firefox di Android"
+          ],
           "note": "Selalu perbarui browser untuk pengalaman terbaik."
         }
       },
@@ -1337,13 +1479,34 @@
       "heroTitle": "Cara Melamar Pekerjaan",
       "heroSubtitle": "Panduan lengkap melamar pekerjaan di Cari Kerja.",
       "toc": {
-        "profile": { "title": "Lengkapi Profil", "desc": "Siapkan akun" },
-        "resume": { "title": "Siapkan CV", "desc": "Unggah dan optimalkan CV" },
-        "search": { "title": "Cari Lowongan", "desc": "Temukan peluang" },
-        "apply": { "title": "Kirim Lamaran", "desc": "Lamar dengan percaya diri" },
-        "followUp": { "title": "Tindak Lanjut", "desc": "Setelah melamar" },
-        "mistakes": { "title": "Kesalahan Umum", "desc": "Hindari ini" },
-        "interview": { "title": "Persiapan Wawancara", "desc": "Tampil terbaik" }
+        "profile": {
+          "title": "Lengkapi Profil",
+          "desc": "Siapkan akun"
+        },
+        "resume": {
+          "title": "Siapkan CV",
+          "desc": "Unggah dan optimalkan CV"
+        },
+        "search": {
+          "title": "Cari Lowongan",
+          "desc": "Temukan peluang"
+        },
+        "apply": {
+          "title": "Kirim Lamaran",
+          "desc": "Lamar dengan percaya diri"
+        },
+        "followUp": {
+          "title": "Tindak Lanjut",
+          "desc": "Setelah melamar"
+        },
+        "mistakes": {
+          "title": "Kesalahan Umum",
+          "desc": "Hindari ini"
+        },
+        "interview": {
+          "title": "Persiapan Wawancara",
+          "desc": "Tampil terbaik"
+        }
       },
       "sections": {
         "profile": {
@@ -1416,11 +1579,26 @@
         "mistakes": {
           "title": "Kesalahan Umum",
           "items": [
-            { "title": "Lamaran Generik", "body": "Tidak menyesuaikan CV untuk posisi spesifik." },
-            { "title": "Kesalahan Ceroboh", "body": "Typo atau informasi usang dalam lamaran." },
-            { "title": "Mengabaikan Instruksi", "body": "Tidak mengikuti instruksi lamaran." },
-            { "title": "Kualifikasi Tidak Sesuai", "body": "Melamar posisi terlalu jauh dari level keahlian." },
-            { "title": "Tidak Ada Follow Up", "body": "Lupa menindaklanjuti lamaran." }
+            {
+              "title": "Lamaran Generik",
+              "body": "Tidak menyesuaikan CV untuk posisi spesifik."
+            },
+            {
+              "title": "Kesalahan Ceroboh",
+              "body": "Typo atau informasi usang dalam lamaran."
+            },
+            {
+              "title": "Mengabaikan Instruksi",
+              "body": "Tidak mengikuti instruksi lamaran."
+            },
+            {
+              "title": "Kualifikasi Tidak Sesuai",
+              "body": "Melamar posisi terlalu jauh dari level keahlian."
+            },
+            {
+              "title": "Tidak Ada Follow Up",
+              "body": "Lupa menindaklanjuti lamaran."
+            }
           ]
         },
         "interview": {
@@ -1448,15 +1626,42 @@
       "heroTitle": "Cara Memposting Lowongan",
       "heroSubtitle": "Panduan bagi perusahaan untuk memposting lowongan efektif.",
       "toc": {
-        "start": { "title": "Memulai", "desc": "Setup akun" },
-        "description": { "title": "Tulis Deskripsi", "desc": "Buat listing menarik" },
-        "details": { "title": "Detail Lowongan", "desc": "Lokasi, gaji, jenis pekerjaan" },
-        "skills": { "title": "Keahlian Dibutuhkan", "desc": "Kualifikasi dan pengalaman" },
-        "attract": { "title": "Tarik Kandidat", "desc": "Buat menonjol" },
-        "manage": { "title": "Kelola Lamaran", "desc": "Tinjau kandidat" },
-        "mistakes": { "title": "Kesalahan Umum", "desc": "Hindari ini" },
-        "optimize": { "title": "Optimalkan Listing", "desc": "Lebih banyak pelamar berkualitas" },
-        "after": { "title": "Setelah Posting", "desc": "Langkah berikutnya" }
+        "start": {
+          "title": "Memulai",
+          "desc": "Setup akun"
+        },
+        "description": {
+          "title": "Tulis Deskripsi",
+          "desc": "Buat listing menarik"
+        },
+        "details": {
+          "title": "Detail Lowongan",
+          "desc": "Lokasi, gaji, jenis pekerjaan"
+        },
+        "skills": {
+          "title": "Keahlian Dibutuhkan",
+          "desc": "Kualifikasi dan pengalaman"
+        },
+        "attract": {
+          "title": "Tarik Kandidat",
+          "desc": "Buat menonjol"
+        },
+        "manage": {
+          "title": "Kelola Lamaran",
+          "desc": "Tinjau kandidat"
+        },
+        "mistakes": {
+          "title": "Kesalahan Umum",
+          "desc": "Hindari ini"
+        },
+        "optimize": {
+          "title": "Optimalkan Listing",
+          "desc": "Lebih banyak pelamar berkualitas"
+        },
+        "after": {
+          "title": "Setelah Posting",
+          "desc": "Langkah berikutnya"
+        }
       },
       "sections": {
         "start": {
@@ -1701,26 +1906,70 @@
   "termsOfService": {
     "title": "Syarat Layanan",
     "lastUpdated": "Terakhir diperbarui: 4 Februari 2026",
-    "agreement": { "title": "1. Persetujuan", "content": "Dengan menggunakan Cari Kerja, Anda menerima Syarat Layanan ini." },
+    "agreement": {
+      "title": "1. Persetujuan",
+      "content": "Dengan menggunakan Cari Kerja, Anda menerima Syarat Layanan ini."
+    },
     "useLicense": {
       "title": "2. Lisensi Penggunaan",
       "content": "Izin terbatas untuk tampilan pribadi non-komersial. Anda tidak boleh:",
-      "prohibitions": ["Memodifikasi materi", "Penggunaan komersial", "Merekayasa balik perangkat lunak", "Menghapus hak cipta", "Mentransfer ke server lain"]
+      "prohibitions": [
+        "Memodifikasi materi",
+        "Penggunaan komersial",
+        "Merekayasa balik perangkat lunak",
+        "Menghapus hak cipta",
+        "Mentransfer ke server lain"
+      ]
     },
-    "disclaimer": { "title": "3. Penafian", "content": "Materi disediakan 'apa adanya' tanpa jaminan." },
-    "limitations": { "title": "4. Batasan", "content": "Cari Kerja tidak bertanggung jawab atas kerusakan dari penggunaan platform." },
-    "accuracy": { "title": "5. Keakuratan", "content": "Materi mungkin mengandung kesalahan. Dapat diubah tanpa pemberitahuan." },
-    "links": { "title": "6. Tautan", "content": "Cari Kerja tidak bertanggung jawab atas konten situs tertaut." },
-    "modifications": { "title": "7. Modifikasi", "content": "Syarat dapat direvisi kapan saja." },
-    "governingLaw": { "title": "8. Hukum yang Berlaku", "content": "Diatur oleh hukum Republik Indonesia." },
-    "userAccounts": { "title": "9. Akun Pengguna", "content": "Anda bertanggung jawab atas kerahasiaan akun." },
+    "disclaimer": {
+      "title": "3. Penafian",
+      "content": "Materi disediakan 'apa adanya' tanpa jaminan."
+    },
+    "limitations": {
+      "title": "4. Batasan",
+      "content": "Cari Kerja tidak bertanggung jawab atas kerusakan dari penggunaan platform."
+    },
+    "accuracy": {
+      "title": "5. Keakuratan",
+      "content": "Materi mungkin mengandung kesalahan. Dapat diubah tanpa pemberitahuan."
+    },
+    "links": {
+      "title": "6. Tautan",
+      "content": "Cari Kerja tidak bertanggung jawab atas konten situs tertaut."
+    },
+    "modifications": {
+      "title": "7. Modifikasi",
+      "content": "Syarat dapat direvisi kapan saja."
+    },
+    "governingLaw": {
+      "title": "8. Hukum yang Berlaku",
+      "content": "Diatur oleh hukum Republik Indonesia."
+    },
+    "userAccounts": {
+      "title": "9. Akun Pengguna",
+      "content": "Anda bertanggung jawab atas kerahasiaan akun."
+    },
     "prohibitedConduct": {
       "title": "10. Perilaku yang Dilarang",
       "content": "Anda setuju untuk tidak:",
-      "items": ["Informasi palsu", "Melanggar hukum", "Melecehkan pengguna lain", "Akses tidak sah", "Spam"]
+      "items": [
+        "Informasi palsu",
+        "Melanggar hukum",
+        "Melecehkan pengguna lain",
+        "Akses tidak sah",
+        "Spam"
+      ]
     },
-    "termination": { "title": "11. Penghentian", "content": "Kami dapat menghentikan akun kapan saja." },
-    "contact": { "title": "12. Hubungi Kami", "content": "Pertanyaan tentang Syarat Layanan:", "emailLabel": "Email", "email": "legal@cari-kerja.id" }
+    "termination": {
+      "title": "11. Penghentian",
+      "content": "Kami dapat menghentikan akun kapan saja."
+    },
+    "contact": {
+      "title": "12. Hubungi Kami",
+      "content": "Pertanyaan tentang Syarat Layanan:",
+      "emailLabel": "Email",
+      "email": "legal@cari-kerja.id"
+    }
   },
   "contactPage": {
     "pageTitle": "Cari Kerja - Kontak",
@@ -1730,8 +1979,8 @@
     "officeAddressLine1": "Oscorp Building, Jl. Darmawangsa Raya No.16, RT.6/RW.1, Pulo, Kebayoran Baru, South Jakarta City, Jakarta 12160",
     "officeAddressLine2": "",
     "workingHours": "Jam kerja",
-    "workingHoursWeekdays": "Sen — Jum: 09.00 — 18.00",
-    "workingHoursSat": "Sab: 10.00 — 14.00",
+    "workingHoursWeekdays": "Sen â€” Jum: 09.00 â€” 18.00",
+    "workingHoursSat": "Sab: 10.00 â€” 14.00",
     "support": "Dukungan",
     "supportDesc": "Pertanyaan umum dan dukungan teknis.",
     "recruiters": "Perekrut",
@@ -1782,26 +2031,68 @@
     "heroTitle": "Syarat Layanan",
     "lastUpdated": "Terakhir diperbarui: 4 Februari 2026",
     "sections": {
-      "agreement": { "title": "1. Persetujuan", "body": "Dengan menggunakan Cari Kerja, Anda menerima syarat ini." },
+      "agreement": {
+        "title": "1. Persetujuan",
+        "body": "Dengan menggunakan Cari Kerja, Anda menerima syarat ini."
+      },
       "license": {
         "title": "2. Lisensi",
         "body": "Izin terbatas untuk penggunaan pribadi non-komersial. Anda tidak boleh:",
-        "bullets": ["Memodifikasi materi", "Penggunaan komersial", "Merekayasa balik", "Menghapus hak cipta", "Transfer ke server lain"]
+        "bullets": [
+          "Memodifikasi materi",
+          "Penggunaan komersial",
+          "Merekayasa balik",
+          "Menghapus hak cipta",
+          "Transfer ke server lain"
+        ]
       },
-      "disclaimer": { "title": "3. Penafian", "body": "Materi disediakan 'apa adanya' tanpa jaminan." },
-      "limitations": { "title": "4. Batasan", "body": "Tidak bertanggung jawab atas kerusakan dari penggunaan platform." },
-      "accuracy": { "title": "5. Keakuratan", "body": "Materi mungkin mengandung kesalahan dan dapat diubah tanpa pemberitahuan." },
-      "links": { "title": "6. Tautan", "body": "Tidak bertanggung jawab atas konten situs tertaut." },
-      "modifications": { "title": "7. Modifikasi", "body": "Syarat dapat direvisi kapan saja." },
-      "governing": { "title": "8. Hukum yang Berlaku", "body": "Diatur oleh hukum Republik Indonesia dengan yurisdiksi eksklusif pengadilan di Jakarta." },
-      "accounts": { "title": "9. Akun Pengguna", "body": "Anda bertanggung jawab atas kerahasiaan akun dan semua aktivitas di dalamnya." },
+      "disclaimer": {
+        "title": "3. Penafian",
+        "body": "Materi disediakan 'apa adanya' tanpa jaminan."
+      },
+      "limitations": {
+        "title": "4. Batasan",
+        "body": "Tidak bertanggung jawab atas kerusakan dari penggunaan platform."
+      },
+      "accuracy": {
+        "title": "5. Keakuratan",
+        "body": "Materi mungkin mengandung kesalahan dan dapat diubah tanpa pemberitahuan."
+      },
+      "links": {
+        "title": "6. Tautan",
+        "body": "Tidak bertanggung jawab atas konten situs tertaut."
+      },
+      "modifications": {
+        "title": "7. Modifikasi",
+        "body": "Syarat dapat direvisi kapan saja."
+      },
+      "governing": {
+        "title": "8. Hukum yang Berlaku",
+        "body": "Diatur oleh hukum Republik Indonesia dengan yurisdiksi eksklusif pengadilan di Jakarta."
+      },
+      "accounts": {
+        "title": "9. Akun Pengguna",
+        "body": "Anda bertanggung jawab atas kerahasiaan akun dan semua aktivitas di dalamnya."
+      },
       "prohibited": {
         "title": "10. Perilaku yang Dilarang",
         "intro": "Anda setuju untuk tidak:",
-        "bullets": ["Informasi palsu", "Melanggar hukum", "Melecehkan pengguna", "Akses tidak sah", "Spam"]
+        "bullets": [
+          "Informasi palsu",
+          "Melanggar hukum",
+          "Melecehkan pengguna",
+          "Akses tidak sah",
+          "Spam"
+        ]
       },
-      "termination": { "title": "11. Penghentian", "body": "Kami dapat menghentikan akun kapan saja tanpa pemberitahuan." },
-      "contact": { "title": "12. Hubungi Kami", "bodyPrefix": "Pertanyaan tentang Syarat Layanan, hubungi kami di" }
+      "termination": {
+        "title": "11. Penghentian",
+        "body": "Kami dapat menghentikan akun kapan saja tanpa pemberitahuan."
+      },
+      "contact": {
+        "title": "12. Hubungi Kami",
+        "bodyPrefix": "Pertanyaan tentang Syarat Layanan, hubungi kami di"
+      }
     }
   },
   "searchWorkers": {
@@ -1820,7 +2111,7 @@
     "jobTitleYearsPairRequired": "Pilih jabatan dan isi min. tahun bersamaan (keduanya wajib).",
     "categoryRole": "Kategori (pengalaman)",
     "allCategories": "Semua kategori",
-    "loadingCategories": "Memuat kategori…",
+    "loadingCategories": "Memuat kategoriâ€¦",
     "minYearsInCategory": "Min. tahun di kategori ini",
     "categoryYearsPairRequired": "Pilih kategori dan isi min. tahun bersamaan (keduanya wajib).",
     "gender": "Jenis Kelamin",
@@ -1889,7 +2180,7 @@
     "usernameLabel": "Nama Pengguna",
     "passwordLabel": "Kata Sandi",
     "confirmPasswordLabel": "Konfirmasi Kata Sandi",
-    "passwordPlaceholder": "••••••••",
+    "passwordPlaceholder": "â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢",
     "forgotPassword": "Lupa kata sandi?",
     "dontHaveAccount": "Belum punya akun?",
     "createAccount": "Buat akun",
@@ -1931,14 +2222,14 @@
       "sending": "Mengirim...",
       "resendVerification": "Kirim ulang email verifikasi",
       "verify": "Memverifikasi...",
-      "redirecting": "Mengalihkan ke login…",
-      "redirectingToApp": "Sedang masuk ke akun Anda…"
+      "redirecting": "Mengalihkan ke loginâ€¦",
+      "redirectingToApp": "Sedang masuk ke akun Andaâ€¦"
     },
     "messages": {
       "emailNotVerified": "Email Anda belum diverifikasi.",
       "verificationSent": "Email verifikasi dikirim",
       "failedToSendVerification": "Gagal mengirim email verifikasi",
-      "verificationSuccess": "Email terverifikasi. Mengalihkan ke login…",
+      "verificationSuccess": "Email terverifikasi. Mengalihkan ke loginâ€¦",
       "invalidToken": "Tautan verifikasi tidak valid atau kadaluarsa",
       "passwordResetSuccess": "Kata sandi berhasil direset.",
       "noPassword": "Kata sandi wajib diisi",
@@ -1980,7 +2271,7 @@
       "missingTelegramCode": "Kode OAuth Telegram tidak ditemukan.",
       "loginRequiredForLink": "Silakan login terlebih dahulu untuk menghubungkan Telegram.",
       "backToApp": "Kembali ke aplikasi",
-      "linkInterrupted": "Proses hubungkan Telegram terputus dan akun Anda tidak diganti. Coba lagi dari Profil → Channel notifikasi.",
+      "linkInterrupted": "Proses hubungkan Telegram terputus dan akun Anda tidak diganti. Coba lagi dari Profil â†’ Channel notifikasi.",
       "telegramAlreadyLoginAccount": "Telegram ini sudah dipakai sebagai akun login. Pakai Telegram lain untuk notifikasi, atau login dengan Telegram untuk akun tersebut.",
       "telegramAlreadyLinked": "Telegram ini sudah terhubung untuk notifikasi di akun lain."
     }
@@ -1995,9 +2286,9 @@
     "upload": "File ditolak (tipe tidak valid atau tipuan). Unggah ulang file asli dalam format yang didukung."
   },
   "maintenance": {
-    "pageTitle": "Sedang Maintenance — Cari Kerja",
+    "pageTitle": "Sedang Maintenance â€” Cari Kerja",
     "title": "Sedang dalam maintenance",
-    "description": "Platform sementara tidak tersedia karena pemeliharaan terjadwal. Silakan coba lagi nanti — tidak perlu terus me-refresh halaman.",
+    "description": "Platform sementara tidak tersedia karena pemeliharaan terjadwal. Silakan coba lagi nanti â€” tidak perlu terus me-refresh halaman.",
     "backHome": "Kembali ke beranda",
     "hint": "Kami segera kembali."
   },
@@ -2014,7 +2305,7 @@
       "pageTitle": "Verifikasi perusahaan (KYC)",
       "pageSubtitle": "Isi data legal perusahaan dan unggah dokumen wajib agar akun employer dapat diverifikasi.",
       "restrictedBanner": "Akses akun Anda dibatasi sampai verifikasi perusahaan selesai. Kirim dokumen lalu ajukan aktivasi ulang.",
-      "loading": "Memuat status verifikasi…",
+      "loading": "Memuat status verifikasiâ€¦",
       "loadFailed": "Gagal memuat status verifikasi",
       "refresh": "Muat ulang",
       "company": "Perusahaan",
@@ -2026,13 +2317,13 @@
       "nib": "Nomor NIB",
       "notes": "Catatan untuk reviewer (opsional)",
       "saveDraft": "Simpan draft",
-      "saving": "Menyimpan…",
+      "saving": "Menyimpanâ€¦",
       "draftSaved": "Draft tersimpan",
       "saveFailed": "Gagal menyimpan draft",
       "documentsSection": "Dokumen",
-      "documentsHint": "PDF, JPG, atau PNG — maks. 10 MB per file.",
+      "documentsHint": "PDF, JPG, atau PNG â€” maks. 10 MB per file.",
       "upload": "Unggah",
-      "uploading": "Mengunggah…",
+      "uploading": "Mengunggahâ€¦",
       "remove": "Hapus",
       "uploaded": "Sudah diunggah",
       "notUploaded": "Belum diunggah",
@@ -2044,16 +2335,16 @@
       "fileTooLarge": "File terlalu besar (maks. 10 MB)",
       "rateLimitedSeconds": "Terlalu banyak percobaan. Coba lagi dalam {seconds}s.",
       "submit": "Kirim untuk direview",
-      "submitting": "Mengirim…",
+      "submitting": "Mengirimâ€¦",
       "submitSuccess": "Pengajuan dikirim untuk direview",
       "submitFailed": "Gagal mengirim pengajuan",
       "reactivateHint": "Setelah mengirim dokumen, ajukan aktivasi ulang agar admin dapat memulihkan akses penuh.",
-      "reactivateReasonPlaceholder": "Catatan opsional untuk admin…",
+      "reactivateReasonPlaceholder": "Catatan opsional untuk adminâ€¦",
       "reactivateCta": "Ajukan aktivasi ulang",
-      "reactivating": "Mengirim permintaan…",
+      "reactivating": "Mengirim permintaanâ€¦",
       "reactivateSuccess": "Permintaan aktivasi ulang terkirim",
       "reactivateFailed": "Gagal mengajukan aktivasi ulang",
-      "reactivatePending": "Permintaan aktivasi ulang sudah terbuka — menunggu review admin.",
+      "reactivatePending": "Permintaan aktivasi ulang sudah terbuka â€” menunggu review admin.",
       "alreadyVerified": "Perusahaan Anda sudah terverifikasi.",
       "applicationStatus": "Pengajuan",
       "status": {
@@ -2061,7 +2352,7 @@
         "pending_review": "Menunggu review",
         "verified": "Terverifikasi",
         "rejected": "Ditolak",
-        "blocked_incomplete": "Diblokir — belum lengkap",
+        "blocked_incomplete": "Diblokir â€” belum lengkap",
         "unknown": "Tidak diketahui"
       },
       "appStatus": {
@@ -2075,7 +2366,7 @@
   },
   "moderation": {
     "title": "Lowongan Ditahan untuk Review Konten",
-    "description": "Lowongan Anda tidak langsung dipublikasikan. Sistem kami menandai kontennya untuk direview terlebih dahulu, sehingga statusnya sekarang Pending. Lowongan akan tayang setelah review selesai — Anda tidak perlu melakukan apa pun.",
+    "description": "Lowongan Anda tidak langsung dipublikasikan. Sistem kami menandai kontennya untuk direview terlebih dahulu, sehingga statusnya sekarang Pending. Lowongan akan tayang setelah review selesai â€” Anda tidak perlu melakukan apa pun.",
     "flagsLabel": "Sinyal terdeteksi",
     "riskScore": "Skor risiko",
     "viewJobs": "Lihat Daftar Lowongan",
@@ -2129,7 +2420,7 @@
     "pricing": "Paket & Harga",
     "pricingTitle": "Tingkatkan Rekrutmen",
     "pricingTitleAccent": " Tanpa Batas",
-    "pricingSubtitle": "Pilih paket yang sesuai kebutuhan bisnis Anda — dari gratis hingga enterprise.",
+    "pricingSubtitle": "Pilih paket yang sesuai kebutuhan bisnis Anda â€” dari gratis hingga enterprise.",
     "activePlan": "Paket aktif",
     "maxPosts": "iklan maks.",
     "singleSlots": "slot satuan",
@@ -2146,10 +2437,26 @@
       "business": "Business"
     },
     "features": {
-      "free": ["1 iklan aktif", "Tanpa biaya", "Akses dasar"],
-      "starter": ["5 iklan aktif", "Berlaku 30 hari", "Semua fitur standar"],
-      "pro": ["15 iklan aktif", "Berlaku 30 hari", "Prioritas dukungan"],
-      "business": ["25 iklan aktif", "Berlaku 30 hari", "Dukungan premium"],
+      "free": [
+        "1 iklan aktif",
+        "Tanpa biaya",
+        "Akses dasar"
+      ],
+      "starter": [
+        "5 iklan aktif",
+        "Berlaku 30 hari",
+        "Semua fitur standar"
+      ],
+      "pro": [
+        "15 iklan aktif",
+        "Berlaku 30 hari",
+        "Prioritas dukungan"
+      ],
+      "business": [
+        "25 iklan aktif",
+        "Berlaku 30 hari",
+        "Dukungan premium"
+      ],
       "activePosts": "iklan aktif bersamaan",
       "durationDays": "hari sejak aktivasi",
       "secureXendit": "Pembayaran aman via Xendit"
@@ -2177,18 +2484,18 @@
       "top10Title": "Boost Top-10",
       "top10Desc": "Iklan Anda muncul di 10 posisi teratas setiap hari dalam durasi paket.",
       "hotTitle": "Boost Hot (Paling Atas)",
-      "hotDesc": "Iklan Anda tampil paling atas dari semua iklan lainnya — visibilitas maksimal."
+      "hotDesc": "Iklan Anda tampil paling atas dari semua iklan lainnya â€” visibilitas maksimal."
     },
     "boostModal": {
       "title": "Boost Iklan",
       "info": "Pilih paket boost, lalu Anda akan diarahkan ke halaman detail harga dan pilihan metode pembayaran.",
-      "hot": "HOT — Paling Atas",
+      "hot": "HOT â€” Paling Atas",
       "hotDesc": "Posisi teratas",
       "top10": "Top-10 Harian",
       "top10Desc": "10 besar harian",
       "selectPay": "Pilih",
       "empty": "Paket boost belum tersedia",
-      "footer": "Aman via Xendit · Aktif otomatis setelah bayar"
+      "footer": "Aman via Xendit Â· Aktif otomatis setelah bayar"
     },
     "history": "Lihat riwayat transaksi saya",
     "checkout": {
@@ -2217,11 +2524,11 @@
       "cardNumber": "Nomor Kartu",
       "cardExpiry": "Masa Berlaku",
       "cardCvv": "CVV / CVC",
-      "cardCvvHint": "(3–4 digit)",
+      "cardCvvHint": "(3â€“4 digit)",
       "cardSecureHint": "Detail kartu diverifikasi di halaman Xendit yang terenkripsi (PCI DSS).",
       "totalCharged": "Total yang dibayarkan",
       "payButton": "Buat Tagihan Pembayaran",
-      "secureTransaction": "Transaksi diproses aman oleh Xendit · PCI DSS Compliant",
+      "secureTransaction": "Transaksi diproses aman oleh Xendit Â· PCI DSS Compliant",
       "errors": {
         "invalidParams": "Parameter paket tidak valid",
         "planNotFound": "Paket tidak ditemukan",
@@ -2282,7 +2589,9 @@
       "tryAgain": "Coba Lagi",
       "backPricing": "Kembali ke Paket",
       "support": "Hubungi Bantuan"
-    }
+    },
+    "activePlanCompany": "Paket perusahaan",
+    "pricingSubtitleCompany": "Paket berbagi untuk seluruh anggota perusahaan."
   },
   "pipeline": {
     "navLabel": "Pipeline",
@@ -2312,18 +2621,18 @@
       "score": "{score}% Match",
       "scoreAria": "Kecocokan {score} persen",
       "scoreLabel": "kecocokan",
-      "pending": "Menghitung kecocokan…",
+      "pending": "Menghitung kecocokanâ€¦",
       "insufficient": "Data profil kurang",
-      "insufficientHint": "Kecocokan masih parsial — lengkapi profil kandidat atau detail lowongan agar semua dimensi bisa dinilai.",
+      "insufficientHint": "Kecocokan masih parsial â€” lengkapi profil kandidat atau detail lowongan agar semua dimensi bisa dinilai.",
       "partialBreakdown": "Dimensi yang tersedia",
       "failed": "Gagal menghitung",
       "sectionTitle": "Kecocokan AI dengan lowongan",
       "computedAt": "Dihitung {date}",
-      "refreshing": "Memuat ulang…",
+      "refreshing": "Memuat ulangâ€¦",
       "refresh": "Muat ulang kecocokan",
       "refreshFailed": "Gagal memuat ulang detail kecocokan",
       "rematch": "Hitung ulang kecocokan",
-      "rematching": "Mengantrikan…",
+      "rematching": "Mengantrikanâ€¦",
       "rematchQueued": "Perhitungan ulang kecocokan diantrikan",
       "rematchQueuedCount": "Menghitung ulang kecocokan untuk {count} pelamar",
       "rematchFailed": "Gagal mengantrikan perhitungan ulang",
@@ -2348,7 +2657,7 @@
       "emptyColumn": "Tidak ada kandidat",
       "noStages": "Belum ada tahapan yang dikonfigurasi",
       "moveFailed": "Gagal memindahkan kandidat",
-      "fallbackHint": "API Pipeline belum tersedia di lingkungan ini — menampilkan pelamar lewat endpoint lama. Drag-and-drop dan kelola tahap membutuhkan modul pipeline backend yang sudah di-deploy."
+      "fallbackHint": "API Pipeline belum tersedia di lingkungan ini â€” menampilkan pelamar lewat endpoint lama. Drag-and-drop dan kelola tahap membutuhkan modul pipeline backend yang sudah di-deploy."
     },
     "card": {
       "moveTo": "Pindahkan ke",
@@ -2393,9 +2702,9 @@
       "selected": "{count} kandidat dipilih",
       "hint": "Pilih kandidat dalam tahap pipeline yang sama untuk mengirim email sekaligus.",
       "moveHint": "Pindahkan semua kandidat terpilih ke tahap pipeline lain sekaligus.",
-      "moveToPlaceholder": "Pindah ke tahap…",
+      "moveToPlaceholder": "Pindah ke tahapâ€¦",
       "moveSelected": "Pindahkan",
-      "moving": "Memindahkan…",
+      "moving": "Memindahkanâ€¦",
       "moveSuccess": "{moved} kandidat dipindah ke {stage}",
       "movePartial": "{failed} kandidat gagal dipindah",
       "moveFailed": "Gagal memindahkan kandidat terpilih",
@@ -2430,7 +2739,7 @@
       "create": "Buat template",
       "edit": "Edit template",
       "list": "Template tersimpan",
-      "empty": "Belum ada template — buat yang pertama di atas.",
+      "empty": "Belum ada template â€” buat yang pertama di atas.",
       "namePlaceholder": "Nama template (mis. Undangan interview)",
       "subjectPlaceholder": "Subjek email",
       "bodyPlaceholder": "Isi email...",
@@ -2498,5 +2807,33 @@
     "enabledSuccess": "Peringatan lowongan diaktifkan",
     "disabledSuccess": "Peringatan lowongan dinonaktifkan",
     "saveFailed": "Gagal memperbarui peringatan lowongan"
+  },
+  "companySettings": {
+    "navCompany": "Perusahaan",
+    "navPersonal": "Profil saya",
+    "title": "Pengaturan perusahaan",
+    "subtitle": "Kelola profil perusahaan Anda",
+    "readOnly": "Anda dapat melihat detail perusahaan, hanya admin yang dapat mengedit.",
+    "teamLink": "Kelola tim",
+    "personalLink": "Profil personal"
+  },
+  "companyTeam": {
+    "nav": "Tim",
+    "billingOwnerOnly": "Hanya owner yang mengelola billing",
+    "contactOwnerUpgrade": "Hubungi owner untuk upgrade"
+  },
+  "acceptInvite": {
+    "missingToken": "Token undangan tidak ada.",
+    "invalid": "Undangan tidak valid atau sudah kedaluwarsa.",
+    "accepted": "Anda bergabung ke perusahaan",
+    "acceptFailed": "Gagal menerima undangan"
+  },
+  "registerInvite": {
+    "title": "Gabung perusahaan",
+    "subtitle": "Gabung {company}",
+    "subtitleGeneric": "Lengkapi akun untuk menerima undangan",
+    "loading": "Memuat undangan...",
+    "emailLocked": "Email terkunci sesuai undangan",
+    "submit": "Gabung & buat akun"
   }
 }

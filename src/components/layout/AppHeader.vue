@@ -243,7 +243,7 @@ function logout() {
 
 function goProfile() {
   if (auth.role === "recruiter") {
-    router.push("/recruiter/profile/edit");
+    router.push("/recruiter/profile");
   } else {
     router.push("/profile/edit");
   }

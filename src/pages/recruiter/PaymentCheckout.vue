@@ -117,6 +117,14 @@ async function createBill() {
       push.error("Gagal membuat tagihan. Silakan coba lagi.");
     }
   } catch (err) {
+    if (err?.response?.status === 403) {
+      push.warning(
+        t("companyTeam.billingOwnerOnly") ||
+          "Hanya owner yang mengelola billing",
+      );
+      router.push("/recruiter/jobs");
+      return;
+    }
     if (isVerificationRequiredError(err)) {
       showVerificationModal.value = true;
       return;

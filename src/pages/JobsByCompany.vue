@@ -308,12 +308,20 @@ function getAvatarUrl(recruiter) {
 }
 
 function goToRecruiterProfile(recruiter) {
-  const recruiterId = recruiter.id || recruiter.recruiter_id;
-  if (!recruiterId) return;
+  const companyId = recruiter.company_id || recruiter.id || recruiter.recruiter_id;
+  if (!companyId) return;
+
+  if (recruiter.company_id || recruiter.company_name) {
+    router.push({
+      name: "public-company-profile",
+      params: { id: companyId },
+    });
+    return;
+  }
 
   router.push({
     name: "public-recruiter-profile",
-    params: { id: recruiterId },
+    params: { id: companyId },
   });
 }
 

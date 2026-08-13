@@ -4,9 +4,11 @@ import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { useEmployerVerificationStore } from "@/stores/employerVerificationStore";
+import { useAuthStore } from "@/stores/authStore.js";
 import { isRateLimitedError, getRetryAfterSeconds } from "@/utils/apiErrors";
 
 const { t } = useI18n();
+const auth = useAuthStore();
 const store = useEmployerVerificationStore();
 const {
   status,
@@ -26,6 +28,14 @@ const {
   restrictedVerification,
   verificationStatus,
 } = storeToRefs(store);
+
+const canManageVerification = computed(() => auth.canManageVerification);
+const canEditVerification = computed(
+  () => canManageVerification.value && canEditDraft.value,
+);
+const canSubmitVerification = computed(
+  () => canManageVerification.value && canSubmit.value,
+);
 
 const form = reactive({
   company_legal_name: "",
@@ -120,7 +130,7 @@ async function load() {
 }
 
 async function saveDraft() {
-  if (!canEditDraft.value) return;
+  if (!canEditVerification.value) return;
   try {
     await store.saveApplication({ ...form });
     push.success(t("verification.kyc.draftSaved"));
@@ -138,7 +148,7 @@ async function saveDraft() {
 async function onFileSelected(docType, event) {
   const file = event.target?.files?.[0];
   event.target.value = "";
-  if (!file || !canEditDraft.value) return;
+  if (!file || !canEditVerification.value) return;
 
   const maxBytes = 10 * 1024 * 1024;
   if (file.size > maxBytes) {
@@ -166,7 +176,7 @@ async function onFileSelected(docType, event) {
 }
 
 async function removeDoc(docType) {
-  if (!canEditDraft.value) return;
+  if (!canEditVerification.value) return;
   try {
     await store.removeDocument(docType);
     push.success(t("verification.kyc.deleteSuccess"));
@@ -178,7 +188,7 @@ async function removeDoc(docType) {
 }
 
 async function submitApplication() {
-  if (!canSubmit.value) return;
+  if (!canSubmitVerification.value) return;
   try {
     await store.submit();
     push.success(t("verification.kyc.submitSuccess"));
@@ -224,6 +234,16 @@ onBeforeUnmount(() => {
         class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
       >
         {{ t("verification.kyc.restrictedBanner") }}
+      </div>
+
+      <div
+        v-if="!canManageVerification"
+        class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700"
+      >
+        {{
+          t("verification.kyc.readOnlyMember") ||
+          "Status verifikasi perusahaan (read-only). Hubungi admin/owner untuk mengirim dokumen."
+        }}
       </div>
 
       <div
@@ -307,7 +327,7 @@ onBeforeUnmount(() => {
               <input
                 v-model="form.company_legal_name"
                 type="text"
-                :disabled="!canEditDraft || saving"
+                :disabled="!canEditVerification || saving"
                 class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a9cf5] disabled:bg-slate-50"
               />
             </div>
@@ -320,7 +340,7 @@ onBeforeUnmount(() => {
                 <input
                   v-model="form.npwp_number"
                   type="text"
-                  :disabled="!canEditDraft || saving"
+                  :disabled="!canEditVerification || saving"
                   class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a9cf5] disabled:bg-slate-50"
                 />
               </div>
@@ -332,7 +352,7 @@ onBeforeUnmount(() => {
                 <input
                   v-model="form.nib_number"
                   type="text"
-                  :disabled="!canEditDraft || saving"
+                  :disabled="!canEditVerification || saving"
                   class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a9cf5] disabled:bg-slate-50"
                 />
               </div>
@@ -344,14 +364,14 @@ onBeforeUnmount(() => {
               <textarea
                 v-model="form.applicant_notes"
                 rows="3"
-                :disabled="!canEditDraft || saving"
+                :disabled="!canEditVerification || saving"
                 class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a9cf5] disabled:bg-slate-50"
               />
             </div>
           </div>
 
           <button
-            v-if="canEditDraft"
+            v-if="canEditVerification"
             type="button"
             :disabled="saving"
             class="inline-flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white px-4 py-2.5 text-sm font-medium"
@@ -400,7 +420,7 @@ onBeforeUnmount(() => {
                   {{ t("verification.kyc.notUploaded") }}
                 </p>
               </div>
-              <div v-if="canEditDraft" class="flex items-center gap-2 shrink-0">
+              <div v-if="canEditVerification" class="flex items-center gap-2 shrink-0">
                 <label
                   class="cursor-pointer rounded-lg bg-[#0a9cf5] hover:bg-[#0890e0] text-white px-3 py-2 text-xs font-semibold"
                   :class="{ 'opacity-50 pointer-events-none': uploadingType === doc.type }"
@@ -448,7 +468,7 @@ onBeforeUnmount(() => {
                   {{ docForType(doc.type).file_name || t("verification.kyc.uploaded") }}
                 </p>
               </div>
-              <div v-if="canEditDraft" class="flex items-center gap-2 shrink-0">
+              <div v-if="canEditVerification" class="flex items-center gap-2 shrink-0">
                 <label
                   class="cursor-pointer rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-3 py-2 text-xs font-semibold"
                 >
@@ -476,9 +496,9 @@ onBeforeUnmount(() => {
         <!-- Actions -->
         <section class="rounded-xl bg-white p-5 shadow-sm space-y-4">
           <button
-            v-if="canEditDraft"
+            v-if="canEditVerification"
             type="button"
-            :disabled="!canSubmit || submitting"
+            :disabled="!canSubmitVerification || submitting"
             class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white px-5 py-2.5 text-sm font-semibold"
             @click="submitApplication"
           >

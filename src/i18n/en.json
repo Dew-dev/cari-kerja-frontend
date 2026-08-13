@@ -28,7 +28,7 @@
   "previous": "Previous",
   "allLocations": "All Locations",
   "gpsLocation": {
-    "detecting": "Detecting GPS location…",
+    "detecting": "Detecting GPS locationâ€¦",
     "showingNear": "Showing jobs in {city}",
     "showAll": "Show all locations",
     "useMyLocation": "Use my location",
@@ -43,7 +43,7 @@
   "alphabetically": "Alphabetically",
   "regionally": "By Region",
   "noCitiesFound": "No cities found",
-  "tryDifferentSearch": "Try a different search term",
+  "tryDifferentSearch": "Try adjusting your search or browse all categories",
   "resumeGenerator": "Resume Generator",
   "resumeGeneratorSubtitle": "Create a professional resume in minutes",
   "personalInformation": "Personal Information",
@@ -218,7 +218,7 @@
   },
   "contactReveal": {
     "show": "Show",
-    "showing": "Revealing…",
+    "showing": "Revealingâ€¦",
     "rateLimited": "Too many reveals. Try again in {seconds}s.",
     "failed": "Could not reveal contact details.",
     "loginRequired": "Sign in to view contact details.",
@@ -226,7 +226,7 @@
     "maskedPhone": "Phone hidden"
   },
   "resumeLink": {
-    "opening": "Opening…",
+    "opening": "Openingâ€¦",
     "unavailable": "Resume is temporarily unavailable. Please try again."
   },
   "jobSearch": {
@@ -238,7 +238,7 @@
     "placeholder": "Search job title...",
     "searching": "Searching...",
     "typeToSearch": "Type at least 2 characters",
-    "noResults": "No matching titles — you can still use free text",
+    "noResults": "No matching titles â€” you can still use free text",
     "freeTextHint": "Select a suggestion or keep typing free text",
     "selectCategoryFirst": "Select a category first",
     "taxonomyLabel": "Job title (taxonomy)",
@@ -251,7 +251,6 @@
   "min_salary": "Min Salary",
   "max_salary": "Max Salary",
   "select": "Select",
-  "education": "Education",
   "job_type": "Job Type",
   "job_level": "Job Level",
   "deadline": "Deadline",
@@ -298,7 +297,7 @@
     "resultSingular": "result",
     "resultPlural": "results",
     "resultsFoundFor": "found for",
-    "noResults": "No results found for \"{query}\" — try different keywords",
+    "noResults": "No results found for \"{query}\" â€” try different keywords",
     "categories": {
       "seekers": {
         "title": "For job seekers",
@@ -352,7 +351,7 @@
         "tag": "Employers"
       },
       {
-        "q": "I forgot my password — what now?",
+        "q": "I forgot my password â€” what now?",
         "a": "Use the <strong>Forgot password</strong> link on the login page to receive an email with reset instructions.",
         "tag": "Account"
       }
@@ -377,7 +376,7 @@
   "recruiterProfile": "Recruiter Profile",
   "recruiterEdit": {
     "uploadLogo": "Upload logo",
-    "logoHint": "JPG or PNG, 1:1 ratio, min. 128×128 px, max. 500 KB",
+    "logoHint": "JPG or PNG, 1:1 ratio, min. 128Ã—128 px, max. 500 KB",
     "sectionCompany": "Company",
     "sectionContact": "Contact",
     "sectionSocial": "Social media",
@@ -387,7 +386,7 @@
     "instagram": "Instagram",
     "tiktok": "TikTok",
     "wordCount": "{count} words",
-    "wordCountHint": "(min. 60 – max. 130)"
+    "wordCountHint": "(min. 60 â€“ max. 130)"
   },
   "recruiterPublic": {
     "visitWebsite": "Visit Website",
@@ -467,7 +466,7 @@
   "alreadyAppliedMessage": "You have already applied to this job.",
   "applyNow": "Apply Now",
   "applying": "Applying...",
-  "loadingApplicants": "Loading applicants…",
+  "loadingApplicants": "Loading applicantsâ€¦",
   "postedJustNow": "Posted just now",
   "postedAgo": "Posted {time} ago",
   "failedToUpdateStatus": "Failed to update applicant status",
@@ -477,7 +476,6 @@
   "add_requirement": "Add requirement",
   "add_responsibility": "Add responsibility",
   "add_benefit": "Add benefit",
-  "add": "Add",
   "questions": "Application Questions",
   "questions_hint": "Ask screening questions that applicants answer when they apply (e.g. availability, experience).",
   "questions_empty": "No questions yet. Add one to screen applicants early.",
@@ -494,7 +492,6 @@
   "options_placeholder": "Comma-separated options",
   "required": "Required",
   "optional": "Optional",
-  "remove": "Remove",
   "applyForJob": "Apply for Job",
   "selectResume": "Select Resume",
   "chooseResume": "Choose a resume",
@@ -542,7 +539,6 @@
   "leastJobs": "Least Jobs",
   "availableJobs": "available jobs",
   "noCategoriesFound": "No Categories Found",
-  "tryDifferentSearch": "Try adjusting your search or browse all categories",
   "clearSearch": "Clear Search",
   "applied": "Applied",
   "topCompanies": "Top Companies",
@@ -575,7 +571,7 @@
     "sectionCompensationHint": "Current and expected salary help match relevant openings.",
     "sectionAbout": "About you",
     "sectionAboutHint": "Address and a short summary of your background.",
-    "skillsSectionHint": "Add skills that highlight your strengths. Click × to remove.",
+    "skillsSectionHint": "Add skills that highlight your strengths. Click Ã— to remove.",
     "appliedJobsHint": "Track roles you have already applied to.",
     "savedJobsHint": "Jobs you bookmarked for later.",
     "changePasswordPage": {
@@ -684,7 +680,7 @@
     "noWorkExperienceAdded": "No work experience added yet",
     "companyName": "Company Name",
     "selectCategory": "Select category",
-    "loadingCategories": "Loading categories…",
+    "loadingCategories": "Loading categoriesâ€¦",
     "jobTitle": "Job Title",
     "startDate": "Start Date",
     "endDate": "End Date",
@@ -818,13 +814,13 @@
       "title": "Parse Your CV",
       "subtitle": "Upload your CV to automatically detect and fill in your profile data. Review each section before saving.",
       "uploadLabel": "Upload CV (PDF or DOCX)",
-      "acceptedFormats": "Accepted: PDF, DOCX – Max 10MB",
+      "acceptedFormats": "Accepted: PDF, DOCX â€“ Max 10MB",
       "parseButton": "Parse CV",
       "parsing": "Parsing...",
       "selectFile": "Please select a CV file",
       "invalidType": "Only PDF or DOCX files are allowed",
       "failedToParse": "Failed to parse CV",
-      "parseSuccess": "CV parsed successfully – review and apply the data below",
+      "parseSuccess": "CV parsed successfully â€“ review and apply the data below",
       "foundInCV": "Found in your CV",
       "applyToProfile": "Apply to Profile",
       "apply": "Apply",
@@ -836,16 +832,16 @@
     }
   },
   "news": {
-    "pageTitle": "News — Cari Kerja",
+    "pageTitle": "News â€” Cari Kerja",
     "title": "News",
     "subtitle": "Updates, tips, and stories from the Cari Kerja team.",
     "search": "Search",
-    "searchPlaceholder": "Search articles…",
+    "searchPlaceholder": "Search articlesâ€¦",
     "featuredOnly": "Featured only",
     "featured": "Featured",
     "allCategories": "All categories",
     "resultCount": "{count} articles",
-    "loading": "Loading…",
+    "loading": "Loadingâ€¦",
     "empty": "No articles found.",
     "noCover": "No image",
     "readMore": "Read more",
@@ -1988,13 +1984,13 @@
   "contactPage": {
     "pageTitle": "Cari Kerja - Contact",
     "title": "Contact Us",
-    "subtitle": "Have a question or need help? Reach out to our team — we are here to help employers and job seekers alike.",
+    "subtitle": "Have a question or need help? Reach out to our team â€” we are here to help employers and job seekers alike.",
     "mainOffice": "Main office",
     "officeAddressLine1": "Oscorp Building, Jl. Darmawangsa Raya No.16, RT.6/RW.1, Pulo, Kebayoran Baru, South Jakarta City, Jakarta 12160",
     "officeAddressLine2": "",
     "workingHours": "Working hours",
-    "workingHoursWeekdays": "Mon — Fri: 9:00 — 18:00",
-    "workingHoursSat": "Sat: 10:00 — 14:00",
+    "workingHoursWeekdays": "Mon â€” Fri: 9:00 â€” 18:00",
+    "workingHoursSat": "Sat: 10:00 â€” 14:00",
     "support": "Support",
     "supportDesc": "For general enquiries and technical support.",
     "recruiters": "Recruiters",
@@ -2125,7 +2121,7 @@
     "jobTitleYearsPairRequired": "Select a job title and enter min. years together (both required).",
     "categoryRole": "Category (experience)",
     "allCategories": "All categories",
-    "loadingCategories": "Loading categories…",
+    "loadingCategories": "Loading categoriesâ€¦",
     "minYearsInCategory": "Min. years in this category",
     "categoryYearsPairRequired": "Select a category and enter min. years together (both required).",
     "gender": "Gender",
@@ -2194,7 +2190,7 @@
     "usernameLabel": "Username",
     "passwordLabel": "Password",
     "confirmPasswordLabel": "Confirm Password",
-    "passwordPlaceholder": "••••••••",
+    "passwordPlaceholder": "â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢",
     "forgotPassword": "Forgot password?",
     "dontHaveAccount": "Don't have an account?",
     "createAccount": "Create account",
@@ -2236,14 +2232,14 @@
       "sending": "Sending...",
       "resendVerification": "Resend verification email",
       "verify": "Verifying...",
-      "redirecting": "Redirecting to login…",
-      "redirectingToApp": "Signing you in…"
+      "redirecting": "Redirecting to loginâ€¦",
+      "redirectingToApp": "Signing you inâ€¦"
     },
     "messages": {
       "emailNotVerified": "Your email is not verified.",
       "verificationSent": "Verification email sent",
       "failedToSendVerification": "Failed to send verification email",
-      "verificationSuccess": "Email verified. Redirecting…",
+      "verificationSuccess": "Email verified. Redirectingâ€¦",
       "invalidToken": "Invalid or expired verification link",
       "passwordResetSuccess": "Password reset successfully.",
       "noPassword": "Password is required",
@@ -2300,9 +2296,9 @@
     "upload": "This file was rejected (invalid or spoofed type). Please re-upload the original file in a supported format."
   },
   "maintenance": {
-    "pageTitle": "Under Maintenance — Cari Kerja",
+    "pageTitle": "Under Maintenance â€” Cari Kerja",
     "title": "We're under maintenance",
-    "description": "The platform is temporarily unavailable while we perform scheduled maintenance. Please check back shortly — no need to keep refreshing.",
+    "description": "The platform is temporarily unavailable while we perform scheduled maintenance. Please check back shortly â€” no need to keep refreshing.",
     "backHome": "Back to home",
     "hint": "We'll be back soon."
   },
@@ -2319,7 +2315,7 @@
       "pageTitle": "Company verification (KYC)",
       "pageSubtitle": "Submit company legal details and required documents so we can verify your employer account.",
       "restrictedBanner": "Your account access is limited until company verification is completed. Please submit your documents and request reactivation.",
-      "loading": "Loading verification status…",
+      "loading": "Loading verification statusâ€¦",
       "loadFailed": "Failed to load verification status",
       "refresh": "Refresh",
       "company": "Company",
@@ -2331,13 +2327,13 @@
       "nib": "NIB number",
       "notes": "Notes for reviewer (optional)",
       "saveDraft": "Save draft",
-      "saving": "Saving…",
+      "saving": "Savingâ€¦",
       "draftSaved": "Draft saved",
       "saveFailed": "Failed to save draft",
       "documentsSection": "Documents",
-      "documentsHint": "PDF, JPG, or PNG — max 10 MB each.",
+      "documentsHint": "PDF, JPG, or PNG â€” max 10 MB each.",
       "upload": "Upload",
-      "uploading": "Uploading…",
+      "uploading": "Uploadingâ€¦",
       "remove": "Remove",
       "uploaded": "Uploaded",
       "notUploaded": "Not uploaded yet",
@@ -2349,16 +2345,16 @@
       "fileTooLarge": "File is too large (max 10 MB)",
       "rateLimitedSeconds": "Too many attempts. Try again in {seconds}s.",
       "submit": "Submit for review",
-      "submitting": "Submitting…",
+      "submitting": "Submittingâ€¦",
       "submitSuccess": "Application submitted for review",
       "submitFailed": "Failed to submit application",
       "reactivateHint": "After submitting documents, request reactivation so an admin can restore full access.",
-      "reactivateReasonPlaceholder": "Optional note for the admin…",
+      "reactivateReasonPlaceholder": "Optional note for the adminâ€¦",
       "reactivateCta": "Request reactivation",
-      "reactivating": "Submitting request…",
+      "reactivating": "Submitting requestâ€¦",
       "reactivateSuccess": "Reactivation request submitted",
       "reactivateFailed": "Failed to request reactivation",
-      "reactivatePending": "Reactivation request is open — waiting for admin review.",
+      "reactivatePending": "Reactivation request is open â€” waiting for admin review.",
       "alreadyVerified": "Your company is already verified.",
       "applicationStatus": "Application",
       "status": {
@@ -2366,7 +2362,7 @@
         "pending_review": "Pending review",
         "verified": "Verified",
         "rejected": "Rejected",
-        "blocked_incomplete": "Blocked — incomplete",
+        "blocked_incomplete": "Blocked â€” incomplete",
         "unknown": "Unknown"
       },
       "appStatus": {
@@ -2380,7 +2376,7 @@
   },
   "moderation": {
     "title": "Job Held for Content Review",
-    "description": "Your job post was not published immediately. Our system flagged its content for a quick review, so its status is now Pending. It will go live once the review is complete — no further action is needed from you.",
+    "description": "Your job post was not published immediately. Our system flagged its content for a quick review, so its status is now Pending. It will go live once the review is complete â€” no further action is needed from you.",
     "flagsLabel": "Detected signals",
     "riskScore": "Risk score",
     "viewJobs": "View My Jobs",
@@ -2434,7 +2430,7 @@
     "pricing": "Plans & Pricing",
     "pricingTitle": "Boost Recruitment",
     "pricingTitleAccent": " Without Limits",
-    "pricingSubtitle": "Choose a plan that fits your business needs — from free to enterprise.",
+    "pricingSubtitle": "Choose a plan that fits your business needs â€” from free to enterprise.",
     "activePlan": "Active plan",
     "maxPosts": "max active jobs",
     "singleSlots": "single slots",
@@ -2451,10 +2447,26 @@
       "business": "Business"
     },
     "features": {
-      "free": ["1 active job post", "No fees", "Basic access"],
-      "starter": ["5 active job posts", "Valid for 30 days", "All standard features"],
-      "pro": ["15 active job posts", "Valid for 30 days", "Priority support"],
-      "business": ["25 active job posts", "Valid for 30 days", "Premium support"],
+      "free": [
+        "1 active job post",
+        "No fees",
+        "Basic access"
+      ],
+      "starter": [
+        "5 active job posts",
+        "Valid for 30 days",
+        "All standard features"
+      ],
+      "pro": [
+        "15 active job posts",
+        "Valid for 30 days",
+        "Priority support"
+      ],
+      "business": [
+        "25 active job posts",
+        "Valid for 30 days",
+        "Premium support"
+      ],
       "activePosts": "active job posts simultaneously",
       "durationDays": "days since activation",
       "secureXendit": "Secure payment processed by Xendit"
@@ -2482,18 +2494,18 @@
       "top10Title": "Boost Top-10",
       "top10Desc": "Your job stays in the top 10 positions every day for the boost duration.",
       "hotTitle": "Boost Hot (Top Position)",
-      "hotDesc": "Your job stands out at the absolute top position — maximum exposure."
+      "hotDesc": "Your job stands out at the absolute top position â€” maximum exposure."
     },
     "boostModal": {
       "title": "Boost Job",
       "info": "Choose a boost plan, and you will be redirected to the checkout page for pricing details and payment options.",
-      "hot": "HOT — Top Position",
+      "hot": "HOT â€” Top Position",
       "hotDesc": "Top position",
       "top10": "Top-10 Daily",
       "top10Desc": "Top 10 daily",
       "selectPay": "Select",
       "empty": "No boost plans available",
-      "footer": "Secure via Xendit · Activated automatically after payment"
+      "footer": "Secure via Xendit Â· Activated automatically after payment"
     },
     "history": "View my transaction history",
     "checkout": {
@@ -2526,7 +2538,7 @@
       "cardSecureHint": "Your card details are verified on encrypted Xendit payment checkout (PCI DSS).",
       "totalCharged": "Total Charged",
       "payButton": "Generate Invoice",
-      "secureTransaction": "Payments are processed securely by Xendit · PCI DSS Compliant",
+      "secureTransaction": "Payments are processed securely by Xendit Â· PCI DSS Compliant",
       "errors": {
         "invalidParams": "Invalid plan parameters",
         "planNotFound": "Plan not found",
@@ -2587,7 +2599,9 @@
       "tryAgain": "Try Again",
       "backPricing": "Back to Plans",
       "support": "Contact Support"
-    }
+    },
+    "activePlanCompany": "Company plan",
+    "pricingSubtitleCompany": "Plans are shared across your company members."
   },
   "pipeline": {
     "navLabel": "Pipeline",
@@ -2617,18 +2631,18 @@
       "score": "{score}% Match",
       "scoreAria": "Match score {score} percent",
       "scoreLabel": "match",
-      "pending": "Calculating…",
+      "pending": "Calculatingâ€¦",
       "insufficient": "Profile data incomplete",
-      "insufficientHint": "Match is only partial — add more profile or job detail so every dimension can be scored.",
+      "insufficientHint": "Match is only partial â€” add more profile or job detail so every dimension can be scored.",
       "partialBreakdown": "Available dimensions",
       "failed": "Could not calculate match",
       "sectionTitle": "AI match with job",
       "computedAt": "Calculated {date}",
-      "refreshing": "Refreshing…",
+      "refreshing": "Refreshingâ€¦",
       "refresh": "Refresh match",
       "refreshFailed": "Could not refresh match details",
       "rematch": "Recalculate matches",
-      "rematching": "Queuing…",
+      "rematching": "Queuingâ€¦",
       "rematchQueued": "Match recalculation queued",
       "rematchQueuedCount": "Recalculating matches for {count} applicants",
       "rematchFailed": "Failed to queue match recalculation",
@@ -2653,7 +2667,7 @@
       "emptyColumn": "No candidates",
       "noStages": "No stages configured yet",
       "moveFailed": "Failed to move candidate",
-      "fallbackHint": "Pipeline API is not available on this environment yet — showing applicants via the legacy endpoint. Drag-and-drop and stage management need the backend pipeline module deployed."
+      "fallbackHint": "Pipeline API is not available on this environment yet â€” showing applicants via the legacy endpoint. Drag-and-drop and stage management need the backend pipeline module deployed."
     },
     "card": {
       "moveTo": "Move to",
@@ -2698,9 +2712,9 @@
       "selected": "{count} candidate(s) selected",
       "hint": "Select candidates in the same pipeline stage to email them together.",
       "moveHint": "Move all selected candidates to another pipeline stage at once.",
-      "moveToPlaceholder": "Move to stage…",
+      "moveToPlaceholder": "Move to stageâ€¦",
       "moveSelected": "Move selected",
-      "moving": "Moving…",
+      "moving": "Movingâ€¦",
       "moveSuccess": "Moved {moved} candidate(s) to {stage}",
       "movePartial": "{failed} candidate(s) could not be moved",
       "moveFailed": "Failed to move selected candidates",
@@ -2735,7 +2749,7 @@
       "create": "Create template",
       "edit": "Edit template",
       "list": "Saved templates",
-      "empty": "No templates yet — create your first one above.",
+      "empty": "No templates yet â€” create your first one above.",
       "namePlaceholder": "Template name (e.g. Interview invite)",
       "subjectPlaceholder": "Email subject",
       "bodyPlaceholder": "Email body...",
@@ -2803,5 +2817,33 @@
     "enabledSuccess": "Job alerts enabled",
     "disabledSuccess": "Job alerts disabled",
     "saveFailed": "Failed to update job alerts"
+  },
+  "companySettings": {
+    "navCompany": "Company",
+    "navPersonal": "My profile",
+    "title": "Company settings",
+    "subtitle": "Manage your company profile",
+    "readOnly": "You can view company details but only admins can edit.",
+    "teamLink": "Manage team",
+    "personalLink": "Personal profile"
+  },
+  "companyTeam": {
+    "nav": "Team",
+    "billingOwnerOnly": "Only the company owner can manage billing",
+    "contactOwnerUpgrade": "Contact the owner to upgrade"
+  },
+  "acceptInvite": {
+    "missingToken": "Invitation token is missing.",
+    "invalid": "This invitation is invalid or has expired.",
+    "accepted": "You joined the company",
+    "acceptFailed": "Failed to accept invitation"
+  },
+  "registerInvite": {
+    "title": "Join company",
+    "subtitle": "Join {company}",
+    "subtitleGeneric": "Complete your account to accept the invitation",
+    "loading": "Loading invitation...",
+    "emailLocked": "Email is locked to the invitation",
+    "submit": "Join & create account"
   }
 }
