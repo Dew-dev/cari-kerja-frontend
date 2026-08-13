@@ -89,7 +89,8 @@
     "forEmployers": "For employers",
     "signIn": "Sign in",
     "language": "Language",
-    "menu": "Menu"
+    "menu": "Menu",
+    "logout": "Logout"
   },
   "chat": {
     "title": "Messages",
@@ -2371,7 +2372,8 @@
         "under_review": "Under review",
         "approved": "Approved",
         "rejected": "Rejected"
-      }
+      },
+      "readOnlyMember": "Company verification status (read-only). Ask an admin/owner to submit documents."
     }
   },
   "moderation": {
@@ -2601,7 +2603,9 @@
       "support": "Contact Support"
     },
     "activePlanCompany": "Company plan",
-    "pricingSubtitleCompany": "Plans are shared across your company members."
+    "pricingSubtitleCompany": "Plans are shared across your company members.",
+    "navOrders": "Order history",
+    "navPricing": "Pricing"
   },
   "pipeline": {
     "navLabel": "Pipeline",
@@ -2821,18 +2825,58 @@
   "companySettings": {
     "navCompany": "Company",
     "navPersonal": "My profile",
+    "navAccount": "Account",
     "title": "Company settings",
     "subtitle": "Manage your company profile",
     "readOnly": "You can view company details but only admins can edit.",
     "teamLink": "Manage team",
-    "personalLink": "Personal profile"
+    "personalLink": "Personal profile",
+    "loadFailed": "Failed to load company"
   },
   "companyTeam": {
     "nav": "Team",
     "billingOwnerOnly": "Only the company owner can manage billing",
-    "contactOwnerUpgrade": "Contact the owner to upgrade"
+    "contactOwnerUpgrade": "Contact the owner to upgrade",
+    "title": "Company team",
+    "subtitle": "Members and invitations",
+    "readOnly": "You can view the team but only admins can manage it.",
+    "backToCompany": "← Company settings",
+    "members": "Members",
+    "noMembers": "No members found.",
+    "colName": "Name",
+    "colEmail": "Email",
+    "colRole": "Role",
+    "colActions": "Actions",
+    "remove": "Remove",
+    "invite": "Invite member",
+    "sendInvite": "Send invite",
+    "pending": "Pending invitations",
+    "noPending": "No pending invitations.",
+    "resend": "Resend",
+    "revoke": "Revoke",
+    "transfer": "Transfer ownership",
+    "newOwner": "New owner",
+    "selectMember": "Select member",
+    "transferBtn": "Transfer",
+    "roleUpdated": "Role updated",
+    "confirmRemove": "Remove this member?",
+    "removed": "Member removed",
+    "confirmTransfer": "Transfer ownership? This cannot be undone easily.",
+    "transferred": "Ownership transferred",
+    "inviteSent": "Invitation sent",
+    "resent": "Invitation resent",
+    "revoked": "Invitation revoked"
   },
   "acceptInvite": {
+    "title": "Company invitation",
+    "subtitle": "Join a recruiter team on Cari Kerja",
+    "company": "Company",
+    "role": "Role",
+    "email": "Invited email",
+    "expires": "Expires",
+    "accept": "Accept invitation",
+    "register": "Register as recruiter",
+    "login": "Log in",
     "missingToken": "Invitation token is missing.",
     "invalid": "This invitation is invalid or has expired.",
     "accepted": "You joined the company",
@@ -2845,5 +2889,13 @@
     "loading": "Loading invitation...",
     "emailLocked": "Email is locked to the invitation",
     "submit": "Join & create account"
+  },
+  "recruiterPersonal": {
+    "title": "Personal profile",
+    "subtitle": "Your contact details as the company PIC",
+    "backToCompany": "← Back to company settings",
+    "avatar": "Personal photo",
+    "uploadAvatar": "Upload photo",
+    "loadFailed": "Failed to load profile"
   }
 }

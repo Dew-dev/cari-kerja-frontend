@@ -14,6 +14,7 @@ const router = useRouter();
 const route = useRoute();
 const auth = useAuthStore();
 
+/** Primary nav only — company/team/profile live in account menu */
 const menu = computed(() => {
   if (auth.restrictedVerification) {
     return [
@@ -21,29 +22,30 @@ const menu = computed(() => {
         label: t("verification.kyc.navLabel"),
         path: "/recruiter/verification",
         icon: "shield",
+        match: "prefix",
       },
     ];
   }
 
   const items = [
     {
-      label: t("companySettings.navCompany") || "Perusahaan",
-      path: "/recruiter/company",
-      icon: "building",
+      label: t("vacancies"),
+      path: "/recruiter/jobs",
+      icon: "briefcase",
+      match: "prefix",
     },
     {
-      label: t("companyTeam.nav") || "Tim",
-      path: "/recruiter/company/team",
-      icon: "users",
+      label: t("find"),
+      path: "/search-workers",
+      icon: "search",
+      match: "prefix",
     },
     {
-      label: t("companySettings.navPersonal") || "Profil saya",
-      path: "/recruiter/profile",
-      icon: "user",
+      label: t("chat.title"),
+      path: "/chat",
+      icon: "chat",
+      match: "exact",
     },
-    { label: t("vacancies"), path: "/recruiter/jobs", icon: "briefcase" },
-    { label: t("find"), path: "/search-workers", icon: "search" },
-    { label: t("chat.title"), path: "/chat", icon: "chat" },
   ];
 
   if (auth.canManageVerification) {
@@ -51,21 +53,37 @@ const menu = computed(() => {
       label: t("verification.kyc.navLabel"),
       path: "/recruiter/verification",
       icon: "shield",
+      match: "prefix",
     });
   }
 
   items.push({
-    label: t("payment.navPricing") || "Pricing",
+    label: t("payment.navPricing") || t("payment.pricing"),
     path: "/recruiter/pricing",
     icon: "tag",
+    match: "prefix",
   });
 
   return items;
 });
 
-function isActive(path) {
+function isActive(item) {
+  const path = item.path;
   if (!path) return false;
-  return route.path === path || route.path.startsWith(`${path}/`);
+  if (item.match === "exact") {
+    return route.path === path;
+  }
+  // Prefer longest unique match: never treat /recruiter/company as active for /team
+  if (route.path === path) return true;
+  if (!route.path.startsWith(`${path}/`)) return false;
+  // If another menu item is a longer prefix of current route, this one is not active
+  const longer = menu.value.some(
+    (other) =>
+      other.path !== path &&
+      other.path.startsWith(path) &&
+      (route.path === other.path || route.path.startsWith(`${other.path}/`)),
+  );
+  return !longer;
 }
 
 function go(path) {
@@ -79,7 +97,7 @@ function go(path) {
     :class="
       mobile
         ? 'flex flex-col gap-1 w-full'
-        : 'ml-8 flex gap-4 xl:gap-6 text-sm flex-wrap'
+        : 'ml-6 lg:ml-10 flex items-center gap-5 lg:gap-7 text-sm whitespace-nowrap'
     "
   >
     <button
@@ -91,15 +109,15 @@ function go(path) {
         mobile
           ? [
               'flex items-center gap-3 px-3 py-3 rounded-xl font-semibold',
-              isActive(item.path)
+              isActive(item)
                 ? 'bg-white text-[#0a9cf5] shadow-sm'
                 : 'bg-white/10 hover:bg-white/20 text-white',
             ]
           : [
-              'cursor-pointer pb-1 text-base xl:text-lg font-semibold',
-              isActive(item.path)
+              'cursor-pointer pb-1 text-base lg:text-lg font-semibold',
+              isActive(item)
                 ? 'text-white font-bold underline decoration-white/80 decoration-2 underline-offset-8'
-                : 'hover:scale-105 hover:text-pink-500',
+                : 'hover:text-pink-500',
             ]
       "
       @click="go(item.path)"
@@ -107,32 +125,11 @@ function go(path) {
       <span
         v-if="mobile"
         class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-        :class="isActive(item.path) ? 'bg-blue-50' : 'bg-white/10'"
+        :class="isActive(item) ? 'bg-blue-50' : 'bg-white/10'"
       >
         <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
-            v-if="item.icon === 'user'"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-          />
-          <path
-            v-else-if="item.icon === 'building'"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-          />
-          <path
-            v-else-if="item.icon === 'users'"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M17 20h5v-2a4 4 0 00-4-4h-1M9 20H4v-2a4 4 0 014-4h1m4-4a4 4 0 11-8 0 4 4 0 018 0zm6 3a3 3 0 100-6 3 3 0 000 6z"
-          />
-          <path
-            v-else-if="item.icon === 'briefcase'"
+            v-if="item.icon === 'briefcase'"
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"

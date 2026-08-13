@@ -89,7 +89,8 @@
     "forEmployers": "Untuk perusahaan",
     "signIn": "Masuk",
     "language": "Bahasa",
-    "menu": "Menu"
+    "menu": "Menu",
+    "logout": "Keluar"
   },
   "chat": {
     "title": "Pesan",
@@ -2361,7 +2362,8 @@
         "under_review": "Sedang direview",
         "approved": "Disetujui",
         "rejected": "Ditolak"
-      }
+      },
+      "readOnlyMember": "Status verifikasi perusahaan (hanya lihat). Hubungi admin/owner untuk mengirim dokumen."
     }
   },
   "moderation": {
@@ -2591,7 +2593,9 @@
       "support": "Hubungi Bantuan"
     },
     "activePlanCompany": "Paket perusahaan",
-    "pricingSubtitleCompany": "Paket berbagi untuk seluruh anggota perusahaan."
+    "pricingSubtitleCompany": "Paket berbagi untuk seluruh anggota perusahaan.",
+    "navOrders": "Riwayat order",
+    "navPricing": "Paket"
   },
   "pipeline": {
     "navLabel": "Pipeline",
@@ -2811,18 +2815,58 @@
   "companySettings": {
     "navCompany": "Perusahaan",
     "navPersonal": "Profil saya",
+    "navAccount": "Akun",
     "title": "Pengaturan perusahaan",
     "subtitle": "Kelola profil perusahaan Anda",
     "readOnly": "Anda dapat melihat detail perusahaan, hanya admin yang dapat mengedit.",
     "teamLink": "Kelola tim",
-    "personalLink": "Profil personal"
+    "personalLink": "Profil personal",
+    "loadFailed": "Gagal memuat data perusahaan"
   },
   "companyTeam": {
     "nav": "Tim",
     "billingOwnerOnly": "Hanya owner yang mengelola billing",
-    "contactOwnerUpgrade": "Hubungi owner untuk upgrade"
+    "contactOwnerUpgrade": "Hubungi owner untuk upgrade",
+    "title": "Tim perusahaan",
+    "subtitle": "Anggota dan undangan",
+    "readOnly": "Anda dapat melihat tim, hanya admin yang dapat mengelola.",
+    "backToCompany": "← Pengaturan perusahaan",
+    "members": "Anggota",
+    "noMembers": "Belum ada anggota.",
+    "colName": "Nama",
+    "colEmail": "Email",
+    "colRole": "Peran",
+    "colActions": "Aksi",
+    "remove": "Hapus",
+    "invite": "Undang anggota",
+    "sendInvite": "Kirim undangan",
+    "pending": "Undangan menunggu",
+    "noPending": "Tidak ada undangan menunggu.",
+    "resend": "Kirim ulang",
+    "revoke": "Batalkan",
+    "transfer": "Transfer kepemilikan",
+    "newOwner": "Owner baru",
+    "selectMember": "Pilih anggota",
+    "transferBtn": "Transfer",
+    "roleUpdated": "Peran diperbarui",
+    "confirmRemove": "Hapus anggota ini?",
+    "removed": "Anggota dihapus",
+    "confirmTransfer": "Transfer kepemilikan? Tindakan ini sulit dibatalkan.",
+    "transferred": "Kepemilikan ditransfer",
+    "inviteSent": "Undangan terkirim",
+    "resent": "Undangan dikirim ulang",
+    "revoked": "Undangan dibatalkan"
   },
   "acceptInvite": {
+    "title": "Undangan perusahaan",
+    "subtitle": "Gabung tim recruiter di Cari Kerja",
+    "company": "Perusahaan",
+    "role": "Peran",
+    "email": "Email undangan",
+    "expires": "Berlaku hingga",
+    "accept": "Terima undangan",
+    "register": "Daftar sebagai recruiter",
+    "login": "Masuk",
     "missingToken": "Token undangan tidak ada.",
     "invalid": "Undangan tidak valid atau sudah kedaluwarsa.",
     "accepted": "Anda bergabung ke perusahaan",
@@ -2835,5 +2879,13 @@
     "loading": "Memuat undangan...",
     "emailLocked": "Email terkunci sesuai undangan",
     "submit": "Gabung & buat akun"
+  },
+  "recruiterPersonal": {
+    "title": "Profil personal",
+    "subtitle": "Data kontak Anda sebagai PIC perusahaan",
+    "backToCompany": "← Kembali ke pengaturan perusahaan",
+    "avatar": "Foto personal",
+    "uploadAvatar": "Unggah foto",
+    "loadFailed": "Gagal memuat profil"
   }
 }
