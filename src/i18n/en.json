@@ -2865,7 +2865,12 @@
     "transferred": "Ownership transferred",
     "inviteSent": "Invitation sent",
     "resent": "Invitation resent",
-    "revoked": "Invitation revoked"
+    "revoked": "Invitation revoked",
+    "checkingEmail": "Checking email…",
+    "cannotInvite": "This email cannot be invited.",
+    "accountExistsHint": "This account already exists — they can accept the invite after logging in.",
+    "checkEmailFailed": "Failed to validate email",
+    "inviteFailed": "Failed to send invitation"
   },
   "acceptInvite": {
     "title": "Company invitation",

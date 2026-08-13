@@ -2855,7 +2855,12 @@
     "transferred": "Kepemilikan ditransfer",
     "inviteSent": "Undangan terkirim",
     "resent": "Undangan dikirim ulang",
-    "revoked": "Undangan dibatalkan"
+    "revoked": "Undangan dibatalkan",
+    "checkingEmail": "Memeriksa email…",
+    "cannotInvite": "Email ini tidak dapat diundang.",
+    "accountExistsHint": "Akun sudah ada — terima undangan setelah login.",
+    "checkEmailFailed": "Gagal memvalidasi email",
+    "inviteFailed": "Gagal mengirim undangan"
   },
   "acceptInvite": {
     "title": "Undangan perusahaan",
