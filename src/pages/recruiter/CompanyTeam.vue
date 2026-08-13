@@ -10,6 +10,7 @@ import {
   transferCompanyOwnership,
   getCompanyInvitations,
   createCompanyInvitation,
+  checkCompanyInvitationEmail,
   resendCompanyInvitation,
   revokeCompanyInvitation,
 } from "@/services/companies.api.js";
@@ -25,17 +26,94 @@ const inviting = ref(false);
 const transferring = ref(false);
 const transferUserId = ref("");
 const invite = reactive({ email: "", role: "recruiter" });
+const inviteEmailError = ref("");
+const inviteEmailHint = ref("");
+const checkingEmail = ref(false);
+let checkEmailSeq = 0;
 
 const canManage = computed(() => auth.canManageTeam);
 const isOwner = computed(() => auth.isCompanyOwner);
 const actorRole = computed(() => auth.companyRole);
+const inviteBlocked = computed(() => Boolean(inviteEmailError.value));
 
 const inputClass =
   "w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 min-h-11 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600";
 const labelClass = "block text-sm font-medium text-slate-800 mb-1.5";
 
 function errMsg(err, fallback) {
-  return err?.response?.data?.message || fallback;
+  const data = err?.response?.data;
+  return (
+    data?.message ||
+    data?.error ||
+    data?.data?.message ||
+    (Array.isArray(data?.errors) ? data.errors[0]?.message : null) ||
+    fallback
+  );
+}
+
+function applyInviteCheckResult(result) {
+  inviteEmailError.value = "";
+  inviteEmailHint.value = "";
+  if (!result || typeof result !== "object") return true;
+
+  const canInvite = result.can_invite !== false;
+  const registered = Boolean(result.account_registered);
+  const message = result.message || result.reason || "";
+
+  if (!canInvite) {
+    inviteEmailError.value =
+      message ||
+      t("companyTeam.cannotInvite") ||
+      "This email cannot be invited.";
+    return false;
+  }
+
+  if (registered && canInvite) {
+    inviteEmailHint.value =
+      message ||
+      t("companyTeam.accountExistsHint") ||
+      "This account already exists — they can accept the invite after logging in.";
+  }
+
+  return true;
+}
+
+function clearInviteEmailFeedback() {
+  inviteEmailError.value = "";
+  inviteEmailHint.value = "";
+}
+
+async function checkInviteEmail({ silent = false } = {}) {
+  const email = invite.email.trim();
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+    clearInviteEmailFeedback();
+    return true;
+  }
+
+  const seq = ++checkEmailSeq;
+  checkingEmail.value = true;
+  try {
+    const result = await checkCompanyInvitationEmail(email);
+    if (seq !== checkEmailSeq) return true;
+    return applyInviteCheckResult(result);
+  } catch (err) {
+    if (seq !== checkEmailSeq) return true;
+    const msg = errMsg(err, t("companyTeam.checkEmailFailed") || "Failed to validate email");
+    inviteEmailError.value = msg;
+    inviteEmailHint.value = "";
+    if (!silent) push.error(msg);
+    return false;
+  } finally {
+    if (seq === checkEmailSeq) checkingEmail.value = false;
+  }
+}
+
+async function onInviteEmailBlur() {
+  await checkInviteEmail({ silent: true });
+}
+
+function onInviteEmailInput() {
+  clearInviteEmailFeedback();
 }
 
 function memberName(m) {
@@ -115,15 +193,35 @@ async function onTransfer() {
 
 async function onInvite() {
   if (!canManage.value) return;
+  const ok = await checkInviteEmail({ silent: true });
+  if (!ok || inviteBlocked.value) {
+    if (inviteEmailError.value) push.error(inviteEmailError.value);
+    return;
+  }
+
   inviting.value = true;
   try {
     await createCompanyInvitation({ email: invite.email.trim(), role: invite.role });
     push.success(t("companyTeam.inviteSent") || "Invitation sent");
     invite.email = "";
     invite.role = "recruiter";
+    clearInviteEmailFeedback();
     await loadAll();
   } catch (err) {
-    push.error(errMsg(err, "Failed to send invitation"));
+    const data = err?.response?.data?.data ?? err?.response?.data ?? {};
+    // Same shape as check-email when BE returns can_invite / message on create
+    if (data && typeof data === "object" && ("can_invite" in data || "account_registered" in data)) {
+      applyInviteCheckResult(data);
+      push.error(
+        inviteEmailError.value ||
+          errMsg(err, t("companyTeam.inviteFailed") || "Failed to send invitation"),
+      );
+      return;
+    }
+    const msg = errMsg(err, t("companyTeam.inviteFailed") || "Failed to send invitation");
+    inviteEmailError.value = msg;
+    inviteEmailHint.value = "";
+    push.error(msg);
   } finally {
     inviting.value = false;
   }
@@ -242,11 +340,33 @@ onMounted(loadAll);
           <h2 class="text-base font-semibold text-slate-900 mb-4">{{ t("companyTeam.invite") || "Invite member" }}</h2>
           <form class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end" @submit.prevent="onInvite">
             <div class="sm:col-span-1">
-              <label :class="labelClass">Email</label>
-              <input v-model="invite.email" :class="inputClass" type="email" required />
+              <label :class="labelClass">{{ t("companyTeam.colEmail") }}</label>
+              <input
+                v-model="invite.email"
+                :class="[
+                  inputClass,
+                  inviteEmailError
+                    ? 'border-red-300 focus:border-red-500 focus:ring-red-600/20'
+                    : '',
+                ]"
+                type="email"
+                required
+                autocomplete="email"
+                @blur="onInviteEmailBlur"
+                @input="onInviteEmailInput"
+              />
+              <p v-if="checkingEmail" class="mt-1.5 text-xs text-slate-400">
+                {{ t("companyTeam.checkingEmail") }}
+              </p>
+              <p v-else-if="inviteEmailError" class="mt-1.5 text-xs text-red-600">
+                {{ inviteEmailError }}
+              </p>
+              <p v-else-if="inviteEmailHint" class="mt-1.5 text-xs text-amber-700">
+                {{ inviteEmailHint }}
+              </p>
             </div>
             <div>
-              <label :class="labelClass">Role</label>
+              <label :class="labelClass">{{ t("companyTeam.colRole") }}</label>
               <select v-model="invite.role" :class="inputClass">
                 <option value="admin">admin</option>
                 <option value="recruiter">recruiter</option>
@@ -254,7 +374,7 @@ onMounted(loadAll);
             </div>
             <button
               type="submit"
-              :disabled="inviting"
+              :disabled="inviting || checkingEmail || inviteBlocked"
               class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60 min-h-11"
             >
               {{ inviting ? (t("loadingDots") || "…") : (t("companyTeam.sendInvite") || "Send invite") }}

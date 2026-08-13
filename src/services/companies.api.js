@@ -56,6 +56,13 @@ export function createCompanyInvitation({ email, role }) {
   return api.post("/companies/me/invitations", { email, role }).then(unwrap);
 }
 
+/** Pre-check invite email (blur / before submit). */
+export function checkCompanyInvitationEmail(email) {
+  return api
+    .post("/companies/me/invitations/check-email", { email })
+    .then(unwrap);
+}
+
 export function resendCompanyInvitation(invitationId) {
   return api.post(`/companies/me/invitations/${invitationId}/resend`).then(unwrap);
 }
