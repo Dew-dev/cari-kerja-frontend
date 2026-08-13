@@ -6,11 +6,22 @@ import { disconnectSocket } from "../composables/useSocket";
 import { decodeAccessToken } from "../utils/jwt";
 import { isTelegramPlaceholderEmail } from "../utils/authFlags";
 import { isCaptchaError, isRateLimitedError } from "../utils/apiErrors";
+import {
+  normalizeCompanyRole,
+  normalizeRecruiterSessionUser,
+  isCompanyOwner,
+  isCompanyAdmin,
+  COMPANY_ROLES,
+} from "../utils/companyPermissions";
 
 const RESTRICTED_KEY = "restrictedVerification";
 
 function readRestrictedFlag() {
   return localStorage.getItem(RESTRICTED_KEY) === "1";
+}
+
+function persistUser(user) {
+  localStorage.setItem("user", JSON.stringify(user));
 }
 
 export const useAuthStore = defineStore("auth", {
@@ -41,12 +52,57 @@ export const useAuthStore = defineStore("auth", {
       const decoded = decodeAccessToken(state.token);
       return decoded?.login_provider || "local";
     },
+
+    companyId: (state) => state.user?.company_id ?? null,
+    companyRole: (state) => normalizeCompanyRole(state.user?.company_role),
+    recruiterId: (state) =>
+      state.user?.recruiter_id ??
+      (state.user?.role === "recruiter" ? state.user?.id : null),
+
+    isCompanyOwner: (state) => isCompanyOwner(state.user?.company_role),
+    isCompanyAdmin: (state) => isCompanyAdmin(state.user?.company_role),
+
+    canManageBilling: (state) => {
+      if (state.user?.role !== "recruiter") return false;
+      // Legacy (no company_role yet): allow billing so existing owners tidak terkunci
+      if (!state.user?.company_role && !state.user?.company_id) return true;
+      return isCompanyOwner(state.user?.company_role);
+    },
+
+    canManageTeam: (state) => {
+      if (state.user?.role !== "recruiter") return false;
+      if (!state.user?.company_role && !state.user?.company_id) return true;
+      return isCompanyAdmin(state.user?.company_role);
+    },
+
+    canEditCompany: (state) => {
+      if (state.user?.role !== "recruiter") return false;
+      if (!state.user?.company_role && !state.user?.company_id) return true;
+      return isCompanyAdmin(state.user?.company_role);
+    },
+
+    canManageVerification: (state) => {
+      if (state.user?.role !== "recruiter") return false;
+      if (!state.user?.company_role && !state.user?.company_id) return true;
+      return isCompanyAdmin(state.user?.company_role);
+    },
+
+    publicCompanyPath: (state) => {
+      const companyId = state.user?.company_id;
+      if (companyId) return `/companies/${companyId}`;
+      const rid = state.user?.recruiter_id || state.user?.id;
+      return rid ? `/recruiters/${rid}` : "/recruiter/company";
+    },
   },
 
   actions: {
     mergeUser(partial) {
-      this.user = { ...(this.user || {}), ...partial };
-      localStorage.setItem("user", JSON.stringify(this.user));
+      const merged = normalizeRecruiterSessionUser(
+        { ...(this.user || {}), ...partial },
+        this.user || {},
+      );
+      this.user = merged;
+      persistUser(this.user);
     },
 
     setRestrictedVerification(value, notice = null) {
@@ -83,17 +139,24 @@ export const useAuthStore = defineStore("auth", {
 
         this.token = token;
         this.$patch({ refreshToken });
-        this.user = {
-          ...user,
-          login_provider:
-            user?.login_provider ||
-            decodeAccessToken(token)?.login_provider ||
-            "local",
-        };
+
+        const decoded = decodeAccessToken(token) || {};
+        this.user = normalizeRecruiterSessionUser(
+          {
+            ...user,
+            company_id: user?.company_id ?? decoded.company_id,
+            company_role: user?.company_role ?? decoded.company_role,
+            recruiter_id: user?.recruiter_id ?? decoded.recruiter_id,
+            user_id: user?.user_id ?? decoded.id ?? user?.id,
+            login_provider:
+              user?.login_provider || decoded.login_provider || "local",
+          },
+          {},
+        );
 
         localStorage.setItem("token", token);
         localStorage.setItem("refreshToken", refreshToken);
-        localStorage.setItem("user", JSON.stringify(this.user));
+        persistUser(this.user);
 
         this.captchaRequired = false;
         this.applySessionFlags(data);
@@ -114,8 +177,6 @@ export const useAuthStore = defineStore("auth", {
           return false;
         }
 
-        // 403 suspended → tampilkan pesan yang diterjemahkan di banner login
-        // Soft KYC block memakai restricted_verification di payload sukses, bukan error login.
         if (
           err?.response?.status === 403 &&
           String(msg || "").includes("ACCOUNT_RESTRICTED") &&
@@ -184,35 +245,29 @@ export const useAuthStore = defineStore("auth", {
         }
 
         if (user) {
-          const role =
-            Number(user.role_id) === 2
-              ? "recruiter"
-              : Number(user.role_id) === 1
-                ? "user"
-                : this.user?.role;
+          const decoded = decodeAccessToken(token) || {};
+          const email = isTelegramPlaceholderEmail(user.email) ? "" : user.email;
 
-          const email =
-            isTelegramPlaceholderEmail(user.email) ? "" : user.email;
-
-          this.user = {
-            ...(this.user || {}),
-            id:
-              Number(user.role_id) === 1
-                ? user.worker_id
-                : Number(user.role_id) === 2
-                  ? user.recruiter_id
-                  : user.id,
-            user_id: user.user_id || user.id,
-            name: user.name || this.user?.name,
-            email: email || this.user?.email || "",
-            avatar_url: user.avatar_url ?? this.user?.avatar_url,
-            role,
-            login_provider:
-              user.login_provider ||
-              decodeAccessToken(token)?.login_provider ||
-              this.user?.login_provider,
-          };
-          localStorage.setItem("user", JSON.stringify(this.user));
+          this.user = normalizeRecruiterSessionUser(
+            {
+              ...user,
+              email: email || this.user?.email || "",
+              name: user.name || this.user?.name,
+              avatar_url: user.avatar_url ?? this.user?.avatar_url,
+              company_id: user.company_id ?? decoded.company_id ?? this.user?.company_id,
+              company_role:
+                user.company_role ?? decoded.company_role ?? this.user?.company_role,
+              recruiter_id:
+                user.recruiter_id ?? decoded.recruiter_id ?? this.user?.recruiter_id,
+              user_id: user.user_id || user.id || this.user?.user_id,
+              login_provider:
+                user.login_provider ||
+                decoded.login_provider ||
+                this.user?.login_provider,
+            },
+            this.user || {},
+          );
+          persistUser(this.user);
         }
 
         this.applySessionFlags(payload);
@@ -227,3 +282,5 @@ export const useAuthStore = defineStore("auth", {
     },
   },
 });
+
+export { COMPANY_ROLES };
