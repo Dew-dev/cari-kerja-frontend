@@ -1,7 +1,8 @@
 <script setup>
-import { reactive, ref } from "vue"
-import { useRouter } from "vue-router"
+import { reactive, ref, computed, onMounted } from "vue"
+import { useRouter, useRoute } from "vue-router"
 import { registerRecruiter } from "@/services/auth.api"
+import { previewCompanyInvitation } from "@/services/companies.api.js"
 import TurnstileWidget from "@/components/common/TurnstileWidget.vue"
 import { isCaptchaError, isDisposableEmailRejected, isDisposablePhoneRejected, isRateLimitedError } from "@/utils/apiErrors"
 import { useI18n } from "vue-i18n"
@@ -9,6 +10,10 @@ import { useI18n } from "vue-i18n"
 const { t } = useI18n()
 
 const router = useRouter()
+const route = useRoute()
+
+const inviteToken = computed(() => String(route.query.invite_token || "").trim())
+const isInviteMode = computed(() => Boolean(inviteToken.value))
 
 const form = reactive({
   username: "",
@@ -33,6 +38,9 @@ const showPassword = ref(false)
 const state = reactive({
   loading: false,
   serverError: null,
+  inviteLoading: false,
+  inviteError: null,
+  invitePreview: null,
 })
 
 const captchaToken = ref("")
@@ -44,6 +52,26 @@ function onCaptchaVerified(token) {
 
 function onCaptchaExpired() {
   captchaToken.value = ""
+}
+
+async function loadInvitePreview() {
+  if (!inviteToken.value) return
+  state.inviteLoading = true
+  state.inviteError = null
+  try {
+    const preview = await previewCompanyInvitation(inviteToken.value)
+    state.invitePreview = preview
+    if (preview?.email) {
+      form.email = preview.email
+    }
+  } catch (err) {
+    state.inviteError =
+      err?.response?.data?.message ||
+      t("acceptInvite.invalid") ||
+      "This invitation is invalid or has expired."
+  } finally {
+    state.inviteLoading = false
+  }
 }
 
 function validate() {
@@ -70,7 +98,7 @@ function validate() {
     valid = false
   }
 
-  if (form.company_name.length < 2) {
+  if (!isInviteMode.value && form.company_name.length < 2) {
     errors.company_name = "Company name is required"
     valid = false
   }
@@ -90,15 +118,31 @@ function validate() {
 
 async function submit() {
   state.serverError = null
+  if (isInviteMode.value && state.inviteError) {
+    state.serverError = state.inviteError
+    return
+  }
   if (!validate()) return
 
   state.loading = true
   try {
-    await registerRecruiter({
-      ...form,
+    const payload = {
+      username: form.username,
+      email: form.email,
+      password: form.password,
+      contact_name: form.contact_name,
+      contact_phone: form.contact_phone,
       captcha_token: captchaToken.value || null,
-    })
-    router.push("/login")
+    }
+
+    if (isInviteMode.value) {
+      payload.invite_token = inviteToken.value
+    } else {
+      payload.company_name = form.company_name
+    }
+
+    await registerRecruiter(payload)
+    router.push("/recruiter-login")
   } catch (err) {
     if (isRateLimitedError(err)) {
       state.serverError = t("captcha.rateLimited")
@@ -121,30 +165,74 @@ async function submit() {
     state.serverError =
       err.response?.data?.message || "Registration failed"
   } finally {
-    state.loading = false;
+    state.loading = false
   }
 }
+
+onMounted(loadInvitePreview)
 </script>
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-100 p-4">
     <div class="w-full max-w-md">
-      <!-- Card Container -->
       <div class="bg-white shadow-2xl rounded-3xl p-8 md:p-10">
-        <!-- Logo/Branding -->
         <div class="text-center mb-8">
           <div class="inline-flex items-center justify-center w-14 h-14 bg-linear-to-br from-purple-600 to-pink-600 rounded-full mb-4">
             <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5.5m0 0H9m0 0h5.5M9 7h1m-1 4h1m0 0h1m-1 4h1" />
             </svg>
           </div>
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ t("register.titleRecruiter") }}</h1>
-          <p class="text-gray-600">{{ t("auth.startPosting") }}</p>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">
+            {{
+              isInviteMode
+                ? (t("registerInvite.title") || "Join company")
+                : t("register.titleRecruiter")
+            }}
+          </h1>
+          <p class="text-gray-600">
+            <template v-if="isInviteMode">
+              {{
+                state.invitePreview?.company_name
+                  ? (t("registerInvite.subtitle", { company: state.invitePreview.company_name }) ||
+                    `Join ${state.invitePreview.company_name}`)
+                  : (t("registerInvite.subtitleGeneric") || "Complete your account to accept the invitation")
+              }}
+            </template>
+            <template v-else>
+              {{ t("auth.startPosting") }}
+            </template>
+          </p>
         </div>
 
-        <!-- Form -->
-        <form @submit.prevent="submit" class="space-y-5">
-          <!-- Username Input -->
+        <div v-if="state.inviteLoading" class="text-center text-sm text-gray-500 py-8">
+          {{ t("registerInvite.loading") || "Loading invitation..." }}
+        </div>
+
+        <div
+          v-else-if="state.inviteError"
+          class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg mb-4"
+        >
+          <p class="text-red-700 text-sm">{{ state.inviteError }}</p>
+          <button
+            type="button"
+            class="mt-3 text-sm font-semibold text-purple-600"
+            @click="router.push('/recruiter-login')"
+          >
+            {{ t("auth.signInHere") }}
+          </button>
+        </div>
+
+        <form v-else @submit.prevent="submit" class="space-y-5">
+          <div
+            v-if="isInviteMode && state.invitePreview"
+            class="rounded-xl bg-purple-50 border border-purple-100 px-4 py-3 text-sm text-purple-900"
+          >
+            <p>
+              <span class="font-semibold">{{ state.invitePreview.company_name || "Company" }}</span>
+              <span v-if="state.invitePreview.role"> · {{ state.invitePreview.role }}</span>
+            </p>
+          </div>
+
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.username") }}</label>
             <input
@@ -157,20 +245,22 @@ async function submit() {
             <p v-if="errors.username" class="text-red-600 text-xs mt-2">{{ errors.username }}</p>
           </div>
 
-          <!-- Email Input -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.email") }}</label>
             <input
               v-model="form.email"
               type="email"
-              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-purple-500 focus:bg-purple-50 transition bg-gray-50"
+              class="w-full border-2 border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:border-purple-500 focus:bg-purple-50 transition bg-gray-50 disabled:bg-gray-100 disabled:text-gray-500"
               placeholder="recruiter@company.com"
+              :disabled="isInviteMode"
               required
             />
+            <p v-if="isInviteMode" class="text-xs text-gray-500 mt-1">
+              {{ t("registerInvite.emailLocked") || "Email is locked to the invitation" }}
+            </p>
             <p v-if="errors.email" class="text-red-600 text-xs mt-2">{{ errors.email }}</p>
           </div>
 
-          <!-- Password Input -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.password") }}</label>
             <div class="relative">
@@ -199,8 +289,7 @@ async function submit() {
             <p v-if="errors.password" class="text-red-600 text-xs mt-2">{{ errors.password }}</p>
           </div>
 
-          <!-- Company Name Input -->
-          <div>
+          <div v-if="!isInviteMode">
             <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.companyName") }}</label>
             <input
               v-model="form.company_name"
@@ -212,7 +301,6 @@ async function submit() {
             <p v-if="errors.company_name" class="text-red-600 text-xs mt-2">{{ errors.company_name }}</p>
           </div>
 
-          <!-- Contact Person Input -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.contactPerson") }}</label>
             <input
@@ -225,7 +313,6 @@ async function submit() {
             <p v-if="errors.contact_name" class="text-red-600 text-xs mt-2">{{ errors.contact_name }}</p>
           </div>
 
-          <!-- Contact Phone Input -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">{{ t("register.contactNumber") }}</label>
             <input
@@ -238,35 +325,36 @@ async function submit() {
             <p v-if="errors.contact_phone" class="text-red-600 text-xs mt-2">{{ errors.contact_phone }}</p>
           </div>
 
-          <!-- Error Message -->
           <div v-if="state.serverError" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
             <p class="text-red-700 text-sm">{{ state.serverError }}</p>
           </div>
 
-          <!-- CAPTCHA -->
           <TurnstileWidget
             ref="turnstileRef"
             @verified="onCaptchaVerified"
             @expired="onCaptchaExpired"
           />
 
-          <!-- Sign Up Button -->
           <button
             type="submit"
             :disabled="state.loading"
             class="w-full bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
-            {{ state.loading ? t("register.loading") : t("register.signUp") }}
+            {{
+              state.loading
+                ? t("register.loading")
+                : isInviteMode
+                  ? (t("registerInvite.submit") || "Join & create account")
+                  : t("register.signUp")
+            }}
           </button>
 
-          <!-- Divider -->
           <div class="flex items-center my-4">
             <div class="grow border-t border-gray-300"></div>
             <span class="px-3 text-gray-500 text-sm">OR</span>
             <div class="grow border-t border-gray-300"></div>
           </div>
 
-          <!-- Sign In Link -->
           <p class="text-center text-sm text-gray-600">
             {{ t("auth.alreadyHaveAccount") }}
             <button
@@ -280,7 +368,6 @@ async function submit() {
         </form>
       </div>
 
-      <!-- Footer Text -->
       <p class="text-center text-xs text-gray-500 mt-6">
         {{ t("auth.termsAndPrivacyRegister") }}
         <router-link to="/terms-of-service" class="text-purple-600 hover:underline">{{ t("footer.termsOfService") }}</router-link>

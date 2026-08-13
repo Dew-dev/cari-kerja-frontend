@@ -203,6 +203,18 @@ const routes = [
     meta: { public: true },
   },
   {
+    path: "/companies/:id",
+    name: "public-company-profile",
+    component: () => import("../pages/public/RecruiterProfile.vue"),
+    meta: { public: true },
+  },
+  {
+    path: "/invite/accept",
+    name: "invite-accept",
+    component: () => import("../pages/auth/AcceptInvite.vue"),
+    meta: { public: true },
+  },
+  {
     path: "/resume-generator",
     name: "resume-generator",
     component: () => import("../pages/ResumeGenerator.vue"),
@@ -215,6 +227,7 @@ const routes = [
   },
   {
     path: "/register-recruiter",
+    name: "register-recruiter",
     meta: { blockRole: "recruiter" },
     component: () => import("../pages/auth/RegisterRecruiter.vue"),
   },
@@ -227,6 +240,7 @@ const routes = [
     path: "/recruiters/:id",
     name: "public-recruiter-profile",
     component: () => import("../pages/public/RecruiterProfile.vue"),
+    meta: { public: true },
   },
   {
     path: "/forgot-password",
@@ -318,8 +332,23 @@ const routes = [
       },
       {
         path: "profile/edit",
-        meta: { requiresAuth: true },
-        component: () => import("../pages/recruiter/EditProfile.vue"),
+        redirect: "/recruiter/company",
+      },
+      {
+        path: "company",
+        name: "recruiter-company",
+        component: () => import("../pages/recruiter/CompanySettings.vue"),
+      },
+      {
+        path: "company/team",
+        name: "recruiter-company-team",
+        meta: { requiresTeamManage: true },
+        component: () => import("../pages/recruiter/CompanyTeam.vue"),
+      },
+      {
+        path: "profile",
+        name: "recruiter-personal-profile",
+        component: () => import("../pages/recruiter/RecruiterPersonalProfile.vue"),
       },
       {
         path: "jobs/archived",
@@ -335,11 +364,13 @@ const routes = [
       {
         path: "checkout",
         name: "recruiter-checkout",
+        meta: { requiresBilling: true },
         component: () => import("../pages/recruiter/PaymentCheckout.vue"),
       },
       {
         path: "orders",
         name: "recruiter-orders",
+        meta: { requiresBilling: true },
         component: () => import("../pages/recruiter/PaymentOrders.vue"),
       },
       {
@@ -453,6 +484,20 @@ router.beforeEach((to) => {
     to.path !== "/recruiter-login"
   ) {
     return { name: "recruiter-verification", replace: true };
+  }
+
+  // Billing: owner only (checkout / orders)
+  if (to.meta.requiresBilling && auth.role === "recruiter" && !auth.canManageBilling) {
+    push.warning(
+      i18n.global.t("companyTeam.billingOwnerOnly") ||
+        "Hanya owner yang mengelola billing",
+    );
+    return { path: "/recruiter/jobs", replace: true };
+  }
+
+  // Team page: all members may view; mutate actions gated in UI by canManageTeam
+  if (to.meta.requiresTeamManage && auth.role === "recruiter" && !auth.isLoggedIn) {
+    return { path: "/recruiter-login", replace: true };
   }
 
   // Reset toast flag on successful login pages

@@ -4,14 +4,17 @@ import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getAllPlans, getActivePlan } from "@/services/payments.api.js";
+import { useAuthStore } from "@/stores/authStore.js";
 
 const router = useRouter();
 const { t, tm } = useI18n();
+const auth = useAuthStore();
 
 const plans     = ref({ subscription: [], single_post: [], boost: [] });
 const activePlan = ref(null);
 const loading   = ref(true);
 const activeTab = ref("subscription");
+const canPay = computed(() => auth.canManageBilling);
 
 /** Boost Top 10 dihentikan — hanya tampilkan paket Hot (boost_priority === 1). */
 const boostPlans = computed(() =>
@@ -51,6 +54,13 @@ function isCurrentPlan(plan) {
 }
 
 function goToCheckout(orderType, plan) {
+  if (!canPay.value) {
+    push.warning(
+      t("companyTeam.billingOwnerOnly") ||
+        "Hubungi owner perusahaan untuk upgrade paket",
+    );
+    return;
+  }
   router.push({ path: "/recruiter/checkout", query: { type: orderType, plan_id: plan.id } });
 }
 
@@ -90,13 +100,23 @@ function getPlanFeatures(planName) {
           <span class="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">{{ t("payment.pricingTitleAccent") }}</span>
         </h1>
         <p class="text-gray-500 max-w-lg mx-auto text-sm">
-          {{ t("payment.pricingSubtitle") }}
+          {{ t("payment.pricingSubtitleCompany") || t("payment.pricingSubtitle") }}
         </p>
+
+        <div
+          v-if="!loading && !canPay"
+          class="mt-4 mx-auto max-w-lg rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+        >
+          {{
+            t("companyTeam.billingOwnerOnly") ||
+            "Hanya owner yang dapat upgrade. Hubungi owner perusahaan untuk mengubah paket."
+          }}
+        </div>
 
         <!-- Active plan badge -->
         <div v-if="!loading && activePlan" class="mt-5 inline-flex items-center gap-3 px-5 py-2.5 bg-white border border-gray-200 rounded-xl text-sm shadow-sm">
           <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-          <span class="text-gray-700">{{ t("payment.activePlan") }}: <strong class="text-green-600 capitalize">{{ currentPlanName }}</strong></span>
+          <span class="text-gray-700">{{ t("payment.activePlanCompany") || t("payment.activePlan") }}: <strong class="text-green-600 capitalize">{{ currentPlanName }}</strong></span>
           <span class="text-gray-300">•</span>
           <span class="text-gray-500">{{ currentMaxPosts }} {{ t("payment.maxPosts") }}</span>
           <span class="text-gray-300">•</span>
@@ -203,6 +223,12 @@ function getPlanFeatures(planName) {
                 class="w-full py-2.5 rounded-xl text-sm font-semibold bg-green-50 text-green-600 cursor-not-allowed border border-green-200"
               ><i class="pi pi-check mr-1"></i>{{ t("payment.cta.active") }}</button>
               <button
+                v-else-if="!canPay"
+                type="button"
+                disabled
+                class="w-full py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-500 cursor-not-allowed"
+              >{{ t("companyTeam.contactOwnerUpgrade") || "Hubungi owner untuk upgrade" }}</button>
+              <button
                 v-else
                 @click="goToCheckout('subscription', plan)"
                 :class="`w-full py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r ${getPlanVisual(plan.name).gradient} hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2`"
@@ -252,6 +278,13 @@ function getPlanFeatures(planName) {
                 </ul>
 
                 <button
+                  v-if="!canPay"
+                  type="button"
+                  disabled
+                  class="w-full py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-500 cursor-not-allowed"
+                >{{ t("companyTeam.contactOwnerUpgrade") || "Hubungi owner untuk upgrade" }}</button>
+                <button
+                  v-else
                   @click="goToCheckout('single_post', plan)"
                   :class="[
                     'w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 flex items-center justify-center gap-2 hover:shadow-lg hover:scale-[1.02] active:scale-95',
@@ -347,7 +380,7 @@ function getPlanFeatures(planName) {
         </div>
 
         <!-- Bottom CTA -->
-        <div class="mt-14 text-center">
+        <div v-if="canPay" class="mt-14 text-center">
           <router-link to="/recruiter/orders" class="inline-flex items-center gap-2 text-gray-400 hover:text-gray-700 text-sm transition-colors">
             <i class="pi pi-history"></i> {{ t("payment.history") }}
           </router-link>

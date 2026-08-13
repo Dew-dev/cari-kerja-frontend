@@ -641,7 +641,6 @@ async function submit(statusId = 1) {
   };
 
   const payload = {
-    recruiter_id: auth.user?.recruiter_id,
     title: form.title,
     description: form.description,
     employment_type_id: form.employment_type_id,

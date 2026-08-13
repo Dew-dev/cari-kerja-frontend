@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted, computed } from "vue"
+import { ref, onMounted, computed, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import api from "@/services/api"
+import { getCompanyById } from "@/services/companies.api.js"
 import RichTextContent from "@/components/common/RichTextContent.vue"
 import CompanyLogo from "@/components/common/CompanyLogo.vue"
 
@@ -15,7 +16,7 @@ const PAGE_SIZE = 5
 const currentPage = ref(1)
 
 const openJobs = computed(() =>
-  recruiter.value?.job_posts?.filter(job => job.status === "OPEN") || []
+  recruiter.value?.job_posts?.filter(job => job.status === "OPEN" || job.status === "open" || !job.status) || []
 )
 
 const totalPages = computed(() => Math.ceil(openJobs.value.length / PAGE_SIZE))
@@ -39,22 +40,51 @@ const formatDate = (dateString) => {
 }
 
 const goToJob = (jobId) => {
-  router.push(`/jobposts/${jobId}`)
+  router.push(`/jobs/${jobId}`)
+}
+
+function normalizePublicCompany(data) {
+  if (!data) return null
+  return {
+    ...data,
+    company_name: data.company_name || data.name,
+    avatar_url: data.avatar_url || data.logo_url || data.logo,
+    industry: data.industry || data.industry_name,
+    job_posts: data.job_posts || data.jobs || [],
+  }
 }
 
 async function fetchRecruiter() {
   try {
     loading.value = true
-    const res = await api.get(`/users/${route.params.id}/recruiters`)
-    recruiter.value = res.data?.data
+    recruiter.value = null
+    const id = route.params.id
+
+    if (route.name === "public-company-profile") {
+      try {
+        const data = await getCompanyById(id)
+        recruiter.value = normalizePublicCompany(data)
+        return
+      } catch (err) {
+        // Fall back to legacy recruiter profile if company endpoint missing
+        if (err?.response?.status && err.response.status !== 404) {
+          console.error("Failed to load company profile", err)
+        }
+      }
+    }
+
+    const res = await api.get(`/users/${id}/recruiters`)
+    recruiter.value = normalizePublicCompany(res.data?.data)
   } catch (err) {
     console.error("Failed to load recruiter profile", err)
+    recruiter.value = null
   } finally {
     loading.value = false
   }
 }
 
 onMounted(fetchRecruiter)
+watch(() => [route.name, route.params.id], fetchRecruiter)
 </script>
 
 <template>

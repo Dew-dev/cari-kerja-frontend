@@ -1323,9 +1323,14 @@ const checkIfSaved = async () => {
 };
 
 const viewCompanyProfile = () => {
-  // Navigate to company profile page
-  router.push(`/recruiters/${job.value.recruiter_id}`);
-  // console.log("Navigate to company profile");
+  const companyId = job.value?.company_id;
+  if (companyId) {
+    router.push(`/companies/${companyId}`);
+    return;
+  }
+  if (job.value?.recruiter_id) {
+    router.push(`/recruiters/${job.value.recruiter_id}`);
+  }
 };
 
 const goToJob = (id) => {
