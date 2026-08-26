@@ -57,12 +57,14 @@ const menu = computed(() => {
     });
   }
 
-  items.push({
-    label: t("payment.navPricing") || t("payment.pricing"),
-    path: "/recruiter/pricing",
-    icon: "tag",
-    match: "prefix",
-  });
+  if (auth.canManageBilling) {
+    items.push({
+      label: t("payment.navPricing") || t("payment.pricing"),
+      path: "/recruiter/pricing",
+      icon: "tag",
+      match: "prefix",
+    });
+  }
 
   return items;
 });

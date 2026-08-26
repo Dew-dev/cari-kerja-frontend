@@ -42,7 +42,12 @@ export function updateMyRecruiterProfile(payload, config = {}) {
   }).then(unwrap);
 }
 
-/** Legacy: load by recruiter profile id (public/self). */
+/** Legacy/public: load recruiter profile by user id or recruiter profile id. */
+export function getRecruiterByUserId(userOrRecruiterId) {
+  return api.get(`/users/${userOrRecruiterId}/recruiters`).then(unwrap);
+}
+
+/** @deprecated Use getRecruiterByUserId — BE accepts user_id or recruiter profile id. */
 export function getRecruiterByProfileId(recruiterId) {
-  return api.get(`/users/${recruiterId}/recruiters`).then(unwrap);
+  return getRecruiterByUserId(recruiterId);
 }

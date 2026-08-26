@@ -2821,7 +2821,8 @@
     "readOnly": "Anda dapat melihat detail perusahaan, hanya admin yang dapat mengedit.",
     "teamLink": "Kelola tim",
     "personalLink": "Profil personal",
-    "loadFailed": "Gagal memuat data perusahaan"
+    "loadFailed": "Gagal memuat data perusahaan",
+    "verified": "Terverifikasi"
   },
   "companyTeam": {
     "nav": "Tim",
@@ -2855,7 +2856,8 @@
     "transferred": "Kepemilikan ditransfer",
     "inviteSent": "Undangan terkirim",
     "resent": "Undangan dikirim ulang",
-    "revoked": "Undangan dibatalkan"
+    "revoked": "Undangan dibatalkan",
+    "invalidInviteRole": "Anda tidak dapat menetapkan peran tersebut."
   },
   "acceptInvite": {
     "title": "Undangan perusahaan",

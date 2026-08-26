@@ -142,7 +142,15 @@ async function submit() {
     }
 
     await registerRecruiter(payload)
-    router.push("/recruiter-login")
+    if (isInviteMode.value) {
+      const acceptPath = `/invite/accept?token=${encodeURIComponent(inviteToken.value)}`
+      router.push({
+        path: "/recruiter-login",
+        query: { redirect: acceptPath },
+      })
+    } else {
+      router.push("/recruiter-login")
+    }
   } catch (err) {
     if (isRateLimitedError(err)) {
       state.serverError = t("captcha.rateLimited")

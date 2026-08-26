@@ -376,11 +376,13 @@ const routes = [
       {
         path: "payment/success",
         name: "recruiter-payment-success",
+        meta: { requiresBilling: true },
         component: () => import("../pages/recruiter/PaymentSuccess.vue"),
       },
       {
         path: "payment/failure",
         name: "recruiter-payment-failure",
+        meta: { requiresBilling: true },
         component: () => import("../pages/recruiter/PaymentFailure.vue"),
       },
       {
@@ -446,6 +448,10 @@ router.beforeEach((to) => {
 
   // 🚫 BLOCK SPECIFIC ROLE - Logout and redirect
   if (to.meta.blockRole && auth.role === to.meta.blockRole) {
+    if (to.name === "register-recruiter" && to.query.invite_token) {
+      auth.logout();
+      return true;
+    }
     auth.logout();
     return "/login";
   }
@@ -493,11 +499,6 @@ router.beforeEach((to) => {
         "Hanya owner yang mengelola billing",
     );
     return { path: "/recruiter/jobs", replace: true };
-  }
-
-  // Team page: all members may view; mutate actions gated in UI by canManageTeam
-  if (to.meta.requiresTeamManage && auth.role === "recruiter" && !auth.isLoggedIn) {
-    return { path: "/recruiter-login", replace: true };
   }
 
   // Reset toast flag on successful login pages
