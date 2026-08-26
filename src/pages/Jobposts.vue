@@ -1026,11 +1026,19 @@ const jobService = {
 };
 
 // Methods
+let loadJobsSeq = 0;
+
 const loadJobs = async () => {
   if (isCoolingDown.value) {
     push.warning(t("jobSearch.rateLimited", { seconds: searchCooldown.value }));
+    if (jobs.value.length === 0) loading.value = false;
     return;
   }
+
+  const seq = ++loadJobsSeq;
+  // Jangan kosongkan list yang sudah tampil — biar tidak "nongol-ilang" saat refetch
+  const blocking = jobs.value.length === 0;
+
   try {
     if (blocking) loading.value = true;
     const data = await jobService.fetchJobs({
@@ -1049,10 +1057,13 @@ const loadJobs = async () => {
       locale: locale.value,
       limit: 5,
     });
-    jobs.value = data.data;
-    totalPages.value = data.meta.totalPage;
-    totalData.value = data.meta.total;
+    if (seq !== loadJobsSeq) return;
+
+    jobs.value = Array.isArray(data?.data) ? data.data : [];
+    totalPages.value = Number(data?.meta?.totalPage) || 1;
+    totalData.value = Number(data?.meta?.total) || 0;
   } catch (error) {
+    if (seq !== loadJobsSeq) return;
     console.error("Error loading jobs:", error);
     if (isRateLimitedError(error)) {
       startSearchCooldown(error, 300);
@@ -1063,7 +1074,7 @@ const loadJobs = async () => {
       );
     }
   } finally {
-    loading.value = false;
+    if (seq === loadJobsSeq) loading.value = false;
   }
 };
 
