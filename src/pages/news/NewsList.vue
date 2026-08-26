@@ -8,6 +8,7 @@ import {
   isNewsLocaleFallback,
   resolveNewsLocale,
 } from "@/services/news.api";
+import SkeletonNewsList from "@/components/common/skeleton/SkeletonNewsList.vue";
 
 const { t, locale } = useI18n();
 const route = useRoute();
@@ -238,9 +239,7 @@ onMounted(async () => {
           {{ t("news.resultCount", { count: totalData }) }}
         </p>
 
-        <div v-if="loading" class="py-16 text-center text-gray-500 text-sm">
-          {{ t("news.loading") }}
-        </div>
+        <SkeletonNewsList v-if="loading" />
         <div
           v-else-if="error"
           class="py-10 text-center text-red-600 text-sm bg-red-50 rounded-lg"

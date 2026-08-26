@@ -69,7 +69,8 @@
               <p class="text-xs text-gray-500 mt-2">Tip: Selecting multiple languages may slow OCR.</p>
             </div>
 
-            <div v-if="loading" class="mt-4">
+            <div v-if="loading" class="mt-4 space-y-3">
+              <SkeletonInline :lines="3" />
               <div class="text-xs text-gray-500 mb-1">Progress: {{ Math.round(progress * 100) }}%</div>
               <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div class="h-2 bg-blue-600" :style="{ width: `${progress * 100}%` }"></div>
@@ -141,6 +142,7 @@ import { ref, computed } from 'vue'
 import { recognize } from 'tesseract.js'
 import * as pdfjsLib from 'pdfjs-dist'
 import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+import SkeletonInline from '@/components/common/skeleton/SkeletonInline.vue'
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl
 

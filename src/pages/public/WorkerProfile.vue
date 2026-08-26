@@ -5,6 +5,7 @@ import { getWorkerById } from '@/services/workers.api'
 import RichTextContent from '@/components/common/RichTextContent.vue'
 import ContactRevealFields from '@/components/common/ContactRevealFields.vue'
 import { resolveUploadUrl } from '@/utils/mediaUrl'
+import SkeletonProfileHero from '@/components/common/skeleton/SkeletonProfileHero.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -88,9 +89,7 @@ onMounted(fetchWorkerProfile)
       </div>
     </div>
 
-    <div v-if="loading" class="flex justify-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-    </div>
+    <SkeletonProfileHero v-if="loading" />
 
     <div v-else-if="worker" class="max-w-6xl mx-auto px-6 py-8">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { getActivePlan, getPaymentOrders } from "@/services/payments.api.js";
+import SkeletonInline from "@/components/common/skeleton/SkeletonInline.vue";
 
 const router = useRouter();
 const route  = useRoute();
@@ -66,8 +67,8 @@ function formatRupiah(amount) {
       </p>
 
       <!-- Loading indicator -->
-      <div v-if="loading" class="flex justify-center mb-6">
-        <div class="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      <div v-if="loading" class="bg-gray-50 border border-gray-100 rounded-xl p-4 mb-6">
+        <SkeletonInline :lines="4" />
       </div>
 
       <div v-else class="space-y-4 mb-6 text-left">

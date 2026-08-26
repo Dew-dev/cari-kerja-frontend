@@ -8,6 +8,7 @@ import SearchableSelect from "@/components/common/SearchableSelect.vue";
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import CompanyLogo from "@/components/common/CompanyLogo.vue";
 import { isContentRejectedError } from "@/utils/apiErrors";
+import SkeletonForm from "@/components/common/skeleton/SkeletonForm.vue";
 
 const auth = useAuthStore();
 const { t } = useI18n();
@@ -183,12 +184,7 @@ onMounted(loadProfile);
       </div>
 
       <!-- Loading -->
-      <div
-        v-if="loading"
-        class="flex justify-center py-16"
-      >
-        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-      </div>
+      <SkeletonForm v-if="loading" />
 
       <form
         v-else

@@ -247,10 +247,7 @@
           </div>
         </div>
 
-        <div v-else-if="loading" class="bg-white rounded-xl border border-gray-100 shadow-sm p-8 text-center">
-          <i class="pi pi-spinner pi-spin text-3xl text-blue-500 mb-3"></i>
-          <p class="text-gray-600 font-medium">{{ t("loadingJobs") }}</p>
-        </div>
+        <SkeletonJobList v-else-if="loading" :count="5" />
 
         <div v-else class="bg-white rounded-xl border border-gray-100 shadow-sm p-8 text-center">
           <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -481,11 +478,8 @@
           </tbody>
           <tbody v-else-if="loading">
             <tr>
-              <td colspan="6" class="px-6 py-16 text-center">
-                <div class="flex flex-col items-center justify-center">
-                  <i class="pi pi-spinner pi-spin text-4xl text-blue-500 mb-3"></i>
-                  <p class="text-gray-600 font-medium">{{ t("loadingJobs") }}</p>
-                </div>
+              <td colspan="6" class="p-0">
+                <SkeletonTable :rows="5" :columns="6" />
               </td>
             </tr>
           </tbody>
@@ -749,6 +743,8 @@ import {
 } from "@/utils/apiErrors";
 import { useAuthStore } from "@/stores/authStore";
 import { getAllPlans, getPaymentOrders } from "@/services/payments.api.js";
+import SkeletonJobList from "@/components/common/skeleton/SkeletonJobList.vue";
+import SkeletonTable from "@/components/common/skeleton/SkeletonTable.vue";
 
 const activeTab = ref("active"); // active | archived
 

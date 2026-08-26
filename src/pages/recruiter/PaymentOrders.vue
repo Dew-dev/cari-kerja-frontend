@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getPaymentOrders } from "@/services/payments.api.js";
+import SkeletonTable from "@/components/common/skeleton/SkeletonTable.vue";
 
 const router = useRouter();
 const { t }  = useI18n();
@@ -133,9 +134,7 @@ function nextPage() {
       </div>
 
       <!-- Loading -->
-      <div v-if="loading" class="flex justify-center py-24">
-        <div class="w-10 h-10 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-      </div>
+      <SkeletonTable v-if="loading" />
 
       <!-- Empty state -->
       <div

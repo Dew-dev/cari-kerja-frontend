@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import { push } from "notivue";
 import { getActivePlan, applySinglePostToJob } from "@/services/payments.api.js";
+import SkeletonList from "@/components/common/skeleton/SkeletonList.vue";
 
 const props = defineProps({
   job: { type: Object, required: true },
@@ -87,9 +88,7 @@ function close() {
 
         <!-- Body -->
         <div class="p-6">
-          <div v-if="loading" class="flex justify-center py-10">
-            <div class="w-8 h-8 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-          </div>
+          <SkeletonList v-if="loading" :count="3" />
 
           <div v-else-if="!availableSlots.length" class="text-center py-8">
             <div class="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">

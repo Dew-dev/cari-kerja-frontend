@@ -11,6 +11,7 @@ import {
 import CompanyLogo from "@/components/common/CompanyLogo.vue";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
 import { isContentRejectedError } from "@/utils/apiErrors";
+import SkeletonForm from "@/components/common/skeleton/SkeletonForm.vue";
 
 const auth = useAuthStore();
 const { t } = useI18n();
@@ -134,9 +135,7 @@ onMounted(loadProfile);
         </RouterLink>
       </div>
 
-      <div v-if="loading" class="flex justify-center py-16">
-        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
-      </div>
+      <SkeletonForm v-if="loading" show-avatar :fields="4" />
 
       <form v-else class="space-y-6" @submit.prevent="saveProfile">
         <section class="rounded-2xl border border-slate-200 bg-white shadow-sm p-5 sm:p-6">

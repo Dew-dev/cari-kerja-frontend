@@ -8,6 +8,7 @@ import {
   resolveNewsLocale,
 } from "@/services/news.api";
 import RichTextContent from "@/components/common/RichTextContent.vue";
+import SkeletonNewsList from "@/components/common/skeleton/SkeletonNewsList.vue";
 
 const props = defineProps({
   slug: {
@@ -115,9 +116,7 @@ onMounted(loadArticle);
         ← {{ t("news.backToList") }}
       </button>
 
-      <div v-if="loading" class="py-20 text-center text-gray-500 text-sm">
-        {{ t("news.loading") }}
-      </div>
+      <SkeletonNewsList v-if="loading" layout="detail" />
 
       <div
         v-else-if="error"

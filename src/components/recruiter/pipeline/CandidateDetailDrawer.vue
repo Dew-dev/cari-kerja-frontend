@@ -14,6 +14,7 @@ import { resolveUploadUrl } from "@/utils/mediaUrl";
 import ContactRevealFields from "@/components/common/ContactRevealFields.vue";
 import ResumeLink from "@/components/common/ResumeLink.vue";
 import CandidateTimeline from "./CandidateTimeline.vue";
+import SkeletonInline from "@/components/common/skeleton/SkeletonInline.vue";
 
 const { t, locale } = useI18n();
 const pipelineStore = usePipelineStore();
@@ -494,12 +495,11 @@ function refreshMatch() {
             </template>
           </section>
 
-          <div
+          <SkeletonInline
             v-if="loading && !(detail?.cover_letter || candidate.cover_letter)"
-            class="flex justify-center py-2"
-          >
-            <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-          </div>
+            :lines="2"
+            class="py-2"
+          />
 
           <div v-if="detail?.cover_letter || candidate.cover_letter">
             <h3 class="text-xs font-semibold text-gray-500 uppercase mb-1.5">{{ t("coverLetter") }}</h3>
