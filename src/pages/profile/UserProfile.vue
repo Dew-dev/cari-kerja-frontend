@@ -19,6 +19,9 @@ import { displayEmail } from "@/utils/authFlags";
 import { isContentRejectedError, isDisposableEmailRejected, isRateLimitedError } from "@/utils/apiErrors";
 import { stripHtml } from "@/utils/richText";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
+import SkeletonForm from "@/components/common/skeleton/SkeletonForm.vue";
+import SkeletonJobList from "@/components/common/skeleton/SkeletonJobList.vue";
+import SkeletonInline from "@/components/common/skeleton/SkeletonInline.vue";
 import ResumeLink from "@/components/common/ResumeLink.vue";
 import { matchJobTitle } from "@/services/job_titles.api";
 import JobTitleAutocomplete from "@/components/common/JobTitleAutocomplete.vue";
@@ -1888,9 +1891,7 @@ watch(activeTab, (newTab) => {
           <p class="text-sm text-slate-500 mt-1">{{ $t('profile.personalInfoHint') }}</p>
         </div>
 
-        <div v-if="loadingProfile" class="text-sm text-slate-500 py-8 text-center">
-          {{ $t('profile.loadingProfile') }}
-        </div>
+        <SkeletonForm v-if="loadingProfile" />
 
         <form v-else class="space-y-8" @submit.prevent="saveProfile">
           <!-- Avatar Section -->
@@ -2119,9 +2120,7 @@ watch(activeTab, (newTab) => {
                           {{ currency.name }} ({{ currency.code }})
                       </div>
                     </div>
-                    <p v-if="currencyLoading" class="text-xs text-slate-500 mt-1">
-                      {{ $t('profile.loadingCurrencies') || 'Loading...' }}
-                    </p>
+                    <SkeletonInline v-if="currencyLoading" :lines="2" class="mt-1" />
                   </div>
                 </div>
               </div>
@@ -2164,9 +2163,7 @@ watch(activeTab, (newTab) => {
                         {{ currency.name }} ({{ currency.code }})
                       </div>
                     </div>
-                    <p v-if="currencyLoading" class="text-xs text-slate-500 mt-1">
-                      {{ $t('profile.loadingCurrencies') || 'Loading...' }}
-                    </p>
+                    <SkeletonInline v-if="currencyLoading" :lines="2" class="mt-1" />
                   </div>
                 </div>
                 <p v-if="salaryCompareError" class="mt-1.5 text-xs text-red-600">
@@ -3420,9 +3417,7 @@ watch(activeTab, (newTab) => {
           <h2 class="text-lg md:text-xl font-semibold text-slate-900">{{ $t('profile.appliedJobs') }}</h2>
           <p class="text-sm text-slate-500 mt-1">{{ $t('profile.appliedJobsHint') }}</p>
         </div>
-        <div v-if="loadingApplied" class="text-sm text-slate-500 py-8 text-center">
-          {{ $t('profile.loadingAppliedJobs') }}
-        </div>
+        <SkeletonJobList v-if="loadingApplied" :count="3" />
         <div v-else-if="appliedError" class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
           {{ appliedError }}
         </div>
@@ -3569,9 +3564,7 @@ watch(activeTab, (newTab) => {
           <h2 class="text-lg md:text-xl font-semibold text-slate-900">{{ $t('profile.savedJobs') }}</h2>
           <p class="text-sm text-slate-500 mt-1">{{ $t('profile.savedJobsHint') }}</p>
         </div>
-        <div v-if="loadingSaved" class="text-sm text-slate-500 py-8 text-center">
-          {{ $t('profile.loadingSavedJobs') }}
-        </div>
+        <SkeletonJobList v-if="loadingSaved" :count="3" />
         <div v-else-if="savedError" class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
           {{ savedError }}
         </div>

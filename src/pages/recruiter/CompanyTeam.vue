@@ -14,6 +14,7 @@ import {
   revokeCompanyInvitation,
 } from "@/services/companies.api.js";
 import { canAssignRole, COMPANY_ROLES } from "@/utils/companyPermissions";
+import SkeletonTable from "@/components/common/skeleton/SkeletonTable.vue";
 
 const auth = useAuthStore();
 const { t } = useI18n();
@@ -186,9 +187,7 @@ onMounted(loadAll);
         </RouterLink>
       </div>
 
-      <div v-if="loading" class="flex justify-center py-16">
-        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
-      </div>
+      <SkeletonTable v-if="loading" :rows="5" :columns="4" />
 
       <div v-else class="space-y-6">
         <!-- Members -->

@@ -4,6 +4,7 @@ import { useRouter, useRoute } from "vue-router"
 import { registerRecruiter } from "@/services/auth.api"
 import { previewCompanyInvitation } from "@/services/companies.api.js"
 import TurnstileWidget from "@/components/common/TurnstileWidget.vue"
+import SkeletonForm from "@/components/common/skeleton/SkeletonForm.vue"
 import { isCaptchaError, isDisposableEmailRejected, isDisposablePhoneRejected, isRateLimitedError } from "@/utils/apiErrors"
 import { useI18n } from "vue-i18n"
 
@@ -204,9 +205,7 @@ onMounted(loadInvitePreview)
           </p>
         </div>
 
-        <div v-if="state.inviteLoading" class="text-center text-sm text-gray-500 py-8">
-          {{ t("registerInvite.loading") || "Loading invitation..." }}
-        </div>
+        <SkeletonForm v-if="state.inviteLoading" :fields="3" />
 
         <div
           v-else-if="state.inviteError"

@@ -6,6 +6,7 @@ import { push } from "notivue";
 import { useEmployerVerificationStore } from "@/stores/employerVerificationStore";
 import { useAuthStore } from "@/stores/authStore.js";
 import { isRateLimitedError, getRetryAfterSeconds } from "@/utils/apiErrors";
+import SkeletonForm from "@/components/common/skeleton/SkeletonForm.vue";
 
 const { t } = useI18n();
 const auth = useAuthStore();
@@ -246,12 +247,7 @@ onBeforeUnmount(() => {
         }}
       </div>
 
-      <div
-        v-if="loading && !status"
-        class="rounded-xl bg-white p-8 text-center text-slate-500 shadow-sm"
-      >
-        {{ t("verification.kyc.loading") }}
-      </div>
+      <SkeletonForm v-if="loading && !status" :fields="4" />
 
       <template v-else-if="status">
         <!-- Status card -->

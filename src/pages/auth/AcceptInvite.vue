@@ -8,6 +8,7 @@ import {
   previewCompanyInvitation,
   acceptCompanyInvitation,
 } from "@/services/companies.api.js";
+import SkeletonForm from "@/components/common/skeleton/SkeletonForm.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -95,9 +96,7 @@ onMounted(loadPreview);
         {{ t("acceptInvite.subtitle") || "Join a recruiter team on Cari Kerja" }}
       </p>
 
-      <div v-if="loading" class="flex justify-center py-12">
-        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
-      </div>
+      <SkeletonForm v-if="loading" :fields="3" />
 
       <div
         v-else-if="error"

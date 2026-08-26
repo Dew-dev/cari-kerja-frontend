@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { unsubscribeByToken } from "@/services/communication.api";
+import SkeletonInline from "@/components/common/skeleton/SkeletonInline.vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -45,9 +46,9 @@ onMounted(async () => {
         {{ t("communication.unsubscribe.title") }}
       </h1>
 
-      <p v-if="loading" class="text-sm text-gray-600">
-        {{ t("communication.unsubscribe.processing") }}
-      </p>
+      <div v-if="loading" class="flex justify-center">
+        <SkeletonInline :lines="2" />
+      </div>
       <p v-else-if="success" class="text-sm text-green-700">
         {{ message }}
       </p>

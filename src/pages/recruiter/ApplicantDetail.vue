@@ -14,6 +14,7 @@ import { getWorkerById } from "@/services/workers.api";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
 import ContactRevealFields from "@/components/common/ContactRevealFields.vue";
 import ResumeLink from "@/components/common/ResumeLink.vue";
+import SkeletonDetailPage from "@/components/common/skeleton/SkeletonDetailPage.vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -218,9 +219,7 @@ async function startChat() {
     </div>
 
     <div class="max-w-6xl mx-auto px-6 py-8">
-      <div v-if="loading" class="flex justify-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
+      <SkeletonDetailPage v-if="loading" />
 
       <div v-else-if="worker" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Left Sidebar -->

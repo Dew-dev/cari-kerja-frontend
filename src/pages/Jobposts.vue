@@ -425,15 +425,7 @@
           <!-- Job Cards -->
           <div class="flex flex-col">
             <!-- Loading State -->
-            <div
-              v-if="loading"
-              class="bg-white rounded-lg shadow p-8 text-center"
-            >
-              <div class="animate-pulse">
-                <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
-                <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
-              </div>
-            </div>
+            <SkeletonJobList v-if="loading" :count="5" />
 
             <!-- Job List -->
             <div v-else>
@@ -642,6 +634,7 @@ import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../stores/authStore";
 import HeroSearch from "../components/home/HeroSearch.vue";
 import CompanyLogo from "../components/common/CompanyLogo.vue";
+import SkeletonJobList from "@/components/common/skeleton/SkeletonJobList.vue";
 import { getJobPosts, getHotJobPosts } from "../services/jobposts.api";
 import { getCategoriesWithJobcount } from "../services/categories.api";
 import api from "../services/api";
