@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brief Desain Logo — Cari Kerja</title>
+  <style>
+    :root {
+      --ink: #111827;
+      --muted: #4b5563;
+      --line: #e5e7eb;
+      --primary: #2563eb;
+      --bg: #ffffff;
+      --soft: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #eef2f7;
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.55;
+    }
+
+    .sheet {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 24px auto;
+      padding: 18mm 18mm 16mm;
+      background: var(--bg);
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.12);
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+
+    .toolbar button {
+      border: 0;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+
+    .toolbar .hint {
+      align-self: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    header {
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      color: var(--primary);
+      font-size: 10pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 26pt;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11pt;
+    }
+
+    h2 {
+      margin: 22px 0 8px;
+      font-size: 13pt;
+      letter-spacing: -0.01em;
+    }
+
+    h2 .num {
+      color: var(--primary);
+      margin-right: 6px;
+    }
+
+    p { margin: 0 0 8px; }
+
+    ul, ol {
+      margin: 0 0 8px;
+      padding-left: 1.2em;
+    }
+
+    li { margin-bottom: 4px; }
+
+    .meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 16px;
+      margin: 10px 0 0;
+      padding: 12px 14px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .meta dt {
+      margin: 0;
+      color: var(--muted);
+      font-size: 9pt;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .meta dd {
+      margin: 2px 0 0;
+      font-weight: 600;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0 4px;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 9.5pt;
+      font-weight: 600;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: var(--soft);
+    }
+
+    .box h3 {
+      margin: 0 0 8px;
+      font-size: 11pt;
+    }
+
+    .swatch-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .swatch {
+      flex: 1;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .swatch .color {
+      height: 36px;
+    }
+
+    .swatch .label {
+      padding: 6px 8px;
+      font-size: 9pt;
+    }
+
+    .swatch .label strong {
+      display: block;
+    }
+
+    .do { color: #047857; }
+    .dont { color: #b91c1c; }
+
+    footer {
+      margin-top: 28px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 9pt;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .toolbar { display: none !important; }
+      .sheet {
+        width: auto;
+        min-height: auto;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+      a { color: inherit; text-decoration: none; }
+    }
+
+    @page {
+      size: A4;
+      margin: 16mm;
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button type="button" onclick="window.print()">Cetak / Simpan PDF</button>
+    <span class="hint">Chrome/Edge: Print → Destination: Save as PDF → A4</span>
+  </div>
+
+  <main class="sheet">
+    <header>
+      <p class="eyebrow">Internal Design Brief</p>
+      <h1>Brief Desain Logo<br />Cari Kerja</h1>
+      <p class="subtitle">Dokumen acuan untuk desain identitas visual logo brand Cari Kerja.</p>
+    </header>
+
+    <section>
+      <h2><span class="num">01</span>Tentang brand</h2>
+      <p>
+        <strong>Cari Kerja</strong> adalah platform lowongan kerja modern di Indonesia yang menghubungkan
+        pencari kerja dengan perusahaan. Fokus produk: proses cari kerja yang lebih sederhana, cepat,
+        transparan, dan terpercaya.
+      </p>
+      <dl class="meta">
+        <div>
+          <dt>Nama resmi</dt>
+          <dd>Cari Kerja</dd>
+        </div>
+        <div>
+          <dt>Website</dt>
+          <dd>cari-kerja.id</dd>
+        </div>
+        <div>
+          <dt>Pasar</dt>
+          <dd>Indonesia</dd>
+        </div>
+        <div>
+          <dt>Pengguna utama</dt>
+          <dd>Pencari kerja &amp; perusahaan / HRD</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2><span class="num">02</span>Positioning</h2>
+      <p>
+        Bukan job board “murahan” dan bukan agensi tradisional. Positioning yang diinginkan:
+        <strong>platform karir digital yang modern, bersih, dan bisa dipercaya</strong> — setara produk tech,
+        bukan iklan koran.
+      </p>
+      <div class="chips">
+        <span class="chip">modern</span>
+        <span class="chip">terpercaya</span>
+        <span class="chip">efisien</span>
+        <span class="chip">transparan</span>
+        <span class="chip">Indonesia</span>
+        <span class="chip">peluang</span>
+      </div>
+      <p>
+        <strong>Hindari kesan:</strong> murah, kasar, terlalu kaku/formal banking, terlalu “startup unicorn”,
+        atau terlalu korporat dingin.
+      </p>
+    </section>
+
+    <section>
+      <h2><span class="num">03</span>Tujuan logo</h2>
+      <ol>
+        <li>Mudah dikenali di ukuran kecil (favicon, app icon, avatar).</li>
+        <li>Terasa profesional untuk perusahaan dan tetap ramah untuk pencari kerja.</li>
+        <li>Bekerja baik di web, mobile, email, dan materi marketing.</li>
+        <li>Bisa dipakai jangka panjang — bukan tren sesaat.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2><span class="num">04</span>Arah kreatif</h2>
+      <p>Prioritas deliverable visual: <strong>wordmark + mark (ikon)</strong> yang bisa berdiri sendiri.</p>
+      <ul>
+        <li>Sederhana, geometris, readable.</li>
+        <li>Ada petunjuk visual tentang mencari / menemukan / koneksi / kemajuan karir — tanpa terlalu literal.</li>
+        <li>Nuansa Indonesia boleh (halus), tanpa klise (Garuda, bendera meriah, batik penuh) kecuali diolah sangat modern.</li>
+      </ul>
+      <div class="two-col">
+        <div class="box">
+          <h3>Arah yang bisa dieksplorasi</h3>
+          <ul>
+            <li><strong>Connection</strong> — talent bertemu company</li>
+            <li><strong>Discovery</strong> — menemukan peluang</li>
+            <li><strong>Progress</strong> — langkah / naik level karir</li>
+            <li><strong>Initial mark</strong> — monogram “CK” yang unik</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Mood referensi</h3>
+          <p>
+            Bersih, modern, confident seperti produk SaaS / marketplace kerja yang mature.
+            Bukan logo agency kreatif yang rumit. Referensi hanya untuk mood — jangan ditiru.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">05</span>Warna &amp; tipografi</h2>
+      <p>
+        Warna primer UI saat ini: biru <strong>#2563EB</strong> (kesan tech / trustworthy).
+        Desainer boleh mengusulkan variasi tonality yang lebih kuat untuk brand, selama tetap koheren.
+      </p>
+      <div class="swatch-row">
+        <div class="swatch">
+          <div class="color" style="background:#2563EB"></div>
+          <div class="label"><strong>Primary</strong>#2563EB</div>
+        </div>
+        <div class="swatch">
+          <div class="color" style="background:#111827"></div>
+          <div class="label"><strong>Ink</strong>#111827</div>
+        </div>
+        <div class="swatch">
+          <div class="color" style="background:#6B7280"></div>
+          <div class="label"><strong>Muted</strong>#6B7280</div>
+        </div>
+        <div class="swatch">
+          <div class="color" style="background:#FFFFFF; border-bottom:1px solid #e5e7eb"></div>
+          <div class="label"><strong>White</strong>#FFFFFF</div>
+        </div>
+      </div>
+      <ul>
+        <li>Wajib ada versi: full color, monochrome hitam, monochrome putih.</li>
+        <li>Hindari ungu/glow generik, gradasi berlebihan, atau efek metallic.</li>
+        <li>Wordmark “Cari Kerja” harus jelas dibaca; hindari font default generik sebagai identitas utama.</li>
+        <li>Karakter tipografi: modern, confident, sedikit hangat — tidak terlalu playful, tidak terlalu kaku.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="num">06</span>Deliverable</h2>
+      <ol>
+        <li>Primary logo (ikon + wordmark horizontal)</li>
+        <li>Stacked logo (ikon di atas, teks di bawah)</li>
+        <li>Icon / symbol only (favicon, app icon, avatar)</li>
+        <li>Monochrome hitam &amp; putih</li>
+        <li>Clear space &amp; minimum size guide</li>
+        <li>
+          File akhir:
+          SVG; PNG transparan (1×, 2×); icon 16 / 32 / 48 / 128 / 512; favicon
+        </li>
+        <li>Opsional: mockup navbar, favicon tab, email header, avatar LinkedIn/company</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2><span class="num">07</span>Do &amp; Don’t</h2>
+      <div class="two-col">
+        <div class="box">
+          <h3 class="do">Do</h3>
+          <ul>
+            <li>Readable di 16–24 px</li>
+            <li>Distinct dari Jobstreet, LinkedIn, Glints, Kalibrr, Indeed</li>
+            <li>Terasa “tech product Indonesia” yang clean</li>
+            <li>Skala rapi dari favicon sampai billboard digital</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3 class="dont">Don’t</h3>
+          <ul>
+            <li>Clipart magnifying glass generik + CV</li>
+            <li>Stick-figure / ikon orang klasik job board</li>
+            <li>Terlalu banyak detail, gradient, atau shadow tebal</li>
+            <li>Font script / calligraphy</li>
+            <li>Terlalu mirip marketplace atau fintech biru generik</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">08</span>Ekspektasi proses (internal)</h2>
+      <ol>
+        <li>Kirim <strong>3 konsep arah</strong> (sketsa / rough) untuk dipilih bersama.</li>
+        <li>Kunci 1 konsep, lalu revisi 2–3 putaran.</li>
+        <li>Finalisasi + serahkan seluruh file deliverable di atas.</li>
+      </ol>
+    </section>
+
+    <footer>
+      Cari Kerja — Brief Desain Logo (internal) · Dokumen ini untuk keperluan desain identitas brand.
+    </footer>
+  </main>
+</body>
+</html>
