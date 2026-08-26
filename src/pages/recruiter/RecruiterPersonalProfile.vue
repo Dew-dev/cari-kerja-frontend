@@ -7,6 +7,7 @@ import { useAuthStore } from "@/stores/authStore.js";
 import {
   getMyRecruiterProfile,
   updateMyRecruiterProfile,
+  getRecruiterByUserId,
 } from "@/services/recruiters.api.js";
 import CompanyLogo from "@/components/common/CompanyLogo.vue";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
@@ -68,8 +69,7 @@ async function loadProfile() {
       data = await getMyRecruiterProfile();
     } catch (err) {
       if (err?.response?.status !== 404) throw err;
-      const res = await api.get(`/users/${auth.user.id}/recruiters`);
-      data = res.data?.data ?? res.data;
+      data = await getRecruiterByUserId(auth.user?.user_id || auth.user?.id);
     }
     applyProfile(data);
   } catch (err) {

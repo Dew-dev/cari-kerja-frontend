@@ -66,10 +66,10 @@ async function fetchRecruiter() {
         recruiter.value = normalizePublicCompany(data)
         return
       } catch (err) {
-        // Fall back to legacy recruiter profile if company endpoint missing
         if (err?.response?.status && err.response.status !== 404) {
           console.error("Failed to load company profile", err)
         }
+        // Legacy URLs may use recruiter profile id on /companies/:id
       }
     }
 

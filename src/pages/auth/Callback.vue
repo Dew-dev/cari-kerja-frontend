@@ -169,12 +169,15 @@ onMounted(async () => {
     if (!user) {
       user = buildUserFromToken(token);
     } else {
-      user = {
-        ...user,
-        email: displayEmail(user.email),
-        login_provider:
-          user.login_provider || resolveLoginProvider(decodeAccessToken(token)),
-      };
+      user = normalizeRecruiterSessionUser(
+        {
+          ...user,
+          email: displayEmail(user.email),
+          login_provider:
+            user.login_provider || resolveLoginProvider(decodeAccessToken(token)),
+        },
+        auth.user || {},
+      );
     }
 
     auth.user = user;

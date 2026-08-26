@@ -2286,6 +2286,7 @@
       "reactivateFailed": "So'rov yuborilmadi",
       "reactivatePending": "Qayta faollashtirish so'rovi ochiq — admin tekshiruvini kuting.",
       "alreadyVerified": "Kompaniyangiz allaqachon tasdiqlangan.",
+      "readOnlyMember": "Kompaniya tasdiqlash holati (faqat ko'rish). Hujjatlarni yuborish uchun admin yoki egasiga murojaat qiling.",
       "applicationStatus": "Ariza",
       "status": {
         "grace": "Imtiyoz muddati",
@@ -2514,7 +2515,11 @@
       "tryAgain": "Qaytadan urinish",
       "backPricing": "Tariflarga qaytish",
       "support": "Yordam xizmati bilan bog'lanish"
-    }
+    },
+    "activePlanCompany": "Kompaniya tarifi",
+    "pricingSubtitleCompany": "Tariflar kompaniya a'zolari uchun umumiy.",
+    "navOrders": "Buyurtmalar tarixi",
+    "navPricing": "Tariflar"
   },
   "pipeline": {
     "navLabel": "Pipeline",
@@ -2695,5 +2700,83 @@
     "enabledSuccess": "Ish ogohlantirishlari yoqildi",
     "disabledSuccess": "Ish ogohlantirishlari o'chirildi",
     "saveFailed": "Ogohlantirishlarni yangilab bo'lmadi"
+  },
+  "companySettings": {
+    "navCompany": "Kompaniya",
+    "navPersonal": "Mening profilim",
+    "navAccount": "Hisob",
+    "title": "Kompaniya sozlamalari",
+    "subtitle": "Kompaniya profilingizni boshqaring",
+    "readOnly": "Kompaniya ma'lumotlarini ko'rishingiz mumkin, tahrirlash faqat adminlar uchun.",
+    "teamLink": "Jamoani boshqarish",
+    "personalLink": "Shaxsiy profil",
+    "loadFailed": "Kompaniyani yuklab bo'lmadi",
+    "verified": "Tasdiqlangan"
+  },
+  "companyTeam": {
+    "nav": "Jamoa",
+    "billingOwnerOnly": "Billingni faqat kompaniya egasi boshqaradi",
+    "contactOwnerUpgrade": "Tarifni yangilash uchun egaga murojaat qiling",
+    "title": "Kompaniya jamoasi",
+    "subtitle": "A'zolar va taklifnomalar",
+    "readOnly": "Jamoani ko'rishingiz mumkin, boshqarish faqat adminlar uchun.",
+    "backToCompany": "← Kompaniya sozlamalari",
+    "members": "A'zolar",
+    "noMembers": "A'zolar topilmadi.",
+    "colName": "Ism",
+    "colEmail": "Email",
+    "colRole": "Rol",
+    "colActions": "Amallar",
+    "remove": "O'chirish",
+    "invite": "A'zoni taklif qilish",
+    "sendInvite": "Taklif yuborish",
+    "pending": "Kutilayotgan taklifnomalar",
+    "noPending": "Kutilayotgan taklifnomalar yo'q.",
+    "resend": "Qayta yuborish",
+    "revoke": "Bekor qilish",
+    "transfer": "Egalikni o'tkazish",
+    "newOwner": "Yangi egasi",
+    "selectMember": "A'zoni tanlang",
+    "transferBtn": "O'tkazish",
+    "roleUpdated": "Rol yangilandi",
+    "confirmRemove": "Bu a'zoni o'chirasizmi?",
+    "removed": "A'zo o'chirildi",
+    "confirmTransfer": "Egalikni o'tkazasizmi? Buni qaytarish qiyin.",
+    "transferred": "Egalik o'tkazildi",
+    "inviteSent": "Taklif yuborildi",
+    "resent": "Taklif qayta yuborildi",
+    "revoked": "Taklif bekor qilindi",
+    "invalidInviteRole": "Bu rolni tayinlay olmaysiz."
+  },
+  "acceptInvite": {
+    "title": "Kompaniya taklifnomasi",
+    "subtitle": "Cari Kerja'da rekruter jamoasiga qo'shiling",
+    "company": "Kompaniya",
+    "role": "Rol",
+    "email": "Taklif emaili",
+    "expires": "Amal qilish muddati",
+    "accept": "Taklifni qabul qilish",
+    "register": "Rekruter sifatida ro'yxatdan o'tish",
+    "login": "Kirish",
+    "missingToken": "Taklif tokeni yo'q.",
+    "invalid": "Taklif noto'g'ri yoki muddati tugagan.",
+    "accepted": "Siz kompaniyaga qo'shildingiz",
+    "acceptFailed": "Taklifni qabul qilib bo'lmadi"
+  },
+  "registerInvite": {
+    "title": "Kompaniyaga qo'shilish",
+    "subtitle": "{company} ga qo'shilish",
+    "subtitleGeneric": "Taklifni qabul qilish uchun hisobingizni to'ldiring",
+    "loading": "Taklif yuklanmoqda...",
+    "emailLocked": "Email taklifga bog'langan",
+    "submit": "Qo'shilish va hisob yaratish"
+  },
+  "recruiterPersonal": {
+    "title": "Shaxsiy profil",
+    "subtitle": "Kompaniya vakili sifatidagi aloqa ma'lumotlaringiz",
+    "backToCompany": "← Kompaniya sozlamalariga qaytish",
+    "avatar": "Shaxsiy foto",
+    "uploadAvatar": "Foto yuklash",
+    "loadFailed": "Profilni yuklab bo'lmadi"
   }
 }

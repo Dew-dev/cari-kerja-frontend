@@ -42,19 +42,20 @@ function memberName(m) {
   return m.contact_name || m.name || m.username || m.email || `#${m.user_id}`;
 }
 
-function assignableRoles(member) {
+function assignableRoles() {
   return [COMPANY_ROLES.ADMIN, COMPANY_ROLES.RECRUITER].filter((role) =>
     canAssignRole(actorRole.value, role),
   );
 }
 
+const inviteRoleOptions = computed(() => assignableRoles());
+
 async function loadAll() {
   loading.value = true;
   try {
-    const [mem, inv] = await Promise.allSettled([
-      getCompanyMembers(),
-      getCompanyInvitations(),
-    ]);
+    const memberPromise = getCompanyMembers();
+    const invitePromise = canManage.value ? getCompanyInvitations() : Promise.resolve([]);
+    const [mem, inv] = await Promise.allSettled([memberPromise, invitePromise]);
     if (mem.status === "fulfilled") {
       members.value = Array.isArray(mem.value) ? mem.value : mem.value?.members || [];
     } else {
@@ -115,6 +116,10 @@ async function onTransfer() {
 
 async function onInvite() {
   if (!canManage.value) return;
+  if (!canAssignRole(actorRole.value, invite.role)) {
+    push.error(t("companyTeam.invalidInviteRole") || "You cannot assign that role.");
+    return;
+  }
   inviting.value = true;
   try {
     await createCompanyInvitation({ email: invite.email.trim(), role: invite.role });
@@ -162,7 +167,12 @@ function normalizeRole(m) {
   return String(m.role || m.company_role || "").toLowerCase();
 }
 
-onMounted(loadAll);
+onMounted(async () => {
+  if (!inviteRoleOptions.value.includes(invite.role)) {
+    invite.role = inviteRoleOptions.value[0] || COMPANY_ROLES.RECRUITER;
+  }
+  await loadAll();
+});
 </script>
 
 <template>
@@ -212,13 +222,13 @@ onMounted(loadAll);
                 <td class="py-3 pr-3 text-slate-600">{{ m.email || "—" }}</td>
                 <td class="py-3 pr-3">
                   <select
-                    v-if="canManage && normalizeRole(m) !== 'owner' && assignableRoles(m).length"
+                    v-if="canManage && normalizeRole(m) !== 'owner' && assignableRoles().length"
                     :value="normalizeRole(m)"
                     class="rounded-lg border border-slate-200 px-2 py-1.5 text-sm"
                     @change="onRoleChange(m, $event.target.value)"
                   >
-                    <option v-for="r in assignableRoles(m)" :key="r" :value="r">{{ r }}</option>
-                    <option v-if="!assignableRoles(m).includes(normalizeRole(m))" :value="normalizeRole(m)">
+                    <option v-for="r in assignableRoles()" :key="r" :value="r">{{ r }}</option>
+                    <option v-if="!assignableRoles().includes(normalizeRole(m))" :value="normalizeRole(m)">
                       {{ normalizeRole(m) }}
                     </option>
                   </select>
@@ -242,14 +252,13 @@ onMounted(loadAll);
           <h2 class="text-base font-semibold text-slate-900 mb-4">{{ t("companyTeam.invite") || "Invite member" }}</h2>
           <form class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end" @submit.prevent="onInvite">
             <div class="sm:col-span-1">
-              <label :class="labelClass">Email</label>
+              <label :class="labelClass">{{ t("companyTeam.colEmail") || "Email" }}</label>
               <input v-model="invite.email" :class="inputClass" type="email" required />
             </div>
             <div>
-              <label :class="labelClass">Role</label>
+              <label :class="labelClass">{{ t("companyTeam.colRole") || "Role" }}</label>
               <select v-model="invite.role" :class="inputClass">
-                <option value="admin">admin</option>
-                <option value="recruiter">recruiter</option>
+                <option v-for="r in inviteRoleOptions" :key="r" :value="r">{{ r }}</option>
               </select>
             </div>
             <button
@@ -273,9 +282,9 @@ onMounted(loadAll);
           <table v-else class="w-full text-sm text-left">
             <thead class="text-slate-500 border-b border-slate-100">
               <tr>
-                <th class="py-2 pr-3 font-medium">Email</th>
-                <th class="py-2 pr-3 font-medium">Role</th>
-                <th class="py-2 font-medium">Actions</th>
+                <th class="py-2 pr-3 font-medium">{{ t("companyTeam.colEmail") || "Email" }}</th>
+                <th class="py-2 pr-3 font-medium">{{ t("companyTeam.colRole") || "Role" }}</th>
+                <th class="py-2 font-medium">{{ t("companyTeam.colActions") || "Actions" }}</th>
               </tr>
             </thead>
             <tbody>

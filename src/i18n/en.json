@@ -2831,7 +2831,8 @@
     "readOnly": "You can view company details but only admins can edit.",
     "teamLink": "Manage team",
     "personalLink": "Personal profile",
-    "loadFailed": "Failed to load company"
+    "loadFailed": "Failed to load company",
+    "verified": "Verified"
   },
   "companyTeam": {
     "nav": "Team",
@@ -2865,7 +2866,8 @@
     "transferred": "Ownership transferred",
     "inviteSent": "Invitation sent",
     "resent": "Invitation resent",
-    "revoked": "Invitation revoked"
+    "revoked": "Invitation revoked",
+    "invalidInviteRole": "You cannot assign that role."
   },
   "acceptInvite": {
     "title": "Company invitation",

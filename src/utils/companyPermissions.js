@@ -34,6 +34,40 @@ export function canAssignRole(actorRole, targetRole) {
   return companyRoleRank(actor) > companyRoleRank(target);
 }
 
+/** Legacy single-recruiter account without multi-company claims from BE. */
+export function isLegacyRecruiterAccount(user) {
+  if (!user || user.role !== "recruiter") return false;
+  return !user.company_id && !normalizeCompanyRole(user.company_role);
+}
+
+/** BE sent company_id but role is not resolved yet — deny elevated permissions until refresh. */
+export function isCompanyRolePending(user) {
+  if (!user || user.role !== "recruiter") return false;
+  return Boolean(user.company_id) && !normalizeCompanyRole(user.company_role);
+}
+
+export function recruiterCanManageBilling(user) {
+  if (user?.role !== "recruiter") return false;
+  if (isLegacyRecruiterAccount(user)) return true;
+  if (isCompanyRolePending(user)) return false;
+  return isCompanyOwner(user.company_role);
+}
+
+export function recruiterCanManageTeam(user) {
+  if (user?.role !== "recruiter") return false;
+  if (isLegacyRecruiterAccount(user)) return true;
+  if (isCompanyRolePending(user)) return false;
+  return isCompanyAdmin(user.company_role);
+}
+
+export function recruiterCanEditCompany(user) {
+  return recruiterCanManageTeam(user);
+}
+
+export function recruiterCanManageVerification(user) {
+  return recruiterCanManageTeam(user);
+}
+
 /**
  * Normalize recruiter session user from login/refresh/OAuth payload.
  * Keeps `id` as recruiter profile id for legacy URLs; adds company_* fields.
@@ -47,18 +81,20 @@ export function normalizeRecruiterSessionUser(user = {}, previous = {}) {
     (isRecruiter ? user.id ?? previous.recruiter_id ?? previous.id : null) ??
     previous.recruiter_id;
 
-  const userId = user.user_id ?? (isRecruiter ? user.id !== recruiterId ? user.id : previous.user_id : user.id) ?? previous.user_id;
+  const userId =
+    user.user_id ??
+    (isRecruiter ? (user.id !== recruiterId ? user.id : previous.user_id) : user.id) ??
+    previous.user_id;
 
   const companyId = user.company_id ?? previous.company_id ?? null;
-  const companyRole =
+  const explicitRole =
     normalizeCompanyRole(user.company_role) ||
-    normalizeCompanyRole(previous.company_role) ||
-    (isRecruiter && companyId ? COMPANY_ROLES.OWNER : normalizeCompanyRole(previous.company_role));
+    normalizeCompanyRole(previous.company_role);
 
-  // Legacy single-recruiter: if BE belum kirim company_*, treat as owner of own company placeholder
+  // Legacy single-recruiter (no company_id): default owner.
+  // Multi-recruiter with company_id but missing role: leave null until BE resolves.
   const resolvedCompanyRole =
-    companyRole ||
-    (isRecruiter ? COMPANY_ROLES.OWNER : null);
+    explicitRole ?? (isRecruiter && !companyId ? COMPANY_ROLES.OWNER : null);
 
   return {
     ...previous,

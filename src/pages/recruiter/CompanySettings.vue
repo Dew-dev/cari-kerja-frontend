@@ -5,7 +5,7 @@ import { push } from "notivue";
 import api from "@/services/api";
 import { useAuthStore } from "@/stores/authStore.js";
 import { getMyCompany, updateMyCompany } from "@/services/companies.api.js";
-import { getRecruiterByProfileId } from "@/services/recruiters.api.js";
+import { getRecruiterByUserId } from "@/services/recruiters.api.js";
 import SearchableSelect from "@/components/common/SearchableSelect.vue";
 import RichTextEditor from "@/components/common/RichTextEditor.vue";
 import CompanyLogo from "@/components/common/CompanyLogo.vue";
@@ -110,7 +110,7 @@ async function loadCompany() {
       data = await getMyCompany();
     } catch (err) {
       if (err?.response?.status !== 404) throw err;
-      data = await getRecruiterByProfileId(auth.user.id);
+      data = await getRecruiterByUserId(auth.user?.user_id || auth.user?.id);
     }
     applyCompany(data);
     await fetchIndustries();
@@ -183,7 +183,7 @@ onMounted(loadCompany);
           <span
             v-else-if="companyMeta.is_verified === true"
             class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-800"
-          >Verified</span>
+          >{{ t("companySettings.verified") || "Verified" }}</span>
         </div>
         <p class="text-sm text-slate-500">{{ t("companySettings.subtitle") || "Manage your company profile" }}</p>
         <p v-if="!canEdit" class="mt-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">

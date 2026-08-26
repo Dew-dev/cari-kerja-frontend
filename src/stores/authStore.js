@@ -11,6 +11,10 @@ import {
   normalizeRecruiterSessionUser,
   isCompanyOwner,
   isCompanyAdmin,
+  recruiterCanManageBilling,
+  recruiterCanManageTeam,
+  recruiterCanEditCompany,
+  recruiterCanManageVerification,
   COMPANY_ROLES,
 } from "../utils/companyPermissions";
 
@@ -18,6 +22,16 @@ const RESTRICTED_KEY = "restrictedVerification";
 
 function readRestrictedFlag() {
   return localStorage.getItem(RESTRICTED_KEY) === "1";
+}
+
+function readStoredUser() {
+  try {
+    const raw = localStorage.getItem("user");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    localStorage.removeItem("user");
+    return null;
+  }
 }
 
 function persistUser(user) {
@@ -28,7 +42,7 @@ export const useAuthStore = defineStore("auth", {
   state: () => ({
     token: localStorage.getItem("token"),
     refreshToken: localStorage.getItem("refreshToken"),
-    user: JSON.parse(localStorage.getItem("user")),
+    user: readStoredUser(),
     loading: false,
     error: null,
     needVerifyEmail: false,
@@ -62,30 +76,13 @@ export const useAuthStore = defineStore("auth", {
     isCompanyOwner: (state) => isCompanyOwner(state.user?.company_role),
     isCompanyAdmin: (state) => isCompanyAdmin(state.user?.company_role),
 
-    canManageBilling: (state) => {
-      if (state.user?.role !== "recruiter") return false;
-      // Legacy (no company_role yet): allow billing so existing owners tidak terkunci
-      if (!state.user?.company_role && !state.user?.company_id) return true;
-      return isCompanyOwner(state.user?.company_role);
-    },
+    canManageBilling: (state) => recruiterCanManageBilling(state.user),
 
-    canManageTeam: (state) => {
-      if (state.user?.role !== "recruiter") return false;
-      if (!state.user?.company_role && !state.user?.company_id) return true;
-      return isCompanyAdmin(state.user?.company_role);
-    },
+    canManageTeam: (state) => recruiterCanManageTeam(state.user),
 
-    canEditCompany: (state) => {
-      if (state.user?.role !== "recruiter") return false;
-      if (!state.user?.company_role && !state.user?.company_id) return true;
-      return isCompanyAdmin(state.user?.company_role);
-    },
+    canEditCompany: (state) => recruiterCanEditCompany(state.user),
 
-    canManageVerification: (state) => {
-      if (state.user?.role !== "recruiter") return false;
-      if (!state.user?.company_role && !state.user?.company_id) return true;
-      return isCompanyAdmin(state.user?.company_role);
-    },
+    canManageVerification: (state) => recruiterCanManageVerification(state.user),
 
     publicCompanyPath: (state) => {
       const companyId = state.user?.company_id;
