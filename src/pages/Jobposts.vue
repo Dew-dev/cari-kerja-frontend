@@ -989,6 +989,22 @@ function sortPreferLocal(list) {
   return [...list].sort((a, b) => localityScore(b) - localityScore(a));
 }
 
+/** Same rules as job list: searchbar hides; GPS prefer-sorts. */
+function applyLocationRules(list) {
+  if (!Array.isArray(list) || !list.length) return [];
+  if (selectedCity.value || selectedProvince.value) {
+    const city = normalizeCityName(selectedCity.value).toLowerCase();
+    const province = String(selectedProvince.value || "").toLowerCase();
+    return list.filter((job) => {
+      const loc = String(job?.location || "").toLowerCase();
+      if (city) return loc.includes(city);
+      if (province) return loc.includes(province);
+      return true;
+    });
+  }
+  return sortPreferLocal(list);
+}
+
 const loadJobs = async () => {
   if (isCoolingDown.value) {
     push.warning(t("jobSearch.rateLimited", { seconds: searchCooldown.value }));
@@ -1335,15 +1351,32 @@ watch(
 );
 
 // Lifecycle
-const hotJobs = ref([]);
+const rawHotJobs = ref([]);
 const loadingHot = ref(false);
+const hotJobs = computed(() => applyLocationRules(rawHotJobs.value).slice(0, 5));
 
 async function fetchHotJobs() {
   if (isCoolingDown.value) return;
   loadingHot.value = true;
   try {
-    const res = await getHotJobPosts({ limit: 5, page: 1, locale: locale.value });
-    hotJobs.value = res.data?.data || [];
+    // Fetch extra when GPS prefer is on so local hot jobs can bubble into top 5
+    const limit = preferCity.value || preferProvince.value ? 20 : 5;
+    const params = {
+      limit,
+      page: 1,
+      locale: locale.value,
+    };
+    if (preferCity.value && !selectedCity.value) {
+      params.prefer_city = preferCity.value;
+    }
+    if (preferProvince.value && !selectedCity.value && !selectedProvince.value) {
+      params.prefer_province = preferProvince.value;
+    }
+    if (selectedCity.value) params.cities_name = selectedCity.value;
+    if (selectedProvince.value) params.province_name = selectedProvince.value;
+
+    const res = await getHotJobPosts(params);
+    rawHotJobs.value = res.data?.data || [];
   } catch (err) {
     console.error("Error loading hot jobs:", err);
     if (isRateLimitedError(err)) {
@@ -1406,6 +1439,7 @@ async function tryDetectPreferredLocation() {
     preferCity.value = matchedCity;
     preferProvince.value = detected.province || "";
     loadJobs();
+    fetchHotJobs();
   } catch (err) {
     console.warn("GPS prefer-sort skipped:", err);
     sessionStorage.setItem(GPS_SKIP_KEY, "1");
