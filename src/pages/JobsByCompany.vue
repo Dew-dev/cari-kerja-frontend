@@ -134,7 +134,7 @@
                 <CompanyLogo
                   class="ring-1 ring-gray-100"
                   size="lg"
-                  rounded="rounded-xl"
+                  rounded="rounded-full"
                   :src="getAvatarUrl(company)"
                   :alt="company.company_name || company.name || 'Company'"
                   fallback="initials"

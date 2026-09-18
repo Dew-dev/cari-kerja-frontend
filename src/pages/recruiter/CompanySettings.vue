@@ -207,7 +207,7 @@ onMounted(loadCompany);
         <section class="rounded-2xl border border-slate-200 bg-white shadow-sm p-5 sm:p-6">
           <h2 class="text-base font-semibold text-slate-900 mb-5">{{ t("companyLogo") || "Company logo" }}</h2>
           <div class="flex flex-col sm:flex-row sm:items-center gap-5">
-            <CompanyLogo size="hero" rounded="rounded-2xl" :src="logoSrc" :alt="form.company_name" fallback="initials" />
+            <CompanyLogo size="hero" rounded="rounded-full" :src="logoSrc" :alt="form.company_name" fallback="initials" />
             <div class="flex-1 min-w-0">
               <label :class="labelClass">{{ t("recruiterEdit.uploadLogo") || "Upload logo" }}</label>
               <input

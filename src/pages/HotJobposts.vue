@@ -115,7 +115,7 @@ function timeAgo(date) {
             <CompanyLogo
               class="shadow-2xs"
               size="md"
-              rounded="rounded-xl"
+              rounded="rounded-full"
               :src="resolveUploadUrl(job.avatar_url)"
               :alt="job.company_name"
             />
