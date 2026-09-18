@@ -24,17 +24,17 @@
       <div class="flex flex-col lg:flex-row gap-6" :class="{ 'pointer-events-none opacity-60': isCoolingDown }">
         <!-- Sidebar - Categories & Filters -->
         <aside :class="['shrink-0 w-full lg:w-64', showFilters ? 'block' : 'hidden lg:block']">
-          <div class="bg-white rounded-lg shadow p-4 sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
-            <h3 class="font-semibold text-lg mb-4 text-gray-900">
+          <div class="bg-white rounded-lg border border-gray-200 p-4 sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
+            <h3 class="text-sm font-semibold mb-3 text-gray-900">
               {{ $t("categories") }}
             </h3>
-            <ul class="space-y-2">
+            <ul class="space-y-0.5">
               <!-- Recommended For You (Only if logged in) -->
               <li v-if="canUseRecommendations">
                 <button
                   @click="enableRecommendations()"
                   :class="[
-                    'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
+                    'w-full text-left px-2.5 py-1.5 rounded text-sm hover:bg-gray-100 flex items-center justify-between',
                     selectedCategoryId == null && recommendations
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700',
@@ -48,7 +48,7 @@
                 <button
                   @click="disableRecommendations()"
                   :class="[
-                    'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
+                    'w-full text-left px-2.5 py-1.5 rounded text-sm hover:bg-gray-100 flex items-center justify-between',
                     selectedCategoryId == null && !recommendations
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700',
@@ -58,7 +58,7 @@
                 </button>
               </li>
 
-              <!-- Categories -->
+              <!-- Categories (hide empty) -->
               <li v-for="category in visibleCategories" :key="category.id">
                 <button
                   @click="
@@ -66,26 +66,26 @@
                     handleFilterChange();
                   "
                   :class="[
-                    'w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center justify-between',
+                    'w-full text-left px-2.5 py-1.5 rounded text-sm hover:bg-gray-100 flex items-center justify-between gap-2',
                     Number(selectedCategoryId) === Number(category.id)
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-700',
                   ]"
                 >
                   <span class="truncate">{{ category.name }}</span>
-                  <span class="text-sm text-gray-500">{{
+                  <span class="text-xs text-gray-400 tabular-nums">{{
                     category.job_count
                   }}</span>
                 </button>
               </li>
 
               <div
-                v-if="categories.length > CATEGORY_LIMIT"
-                class="mt-4 pt-3 border-t border-gray-100"
+                v-if="categoriesWithJobs.length > CATEGORY_LIMIT"
+                class="mt-3 pt-3 border-t border-gray-100"
               >
                 <button
                   @click="showAllCategories = !showAllCategories"
-                  class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition cursor-pointer focus:outline-none"
+                  class="w-full flex items-center justify-center gap-1.5 px-2 py-1.5 rounded text-xs font-medium text-gray-500 hover:text-blue-600 hover:bg-blue-50 transition cursor-pointer focus:outline-none"
                 >
                   <span>
                     {{
@@ -96,7 +96,7 @@
                   </span>
 
                   <svg
-                    class="w-4 h-4 transition-transform duration-200"
+                    class="w-3.5 h-3.5 transition-transform duration-200"
                     :class="{ 'rotate-180': showAllCategories }"
                     fill="none"
                     stroke="currentColor"
@@ -173,12 +173,12 @@
                 </div>
               </div>
             </div> -->
-            <div class="mt-6 pt-6 border-t">
-              <h4 class="font-semibold text-sm mb-3 text-gray-900">
+            <div class="mt-5 pt-5 border-t border-gray-100">
+              <h4 class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
                 {{ $t("employmentTypes") }}
               </h4>
 
-              <div class="space-y-2">
+              <div class="space-y-1.5">
                 <label
                   v-for="type in employmentTypes"
                   :key="type.id"
@@ -196,14 +196,14 @@
               </div>
             </div>
 
-            <div class="mt-6 pt-6 border-t">
-              <h4 class="font-semibold text-sm mb-3 text-gray-900">
+            <div class="mt-5 pt-5 border-t border-gray-100">
+              <h4 class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
                 Salary Range
               </h4>
-              <div class="space-y-3">
+              <div class="space-y-2.5">
                 <div>
-                  <label class="block text-xs text-gray-600 mb-1">Currency</label>
-                  <select v-model="salaryCurrency" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <label class="block text-xs text-gray-500 mb-1">Currency</label>
+                  <select v-model="salaryCurrency" class="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
                     <option value="ALL">ALL</option>
                     <option value="IDR">IDR</option>
                     <option value="UZS">UZS</option>
@@ -212,23 +212,23 @@
                   </select>
                 </div>
                 <div>
-                  <label class="block text-xs text-gray-600 mb-1">Min ({{ salaryCurrency }})</label>
-                  <input type="text" v-model="displaySalaryMin" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Min salary" />
+                  <label class="block text-xs text-gray-500 mb-1">Min ({{ salaryCurrency }})</label>
+                  <input type="text" v-model="displaySalaryMin" class="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Min salary" />
                 </div>
                 <div>
-                  <label class="block text-xs text-gray-600 mb-1">Max ({{ salaryCurrency }})</label>
-                  <input type="text" v-model="displaySalaryMax" class="w-full border border-gray-200 shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Max salary" />
+                  <label class="block text-xs text-gray-500 mb-1">Max ({{ salaryCurrency }})</label>
+                  <input type="text" v-model="displaySalaryMax" class="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Max salary" />
                 </div>
-                <button @click="handleFilterChange" class="w-full rounded-md border border-gray-200 shadow-sm px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100">
+                <button @click="handleFilterChange" class="w-full rounded-md border border-gray-200 px-2.5 py-1.5 text-sm text-gray-700 bg-gray-50 hover:bg-gray-100">
                   Apply
                 </button>
               </div>
             </div>
 
-            <div class="mt-6">
+            <div class="mt-4">
               <button
                 @click="resetFilters"
-                class="w-full rounded-md border border-gray-200 shadow-sm px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                class="w-full rounded-md border border-gray-200 px-2.5 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
               >
                 {{ $t("resetFilters") }}
               </button>
@@ -316,41 +316,6 @@
                 <p class="text-sm text-gray-600">{{ $t("recommendedJobsDesc") || "Jobs matched based on your profile and preferences" }}</p>
               </div>
             </div>
-          </div>
-
-          <!-- Location: opt-in GPS (tidak auto-filter saat load) -->
-          <div
-            v-if="gpsFilterActive"
-            class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-          >
-            <div class="flex items-center gap-2 text-sm min-w-0">
-              <i class="pi pi-map-marker shrink-0 text-emerald-600"></i>
-              <span class="text-emerald-800 truncate">
-                {{ $t("gpsLocation.showingNear", { city: gpsCity }) }}
-                <span v-if="gpsProvince" class="text-emerald-700/80"> · {{ gpsProvince }}</span>
-              </span>
-            </div>
-            <button
-              type="button"
-              class="shrink-0 text-xs font-semibold text-emerald-800 hover:text-emerald-950 underline"
-              @click="clearGpsCityFilter"
-            >
-              {{ $t("gpsLocation.showAll") }}
-            </button>
-          </div>
-          <div
-            v-else
-            class="mb-3 flex justify-end"
-          >
-            <button
-              type="button"
-              class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-blue-700 disabled:opacity-50"
-              :disabled="gpsLoading"
-              @click="applyGpsCityFilter"
-            >
-              <i class="pi pi-map-marker text-[11px]"></i>
-              {{ gpsLoading ? $t("gpsLocation.detecting") : $t("gpsLocation.useMyLocation") }}
-            </button>
           </div>
 
           <!-- HOT Jobs Section -->
@@ -664,11 +629,10 @@ const salaryMin = ref(null);
 const salaryMax = ref(null);
 const salaryCurrency = ref("ALL");
 
-/** GPS-detected city applied as cities_name filter */
-const gpsCity = ref("");
-const gpsProvince = ref("");
-const gpsLoading = ref(false);
-const gpsFilterActive = ref(false);
+/** GPS prefer-city: sort local jobs first (does NOT filter/hide) */
+const preferCity = ref("");
+const preferProvince = ref("");
+const gpsPrompted = ref(false);
 
 // Computed
 const displaySalaryMin = computed({
@@ -711,10 +675,16 @@ const displayPages = computed(() => {
   }
   return pages;
 });
+
+/** Categories with at least one job */
+const categoriesWithJobs = computed(() =>
+  categories.value.filter((c) => Number(c.job_count) > 0),
+);
+
 const visibleCategories = computed(() => {
   return showAllCategories.value
-    ? categories.value
-    : categories.value.slice(0, CATEGORY_LIMIT);
+    ? categoriesWithJobs.value
+    : categoriesWithJobs.value.slice(0, CATEGORY_LIMIT);
 });
 
 const canUseRecommendations = computed(
@@ -924,6 +894,14 @@ const jobService = {
         hasActiveFilters = true;
       }
 
+      // Prefer local city (sort hint for BE; FE also reorders client-side)
+      if (filters.prefer_city && !filters.cities_name) {
+        params.prefer_city = filters.prefer_city;
+      }
+      if (filters.prefer_province && !filters.cities_name && !filters.province_name) {
+        params.prefer_province = filters.prefer_province;
+      }
+
       if (filters.salaryMin && filters.salaryMin !== null) {
         params.salary_min = filters.salaryMin;
         hasActiveFilters = true;
@@ -993,6 +971,24 @@ const jobService = {
 // Methods
 let loadJobsSeq = 0;
 
+/** Score job locality vs GPS prefer (higher = closer). Searchbar city filter hides instead. */
+function localityScore(job) {
+  if (!preferCity.value && !preferProvince.value) return 0;
+  const loc = String(job?.location || "").toLowerCase();
+  const city = normalizeCityName(preferCity.value).toLowerCase();
+  const province = String(preferProvince.value || "").toLowerCase();
+  if (city && loc.includes(city)) return 2;
+  if (province && loc.includes(province)) return 1;
+  return 0;
+}
+
+function sortPreferLocal(list) {
+  // Explicit searchbar location already filters via cities_name / province_name
+  if (selectedCity.value || selectedProvince.value) return list;
+  if (!preferCity.value && !preferProvince.value) return list;
+  return [...list].sort((a, b) => localityScore(b) - localityScore(a));
+}
+
 const loadJobs = async () => {
   if (isCoolingDown.value) {
     push.warning(t("jobSearch.rateLimited", { seconds: searchCooldown.value }));
@@ -1013,6 +1009,8 @@ const loadJobs = async () => {
       employmentTypes: selectedEmploymentTypes.value,
       province_name: selectedProvince.value,
       cities_name: selectedCity.value,
+      prefer_city: preferCity.value || undefined,
+      prefer_province: preferProvince.value || undefined,
       salaryMin: salaryMin.value,
       salaryMax: salaryMax.value,
       salaryCurrency: salaryCurrency.value,
@@ -1024,7 +1022,8 @@ const loadJobs = async () => {
     });
     if (seq !== loadJobsSeq) return;
 
-    jobs.value = Array.isArray(data?.data) ? data.data : [];
+    const list = Array.isArray(data?.data) ? data.data : [];
+    jobs.value = sortPreferLocal(list);
     totalPages.value = Number(data?.meta?.totalPage) || 1;
     totalData.value = Number(data?.meta?.total) || 0;
   } catch (error) {
@@ -1360,7 +1359,7 @@ onMounted(() => {
   loadCategories();
   loadEmploymentTypes();
   fetchHotJobs();
-  // GPS tidak auto-jalan saat mount — default tampilkan semua lowongan.
+  tryDetectPreferredLocation();
 });
 
 function normalizeCityName(name = "") {
@@ -1390,66 +1389,28 @@ async function resolveCityAgainstCatalog(rawCity) {
 }
 
 /**
- * Opt-in GPS city filter. Default page load shows ALL jobs (no auto-GPS).
+ * Auto-prompt GPS once. If allowed → prefer-sort by city (do not filter).
+ * If denied → keep default API sort.
  */
-async function applyGpsCityFilter() {
-  if (gpsLoading.value) return;
+async function tryDetectPreferredLocation() {
+  if (gpsPrompted.value) return;
+  if (sessionStorage.getItem(GPS_SKIP_KEY) === "1") return;
+  if (!navigator.geolocation) return;
 
-  if (!navigator.geolocation) {
-    console.warn("Geolocation not supported");
-    return;
-  }
-
-  gpsLoading.value = true;
+  gpsPrompted.value = true;
   try {
     const detected = await detectCityFromGps();
-    if (!detected?.city) {
-      console.warn("GPS city undetected — keeping all jobs");
-      return;
-    }
+    if (!detected?.city) return;
 
     const matchedCity = await resolveCityAgainstCatalog(detected.city);
-    gpsCity.value = matchedCity;
-    gpsProvince.value = detected.province || "";
-    gpsFilterActive.value = true;
-    sessionStorage.removeItem(GPS_SKIP_KEY);
-
-    router.replace({
-      query: {
-        ...route.query,
-        cities_name: matchedCity,
-        recommendations: "false",
-        page: 1,
-      },
-    });
+    preferCity.value = matchedCity;
+    preferProvince.value = detected.province || "";
+    loadJobs();
   } catch (err) {
-    console.warn("GPS city filter skipped, showing all jobs:", err);
+    console.warn("GPS prefer-sort skipped:", err);
     sessionStorage.setItem(GPS_SKIP_KEY, "1");
-  } finally {
-    gpsLoading.value = false;
   }
 }
-
-function clearGpsCityFilter() {
-  sessionStorage.setItem(GPS_SKIP_KEY, "1");
-  gpsFilterActive.value = false;
-  gpsCity.value = "";
-  gpsProvince.value = "";
-
-  const query = { ...route.query };
-  delete query.cities_name;
-  query.page = 1;
-  router.push({ query });
-}
-
-watch(
-  () => route.query.cities_name,
-  (name) => {
-    if (gpsFilterActive.value && name !== gpsCity.value) {
-      gpsFilterActive.value = false;
-    }
-  },
-);
 
 watch(locale, () => {
   loadCategories();
