@@ -425,77 +425,129 @@
           <!-- Job Cards -->
           <div class="flex flex-col">
             <!-- Loading State -->
-            <div v-if="loading" class="flex flex-col gap-2.5">
-              <div
-                v-for="n in 8"
-                :key="n"
-                class="bg-white rounded-lg border border-gray-100 px-3 py-3 sm:px-4 animate-pulse"
-              >
-                <div class="flex items-start gap-3">
-                  <div class="h-12 w-20 bg-gray-200 rounded shrink-0"></div>
-                  <div class="flex-1 space-y-2">
-                    <div class="h-4 bg-gray-200 rounded w-2/3"></div>
-                    <div class="h-3 bg-gray-100 rounded w-1/2"></div>
-                  </div>
-                  <div class="h-4 w-24 bg-gray-200 rounded shrink-0"></div>
-                </div>
+            <div
+              v-if="loading"
+              class="bg-white rounded-lg shadow p-8 text-center"
+            >
+              <div class="animate-pulse">
+                <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
+                <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
               </div>
             </div>
 
             <!-- Job List -->
-            <div v-else-if="jobs.length" class="flex flex-col gap-2.5">
+            <div v-else-if="jobs.length">
               <div
                 v-for="job in jobs"
                 :key="job.id"
                 :class="[
-                  'rounded-lg shadow-sm transition-all duration-200 px-3 py-3 sm:px-4 cursor-pointer border',
+                  'rounded-lg shadow transition-all duration-200 p-4 sm:p-5 md:p-6 cursor-pointer mb-6 last:mb-0 border-2',
                   job.boost_type === 'hot'
-                    ? 'bg-gradient-to-br from-amber-50/70 to-orange-50/40 border-orange-200 hover:shadow-md'
+                    ? 'bg-gradient-to-br from-amber-50/70 to-orange-50/40 border-orange-200 hover:shadow-orange-200/40 hover:shadow-xl ring-2 ring-orange-100/50'
                     : job.boost_type === 'top10'
-                    ? 'bg-gradient-to-br from-blue-50/70 to-indigo-50/40 border-blue-200 hover:shadow-md'
-                    : 'bg-white border-gray-100 hover:border-blue-200 hover:shadow-md'
+                    ? 'bg-gradient-to-br from-blue-50/70 to-indigo-50/40 border-blue-200 hover:shadow-blue-200/40 hover:shadow-xl ring-2 ring-blue-100/50'
+                    : 'bg-white border-transparent hover:shadow-lg'
                 ]"
                 @click="viewJobDetail(job.id)"
               >
-                <div class="flex items-start gap-3">
-                  <CompanyLogo
-                    class="shadow-sm shrink-0"
-                    size="sm"
-                    rounded="rounded"
-                    :src="resolveUploadUrl(job.avatar_url)"
-                    :alt="job.company_name"
-                  />
+                <!-- Mobile-first card: image on top, content below -->
+                <div class="flex flex-col gap-3">
+                  <div class="w-full sm:w-auto sm:shrink-0">
+                    <CompanyLogo
+                      class="shadow-sm"
+                      size="card"
+                      rounded="rounded"
+                      :src="resolveUploadUrl(job.avatar_url)"
+                      :alt="job.company_name"
+                    />
+                  </div>
 
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-start justify-between gap-3">
-                      <div class="min-w-0">
-                        <h3 class="text-sm sm:text-base font-semibold text-gray-900 flex items-center gap-1.5 flex-wrap leading-snug">
-                          <span class="line-clamp-1">{{ job.title }}</span>
-                          <span v-if="job.boost_type === 'hot'" class="px-1.5 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap">
-                            <i class="pi pi-star-fill text-[7px]"></i> HOT
-                          </span>
-                          <span v-else-if="job.boost_type === 'top10'" class="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[9px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap border border-blue-200">
-                            <i class="pi pi-chart-line text-[7px]"></i> Top-10
-                          </span>
-                        </h3>
-                        <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-600">
-                          <span class="truncate max-w-[14rem]">{{ job.company_name }}</span>
-                          <span v-if="job.location" class="truncate max-w-[12rem] text-gray-500">{{ job.location }}</span>
-                          <span class="text-gray-400">{{ job.employment_type }} · {{ timeAgo(job.created_at) }}</span>
-                        </div>
-                      </div>
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-1.5 flex-wrap">
+                        <span>{{ job.title }}</span>
+                        <span v-if="job.boost_type === 'hot'" class="px-2 py-0.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap shadow-sm">
+                          <i class="pi pi-star-fill text-[8px]"></i> HOT
+                        </span>
+                        <span v-else-if="job.boost_type === 'top10'" class="px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-full flex items-center gap-0.5 whitespace-nowrap border border-blue-200 shadow-sm">
+                          <i class="pi pi-chart-line text-[8px]"></i> Top-10
+                        </span>
+                      </h3>
 
-                      <div class="shrink-0 text-right">
-                        <div class="text-green-600 font-semibold text-xs sm:text-sm whitespace-nowrap">
-                          {{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }}
+                      <div
+                        class="flex items-center gap-3 text-sm text-gray-600 mt-1 flex-wrap"
+                      >
+                        <div class="flex items-center gap-1 truncate">
+                          <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"
+                            />
+                          </svg>
+                          <span class="truncate">{{ job.company_name }}</span>
                         </div>
-                        <div class="text-gray-400 text-[11px] mt-0.5">{{ job.currency }}</div>
+                        <div
+                          class="flex items-center gap-1 text-gray-500 truncate"
+                        >
+                          <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            />
+                          </svg>
+                          <span class="truncate">{{ job.location }}</span>
+                        </div>
                       </div>
                     </div>
 
-                    <p class="hidden sm:block text-xs text-gray-500 mt-1.5 line-clamp-1">
-                      {{ stripHtml(job.description) }}
-                    </p>
+                    <div class="shrink-0 text-right">
+                      <div class="text-green-600 font-semibold text-sm">
+                        {{ formatNumber(job.salary_min) }} -
+                        {{ formatNumber(job.salary_max) }}
+                      </div>
+                      <div class="text-gray-500 text-xs mt-1">
+                        <div class="whitespace-nowrap">{{ job.currency }}</div>
+                        <div class="mt-1">
+                          {{ job.employment_type }} ·
+                          {{ timeAgo(job.created_at) }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="text-sm text-gray-600 mt-1 line-clamp-2">
+                    {{ stripHtml(job.description) }}
+                  </p>
+
+                  <!-- arrow for larger screens -->
+                  <div class="hidden sm:flex items-center justify-end">
+                    <svg
+                      class="w-5 h-5 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
                   </div>
                 </div>
               </div>
@@ -1010,7 +1062,7 @@ const loadJobs = async () => {
       page: currentPage.value,
       recommendations: recommendations.value,
       locale: locale.value,
-      limit: 10,
+      limit: 5,
     });
     if (seq !== loadJobsSeq) return;
 
