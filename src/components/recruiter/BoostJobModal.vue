@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { getAllPlans } from "@/services/payments.api.js";
 import { push } from "notivue";
+import SkeletonList from "@/components/common/skeleton/SkeletonList.vue";
 
 const props = defineProps({
   job:  { type: Object,  required: true },
@@ -82,9 +83,7 @@ function close() { emit("close"); }
         <div class="p-4">
 
           <!-- Loading -->
-          <div v-if="loading" class="flex justify-center py-8">
-            <div class="w-7 h-7 border-3 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-          </div>
+          <SkeletonList v-if="loading" :count="3" />
 
           <div v-else>
             <!-- Info banner -->

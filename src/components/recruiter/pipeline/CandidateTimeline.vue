@@ -3,6 +3,7 @@ import { ref, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getApplicationTimeline, getApplicationNotes, addApplicationNote } from "@/services/pipeline.api";
+import SkeletonList from "@/components/common/skeleton/SkeletonList.vue";
 
 const { t } = useI18n();
 
@@ -146,9 +147,7 @@ const hasEvents = computed(() => events.value.length > 0);
     </div>
 
     <!-- Timeline -->
-    <div v-if="loading" class="flex justify-center py-6">
-      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-    </div>
+    <SkeletonList v-if="loading" :count="4" />
 
     <div v-else-if="!hasEvents" class="text-center text-sm text-gray-400 py-6">
       {{ t("pipeline.timeline.empty") }}

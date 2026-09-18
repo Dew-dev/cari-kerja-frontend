@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getJobAlerts, updateJobAlerts } from "@/services/workers.api";
+import SkeletonInline from "@/components/common/skeleton/SkeletonInline.vue";
 
 const { t } = useI18n();
 
@@ -84,9 +85,7 @@ async function onToggle(event) {
       <p class="text-sm text-slate-500 mt-1">{{ t("jobAlerts.subtitle") }}</p>
     </div>
 
-    <div v-if="loading" class="text-sm text-slate-500">
-      {{ t("loading") }}...
-    </div>
+    <SkeletonInline v-if="loading" :lines="3" />
 
     <template v-else>
       <label

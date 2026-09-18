@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { push } from 'notivue'
 import { listBlocks, unblockUser } from '@/services/chat.api'
 import { chatErrorI18nKey } from '@/utils/apiErrors'
+import SkeletonList from '@/components/common/skeleton/SkeletonList.vue'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -69,9 +70,7 @@ onMounted(loadBlocks)
         </div>
       </div>
 
-      <div v-if="loading" class="text-center py-12 text-gray-400 text-sm">
-        {{ $t('chat.blocks.loading') }}
-      </div>
+      <SkeletonList v-if="loading" :count="5" />
 
       <div
         v-else-if="blocks.length === 0"

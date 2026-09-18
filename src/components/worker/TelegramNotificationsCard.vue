@@ -2,6 +2,7 @@
 import { computed, onMounted, onBeforeUnmount, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import api from "@/services/api";
+import SkeletonInline from "@/components/common/skeleton/SkeletonInline.vue";
 
 const { t } = useI18n();
 
@@ -131,9 +132,7 @@ onBeforeUnmount(() => {
       </p>
     </div>
 
-    <div v-if="loading" class="text-sm text-slate-500">
-      {{ t("loading") }}...
-    </div>
+    <SkeletonInline v-if="loading" :lines="3" />
 
     <template v-else>
       <div

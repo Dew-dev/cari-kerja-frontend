@@ -5,9 +5,7 @@
       <p class="text-center text-gray-600 mb-12">{{ $t("companiesHiring") || "Companies actively hiring" }}</p>
 
       <div class="bg-white rounded-xl shadow-md p-8 overflow-hidden">
-        <div v-if="loading" class="text-center py-8 text-gray-600">
-          {{ $t("loading") || "Loading..." }}
-        </div>
+        <SkeletonLogoGrid v-if="loading" />
 
         <div v-else-if="previewCompanies.length" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-start">
           <button
@@ -55,6 +53,7 @@ import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { getRecruitersGroupedByIndustry } from "@/services/recruiters.api";
 import CompanyLogo from "@/components/common/CompanyLogo.vue";
+import SkeletonLogoGrid from "@/components/common/skeleton/SkeletonLogoGrid.vue";
 
 const router = useRouter();
 const loading = ref(false);

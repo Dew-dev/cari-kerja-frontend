@@ -1,16 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Loading State -->
-    <div v-if="loading" class="max-w-5xl mx-auto px-4 py-8">
-      <div class="bg-white rounded-lg shadow p-8">
-        <div class="animate-pulse space-y-4">
-          <div class="h-8 bg-gray-200 rounded w-3/4"></div>
-          <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-          <div class="h-4 bg-gray-200 rounded w-full"></div>
-          <div class="h-4 bg-gray-200 rounded w-full"></div>
-        </div>
-      </div>
-    </div>
+    <SkeletonDetailPage v-if="loading" />
 
     <!-- Job Detail Content -->
     <div v-else-if="job" class="max-w-5xl mx-auto px-4 py-8">
@@ -735,6 +726,7 @@ import api from "@/services/api";
 import TurnstileWidget from "@/components/common/TurnstileWidget.vue";
 import CompanyLogo from "@/components/common/CompanyLogo.vue";
 import RichTextContent from "@/components/common/RichTextContent.vue";
+import SkeletonDetailPage from "@/components/common/skeleton/SkeletonDetailPage.vue";
 import {
   isCaptchaError,
   isDuplicateSubmissionError,

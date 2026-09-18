@@ -74,8 +74,8 @@
             >
               {{ location.name }}
             </button>
-            <div v-if="locationLoading" class="px-4 py-3 text-sm text-gray-500 text-center">
-              Loading...
+            <div v-if="locationLoading" class="px-4 py-3">
+              <SkeletonInline :lines="2" />
             </div>
           </div>
         </div>
@@ -102,6 +102,7 @@ import { ref, watch, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { getJobPosts } from "@/services/jobposts.api";
 import api from "@/services/api";
+import SkeletonInline from "@/components/common/skeleton/SkeletonInline.vue";
 
 const { t } = useI18n();
 const router = useRouter();

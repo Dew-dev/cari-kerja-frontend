@@ -80,16 +80,7 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div
-          v-for="n in 6"
-          :key="n"
-          class="bg-white rounded-lg shadow p-6 animate-pulse"
-        >
-          <div class="h-6 bg-gray-200 rounded w-3/4 mb-3"></div>
-          <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-        </div>
-      </div>
+      <SkeletonGrid v-if="loading" />
 
       <!-- Categories Grid -->
       <div
@@ -179,6 +170,7 @@ import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { getCategoriesWithJobcount } from "../services/categories.api";
+import SkeletonGrid from "@/components/common/skeleton/SkeletonGrid.vue";
 
 const { t, locale } = useI18n();
 const router = useRouter();

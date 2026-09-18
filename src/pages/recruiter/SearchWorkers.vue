@@ -187,7 +187,7 @@
                     </div>
                   </div>
                   
-                  <p v-if="nationalitiesLoading" class="text-xs text-gray-500 mt-1">Loading...</p>
+                  <SkeletonInline v-if="nationalitiesLoading" :lines="2" class="mt-1" />
                 </div>
               </div>
 
@@ -310,13 +310,7 @@
           </div>
 
           <!-- Loading State -->
-          <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div v-for="i in 6" :key="i" class="bg-white rounded-lg shadow-md p-6 animate-pulse">
-              <div class="h-12 w-12 bg-gray-200 rounded-full mb-4"></div>
-              <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-              <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-            </div>
-          </div>
+          <SkeletonWorkerGrid v-if="loading" />
 
           <!-- Workers Grid -->
           <div v-else-if="workers.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -488,6 +482,8 @@ import api from '@/services/api'
 import { stripHtml } from '@/utils/richText'
 import { getCategories } from '@/services/categories.api'
 import { resolveUploadUrl } from '@/utils/mediaUrl'
+import SkeletonWorkerGrid from '@/components/common/skeleton/SkeletonWorkerGrid.vue'
+import SkeletonInline from '@/components/common/skeleton/SkeletonInline.vue'
 
 const router = useRouter()
 const route = useRoute()

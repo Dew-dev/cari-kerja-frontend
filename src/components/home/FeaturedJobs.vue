@@ -6,9 +6,11 @@
         <p class="text-gray-600">{{ $t('bestJobsAvailable') || 'Check out the best job opportunities' }}</p>
       </div>
 
-      <div v-if="loading" class="text-center py-12">
-        <p class="text-gray-600">{{ $t('loading') || 'Loading...' }}</p>
-      </div>
+      <SkeletonGrid
+        v-if="loading"
+        :count="3"
+        columns="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+      />
 
       <div v-else-if="jobs.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
@@ -74,6 +76,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { getJobPosts } from '@/services/jobposts.api';
 import { stripHtml } from '@/utils/richText';
+import SkeletonGrid from '@/components/common/skeleton/SkeletonGrid.vue';
 
 const router = useRouter();
 const jobs = ref([]);

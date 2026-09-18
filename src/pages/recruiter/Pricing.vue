@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 import { push } from "notivue";
 import { getAllPlans, getActivePlan } from "@/services/payments.api.js";
 import { useAuthStore } from "@/stores/authStore.js";
+import SkeletonPricing from "@/components/common/skeleton/SkeletonPricing.vue";
 
 const router = useRouter();
 const { t, tm } = useI18n();
@@ -125,12 +126,7 @@ function getPlanFeatures(planName) {
       </div>
 
       <!-- ── Loading ────────────────────────────────────────────────────────── -->
-      <div v-if="loading" class="flex justify-center py-24">
-        <div class="flex flex-col items-center gap-3">
-          <div class="w-10 h-10 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-          <p class="text-gray-400 text-sm">{{ t("payment.loadingPlans") }}</p>
-        </div>
-      </div>
+      <SkeletonPricing v-if="loading" />
 
       <div v-else>
         <!-- ── Tabs ───────────────────────────────────────────────────────────── -->

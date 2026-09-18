@@ -425,18 +425,10 @@
           <!-- Job Cards -->
           <div class="flex flex-col">
             <!-- Loading State -->
-            <div
-              v-if="loading"
-              class="bg-white rounded-lg shadow p-8 text-center"
-            >
-              <div class="animate-pulse">
-                <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
-                <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
-              </div>
-            </div>
+            <SkeletonJobList v-if="loading" :count="5" />
 
             <!-- Job List -->
-            <div v-else>
+            <div v-else-if="jobs.length">
               <div
                 v-for="job in jobs"
                 :key="job.id"
@@ -552,10 +544,17 @@
                 </div>
               </div>
             </div>
+
+            <div
+              v-else
+              class="bg-white rounded-lg shadow p-8 text-center text-gray-500"
+            >
+              {{ $t("noVacancies") || "No vacancies found." }}
+            </div>
           </div>
 
           <!-- Pagination -->
-          <nav aria-label="Pagination" class="mt-6">
+          <nav v-if="!loading && totalPages > 1" aria-label="Pagination" class="mt-6">
             <div
               class="flex items-center justify-center gap-3 flex-nowrap overflow-x-auto px-2"
             >
@@ -642,6 +641,7 @@ import { useI18n } from "vue-i18n";
 import { useAuthStore } from "../stores/authStore";
 import HeroSearch from "../components/home/HeroSearch.vue";
 import CompanyLogo from "../components/common/CompanyLogo.vue";
+import SkeletonJobList from "@/components/common/skeleton/SkeletonJobList.vue";
 import { getJobPosts, getHotJobPosts } from "../services/jobposts.api";
 import { getCategoriesWithJobcount } from "../services/categories.api";
 import api from "../services/api";
@@ -675,7 +675,7 @@ const legacyCategoryName = ref("");
 const showFilters = ref(false);
 const sortBy = ref("highest-salary");
 const currentPage = ref(1);
-const totalPages = ref(5);
+const totalPages = ref(1);
 const totalData = ref(0);
 const CATEGORY_LIMIT = 6;
 const showAllCategories = ref(false);
@@ -1026,11 +1026,19 @@ const jobService = {
 };
 
 // Methods
+let loadJobsSeq = 0;
+
 const loadJobs = async () => {
   if (isCoolingDown.value) {
     push.warning(t("jobSearch.rateLimited", { seconds: searchCooldown.value }));
+    if (jobs.value.length === 0) loading.value = false;
     return;
   }
+
+  const seq = ++loadJobsSeq;
+  // Spinner only on first load — keep existing cards visible during refetch
+  const blocking = jobs.value.length === 0;
+
   try {
     if (blocking) loading.value = true;
     const data = await jobService.fetchJobs({
@@ -1049,10 +1057,13 @@ const loadJobs = async () => {
       locale: locale.value,
       limit: 5,
     });
-    jobs.value = data.data;
-    totalPages.value = data.meta.totalPage;
-    totalData.value = data.meta.total;
+    if (seq !== loadJobsSeq) return;
+
+    jobs.value = Array.isArray(data?.data) ? data.data : [];
+    totalPages.value = Number(data?.meta?.totalPage) || 1;
+    totalData.value = Number(data?.meta?.total) || 0;
   } catch (error) {
+    if (seq !== loadJobsSeq) return;
     console.error("Error loading jobs:", error);
     if (isRateLimitedError(error)) {
       startSearchCooldown(error, 300);
@@ -1063,7 +1074,7 @@ const loadJobs = async () => {
       );
     }
   } finally {
-    loading.value = false;
+    if (seq === loadJobsSeq) loading.value = false;
   }
 };
 

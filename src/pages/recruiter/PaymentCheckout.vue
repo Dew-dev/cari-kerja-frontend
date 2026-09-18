@@ -6,6 +6,7 @@ import { push } from "notivue";
 import { getAllPlans, createInvoice } from "@/services/payments.api.js";
 import { isRateLimitedError, isVerificationRequiredError } from "@/utils/apiErrors";
 import VerificationRequiredModal from "@/components/recruiter/VerificationRequiredModal.vue";
+import SkeletonForm from "@/components/common/skeleton/SkeletonForm.vue";
 
 const route  = useRoute();
 const router = useRouter();
@@ -161,9 +162,7 @@ async function createBill() {
       </button>
 
       <!-- Loading -->
-      <div v-if="loading" class="flex justify-center py-20">
-        <div class="w-9 h-9 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-      </div>
+      <SkeletonForm v-if="loading" :fields="4" />
 
       <div v-else-if="plan" class="space-y-4">
         <!-- Plan card -->

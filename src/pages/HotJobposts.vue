@@ -8,6 +8,7 @@ import CompanyLogo from "@/components/common/CompanyLogo.vue";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
 import { isRateLimitedError } from "@/utils/apiErrors";
 import { useRateLimitCooldown } from "@/composables/useRateLimitCooldown";
+import SkeletonJobList from "@/components/common/skeleton/SkeletonJobList.vue";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -90,9 +91,7 @@ function timeAgo(date) {
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="flex justify-center py-20">
-        <div class="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
+      <SkeletonJobList v-if="loading" :count="5" />
 
       <!-- Empty State -->
       <div v-else-if="jobs.length === 0" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">

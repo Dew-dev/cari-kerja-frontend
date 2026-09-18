@@ -18,9 +18,7 @@
         </router-link>
       </div>
 
-      <div v-if="loading" class="text-center py-12 text-gray-600 text-sm">
-        {{ t("news.loading") }}
-      </div>
+      <SkeletonNewsList v-if="loading" :count="3" />
 
       <div
         v-else-if="!items.length"
@@ -113,6 +111,7 @@ import {
   isNewsLocaleFallback,
   resolveNewsLocale,
 } from "@/services/news.api";
+import SkeletonNewsList from "@/components/common/skeleton/SkeletonNewsList.vue";
 
 const { t, locale } = useI18n();
 

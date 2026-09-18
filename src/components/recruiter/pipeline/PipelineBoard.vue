@@ -1,6 +1,7 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import PipelineColumn from "./PipelineColumn.vue";
+import SkeletonGrid from "@/components/common/skeleton/SkeletonGrid.vue";
 
 const { t } = useI18n();
 
@@ -19,9 +20,11 @@ const emit = defineEmits(["move", "open", "chat", "toggle-select", "toggle-colum
 </script>
 
 <template>
-  <div v-if="loading" class="flex justify-center py-16">
-    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-  </div>
+  <SkeletonGrid
+    v-if="loading"
+    :count="4"
+    columns="grid-cols-1 md:grid-cols-4"
+  />
 
   <div v-else-if="!columns.length" class="text-center py-16 text-gray-500 text-sm">
     {{ t("pipeline.board.noStages") }}

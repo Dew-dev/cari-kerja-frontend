@@ -5,6 +5,7 @@ import api from "@/services/api"
 import { getCompanyById } from "@/services/companies.api.js"
 import RichTextContent from "@/components/common/RichTextContent.vue"
 import CompanyLogo from "@/components/common/CompanyLogo.vue"
+import SkeletonProfileHero from "@/components/common/skeleton/SkeletonProfileHero.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -90,12 +91,7 @@ watch(() => [route.name, route.params.id], fetchRecruiter)
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Loading State -->
-    <div v-if="loading" class="max-w-5xl mx-auto px-4 py-12">
-      <div class="animate-pulse space-y-6">
-        <div class="h-52 bg-gray-200 rounded-2xl"></div>
-        <div class="h-64 bg-gray-200 rounded-2xl"></div>
-      </div>
-    </div>
+    <SkeletonProfileHero v-if="loading" />
 
     <!-- Content -->
     <div v-else-if="recruiter" class="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">

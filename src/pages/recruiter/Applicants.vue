@@ -11,6 +11,7 @@ import { chatErrorI18nKey } from "@/utils/apiErrors";
 import { useChatStore } from "@/stores/chatStore";
 import { getWorkerById } from "@/services/workers.api";
 import ResumeLink from "@/components/common/ResumeLink.vue";
+import SkeletonTable from "@/components/common/skeleton/SkeletonTable.vue";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -163,8 +164,8 @@ async function startChat(applicant) {
           <tbody>
             <!-- LOADING -->
             <tr v-if="loading">
-              <td colspan="5" class="px-4 py-6 text-center text-gray-500">
-                {{ $t('loadingApplicants') }}
+              <td colspan="5" class="p-0">
+                <SkeletonTable />
               </td>
             </tr>
 
