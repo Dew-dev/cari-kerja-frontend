@@ -80,21 +80,19 @@ function onError(event) {
 
 <style scoped>
 /*
-  Full logo always visible inside the wrapper.
-  Outer = fixed box + padding. Inner frame fills content box.
-  Img uses width/height 100% + object-fit:contain so the mark scales
-  down to the wrapper width/height and is never cropped.
+  Logo fills the wrapper edge-to-edge (no inner padding).
+  Img uses object-fit:contain so the mark scales into the box without cropping.
 */
 .company-logo {
   box-sizing: border-box;
   flex-shrink: 1;
   min-width: 0;
   min-height: 0;
-  /* Never exceed the parent wrapper — this was causing visible “cropping”. */
   max-width: 100%;
   max-height: 100%;
-  padding: 0.5rem;
+  padding: 0;
   background: #fff;
+  overflow: hidden;
 }
 
 .company-logo--bordered {
@@ -130,7 +128,7 @@ function onError(event) {
   justify-content: center;
   width: 100%;
   height: 100%;
-  border-radius: 0.375rem;
+  border-radius: 0;
   background: #eff6ff;
   color: #2563eb;
   font-weight: 700;
@@ -140,7 +138,11 @@ function onError(event) {
 .company-logo--sm {
   width: 5.5rem;
   height: 3.25rem;
-  padding: 0.35rem;
+  padding: 0;
+}
+
+.company-logo--sm .company-logo__fallback {
+  font-size: 0.75rem;
 }
 
 .company-logo--md {
@@ -153,10 +155,18 @@ function onError(event) {
   height: 6rem;
 }
 
+.company-logo--lg .company-logo__fallback {
+  font-size: 1.125rem;
+}
+
 .company-logo--hero {
   width: 12rem;
   height: 6.5rem;
-  padding: 0.65rem;
+  padding: 0;
+}
+
+.company-logo--hero .company-logo__fallback {
+  font-size: 1.25rem;
 }
 
 @media (min-width: 640px) {
@@ -169,7 +179,7 @@ function onError(event) {
 .company-logo--card {
   width: 100%;
   height: 10rem;
-  padding: 0.75rem;
+  padding: 0;
 }
 
 @media (min-width: 640px) {
@@ -183,6 +193,10 @@ function onError(event) {
   width: 100%;
   aspect-ratio: 2 / 1;
   height: auto;
-  padding: 0.75rem;
+  padding: 0;
+}
+
+.company-logo--fluid .company-logo__fallback {
+  font-size: 1rem;
 }
 </style>
