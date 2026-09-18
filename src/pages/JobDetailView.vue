@@ -38,117 +38,59 @@
         <!-- Left Column - Job Details -->
         <div class="lg:col-span-2 space-y-6">
           <!-- Job Header Card -->
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex gap-4 mb-6">
+          <div class="bg-white rounded-lg border border-gray-200 p-5">
+            <div class="flex gap-4 mb-5">
               <CompanyLogo
-                class="shadow-sm"
                 size="lg"
                 :src="resolveUploadUrl(job.avatar_url)"
                 :alt="job.company_name"
               />
-              <div class="flex-1">
-                <h1 class="text-2xl font-bold text-gray-900 mb-2">
+              <div class="flex-1 min-w-0">
+                <h1 class="text-xl font-semibold text-gray-900 mb-1.5">
                   {{ job.title }}
                 </h1>
                 <div
-                  class="flex flex-wrap items-center gap-4 text-sm text-gray-600"
+                  class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-600"
                 >
-                  <div class="flex items-center gap-1">
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                      />
-                    </svg>
-                    <span class="font-medium">{{ job.company_name }}</span>
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                      />
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                    </svg>
-                    <span>{{ job.location }}</span>
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span>{{ timeAgo(job.created_at) }}</span>
-                  </div>
+                  <span class="font-medium text-gray-800">{{ job.company_name }}</span>
+                  <span v-if="job.location" class="text-gray-400">·</span>
+                  <span v-if="job.location">{{ job.location }}</span>
+                  <span class="text-gray-400">·</span>
+                  <span>{{ timeAgo(job.created_at) }}</span>
                 </div>
               </div>
             </div>
 
             <!-- Job Key Info -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div class="bg-linear-to-br from-green-50 to-green-100 border-l-4 border-green-500 rounded-lg p-4">
-                <div class="text-xs text-gray-600 font-semibold mb-2">{{ $t("salary") }}</div>
-                <div class="text-lg font-bold text-green-700">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5 text-sm">
+              <div class="border border-gray-200 rounded-md px-3 py-2.5">
+                <div class="text-xs text-gray-500 mb-0.5">{{ $t("salary") }}</div>
+                <div class="font-semibold text-gray-900">
                   {{ formatNumber(job.salary_min) }} - {{ formatNumber(job.salary_max) }}
-                </div>
-                <div class="text-xs text-gray-600 mt-1">{{ job.currency_code }}</div>
-              </div>
-              <div class="bg-linear-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500 rounded-lg p-4">
-                <div class="text-xs text-gray-600 font-semibold mb-2">
-                  {{ $t("employmentType") }}
-                </div>
-                <div class="text-lg font-bold text-blue-700">
-                  {{ job.employment_type }}
+                  <span class="font-normal text-gray-500">{{ job.currency_code }}</span>
                 </div>
               </div>
-              <div class="bg-linear-to-br from-purple-50 to-purple-100 border-l-4 border-purple-500 rounded-lg p-4">
-                <div class="text-xs text-gray-600 font-semibold mb-2">
-                  {{ $t("category") }}
-                </div>
-                <div class="text-sm font-bold text-purple-700">
-                  {{ job.category_name }}
-                </div>
+              <div class="border border-gray-200 rounded-md px-3 py-2.5">
+                <div class="text-xs text-gray-500 mb-0.5">{{ $t("employmentType") }}</div>
+                <div class="font-semibold text-gray-900">{{ job.employment_type }}</div>
+              </div>
+              <div class="border border-gray-200 rounded-md px-3 py-2.5">
+                <div class="text-xs text-gray-500 mb-0.5">{{ $t("category") }}</div>
+                <div class="font-semibold text-gray-900">{{ job.category_name }}</div>
               </div>
             </div>
 
             <!-- Apply Button -->
-            <div class="flex gap-3">
+            <div class="flex gap-2">
               <button
                 v-if="!auth.isLoggedIn || auth.role === 'user'"
                 @click="handleApply"
                 :disabled="isApplying || hasApplied"
-                class="flex-1 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white text-sm font-medium py-2.5 px-4 rounded-md transition flex items-center justify-center gap-2"
               >
                 <svg
                   v-if="hasApplied"
-                  class="w-5 h-5"
+                  class="w-4 h-4"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -169,15 +111,15 @@
                 @click="handleSaveJob"
                 :disabled="isSavingJob"
                 :class="[
-                  'px-6 py-3 rounded-lg font-semibold transition duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg',
+                  'px-4 py-2.5 rounded-md text-sm font-medium transition flex items-center justify-center gap-2',
                   isSaved
-                    ? 'bg-linear-to-r from-yellow-400 to-yellow-500 text-white hover:from-yellow-500 hover:to-yellow-600'
-                    : 'bg-white text-gray-900 border-2 border-gray-300 hover:border-blue-600 hover:bg-blue-50',
+                    ? 'bg-amber-500 text-white hover:bg-amber-600'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400',
                   isSavingJob && 'opacity-50 cursor-not-allowed'
                 ]"
               >
                 <svg
-                  class="w-5 h-5"
+                  class="w-4 h-4"
                   :fill="isSaved ? 'currentColor' : 'none'"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -195,95 +137,77 @@
           </div>
 
           <!-- Job Description -->
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+          <div class="bg-white rounded-lg border border-gray-200 p-5">
+            <h2 class="text-base font-semibold text-gray-900 mb-3">
               {{ $t("jobDescription") }}
             </h2>
             <RichTextContent
               :html="job.description"
-              class="leading-relaxed"
+              class="leading-relaxed text-sm text-gray-700"
             />
           </div>
 
           <!-- Requirements -->
           <div
             v-if="job.requirements?.length"
-            class="bg-white rounded-lg shadow-md p-6"
+            class="bg-white rounded-lg border border-gray-200 p-5"
           >
-            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+            <h2 class="text-base font-semibold text-gray-900 mb-3">
               Requirements
             </h2>
             <ul
               v-for="requirement in job.requirements"
-              class="list-disc list-inside space-y-2 text-gray-700"
+              class="list-disc list-inside space-y-1.5 text-sm text-gray-700"
             >
-              <li class="ml-2">{{ requirement.requirement }}</li>
+              <li class="ml-1">{{ requirement.requirement }}</li>
             </ul>
           </div>
 
           <!-- Responsibilities -->
           <div
             v-if="job.responsibilities?.length"
-            class="bg-white rounded-lg shadow-md p-6"
+            class="bg-white rounded-lg border border-gray-200 p-5"
           >
-            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2 1m2-1l-2-1m2 1v2.5" />
-              </svg>
+            <h2 class="text-base font-semibold text-gray-900 mb-3">
               Responsibilities
             </h2>
             <ul
               v-for="responsibility in job.responsibilities"
-              class="list-disc list-inside space-y-2 text-gray-700"
+              class="list-disc list-inside space-y-1.5 text-sm text-gray-700"
             >
-              <li class="ml-2">{{ responsibility.responsibility }}</li>
+              <li class="ml-1">{{ responsibility.responsibility }}</li>
             </ul>
           </div>
 
           <!-- Benefits -->
-          <div v-if="job.benefits?.length" class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5c.75 0 1.498-.037 2.237-.111a6.009 6.009 0 00-11.066 0c.738.074 1.487.111 2.237.111h6.592z" />
-              </svg>
+          <div v-if="job.benefits?.length" class="bg-white rounded-lg border border-gray-200 p-5">
+            <h2 class="text-base font-semibold text-gray-900 mb-3">
               Benefits
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div
+            <ul class="list-disc list-inside space-y-1.5 text-sm text-gray-700">
+              <li
                 v-for="benefit in job.benefits"
                 :key="benefit.id"
-                class="flex gap-3 p-4 rounded-lg bg-green-50 border border-green-200"
+                class="ml-1"
               >
-                <svg class="w-5 h-5 text-green-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
-                <span class="text-gray-900 text-sm">{{ benefit.benefit }}</span>
-              </div>
-            </div>
+                {{ benefit.benefit }}
+              </li>
+            </ul>
           </div>
 
           <!-- Skills -->
-          <div v-if="skills?.length" class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5h.01" />
-              </svg>
+          <div v-if="skills?.length" class="bg-white rounded-lg border border-gray-200 p-5">
+            <h2 class="text-base font-semibold text-gray-900 mb-3">
               Required Skills
             </h2>
-            <div class="flex flex-wrap gap-3">
-              <div
+            <div class="flex flex-wrap gap-1.5">
+              <span
                 v-for="skill in skills"
                 :key="skill.id"
-                class="px-4 py-2 rounded-full bg-indigo-50 border border-indigo-300 text-indigo-700 font-medium text-sm hover:bg-indigo-100 transition cursor-default"
+                class="px-2 py-0.5 rounded bg-gray-100 text-gray-700 text-xs"
               >
                 {{ skill.skill || skill.skill_name }}
-              </div>
+              </span>
             </div>
           </div>
         </div>
@@ -291,22 +215,21 @@
         <!-- Right Column - Company Info & Similar Jobs -->
         <div class="lg:col-span-1 space-y-6">
           <!-- Company Info Card -->
-          <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">
+          <div class="bg-white rounded-lg border border-gray-200 p-5 sticky top-6">
+            <h3 class="text-sm font-semibold text-gray-900 mb-3">
               {{ $t("aboutCompany") }}
             </h3>
-            <div class="flex items-center gap-3 mb-4">
+            <div class="flex items-center gap-3 mb-3">
               <CompanyLogo
-                class="shadow-sm"
                 size="md"
                 :src="resolveUploadUrl(job.avatar_url)"
                 :alt="job.company_name"
               />
               <div>
-                <h4 class="font-semibold text-gray-900">
+                <h4 class="text-sm font-medium text-gray-900">
                   {{ job.company_name }}
                 </h4>
-                <p class="text-sm text-gray-600">
+                <p class="text-xs text-gray-500">
                   {{ job.industry || "Technology" }}
                 </p>
               </div>
@@ -363,7 +286,7 @@
 
             <button
               @click="viewCompanyProfile"
-              class="mt-4 w-full shadow-md text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-lg transition duration-200"
+              class="mt-3 w-full text-sm text-blue-600 hover:bg-blue-50 font-medium py-2 px-3 rounded-md transition"
             >
               {{ $t("viewCompanyProfile") }}
             </button>
@@ -372,31 +295,31 @@
           <!-- Similar Jobs -->
           <div
             v-if="similarJobs.length > 0"
-            class="bg-white rounded-lg shadow-md p-6"
+            class="bg-white rounded-lg border border-gray-200 p-5"
           >
-            <h3 class="text-lg font-bold text-gray-900 mb-4">
+            <h3 class="text-sm font-semibold text-gray-900 mb-3">
               {{ $t("similarJobs") }}
             </h3>
-            <div class="space-y-4">
+            <div class="space-y-2">
               <div
                 v-for="similarJob in similarJobs"
                 :key="similarJob.id"
                 @click="goToJob(similarJob.id)"
-                class="shadow-sm rounded-lg p-4 hover:shadow-md cursor-pointer transition"
+                class="border border-gray-100 rounded-md p-3 hover:bg-gray-50 cursor-pointer transition"
               >
                 <h4
-                  class="font-semibold text-gray-900 mb-1 hover:text-blue-600"
+                  class="text-sm font-medium text-gray-900 mb-0.5 hover:text-blue-600"
                 >
                   {{ similarJob.title }}
                 </h4>
-                <p class="text-sm text-gray-600 mb-2">
+                <p class="text-xs text-gray-500 mb-1.5">
                   {{ similarJob.company_name }}
                 </p>
                 <div
                   class="flex items-center justify-between text-xs text-gray-500"
                 >
                   <span>{{ similarJob.location }}</span>
-                  <span class="text-green-600 font-semibold">
+                  <span class="text-gray-700 font-medium">
                     {{ formatNumber(similarJob.salary_max) }}
                     {{ similarJob.currency }}
                   </span>
