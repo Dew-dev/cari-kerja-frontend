@@ -146,7 +146,7 @@ onMounted(loadProfile);
           <div class="flex flex-col sm:flex-row sm:items-center gap-5">
             <CompanyLogo
               size="hero"
-              rounded="rounded-2xl"
+              rounded="rounded-full"
               :src="avatarSrc"
               :alt="form.contact_name || 'Avatar'"
               fallback="initials"

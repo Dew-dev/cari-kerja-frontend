@@ -3444,7 +3444,7 @@ watch(activeTab, (newTab) => {
               <div class="shrink-0 self-start">
                 <CompanyLogo
                   size="md"
-                  rounded="rounded-xl"
+                  rounded="rounded-full"
                   :src="
                     (item.job?.avatar_url || item.avatar_url)
                       ? `${linkStorageUrl}${item.job?.avatar_url || item.avatar_url}`
@@ -3593,7 +3593,7 @@ watch(activeTab, (newTab) => {
               <div class="shrink-0 self-start">
                 <CompanyLogo
                   size="md"
-                  rounded="rounded-xl"
+                  rounded="rounded-full"
                   :src="job.recruiter_avatar_url ? `${linkStorageUrl}${job.recruiter_avatar_url}` : ''"
                   :alt="job.company_name || 'Company'"
                 />

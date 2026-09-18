@@ -21,8 +21,9 @@
               class="mb-3"
             >
               <CompanyLogo
-                class="shadow-sm group-hover:border-blue-200 group-hover:shadow"
+                class="shadow-sm group-hover:border-blue-200 group-hover:shadow mx-auto"
                 size="fluid"
+                rounded="rounded-full"
                 :src="company.logo"
                 :alt="company.name"
                 fallback="initials"

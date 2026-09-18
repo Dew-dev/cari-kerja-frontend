@@ -33,9 +33,10 @@ const DEFAULT_IMAGE = "/company-default-image.png";
 const props = defineProps({
   src: { type: String, default: "" },
   alt: { type: String, default: "Company" },
-  /** sm | md | lg | hero | card | fluid */
+  /** sm | md | lg | hero | card | fluid — all square for circular logos */
   size: { type: String, default: "md" },
-  rounded: { type: String, default: "rounded-lg" },
+  /** Always circular by default */
+  rounded: { type: String, default: "rounded-full" },
   bordered: { type: Boolean, default: true },
   /** image = default PNG; initials = letter badge */
   fallback: { type: String, default: "image" },
@@ -80,21 +81,21 @@ function onError(event) {
 
 <style scoped>
 /*
-  Full logo always visible inside the wrapper.
-  Outer = fixed box + padding. Inner frame fills content box.
-  Img uses width/height 100% + object-fit:contain so the mark scales
-  down to the wrapper width/height and is never cropped.
+  Circular company mark: equal width/height + overflow hidden.
+  Logo stays fully visible via object-fit: contain on a white disc.
 */
 .company-logo {
   box-sizing: border-box;
-  flex-shrink: 1;
+  flex-shrink: 0;
   min-width: 0;
   min-height: 0;
-  /* Never exceed the parent wrapper — this was causing visible “cropping”. */
   max-width: 100%;
   max-height: 100%;
-  padding: 0.5rem;
+  padding: 0.35rem;
   background: #fff;
+  overflow: hidden;
+  border-radius: 9999px;
+  aspect-ratio: 1 / 1;
 }
 
 .company-logo--bordered {
@@ -109,6 +110,8 @@ function onError(event) {
   min-height: 0;
   display: block;
   position: relative;
+  overflow: hidden;
+  border-radius: 9999px;
 }
 
 .company-logo__img {
@@ -122,6 +125,7 @@ function onError(event) {
   min-height: 0;
   object-fit: contain;
   object-position: center center;
+  border-radius: 9999px;
 }
 
 .company-logo__fallback {
@@ -130,7 +134,7 @@ function onError(event) {
   justify-content: center;
   width: 100%;
   height: 100%;
-  border-radius: 0.375rem;
+  border-radius: 9999px;
   background: #eff6ff;
   color: #2563eb;
   font-weight: 700;
@@ -138,51 +142,64 @@ function onError(event) {
 }
 
 .company-logo--sm {
-  width: 5.5rem;
-  height: 3.25rem;
-  padding: 0.35rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.25rem;
+}
+
+.company-logo--sm .company-logo__fallback {
+  font-size: 0.7rem;
 }
 
 .company-logo--md {
-  width: 8rem;
-  height: 4.5rem;
+  width: 4rem;
+  height: 4rem;
 }
 
 .company-logo--lg {
-  width: 11rem;
-  height: 6rem;
+  width: 5rem;
+  height: 5rem;
+}
+
+.company-logo--lg .company-logo__fallback {
+  font-size: 1rem;
 }
 
 .company-logo--hero {
-  width: 12rem;
-  height: 6.5rem;
-  padding: 0.65rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  padding: 0.4rem;
+}
+
+.company-logo--hero .company-logo__fallback {
+  font-size: 1.15rem;
 }
 
 @media (min-width: 640px) {
   .company-logo--hero {
-    width: 14rem;
-    height: 7.5rem;
+    width: 6.5rem;
+    height: 6.5rem;
   }
 }
 
 .company-logo--card {
-  width: 100%;
-  height: 10rem;
-  padding: 0.75rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0.3rem;
 }
 
 @media (min-width: 640px) {
   .company-logo--card {
-    width: 10rem;
-    height: 6.5rem;
+    width: 4rem;
+    height: 4rem;
   }
 }
 
 .company-logo--fluid {
   width: 100%;
-  aspect-ratio: 2 / 1;
+  max-width: 5rem;
   height: auto;
-  padding: 0.75rem;
+  aspect-ratio: 1 / 1;
+  padding: 0.4rem;
 }
 </style>

@@ -108,7 +108,7 @@ watch(() => [route.name, route.params.id], fetchRecruiter)
           <CompanyLogo
             class="shadow-lg"
             size="hero"
-            rounded="rounded-xl"
+            rounded="rounded-full"
             :src="recruiter.avatar_url ? `${fileStorageUrl}${recruiter.avatar_url}` : ''"
             :alt="recruiter.company_name"
             fallback="initials"

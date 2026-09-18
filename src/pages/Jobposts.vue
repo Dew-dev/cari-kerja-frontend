@@ -468,7 +468,7 @@
                   <CompanyLogo
                     class="shadow-sm shrink-0"
                     size="sm"
-                    rounded="rounded"
+                    rounded="rounded-full"
                     :src="resolveUploadUrl(job.avatar_url)"
                     :alt="job.company_name"
                   />

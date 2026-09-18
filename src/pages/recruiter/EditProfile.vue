@@ -204,7 +204,7 @@ onMounted(loadProfile);
           <div class="flex flex-col sm:flex-row sm:items-center gap-5">
             <CompanyLogo
               size="hero"
-              rounded="rounded-2xl"
+              rounded="rounded-full"
               :src="avatarPreview || (avatarFromBackend ? `${fileStorageUrl}${avatarFromBackend}` : '')"
               :alt="form.company_name || t('companyLogo')"
               fallback="initials"
