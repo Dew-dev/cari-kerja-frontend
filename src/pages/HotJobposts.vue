@@ -8,18 +8,86 @@ import CompanyLogo from "@/components/common/CompanyLogo.vue";
 import { resolveUploadUrl } from "@/utils/mediaUrl";
 import { isRateLimitedError } from "@/utils/apiErrors";
 import { useRateLimitCooldown } from "@/composables/useRateLimitCooldown";
+import { detectCityFromGps } from "@/utils/geoCity";
+import api from "@/services/api";
 
 const router = useRouter();
 const { t } = useI18n();
 
 const jobs = ref([]);
 const loading = ref(true);
+const preferCity = ref("");
+const preferProvince = ref("");
+const GPS_SKIP_KEY = "jobpostsGpsSkipped";
 const { cooldownSeconds, isCoolingDown, startFromError } = useRateLimitCooldown(300);
+
+function normalizeCityName(name = "") {
+  return String(name)
+    .replace(/^(kota|kabupaten|kab\.?)\s+/i, "")
+    .trim();
+}
+
+function localityScore(job) {
+  if (!preferCity.value && !preferProvince.value) return 0;
+  const loc = String(job?.location || "").toLowerCase();
+  const city = normalizeCityName(preferCity.value).toLowerCase();
+  const province = String(preferProvince.value || "").toLowerCase();
+  if (city && loc.includes(city)) return 2;
+  if (province && loc.includes(province)) return 1;
+  return 0;
+}
+
+function sortPreferLocal(list) {
+  if (!preferCity.value && !preferProvince.value) return list;
+  return [...list].sort((a, b) => localityScore(b) - localityScore(a));
+}
+
+async function resolveCityAgainstCatalog(rawCity) {
+  const normalized = normalizeCityName(rawCity);
+  if (!normalized) return rawCity;
+  try {
+    const res = await api.get("/locations/search", {
+      params: { search: normalized, type: "cities" },
+    });
+    const cities = res.data?.data?.cities || [];
+    if (!cities.length) return normalized;
+    const exact = cities.find(
+      (c) => normalizeCityName(c.name).toLowerCase() === normalized.toLowerCase(),
+    );
+    return exact?.name || cities[0].name || normalized;
+  } catch {
+    return normalized;
+  }
+}
+
+async function loadHotJobs() {
+  if (isCoolingDown.value) return;
+  const params = { limit: 50, page: 1 };
+  if (preferCity.value) params.prefer_city = preferCity.value;
+  if (preferProvince.value) params.prefer_province = preferProvince.value;
+  const res = await getHotJobPosts(params);
+  jobs.value = sortPreferLocal(res.data?.data || []);
+}
+
+async function tryDetectPreferredLocation() {
+  if (sessionStorage.getItem(GPS_SKIP_KEY) === "1") return;
+  if (!navigator.geolocation) return;
+  try {
+    const detected = await detectCityFromGps();
+    if (!detected?.city) return;
+    preferCity.value = await resolveCityAgainstCatalog(detected.city);
+    preferProvince.value = detected.province || "";
+    await loadHotJobs();
+  } catch (err) {
+    console.warn("GPS prefer-sort skipped:", err);
+    sessionStorage.setItem(GPS_SKIP_KEY, "1");
+  }
+}
 
 onMounted(async () => {
   try {
-    const res = await getHotJobPosts({ limit: 50, page: 1 });
-    jobs.value = res.data?.data || [];
+    await loadHotJobs();
+    await tryDetectPreferredLocation();
   } catch (err) {
     console.error("Failed to load hot jobs", err);
     if (isRateLimitedError(err)) {
